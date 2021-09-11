@@ -1,0 +1,12 @@
+<resources>
+
+    <!-- Application Name -->
+    <string name="app_name">Espasyo</string>
+
+    <!-- My Strings -->
+    <string-array name="userRole">
+        <item>student</item>
+        <item>landlord</item>
+    </string-array>
+
+</resources>
