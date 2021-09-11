@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_sampleFragment"
+            app:destination="@id/sampleFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -21,6 +24,15 @@
         tools:layout="@layout/fragment_sign_up" >
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sampleFragment"
+        android:name="com.capstone.espasyo.auth.views.SampleFragment"
+        android:label="fragment_sample"
+        tools:layout="@layout/fragment_sample" >
+        <action
+            android:id="@+id/action_sampleFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
 </navigation>

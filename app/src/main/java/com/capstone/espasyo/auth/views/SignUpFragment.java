@@ -13,7 +13,9 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,12 +24,17 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpFragment extends Fragment {
 
-    private EditText txtEmail, txtFirstName, txtLastName, txtPassword, txtConfirmPassword;
-    private Spinner txtRole;
+    private TextInputEditText txtEmail, txtFirstName, txtLastName, txtPassword, txtConfirmPassword;
+
+    String [] roles = {"Student","Landlord or Landlady"};
+    AutoCompleteTextView roleChosen;
+    ArrayAdapter<String> rolesAdapter;
+
     private TextView gotoLogin;
     private Button signUpButton;
     private AuthViewModel viewModel;
@@ -47,6 +54,7 @@ public class SignUpFragment extends Fragment {
                 }
             }
         });
+
     }
 
     @Override
@@ -64,11 +72,11 @@ public class SignUpFragment extends Fragment {
         txtLastName = view.findViewById(R.id.lastName);
         txtPassword = view.findViewById(R.id.password);
         txtConfirmPassword = view.findViewById(R.id.confirmPassword);
-        txtRole = view.findViewById(R.id.inputRole);
+        roleChosen =view.findViewById(R.id.inputRole);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity().getApplicationContext(),
-                R.array.userRole, R.layout.support_simple_spinner_dropdown_item);
-        txtRole.setAdapter(adapter);
+            rolesAdapter = new ArrayAdapter<String>(getActivity(), R.layout.role_list_item, roles);
+            roleChosen.setAdapter(rolesAdapter);
+
 
 
 
@@ -92,7 +100,7 @@ public class SignUpFragment extends Fragment {
                 String LName = txtLastName.getText().toString();
                 String pass = txtPassword.getText().toString();
                 String confirmPass = txtConfirmPassword.getText().toString();
-                String userRole = txtRole.getSelectedItem().toString();
+                String userRole = roleChosen.getText().toString();
 
 
                 if(!email.isEmpty() && !FName.isEmpty() && !LName.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty()) {

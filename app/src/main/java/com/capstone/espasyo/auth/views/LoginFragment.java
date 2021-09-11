@@ -19,13 +19,13 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
-import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseUser;
 
 
 public class LoginFragment extends Fragment {
 
-    private TextInputLayout textInputEmail, textInputPassword;
+    private TextInputEditText textInputEmail, textInputPassword;
     private Button btnLogin;
     private TextView gotoSignUp;
 
@@ -42,7 +42,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
                 if(firebaseUser != null) {
-                    //navController.navigate(R.id.action_loginFragment_to_mainPageFragment);
+                    navController.navigate(R.id.action_loginFragment_to_sampleFragment);
                 }
             }
         });
@@ -75,8 +75,8 @@ public class LoginFragment extends Fragment {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String txtEmail = textInputEmail.getEditText().getText().toString().trim();
-                String txtPassword = textInputPassword.getEditText().getText().toString().trim();
+                String txtEmail = textInputEmail.getText().toString().trim();
+                String txtPassword = textInputPassword.getText().toString().trim();
 
                 if(confirmInput(txtEmail, txtPassword)) {
                     viewModel.signIn(txtEmail, txtPassword);

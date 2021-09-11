@@ -4,9 +4,14 @@
     <string name="app_name">Espasyo</string>
 
     <!-- My Strings -->
+    <!-- For signup fragment -->
+    <string name="dropDown_label">Choose Role</string>
     <string-array name="userRole">
         <item>student</item>
         <item>landlord</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>
