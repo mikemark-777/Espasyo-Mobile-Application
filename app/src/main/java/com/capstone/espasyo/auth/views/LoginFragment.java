@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +21,13 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
 
 
 public class LoginFragment extends Fragment {
 
+    private TextInputLayout sampleLayout;
     private TextInputEditText textInputEmail, textInputPassword;
     private Button btnLogin;
     private TextView gotoSignUp;
@@ -59,6 +62,8 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        sampleLayout = view.findViewById(R.id.sampleLayout);
+
         textInputEmail = view.findViewById(R.id.text_input_email);
         textInputPassword = view.findViewById(R.id.text_input_password);
         gotoSignUp = view.findViewById(R.id.gotoSignUp);
@@ -78,6 +83,7 @@ public class LoginFragment extends Fragment {
                 String txtEmail = textInputEmail.getText().toString().trim();
                 String txtPassword = textInputPassword.getText().toString().trim();
 
+
                 if(confirmInput(txtEmail, txtPassword)) {
                     viewModel.signIn(txtEmail, txtPassword);
                 } else {
@@ -87,12 +93,18 @@ public class LoginFragment extends Fragment {
         });
     }
 
+    // Functions
+    // ------ input validations -------------------------------
+    public final String TAG = "TESTING";
+
     private boolean validateEmail(String email) {
         if(email.isEmpty()) {
             textInputEmail.setError("Email address field cannot be empty");
+            Log.d(TAG, "EMAIL: EMPTY");
             return false;
         } else {
             textInputEmail.setError(null);
+            Log.d(TAG, "EMAIL: NOT EMPTY");
             return true;
         }
     }
@@ -100,9 +112,11 @@ public class LoginFragment extends Fragment {
     private boolean validatePassword(String password) {
         if(password.isEmpty()) {
             textInputPassword.setError("Password field cannot be empty");
+            Log.d(TAG, "PASSWORD: EMPTY");
             return false;
         } else {
             textInputPassword.setError(null);
+            Log.d(TAG, "PASSWORD: NOT EMPTY");
             return true;
         }
     }
@@ -111,9 +125,14 @@ public class LoginFragment extends Fragment {
 
         boolean isValid = false;
 
-        if(validateEmail(email) | validatePassword(password)) {
+        boolean emailResult = validateEmail(email);
+        boolean passwordResult = validatePassword(password);
+
+        if(emailResult == true && passwordResult == true) {
+            Log.d(TAG, "CAN PROCEED: TRUE");
             isValid = true;
         } else {
+            Log.d(TAG, "CAN PROCEED: FALSE");
             isValid = false;
         }
 

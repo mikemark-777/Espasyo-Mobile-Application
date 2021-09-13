@@ -10,15 +10,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,14 +27,16 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpFragment extends Fragment {
 
-    private TextInputEditText txtEmail, txtFirstName, txtLastName, txtPassword, txtConfirmPassword;
+    private TextInputEditText textInputEmail, textInputFirstName, textInputLastName, textInputPassword, textInputConfirmPassword;
 
     String [] roles = {"Student","Landlord or Landlady"};
     AutoCompleteTextView roleChosen;
     ArrayAdapter<String> rolesAdapter;
 
+    //navigate to Login using text
     private TextView gotoLogin;
-    private Button signUpButton;
+
+    private Button btnSignUp;
     private AuthViewModel viewModel;
     private NavController navController;
 
@@ -67,23 +67,19 @@ public class SignUpFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        txtEmail = view.findViewById(R.id.emailSignUp);
-        txtFirstName = view.findViewById(R.id.firstName);
-        txtLastName = view.findViewById(R.id.lastName);
-        txtPassword = view.findViewById(R.id.password);
-        txtConfirmPassword = view.findViewById(R.id.confirmPassword);
+
+        textInputFirstName = view.findViewById(R.id.firstName);
+        textInputLastName = view.findViewById(R.id.lastName);
+        textInputEmail = view.findViewById(R.id.emailSignUp);
+        textInputPassword = view.findViewById(R.id.password);
+        textInputConfirmPassword = view.findViewById(R.id.confirmPassword);
         roleChosen =view.findViewById(R.id.inputRole);
+        btnSignUp = view.findViewById(R.id.btnSignUp);
+        gotoLogin = view.findViewById(R.id.gotoLogin);
+        navController = Navigation.findNavController(view);
 
             rolesAdapter = new ArrayAdapter<String>(getActivity(), R.layout.role_list_item, roles);
             roleChosen.setAdapter(rolesAdapter);
-
-
-
-
-        signUpButton = view.findViewById(R.id.btnSignUp);
-        gotoLogin = view.findViewById(R.id.gotoLogin);
-
-        navController = Navigation.findNavController(view);
 
         gotoLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,44 +88,172 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = txtEmail.getText().toString();
-                String FName = txtFirstName.getText().toString();
-                String LName = txtLastName.getText().toString();
-                String pass = txtPassword.getText().toString();
-                String confirmPass = txtConfirmPassword.getText().toString();
-                String userRole = roleChosen.getText().toString();
+                String FName = textInputFirstName.getText().toString().trim();
+                String LName = textInputLastName.getText().toString().trim();
+                String email = textInputEmail.getText().toString().trim();
+                String pass = textInputPassword.getText().toString().trim();
+                String confirmPass = textInputConfirmPassword.getText().toString().trim();
+                String userRole = roleChosen.getText().toString().trim();
+
+                if(confirmInput(FName, LName, email, pass, confirmPass, userRole)) {
+                    Toast.makeText(getActivity(),"ACCOUNT CREATED" , Toast.LENGTH_SHORT).show();
+                }
 
 
-                if(!email.isEmpty() && !FName.isEmpty() && !LName.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty()) {
+            /*    if(!email.isEmpty() && !FName.isEmpty() && !LName.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty()) {
                     if(matchPassword(pass, confirmPass)) {
                         //Todo:Edit Authentication viewmodel and repository
-                        viewModel.register(email, pass);
+                        //Todo: Uncomment when validations are done and functional
+                       // viewModel.register(email, pass);
                     } else {
                         Toast.makeText(getActivity(),"Password not match" , Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getActivity(),"Please Fillout everything." , Toast.LENGTH_SHORT).show();
-                }
+                }*/
             }
         });
 
     }
 
     // Functions
+    // ------ input validations -------------------------------
+    public final String TAG = "TESTING";
 
-    public Boolean matchPassword(String password, String confirmPassword) {
-
-        boolean isMatch = false;
-        if(password.equals(confirmPassword)) {
-            isMatch = true;
+    /* Check if firstName is empty */
+    public Boolean isFirstNameEmpty(String firstName) {
+        if(firstName.isEmpty()) {
+            textInputFirstName.setError("First Name field cannot be empty");
+            Log.d(TAG, "FIRSTNAME: EMPTY");
+            return false;
         } else {
-            isMatch = false;
+            textInputFirstName.setError(null);
+            Log.d(TAG, "FIRSTNAME: NOT EMPTY");
+            return true;
         }
-        return isMatch;
     }
 
+    /* Check if lastName is empty */
+    public Boolean isLastNameEmpty(String lastName) {
+        if(lastName.isEmpty()) {
+            textInputLastName.setError("Last Name field cannot be empty");
+            Log.d(TAG, "LASTNAME: EMPTY");
+            return false;
+        } else {
+            textInputLastName.setError(null);
+            Log.d(TAG, "LASTNAME: NOT EMPTY");
+            return true;
+        }
+    }
+
+    /* Check if email is empty */
+    public Boolean isEmailEmpty(String email) {
+        if(email.isEmpty()) {
+            textInputEmail.setError("Email field cannot be empty");
+            Log.d(TAG, "EMAIL: EMPTY");
+            return false;
+        } else {
+            textInputEmail.setError(null);
+            Log.d(TAG, "EMAIL: NOT EMPTY");
+            return true;
+        }
+    }
+
+    /* Check if password and confirmPassword is empty */
+    public Boolean isPasswordsEmpty(String password, String confirmPassword) {
+
+        boolean isPasswordEmpty = false;
+        boolean isConfirmPasswordEmpty = false;
+
+        //check if password is empty
+        if(password.isEmpty()) {
+            textInputPassword.setError("Password field cannot be empty");
+            Log.d(TAG, "PASSWORD: EMPTY");
+            isPasswordEmpty = true;
+        } else {
+            textInputPassword.setError(null);
+            Log.d(TAG, "PASSWORD: NOT EMPTY");
+            isPasswordEmpty = false;
+        }
+        //check if confirmPassword is empty
+        if(confirmPassword.isEmpty()) {
+            textInputConfirmPassword.setError("Confirm Password field cannot be empty");
+            Log.d(TAG, "CONFIRM PASSWORD: EMPTY");
+            isConfirmPasswordEmpty = true;
+        } else {
+            textInputConfirmPassword.setError(null);
+            Log.d(TAG, "CONFIRM PASSWORD: NOT EMPTY");
+            isConfirmPasswordEmpty = false;
+        }
+
+          if(isPasswordEmpty == true && isConfirmPasswordEmpty == true) {
+              return true;
+          } else {
+              return false;
+          }
+    }
+
+    /* Check if userRole is empty */
+    public Boolean isUserRoleEmpty(String userRole) {
+        if(userRole.isEmpty()) {
+            roleChosen.setError("Email field cannot be empty");
+            Log.d(TAG, "ROLE: EMPTY");
+            return false;
+        } else {
+            roleChosen.setError(null);
+            Log.d(TAG, "ROLE: NOT EMPTY");
+            return true;
+        }
+    }
+
+    /* Check if password1 and password2 are not empty and match*/
+    public Boolean validatePassword(String password1, String password2) {
+
+        if(isPasswordsEmpty(password1, password2) == false) {
+            if(matchPassword(password1, password2) == true) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /* Check if password1 and password2 are match*/
+    public Boolean matchPassword(String password, String confirmPassword) {
+
+        if(password.equals(confirmPassword)) {
+            Log.d(TAG, "PASSWORD MATCHING: MATCH");
+            return true;
+        } else {
+            textInputPassword.setError("Password Not Match");
+            textInputConfirmPassword.setError("Password Not Match");
+            Log.d(TAG, "PASSWORD MATCHING: NOT MATCH");
+            return false;
+        }
+    }
+
+
+    public Boolean confirmInput(String firstName, String lastName, String email, String password, String confirmPassword, String userRole) {
+
+        boolean firstNameResult = isFirstNameEmpty(firstName);
+        boolean lastNameResult = isLastNameEmpty(lastName);
+        boolean emailResult = isEmailEmpty(email);
+        boolean passwordResult = validatePassword(password, confirmPassword);
+        boolean userRoleResult = isUserRoleEmpty(userRole);
+
+
+        if(firstNameResult == true && lastNameResult == true && emailResult == true && passwordResult == true && userRoleResult == true) {
+            Log.d(TAG, "CAN PROCEED: TRUE");
+            return true;
+        } else {
+            Log.d(TAG, "CAN PROCEED: FALSE");
+            return false;
+        }
+    }
 
 }
