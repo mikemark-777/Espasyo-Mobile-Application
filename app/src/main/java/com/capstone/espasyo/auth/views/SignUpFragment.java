@@ -99,6 +99,7 @@ public class SignUpFragment extends Fragment {
                 String userRole = roleChosen.getText().toString().trim();
 
                 if(confirmInput(FName, LName, email, pass, confirmPass, userRole)) {
+                    //TODO: Change to the viewModel.register(email, pass);
                     Toast.makeText(getActivity(),"ACCOUNT CREATED" , Toast.LENGTH_SHORT).show();
                 }
 
