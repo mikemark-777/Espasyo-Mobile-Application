@@ -1,5 +1,6 @@
 package com.capstone.espasyo.auth.views;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -35,16 +36,22 @@ public class LoginFragment extends Fragment {
     private AuthViewModel viewModel;
     private NavController navController;
 
+    //TODO: Update API used. This is depracated
+    private ProgressDialog loginProgressDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
                 .getInstance(getActivity().getApplication())).get(AuthViewModel.class);
 
+
         viewModel.getUserData().observe(this, new Observer<FirebaseUser>() {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
                 if(firebaseUser != null) {
+                    String UID = viewModel.getUserData().getValue().getUid();
+                    Toast.makeText(getActivity(), "Logged In User: " + UID, Toast.LENGTH_SHORT).show();
                     navController.navigate(R.id.action_loginFragment_to_sampleFragment);
                 }
             }
@@ -85,6 +92,14 @@ public class LoginFragment extends Fragment {
 
 
                 if(confirmInput(txtEmail, txtPassword)) {
+
+                    //TODO: Update API used. This is depracated
+                    loginProgressDialog = new ProgressDialog(getActivity());
+                    loginProgressDialog.show();
+                    loginProgressDialog.setContentView(R.layout.login_progress_dialog);
+                    loginProgressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+
                     viewModel.signIn(txtEmail, txtPassword);
                 } else {
                     Toast.makeText(getActivity(), "Please fill out everything", Toast.LENGTH_SHORT).show();

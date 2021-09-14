@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.capstone.espasyo.auth.repository.AuthenticationRepository;
+import com.capstone.espasyo.models.User;
 import com.google.firebase.auth.FirebaseUser;
 
 public class AuthViewModel extends AndroidViewModel {
@@ -22,6 +23,8 @@ public class AuthViewModel extends AndroidViewModel {
         loggedStatus = repository.getUserLoggedMutableLiveData();
     }
 
+    /* ---------------- For Authenticating Users in the System -----------------------------*/
+
     public MutableLiveData<FirebaseUser> getUserData() {
         return userData;
     }
@@ -30,8 +33,8 @@ public class AuthViewModel extends AndroidViewModel {
         return loggedStatus;
     }
 
-    public void register(String email, String password) {
-        repository.register(email, password);
+    public void register(User newUser) {
+        repository.register(newUser);
     }
 
     public void signIn(String email, String password) {
@@ -41,4 +44,5 @@ public class AuthViewModel extends AndroidViewModel {
     public void signOut() {
         repository.logout();
     }
+
 }

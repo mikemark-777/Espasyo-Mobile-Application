@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
+import com.capstone.espasyo.models.User;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -99,22 +100,23 @@ public class SignUpFragment extends Fragment {
                 String userRole = roleChosen.getText().toString().trim();
 
                 if(confirmInput(FName, LName, email, pass, confirmPass, userRole)) {
-                    //TODO: Change to the viewModel.register(email, pass);
-                    Toast.makeText(getActivity(),"ACCOUNT CREATED" , Toast.LENGTH_SHORT).show();
+
+                    int uRole = userRole.equals("Student") ? 3 : 2;
+
+                  String UID = "";
+                    User newUser = new User(
+                        UID,
+                        FName,
+                        LName,
+                        email,
+                        pass,
+                        uRole
+                    );
+
+                    viewModel.register(newUser);
+
+
                 }
-
-
-            /*    if(!email.isEmpty() && !FName.isEmpty() && !LName.isEmpty() && !pass.isEmpty() && !confirmPass.isEmpty()) {
-                    if(matchPassword(pass, confirmPass)) {
-                        //Todo:Edit Authentication viewmodel and repository
-                        //Todo: Uncomment when validations are done and functional
-                       // viewModel.register(email, pass);
-                    } else {
-                        Toast.makeText(getActivity(),"Password not match" , Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getActivity(),"Please Fillout everything." , Toast.LENGTH_SHORT).show();
-                }*/
             }
         });
 
