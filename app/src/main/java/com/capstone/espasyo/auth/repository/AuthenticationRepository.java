@@ -50,7 +50,7 @@ public class AuthenticationRepository {
     }
 
     public void register(User newUser) {
-        //extract user and password
+        /* extract user and password */
         String email = newUser.getEmail();
         String password = newUser.getPassword();
 
@@ -61,22 +61,10 @@ public class AuthenticationRepository {
                     firebaseUserMutableLiveData.postValue(auth.getCurrentUser());
                     //TODO: [BELOW] get current user id and put it in the newUser object to be saved on the database
                     String UID = auth.getCurrentUser().getUid();
-
-
                     dbUsers = database.collection("users").document(UID);
-                    newUser.setUID(UID);
 
-                    dbUsers.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Toast.makeText(application, "Account successfully created", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(application, "Failed to create account", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                   newUser.setUID(UID);
+                    saveUserData(dbUsers, newUser, UID);
 
                 } else {
                     Toast.makeText(application, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -103,5 +91,26 @@ public class AuthenticationRepository {
         auth.signOut();
         userLoggedMutableLiveData.postValue(true);
     }
+
+
+    /*----------------------- FIRESTORE DATABASE OPERATIONS --------------------------------*/
+
+    /* Save data to Firestore Database*/
+    public void saveUserData(DocumentReference dbUsers, User newUser, String UID) {
+
+        newUser.setUID(UID);
+        dbUsers.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(application, "Account successfully created", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(application, "Failed to create account", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 }

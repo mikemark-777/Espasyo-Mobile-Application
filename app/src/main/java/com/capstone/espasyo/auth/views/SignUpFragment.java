@@ -28,7 +28,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpFragment extends Fragment {
 
-    private TextInputEditText textInputEmail, textInputFirstName, textInputLastName, textInputPassword, textInputConfirmPassword;
+    private TextInputEditText textInputEmail,
+                              textInputFirstName,
+                              textInputLastName,
+                              textInputPassword,
+                              textInputConfirmPassword;
 
     String [] roles = {"Student","Landlord or Landlady"};
     AutoCompleteTextView roleChosen;
@@ -47,6 +51,7 @@ public class SignUpFragment extends Fragment {
         viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
                 .getInstance(getActivity().getApplication())).get(AuthViewModel.class);
 
+        //check each time if there is a logged user
         viewModel.getUserData().observe(this, new Observer<FirebaseUser>() {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
@@ -74,14 +79,16 @@ public class SignUpFragment extends Fragment {
         textInputEmail = view.findViewById(R.id.emailSignUp);
         textInputPassword = view.findViewById(R.id.password);
         textInputConfirmPassword = view.findViewById(R.id.confirmPassword);
+
         roleChosen =view.findViewById(R.id.inputRole);
         btnSignUp = view.findViewById(R.id.btnSignUp);
         gotoLogin = view.findViewById(R.id.gotoLogin);
         navController = Navigation.findNavController(view);
 
-            rolesAdapter = new ArrayAdapter<String>(getActivity(), R.layout.role_list_item, roles);
-            roleChosen.setAdapter(rolesAdapter);
+        rolesAdapter = new ArrayAdapter<String>(getActivity(), R.layout.role_list_item, roles);
+        roleChosen.setAdapter(rolesAdapter);
 
+        //Navigate to Login Fragment
         gotoLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,9 +108,16 @@ public class SignUpFragment extends Fragment {
 
                 if(confirmInput(FName, LName, email, pass, confirmPass, userRole)) {
 
-                    int uRole = userRole.equals("Student") ? 3 : 2;
+                  /*Check if what role and change it into user-role-code
+                  * User-Role-Code:
+                  * 1 - Admin
+                  * 2 - Landlord/Landlady
+                  * 3 - Student
+                  */
+                  int uRole = userRole.equals("Student") ? 3 : 2;
 
                   String UID = "";
+
                     User newUser = new User(
                         UID,
                         FName,
@@ -114,8 +128,6 @@ public class SignUpFragment extends Fragment {
                     );
 
                     viewModel.register(newUser);
-
-
                 }
             }
         });

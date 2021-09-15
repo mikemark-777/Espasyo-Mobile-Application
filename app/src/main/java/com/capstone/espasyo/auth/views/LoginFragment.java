@@ -1,6 +1,6 @@
 package com.capstone.espasyo.auth.views;
 
-import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
+import com.capstone.espasyo.landlord.SampleLandlordDashboard;
+import com.capstone.espasyo.student.SampleStudentDashboard;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,23 +38,33 @@ public class LoginFragment extends Fragment {
     private AuthViewModel viewModel;
     private NavController navController;
 
-    //TODO: Update API used. This is depracated
-    private ProgressDialog loginProgressDialog;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
                 .getInstance(getActivity().getApplication())).get(AuthViewModel.class);
 
-
+        //check each time if there is a logged user
         viewModel.getUserData().observe(this, new Observer<FirebaseUser>() {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
                 if(firebaseUser != null) {
-                    String UID = viewModel.getUserData().getValue().getUid();
-                    Toast.makeText(getActivity(), "Logged In User: " + UID, Toast.LENGTH_SHORT).show();
-                    navController.navigate(R.id.action_loginFragment_to_sampleFragment);
+                    //String UID = viewModel.getUserData().getValue().getUid();
+                   // navController.navigate(R.id.action_loginFragment_to_sampleFragment);
+
+
+                    //TODO: GET USER DATA AND CHECK IF IT IS A STUDENT OR LANDLADY
+                    //String id = firebaseUser.getUid().toString();
+
+                    int user = 2;
+
+                    if(user == 1) {
+                       Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
+                       startActivity(intent);
+                    } else if(user == 2){
+                        Intent intent = new Intent(getActivity(), SampleLandlordDashboard.class);
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -77,6 +89,7 @@ public class LoginFragment extends Fragment {
         btnLogin = view.findViewById(R.id.btnLogin);
         navController = Navigation.findNavController(view);
 
+        //Navigate to Signup Fragment
         gotoSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,14 +105,6 @@ public class LoginFragment extends Fragment {
 
 
                 if(confirmInput(txtEmail, txtPassword)) {
-
-                    //TODO: Update API used. This is depracated
-                    loginProgressDialog = new ProgressDialog(getActivity());
-                    loginProgressDialog.show();
-                    loginProgressDialog.setContentView(R.layout.login_progress_dialog);
-                    loginProgressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-
                     viewModel.signIn(txtEmail, txtPassword);
                 } else {
                     Toast.makeText(getActivity(), "Please fill out everything", Toast.LENGTH_SHORT).show();

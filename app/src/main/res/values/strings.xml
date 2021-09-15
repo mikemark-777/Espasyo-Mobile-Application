@@ -5,12 +5,12 @@
 
     <!-- My Strings -->
 
-        <!-- For signup fragment -->
-        <string name="dropDown_label">Choose Role</string>
-        <string-array name="userRole">
-            <item>student</item>
-            <item>landlord</item>
-        </string-array>
+    <!-- For signup fragment -->
+    <string name="dropDown_label">Choose Role</string>
+    <string-array name="userRole">
+        <item>student</item>
+        <item>landlord</item>
+    </string-array>
 
 
 </resources>
