@@ -46,4 +46,8 @@ public class AuthViewModel extends AndroidViewModel {
         repository.logout();
     }
 
+    public void updateEmailAddress(FirebaseUser currentUser,String currentEmail, String newEmail, String password) {
+        repository.updateEmailAddress(currentUser, currentEmail, newEmail, password);
+    }
+
 }

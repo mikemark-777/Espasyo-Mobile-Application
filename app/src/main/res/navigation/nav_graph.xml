@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/navigation_graph"
     app:startDestination="@id/loginFragment">
 
     <fragment
@@ -11,14 +11,13 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_signUpFragment"
+            android:id="@+id/gotoSignUpFragment"
             app:destination="@id/signUpFragment"
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right" />
         <action
-            android:id="@+id/action_loginFragment_to_sampleFragment"
-            app:destination="@id/sampleFragment"
-            app:exitAnim="@anim/nav_default_exit_anim" />
+            android:id="@+id/gotoEmailVerification_from_LoginFragment"
+            app:destination="@id/emailVerificationFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -26,16 +25,31 @@
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" >
         <action
-            android:id="@+id/action_signUpFragment_to_loginFragment"
+            android:id="@+id/gotoLoginFragment_From_SignUp"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/gotoEmailVerification_From_SignUpFragment"
+            app:destination="@id/emailVerificationFragment" />
     </fragment>
     <fragment
-        android:id="@+id/sampleFragment"
-        android:name="com.capstone.espasyo.auth.views.SampleFragment"
-        android:label="fragment_sample"
-        tools:layout="@layout/fragment_sample" >
+        android:id="@+id/emailVerificationFragment"
+        android:name="com.capstone.espasyo.auth.views.EmailVerificationFragment"
+        android:label="fragment_email_verification"
+        tools:layout="@layout/fragment_email_verification" >
         <action
-            android:id="@+id/action_sampleFragment_to_loginFragment"
+            android:id="@+id/gotoLoginFragment_From_EmailVerificationFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_emailVerificationFragment_to_updateEmailFragment"
+            app:destination="@id/updateEmailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateEmailFragment"
+        android:name="com.capstone.espasyo.auth.views.UpdateEmailFragment"
+        android:label="fragment_update_email"
+        tools:layout="@layout/fragment_update_email" >
+        <action
+            android:id="@+id/gotoEmailVerificationFragment_From_UpdateEmailFragment"
+            app:destination="@id/emailVerificationFragment" />
     </fragment>
 </navigation>

@@ -18,7 +18,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
@@ -56,7 +55,13 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
                 if(firebaseUser != null) {
-                    navController.navigate(R.id.action_signUpFragment_to_loginFragment);
+                    if(firebaseUser.isEmailVerified()) {
+                        //TODO:must include logout user for them to try login in their verified credentials
+                        navController.navigate(R.id.gotoLoginFragment_From_EmailVerificationFragment);
+                    } else {
+                        navController.navigate(R.id.gotoEmailVerification_From_SignUpFragment);
+                    }
+                    //navController.navigate(R.id.gotoLoginFragment_From_SignUp);
                 }
             }
         });
@@ -92,7 +97,7 @@ public class SignUpFragment extends Fragment {
         gotoLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.action_signUpFragment_to_loginFragment);
+                navController.navigate(R.id.gotoLoginFragment_From_SignUp);
             }
         });
 

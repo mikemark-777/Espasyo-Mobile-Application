@@ -5,16 +5,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.capstone.espasyo.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -22,19 +25,21 @@ public class AuthenticationRepository {
     private Application application;
     private MutableLiveData<FirebaseUser> firebaseUserMutableLiveData;
     private MutableLiveData<Boolean> userLoggedMutableLiveData;
-    private FirebaseAuth auth;
+    private FirebaseAuth firebaseAuth;
     private FirebaseFirestore database;
     private DocumentReference dbUsers;
+
 
     public AuthenticationRepository(Application application) {
         this.application = application;
         firebaseUserMutableLiveData = new MutableLiveData<>();
         userLoggedMutableLiveData = new MutableLiveData<>();
-        auth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
 
-        if(auth.getCurrentUser() != null) {
-            firebaseUserMutableLiveData.postValue(auth.getCurrentUser());
+
+        if(firebaseAuth.getCurrentUser() != null) {
+            firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
         }
     }
 
@@ -43,7 +48,6 @@ public class AuthenticationRepository {
     public MutableLiveData<FirebaseUser> getFirebaseUserMutableLiveData() {
         return firebaseUserMutableLiveData;
     }
-
 
     public MutableLiveData<Boolean> getUserLoggedMutableLiveData() {
         return userLoggedMutableLiveData;
@@ -54,17 +58,15 @@ public class AuthenticationRepository {
         String email = newUser.getEmail();
         String password = newUser.getPassword();
 
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
-                    firebaseUserMutableLiveData.postValue(auth.getCurrentUser());
-                    //TODO: [BELOW] get current user id and put it in the newUser object to be saved on the database
-                    String UID = auth.getCurrentUser().getUid();
-                    dbUsers = database.collection("users").document(UID);
 
-                   newUser.setUID(UID);
-                    saveUserData(dbUsers, newUser, UID);
+                    firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
+                    String UID = firebaseAuth.getCurrentUser().getUid(); //get currentUser's UID
+                    saveUserData(newUser, UID); //save user data to database
+
 
                 } else {
                     Toast.makeText(application, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -75,11 +77,11 @@ public class AuthenticationRepository {
 
     public void login(String email, String password) {
 
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
-                    firebaseUserMutableLiveData.postValue(auth.getCurrentUser());
+                    firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
                 }else {
                     Toast.makeText(application, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -88,17 +90,47 @@ public class AuthenticationRepository {
     }
 
     public void logout() {
-        auth.signOut();
+        firebaseAuth.signOut();
         userLoggedMutableLiveData.postValue(true);
     }
+
+    /*Re-authenticate email | Update email address*/
+
+
+
+    public void updateEmailAddress(FirebaseUser currentUser,String currentEmail, String newEmail, String password) {
+
+        AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, password);// Get current auth credentials from the user for re-authentication
+        currentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                currentUser.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
+                            Toast.makeText(application, "Email Address successfully updated", Toast.LENGTH_SHORT).show();
+                            //TODO: Must update the email in the Firestore database as well
+                        } else {
+                            Toast.makeText(application, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 
 
     /*----------------------- FIRESTORE DATABASE OPERATIONS --------------------------------*/
 
     /* Save data to Firestore Database*/
-    public void saveUserData(DocumentReference dbUsers, User newUser, String UID) {
+    public void saveUserData(User newUser, String UID) {
 
         newUser.setUID(UID);
+        //Set the path where the data will be saved, Set the UID of the data that will be saved
+        dbUsers = database.collection("users").document(UID);
+
         dbUsers.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {

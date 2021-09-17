@@ -30,6 +30,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginFragment extends Fragment {
 
+    private final int ADMIN_CODE = 1;
+    private final int LANDLORD_CODE = 2;
+    private final int STUDENT_CODE = 3;
+
     private TextInputLayout sampleLayout;
     private TextInputEditText textInputEmail, textInputPassword;
     private Button btnLogin;
@@ -49,22 +53,53 @@ public class LoginFragment extends Fragment {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
                 if(firebaseUser != null) {
-                    //String UID = viewModel.getUserData().getValue().getUid();
-                   // navController.navigate(R.id.action_loginFragment_to_sampleFragment);
 
+                    if(firebaseUser.isEmailVerified()) {
+                        //TODO: GET USER DATA AND CHECK IF IT IS A STUDENT OR LANDLADY
+                        //String id = firebaseUser.getUid().toString();
 
-                    //TODO: GET USER DATA AND CHECK IF IT IS A STUDENT OR LANDLADY
-                    //String id = firebaseUser.getUid().toString();
+                        int user = 2;
 
-                    int user = 2;
+                        if(user == 1) {
+                            Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
+                            startActivity(intent);
+                        } else if(user == 2){
+                            Intent intent = new Intent(getActivity(), SampleLandlordDashboard.class);
+                            startActivity(intent);
+                        }
+                        //navController.navigate(R.id.gotoEmailVerification_from_LoginFragment);
+                    } else {
+                        navController.navigate(R.id.gotoEmailVerification_from_LoginFragment);
+                        //Toast.makeText(getActivity(), "Please check your email to verify account", Toast.LENGTH_SHORT).show();
+                    }
+
+                    /*int user = 2;
 
                     if(user == 1) {
-                       Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
-                       startActivity(intent);
+                        Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
+                        startActivity(intent);
                     } else if(user == 2){
                         Intent intent = new Intent(getActivity(), SampleLandlordDashboard.class);
                         startActivity(intent);
-                    }
+                    }*/
+
+                     /* if(firebaseUser.isEmailVerified()) {
+                          //TODO: GET USER DATA AND CHECK IF IT IS A STUDENT OR LANDLADY
+                          //String id = firebaseUser.getUid().toString();
+
+                          int user = 2;
+
+                          if(user == 1) {
+                              Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
+                              startActivity(intent);
+                          } else if(user == 2){
+                              Intent intent = new Intent(getActivity(), SampleLandlordDashboard.class);
+                              startActivity(intent);
+                          }
+                          //navController.navigate(R.id.gotoEmailVerification_from_LoginFragment);
+                      } else {
+                          Toast.makeText(getActivity(), "Please check your email to verify account", Toast.LENGTH_SHORT).show();
+                      }*/
                 }
             }
         });
@@ -93,7 +128,7 @@ public class LoginFragment extends Fragment {
         gotoSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.action_loginFragment_to_signUpFragment);
+                navController.navigate(R.id.gotoSignUpFragment);
             }
         });
 
@@ -102,7 +137,6 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 String txtEmail = textInputEmail.getText().toString().trim();
                 String txtPassword = textInputPassword.getText().toString().trim();
-
 
                 if(confirmInput(txtEmail, txtPassword)) {
                     viewModel.signIn(txtEmail, txtPassword);
