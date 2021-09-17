@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -21,6 +22,7 @@ import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class EmailVerificationFragment extends Fragment {
@@ -31,6 +33,7 @@ public class EmailVerificationFragment extends Fragment {
     private Button btnProceed;
     private NavController navController;
     private TextView gotoUpdateEmailFragment;
+    private TextView txtEmail;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,19 @@ public class EmailVerificationFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
                 .getInstance(getActivity().getApplication())).get(AuthViewModel.class);
+
+        viewModel.getUserData().observe(this, new Observer<FirebaseUser>() {
+            @Override
+            public void onChanged(FirebaseUser firebaseUser) {
+                if(firebaseUser != null) {
+                    String email = firebaseUser.getEmail();
+                    txtEmail.setText(email);
+                }
+            }
+        });
+
+
+
     }
 
     @Override
@@ -56,6 +72,7 @@ public class EmailVerificationFragment extends Fragment {
         btnVerifyEmail = view.findViewById(R.id.btnVerifyEmail);
         btnProceed = view.findViewById(R.id.btnProceed);
         gotoUpdateEmailFragment = view.findViewById(R.id.gotoUpdateEmailFragment);
+        txtEmail = view.findViewById(R.id.txtEmail);
 
         btnProceed.setEnabled(false);
 

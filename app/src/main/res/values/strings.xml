@@ -11,9 +11,8 @@
         <item>student</item>
         <item>landlord</item>
     </string-array>
-    <string name="emailConfirmationMessage">We have sent an email to</string>
+    <string name="emailConfirmationMessage">We will send an email to</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
