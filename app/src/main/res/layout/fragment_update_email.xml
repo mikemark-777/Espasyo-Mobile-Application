@@ -31,14 +31,14 @@
             android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sampleLayout1"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/text_input_currentemail_layout_updateemail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_CurrentEmail_update"
+                android:id="@+id/text_input_currentemail_updateemail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Current Email Address"
@@ -47,14 +47,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sampleLayout2"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/text_input_newemail_layout_updateemail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_NewEmail_update"
+                android:id="@+id/text_input_newemail_updateemail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="New Email Address"
@@ -64,6 +64,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/text_input_password_layout_updateemail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -71,7 +72,7 @@
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_Password_update"
+                android:id="@+id/text_input_password_updateemail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"

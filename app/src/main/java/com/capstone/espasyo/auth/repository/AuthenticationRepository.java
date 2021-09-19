@@ -5,8 +5,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.capstone.espasyo.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,6 +51,7 @@ public class AuthenticationRepository {
         return userLoggedMutableLiveData;
     }
 
+
     public void register(User newUser) {
         /* extract user and password */
         String email = newUser.getEmail();
@@ -67,6 +66,14 @@ public class AuthenticationRepository {
                     String UID = firebaseAuth.getCurrentUser().getUid(); //get currentUser's UID
                     saveUserData(newUser, UID); //save user data to database
 
+                    firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                Toast.makeText(application, "Email Verification Successfully sent", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
 
                 } else {
                     Toast.makeText(application, task.getException().getMessage(), Toast.LENGTH_SHORT).show();

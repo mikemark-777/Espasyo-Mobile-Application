@@ -17,21 +17,33 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.capstone.espasyo.models.User;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpFragment extends Fragment {
+
+    private TextInputLayout textInputEmailLayout,
+                            textInputFirstNameLayout,
+                            textInputLastNameLayout,
+                            textInputPasswordLayout,
+                            textInputConfirmPasswordLayout,
+                            textInputRoleLayout;
 
     private TextInputEditText textInputEmail,
                               textInputFirstName,
                               textInputLastName,
                               textInputPassword,
                               textInputConfirmPassword;
+
+    private CheckBox agreeToTermsAndConditions;
 
     String [] roles = {"Student","Landlord or Landlady"};
     AutoCompleteTextView roleChosen;
@@ -55,13 +67,14 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
                 if(firebaseUser != null) {
+
                     if(firebaseUser.isEmailVerified()) {
                         //TODO:must include logout user for them to try login in their verified credentials
-                        navController.navigate(R.id.gotoLoginFragment_From_EmailVerificationFragment);
+                        viewModel.signOut();
+                        navController.navigate(R.id.action_emailVerificationFragment_to_loginFragment);
                     } else {
-                        navController.navigate(R.id.gotoEmailVerification_From_SignUpFragment);
+                        navController.navigate(R.id.action_signUpFragment_to_emailVerificationFragment);
                     }
-                    //navController.navigate(R.id.gotoLoginFragment_From_SignUp);
                 }
             }
         });
@@ -78,14 +91,25 @@ public class SignUpFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //TextInputLayouts
+        textInputEmailLayout = view.findViewById(R.id.text_input_email_layout_signup);
+        textInputFirstNameLayout = view.findViewById(R.id.text_input_firstname_layout_signup);
+        textInputLastNameLayout = view.findViewById(R.id.text_input_lastname_layout_signup);
+        textInputPasswordLayout = view.findViewById(R.id.text_input_password_layout_signup);
+        textInputConfirmPasswordLayout = view.findViewById(R.id.text_input_confirmpassword_layout_signup);
+        textInputRoleLayout = view.findViewById(R.id.text_input_role_layout_signup);
 
-        textInputFirstName = view.findViewById(R.id.firstName);
-        textInputLastName = view.findViewById(R.id.lastName);
-        textInputEmail = view.findViewById(R.id.emailSignUp);
-        textInputPassword = view.findViewById(R.id.password);
-        textInputConfirmPassword = view.findViewById(R.id.confirmPassword);
+        //TextInputEditText
+        textInputFirstName = view.findViewById(R.id.text_input_firstname_signup);
+        textInputLastName = view.findViewById(R.id.text_input_lastname_signup);
+        textInputEmail = view.findViewById(R.id.text_input_email_signup);
+        textInputPassword = view.findViewById(R.id.text_input_password_signup);
+        textInputConfirmPassword = view.findViewById(R.id.text_input_confirmpassword_signup);
+        roleChosen =view.findViewById(R.id.text_input_role_signup);
 
-        roleChosen =view.findViewById(R.id.inputRole);
+        //Checkbox
+        agreeToTermsAndConditions = view.findViewById(R.id.agreeToTermsAndConditions);
+
         btnSignUp = view.findViewById(R.id.btnSignUp);
         gotoLogin = view.findViewById(R.id.gotoLogin);
         navController = Navigation.findNavController(view);
@@ -93,11 +117,24 @@ public class SignUpFragment extends Fragment {
         rolesAdapter = new ArrayAdapter<String>(getActivity(), R.layout.role_list_item, roles);
         roleChosen.setAdapter(rolesAdapter);
 
+        btnSignUp.setEnabled(false);
+
         //Navigate to Login Fragment
         gotoLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.gotoLoginFragment_From_SignUp);
+                navController.navigate(R.id.action_signUpFragment_to_loginFragment);
+            }
+        });
+
+        agreeToTermsAndConditions.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!isChecked) {
+                    btnSignUp.setEnabled(false);
+                } else {
+                    btnSignUp.setEnabled(true);
+                }
             }
         });
 
@@ -144,67 +181,73 @@ public class SignUpFragment extends Fragment {
     public final String TAG = "TESTING";
 
     /* Check if firstName is empty */
-    public Boolean isFirstNameEmpty(String firstName) {
+    private Boolean isFirstNameEmpty(String firstName) {
         if(firstName.isEmpty()) {
-            textInputFirstName.setError("First Name field cannot be empty");
+            textInputFirstNameLayout.setError("First Name field cannot be empty");
             Log.d(TAG, "FIRSTNAME: EMPTY");
             return false;
         } else {
-            textInputFirstName.setError(null);
+            textInputFirstNameLayout.setError(null);
             Log.d(TAG, "FIRSTNAME: NOT EMPTY");
             return true;
         }
     }
 
     /* Check if lastName is empty */
-    public Boolean isLastNameEmpty(String lastName) {
+    private Boolean isLastNameEmpty(String lastName) {
         if(lastName.isEmpty()) {
-            textInputLastName.setError("Last Name field cannot be empty");
+            textInputLastNameLayout.setError("Last Name field cannot be empty");
             Log.d(TAG, "LASTNAME: EMPTY");
             return false;
         } else {
-            textInputLastName.setError(null);
+            textInputLastNameLayout.setError(null);
             Log.d(TAG, "LASTNAME: NOT EMPTY");
             return true;
         }
     }
 
     /* Check if email is empty */
-    public Boolean isEmailEmpty(String email) {
+    private Boolean isEmailEmpty(String email) {
+        //TODO: Must include validations if email exist in firebase auth and database
         if(email.isEmpty()) {
-            textInputEmail.setError("Email field cannot be empty");
+            textInputEmailLayout.setError("Email field cannot be empty");
             Log.d(TAG, "EMAIL: EMPTY");
             return false;
         } else {
-            textInputEmail.setError(null);
+            textInputEmailLayout.setError(null);
             Log.d(TAG, "EMAIL: NOT EMPTY");
             return true;
         }
     }
 
+ /*   private Boolean isEmailExisting(String email) {
+        
+    }*/
+
     /* Check if password and confirmPassword is empty */
-    public Boolean isPasswordsEmpty(String password, String confirmPassword) {
+    private Boolean isPasswordsEmpty(String password, String confirmPassword) {
 
         boolean isPasswordEmpty = false;
         boolean isConfirmPasswordEmpty = false;
+        boolean isPasswordGreaterThanFive = false;
 
         //check if password is empty
         if(password.isEmpty()) {
-            textInputPassword.setError("Password field cannot be empty");
+            textInputPasswordLayout.setError("Password field cannot be empty");
             Log.d(TAG, "PASSWORD: EMPTY");
             isPasswordEmpty = true;
         } else {
-            textInputPassword.setError(null);
+            textInputPasswordLayout.setError(null);
             Log.d(TAG, "PASSWORD: NOT EMPTY");
             isPasswordEmpty = false;
         }
         //check if confirmPassword is empty
         if(confirmPassword.isEmpty()) {
-            textInputConfirmPassword.setError("Confirm Password field cannot be empty");
+            textInputConfirmPasswordLayout.setError("Confirm Password field cannot be empty");
             Log.d(TAG, "CONFIRM PASSWORD: EMPTY");
             isConfirmPasswordEmpty = true;
         } else {
-            textInputConfirmPassword.setError(null);
+            textInputConfirmPasswordLayout.setError(null);
             Log.d(TAG, "CONFIRM PASSWORD: NOT EMPTY");
             isConfirmPasswordEmpty = false;
         }
@@ -217,48 +260,58 @@ public class SignUpFragment extends Fragment {
     }
 
     /* Check if userRole is empty */
-    public Boolean isUserRoleEmpty(String userRole) {
+    private Boolean isUserRoleEmpty(String userRole) {
         if(userRole.isEmpty()) {
-            roleChosen.setError("Email field cannot be empty");
+            textInputRoleLayout.setError("Role field cannot be empty");
             Log.d(TAG, "ROLE: EMPTY");
             return false;
         } else {
-            roleChosen.setError(null);
+            textInputRoleLayout.setError(null);
             Log.d(TAG, "ROLE: NOT EMPTY");
             return true;
         }
     }
 
     /* Check if password1 and password2 are not empty and match*/
-    public Boolean validatePassword(String password1, String password2) {
+    private Boolean validatePassword(String password1, String password2) {
 
         if(isPasswordsEmpty(password1, password2) == false) {
-            if(matchPassword(password1, password2) == true) {
-                return true;
+            if(password1.length() > 5 && password2.length() > 5) {
+
+                Log.d(TAG, "PASSWORD COUNT: GREATER THAN 5");
+                if(matchPassword(password1, password2) == true) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
+                textInputPasswordLayout.setError("Password must be 6-15 characters");
+                textInputConfirmPasswordLayout.setError("Password must be 6-15 characters");
+                Log.d(TAG, "PASSWORD COUNT: LESS THAN 6");
                 return false;
             }
+
         } else {
             return false;
         }
     }
 
     /* Check if password1 and password2 are match*/
-    public Boolean matchPassword(String password, String confirmPassword) {
+    private Boolean matchPassword(String password, String confirmPassword) {
 
         if(password.equals(confirmPassword)) {
             Log.d(TAG, "PASSWORD MATCHING: MATCH");
             return true;
         } else {
-            textInputPassword.setError("Password Not Match");
-            textInputConfirmPassword.setError("Password Not Match");
+            textInputPasswordLayout.setError("Password Not Match");
+            textInputConfirmPasswordLayout.setError("Password Not Match");
             Log.d(TAG, "PASSWORD MATCHING: NOT MATCH");
             return false;
         }
     }
 
 
-    public Boolean confirmInput(String firstName, String lastName, String email, String password, String confirmPassword, String userRole) {
+    private Boolean confirmInput(String firstName, String lastName, String email, String password, String confirmPassword, String userRole) {
 
         boolean firstNameResult = isFirstNameEmpty(firstName);
         boolean lastNameResult = isLastNameEmpty(lastName);

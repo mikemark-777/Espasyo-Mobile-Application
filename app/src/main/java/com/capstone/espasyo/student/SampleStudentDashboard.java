@@ -31,8 +31,8 @@ public class SampleStudentDashboard extends AppCompatActivity {
 
         viewModel.getLoggedStatus().observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
-                if(aBoolean) {
+            public void onChanged(Boolean isUserLoggedIn) {
+                if(!isUserLoggedIn) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 }

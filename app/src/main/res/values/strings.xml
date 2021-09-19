@@ -11,8 +11,6 @@
         <item>student</item>
         <item>landlord</item>
     </string-array>
-    <string name="emailConfirmationMessage">We will send an email to</string>
-    <!-- TODO: Remove or change this placeholder text -->
 
 
 </resources>

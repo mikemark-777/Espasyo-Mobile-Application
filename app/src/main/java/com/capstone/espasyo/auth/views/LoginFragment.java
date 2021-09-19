@@ -34,7 +34,7 @@ public class LoginFragment extends Fragment {
     private final int LANDLORD_CODE = 2;
     private final int STUDENT_CODE = 3;
 
-    private TextInputLayout sampleLayout;
+    private TextInputLayout textInputEmailLayout, textInputPasswordLayout;
     private TextInputEditText textInputEmail, textInputPassword;
     private Button btnLogin;
     private TextView gotoSignUp;
@@ -53,11 +53,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
                 if(firebaseUser != null) {
-
                     if(firebaseUser.isEmailVerified()) {
                         //TODO: GET USER DATA AND CHECK IF IT IS A STUDENT OR LANDLADY
-                        //String id = firebaseUser.getUid().toString();
-
                         int user = 2;
 
                         if(user == 1) {
@@ -67,39 +64,9 @@ public class LoginFragment extends Fragment {
                             Intent intent = new Intent(getActivity(), SampleLandlordDashboard.class);
                             startActivity(intent);
                         }
-                        //navController.navigate(R.id.gotoEmailVerification_from_LoginFragment);
                     } else {
-                        navController.navigate(R.id.gotoEmailVerification_from_LoginFragment);
-                        //Toast.makeText(getActivity(), "Please check your email to verify account", Toast.LENGTH_SHORT).show();
+                        navController.navigate(R.id.action_loginFragment_to_emailVerificationFragment);
                     }
-
-                    /*int user = 2;
-
-                    if(user == 1) {
-                        Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
-                        startActivity(intent);
-                    } else if(user == 2){
-                        Intent intent = new Intent(getActivity(), SampleLandlordDashboard.class);
-                        startActivity(intent);
-                    }*/
-
-                     /* if(firebaseUser.isEmailVerified()) {
-                          //TODO: GET USER DATA AND CHECK IF IT IS A STUDENT OR LANDLADY
-                          //String id = firebaseUser.getUid().toString();
-
-                          int user = 2;
-
-                          if(user == 1) {
-                              Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
-                              startActivity(intent);
-                          } else if(user == 2){
-                              Intent intent = new Intent(getActivity(), SampleLandlordDashboard.class);
-                              startActivity(intent);
-                          }
-                          //navController.navigate(R.id.gotoEmailVerification_from_LoginFragment);
-                      } else {
-                          Toast.makeText(getActivity(), "Please check your email to verify account", Toast.LENGTH_SHORT).show();
-                      }*/
                 }
             }
         });
@@ -116,10 +83,14 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        sampleLayout = view.findViewById(R.id.sampleLayout);
+        // TextInputLayouts
+        textInputEmailLayout = view.findViewById(R.id.text_input_email_layout_login);
+        textInputPasswordLayout = view.findViewById(R.id.text_input_password_layout_login);
 
-        textInputEmail = view.findViewById(R.id.text_input_email);
-        textInputPassword = view.findViewById(R.id.text_input_password);
+        //TextInputEditTexts
+        textInputEmail = view.findViewById(R.id.text_input_email_login);
+        textInputPassword = view.findViewById(R.id.text_input_password_login);
+
         gotoSignUp = view.findViewById(R.id.gotoSignUp);
         btnLogin = view.findViewById(R.id.btnLogin);
         navController = Navigation.findNavController(view);
@@ -128,7 +99,7 @@ public class LoginFragment extends Fragment {
         gotoSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.gotoSignUpFragment);
+                navController.navigate(R.id.action_loginFragment_to_signUpFragment);
             }
         });
 
@@ -151,13 +122,13 @@ public class LoginFragment extends Fragment {
     // ------ input validations -------------------------------
     public final String TAG = "TESTING";
 
-    private boolean validateEmail(String email) {
+    private boolean isEmailEmpty(String email) {
         if(email.isEmpty()) {
-            textInputEmail.setError("Email address field cannot be empty");
+            textInputEmailLayout.setError("Email address field cannot be empty");
             Log.d(TAG, "EMAIL: EMPTY");
             return false;
         } else {
-            textInputEmail.setError(null);
+            textInputEmailLayout.setError(null);
             Log.d(TAG, "EMAIL: NOT EMPTY");
             return true;
         }
@@ -165,11 +136,11 @@ public class LoginFragment extends Fragment {
 
     private boolean validatePassword(String password) {
         if(password.isEmpty()) {
-            textInputPassword.setError("Password field cannot be empty");
+            textInputPasswordLayout.setError("Password field cannot be empty");
             Log.d(TAG, "PASSWORD: EMPTY");
             return false;
         } else {
-            textInputPassword.setError(null);
+            textInputPasswordLayout.setError(null);
             Log.d(TAG, "PASSWORD: NOT EMPTY");
             return true;
         }
@@ -179,7 +150,7 @@ public class LoginFragment extends Fragment {
 
         boolean isValid = false;
 
-        boolean emailResult = validateEmail(email);
+        boolean emailResult = isEmailEmpty(email);
         boolean passwordResult = validatePassword(password);
 
         if(emailResult == true && passwordResult == true) {

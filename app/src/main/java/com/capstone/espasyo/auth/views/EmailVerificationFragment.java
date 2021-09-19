@@ -29,8 +29,7 @@ public class EmailVerificationFragment extends Fragment {
 
     private AuthViewModel viewModel;
 
-    private Button btnVerifyEmail;
-    private Button btnProceed;
+    private Button btnLoginToYourAccount;
     private NavController navController;
     private TextView gotoUpdateEmailFragment;
     private TextView txtEmail;
@@ -48,12 +47,16 @@ public class EmailVerificationFragment extends Fragment {
                 if(firebaseUser != null) {
                     String email = firebaseUser.getEmail();
                     txtEmail.setText(email);
+                    if(firebaseUser.isEmailVerified()) {
+                        viewModel.signOut();
+                        navController.navigate(R.id.action_emailVerificationFragment_to_loginFragment);
+                    }
+                } else  {
+                    // by default will navigate to login fragment if firebaseUser is null
+                    navController.navigate(R.id.action_emailVerificationFragment_to_loginFragment);
                 }
             }
         });
-
-
-
     }
 
     @Override
@@ -68,31 +71,16 @@ public class EmailVerificationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(view);
-
-        btnVerifyEmail = view.findViewById(R.id.btnVerifyEmail);
-        btnProceed = view.findViewById(R.id.btnProceed);
+        btnLoginToYourAccount = view.findViewById(R.id.btnLoginToYourAccount);
         gotoUpdateEmailFragment = view.findViewById(R.id.gotoUpdateEmailFragment);
         txtEmail = view.findViewById(R.id.txtEmail);
 
-        btnProceed.setEnabled(false);
 
-        btnVerifyEmail.setOnClickListener(new View.OnClickListener() {
+        btnLoginToYourAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-            btnVerifyEmail.setEnabled(false);
-            btnProceed.setEnabled(true);
-            Toast.makeText(getActivity(), "Verification Sent to your email.", Toast.LENGTH_SHORT).show();
-             /*   //send verification to newUser's email
-                viewModel.getUserData().getValue().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-
-                    }
-                });
-                //navController.navigate(R.id.gotoLoginFragment_From_EmailVerificationFragment);*/
+                viewModel.signOut();
+                navController.navigate(R.id.action_emailVerificationFragment_to_loginFragment);
             }
         });
 

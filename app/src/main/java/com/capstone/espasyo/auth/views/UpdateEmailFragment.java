@@ -1,6 +1,5 @@
 package com.capstone.espasyo.auth.views;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +19,6 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
-import com.capstone.espasyo.landlord.SampleLandlordDashboard;
-import com.capstone.espasyo.student.SampleStudentDashboard;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,13 +28,17 @@ public class UpdateEmailFragment extends Fragment {
 
     private FirebaseUser currentUser;
 
-    private TextInputLayout sampleLayout;
-    private TextInputEditText textInputCurrentEmail, textInputNewEmail, textInputPassword;
-    private Button btnChangeEmail;
+    private TextInputLayout textInputCurrentEmailLayout,
+                            textInputNewEmailLayout,
+                            textInputPasswordLayout;
 
+    private TextInputEditText textInputCurrentEmailAddress,
+                              textInputNewEmailAddress,
+                              textInputPassword;
+
+    private Button btnChangeEmail;
     private AuthViewModel viewModel;
     private NavController navController;
-
     private Boolean isEmailChanged = false;
 
 
@@ -53,12 +55,15 @@ public class UpdateEmailFragment extends Fragment {
             public void onChanged(FirebaseUser firebaseUser) {
                 if(firebaseUser != null) {
 
-                    Toast.makeText(getActivity(), "Here again", Toast.LENGTH_SHORT).show();
                    currentUser = firebaseUser;
+
                     if(isEmailChanged) {
                         isEmailChanged = false;
-                        navController.navigate(R.id.gotoEmailVerificationFragment_From_UpdateEmailFragment);
+                        navController.navigate(R.id.action_updateEmailFragment_to_emailVerificationFragment);
                     }
+                } else  {
+                    // by default will navigate to login fragment if firebaseUser is null
+                    navController.navigate(R.id.action_updateEmailFragment_to_loginFragment);
                 }
             }
         });
@@ -76,27 +81,96 @@ public class UpdateEmailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(view);
+        // TextInputLayouts
+        textInputCurrentEmailLayout = view.findViewById(R.id.text_input_currentemail_layout_updateemail);
+        textInputNewEmailLayout = view.findViewById(R.id.text_input_newemail_layout_updateemail);
+        textInputPasswordLayout = view.findViewById(R.id.text_input_password_layout_updateemail);
 
-        textInputCurrentEmail = view.findViewById(R.id.text_input_CurrentEmail_update);
-        textInputNewEmail = view.findViewById(R.id.text_input_NewEmail_update);
-        textInputPassword = view.findViewById(R.id.text_input_Password_update);
+        //TextInputEditTexts
+        textInputCurrentEmailAddress = view.findViewById(R.id.text_input_currentemail_layout_updateemail);
+        textInputNewEmailAddress = view.findViewById(R.id.text_input_newemail_updateemail);
+        textInputPassword = view.findViewById(R.id.text_input_password_updateemail);
+
         btnChangeEmail = view.findViewById(R.id.btnChangeEmail);
 
         btnChangeEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String currentEmail = textInputCurrentEmail.getText().toString();
-                String newEmail = textInputNewEmail.getText().toString();
+                String currentEmailAddress = textInputCurrentEmailAddress.getText().toString();
+                String newEmailAddress = textInputNewEmailAddress.getText().toString();
                 String password = textInputPassword.getText().toString();
 
-                viewModel.updateEmailAddress(currentUser, currentEmail ,newEmail ,password);
-                isEmailChanged = true;
-                textInputCurrentEmail.setText("");
-                textInputNewEmail.setText("");
-                textInputPassword.setText("");
+                if(confirmInput(currentEmailAddress, newEmailAddress, password)) {
+                    viewModel.updateEmailAddress(currentUser, currentEmailAddress ,newEmailAddress ,password);
+                    isEmailChanged = true;
+                    textInputCurrentEmailAddress.setText("");
+                    textInputNewEmailAddress.setText("");
+                    textInputPassword.setText("");
+                } else {
+                    Toast.makeText(getActivity(), "Please fill out everything", Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
 
     }
+
+    // Functions
+    // ------ input validations -------------------------------
+    public final String TAG = "TESTING";
+
+    private boolean isCurrentEmailAddressEmpty(String email) {
+        if(email.isEmpty()) {
+            textInputCurrentEmailLayout.setError("Current Email Address field cannot be empty");
+            Log.d(TAG, "CURRENT EMAIL: EMPTY");
+            return false;
+        } else {
+            textInputCurrentEmailLayout.setError(null);
+            Log.d(TAG, "CURRENT EMAIL: NOT EMPTY");
+            return true;
+        }
+    }
+
+    private boolean isNewEmailAddressEmpty(String email) {
+        //TODO: Must include validations if email exist in firebase auth and database
+        if(email.isEmpty()) {
+            textInputNewEmailLayout.setError("New Email Address field cannot be empty");
+            Log.d(TAG, "NEW EMAIL: EMPTY");
+            return false;
+        } else {
+            textInputNewEmailLayout.setError(null);
+            Log.d(TAG, "NEW EMAIL: NOT EMPTY");
+            return true;
+        }
+    }
+
+    private boolean validatePassword(String password) {
+        //TODO: Must include validations if password is the password of the real account being updated
+        if(password.isEmpty()) {
+            textInputPasswordLayout.setError("Password field cannot be empty");
+            Log.d(TAG, "PASSWORD: EMPTY");
+            return false;
+        } else {
+            textInputPasswordLayout.setError(null);
+            Log.d(TAG, "PASSWORD: NOT EMPTY");
+            return true;
+        }
+    }
+
+    private boolean confirmInput(String currentEmailAddress, String newEmailAddress, String password) {
+        boolean currentEmailAddressResult = isCurrentEmailAddressEmpty(currentEmailAddress);
+        boolean newEmailAddressResult = isNewEmailAddressEmpty(newEmailAddress);
+        boolean passwordResult = validatePassword(password);
+
+        if(currentEmailAddressResult == true && newEmailAddressResult == true && passwordResult == true) {
+            Log.d(TAG, "CAN PROCEED: TRUE");
+            return true;
+        } else {
+            Log.d(TAG, "CAN PROCEED: FALSE");
+            return false;
+        }
+    }
+
 }
