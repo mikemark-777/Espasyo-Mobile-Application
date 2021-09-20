@@ -87,7 +87,7 @@ public class UpdateEmailFragment extends Fragment {
         textInputPasswordLayout = view.findViewById(R.id.text_input_password_layout_updateemail);
 
         //TextInputEditTexts
-        textInputCurrentEmailAddress = view.findViewById(R.id.text_input_currentemail_layout_updateemail);
+        textInputCurrentEmailAddress = view.findViewById(R.id.text_input_currentemail_updateemail);
         textInputNewEmailAddress = view.findViewById(R.id.text_input_newemail_updateemail);
         textInputPassword = view.findViewById(R.id.text_input_password_updateemail);
 

@@ -46,10 +46,6 @@ public class AuthViewModel extends AndroidViewModel {
         repository.logout();
     }
 
-    public boolean checkEmailDuplicate(String email) {
-       return repository.checkEmailDuplicate(email);
-    }
-
     public void updateEmailAddress(FirebaseUser currentUser,String currentEmail, String newEmail, String password) {
         repository.updateEmailAddress(currentUser, currentEmail, newEmail, password);
     }
