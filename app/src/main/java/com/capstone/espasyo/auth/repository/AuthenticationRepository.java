@@ -16,6 +16,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -101,10 +102,33 @@ public class AuthenticationRepository {
         userLoggedMutableLiveData.postValue(true);
     }
 
+    /*Check if email exist during signup*/
+    private static boolean hasDuplicate = false;
+    public boolean checkEmailDuplicate(String email) {
+
+        firebaseAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+            @Override
+            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                if(task.isSuccessful()) {
+                    if(task.getResult().getSignInMethods().size() == 0) {
+                        hasDuplicate = false;
+                        Toast.makeText(application, "Email does not exist", Toast.LENGTH_SHORT).show();
+                    } else {
+                        hasDuplicate = true;
+                        Toast.makeText(application, "Email already exist", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(application, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        return hasDuplicate;
+    }
+
+
     /*Re-authenticate email | Update email address*/
-
-
-
     public void updateEmailAddress(FirebaseUser currentUser,String currentEmail, String newEmail, String password) {
 
         AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, password);// Get current auth credentials from the user for re-authentication
