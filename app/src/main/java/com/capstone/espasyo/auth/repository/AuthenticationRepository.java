@@ -170,18 +170,4 @@ public class AuthenticationRepository {
         });
     }
 
-    private int userRole;
-    public int getUserRole(Activity activity, String UID) {
-        DocumentReference userReference = database.collection("users").document(UID);
-        userReference.addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                DocumentSnapshot user = value;
-                userRole = user.getLong("userRole").intValue();
-            }
-        });
-
-        return  userRole;
-    }
-
 }

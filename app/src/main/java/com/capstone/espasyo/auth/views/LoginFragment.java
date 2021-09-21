@@ -11,11 +11,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,8 +28,13 @@ import com.capstone.espasyo.landlord.SampleLandlordDashboard;
 import com.capstone.espasyo.student.SampleStudentDashboard;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 
 public class LoginFragment extends Fragment {
@@ -39,13 +47,20 @@ public class LoginFragment extends Fragment {
     private TextInputEditText textInputEmail, textInputPassword;
     private Button btnLogin;
     private TextView gotoSignUp;
+    private ProgressBar loginProgressBar;
 
     private AuthViewModel viewModel;
     private NavController navController;
 
+    private FirebaseFirestore database;
+    private DocumentReference userReference;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        database = FirebaseFirestore.getInstance();
+
         viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
                 .getInstance(getActivity().getApplication())).get(AuthViewModel.class);
 
@@ -55,29 +70,39 @@ public class LoginFragment extends Fragment {
             public void onChanged(FirebaseUser firebaseUser) {
                 if(firebaseUser != null) {
                     if(firebaseUser.isEmailVerified()) {
-                        //TODO: GET USER DATA AND CHECK IF IT IS A STUDENT OR LANDLADY
+
+                        //Get currentUser's UID
                         String UID = firebaseUser.getUid();
 
-                        int userRole = viewModel.getUserRole(getActivity(),UID);
+                        userReference = database.collection("users").document(UID);
+                        userReference.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                        //Navigate to different modules depending on the user's role
-                        if(userRole == ADMIN_CODE) {
+                                DocumentSnapshot user = value;
+                                int userRole = user.getLong("userRole").intValue();
+                                //Navigate to different modules depending on the user's role
+                                if(userRole == ADMIN_CODE) {
 
-                        } else if(userRole == LANDLORD_CODE){
-                            Intent intent = new Intent(getActivity(), SampleLandlordDashboard.class);
-                            startActivity(intent);
-                            getActivity().finish();
-                        } else if(userRole == STUDENT_CODE) {
-                            Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
-                            startActivity(intent);
-                            getActivity().finish();
-                        }
+                                } else if(userRole == LANDLORD_CODE){
+                                    Intent intent = new Intent(getActivity(), SampleLandlordDashboard.class);
+                                    startActivity(intent);
+                                    getActivity().finish();
+                                } else if(userRole == STUDENT_CODE) {
+                                    Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
+                                    startActivity(intent);
+                                    getActivity().finish();
+                                }
+                            }
+                        });
+
                     } else {
                         navController.navigate(R.id.action_loginFragment_to_emailVerificationFragment);
                     }
                 }
             }
         });
+
     }
 
     @Override
@@ -102,6 +127,7 @@ public class LoginFragment extends Fragment {
         gotoSignUp = view.findViewById(R.id.gotoSignUp);
         btnLogin = view.findViewById(R.id.btnLogin);
         navController = Navigation.findNavController(view);
+        loginProgressBar = view.findViewById(R.id.loginProgressBar);
 
         //Navigate to Signup Fragment
         gotoSignUp.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +144,16 @@ public class LoginFragment extends Fragment {
                 String txtPassword = textInputPassword.getText().toString().trim();
 
                 if(confirmInput(txtEmail, txtPassword)) {
-                    viewModel.signIn(txtEmail, txtPassword);
+
+                    loginProgressBar.setVisibility(View.VISIBLE);
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loginProgressBar.setVisibility(View.INVISIBLE);
+                            viewModel.signIn(txtEmail, txtPassword);
+                        }
+                    }, 4000);
+
                 } else {
                     Toast.makeText(getActivity(), "Please fill out everything", Toast.LENGTH_SHORT).show();
                 }
@@ -126,7 +161,7 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    // Functions
+    // --------------------------------------------  FUNCTIONS  -------------------------------------------------------//
     // ------ input validations -------------------------------
     public final String TAG = "TESTING";
 
@@ -171,4 +206,6 @@ public class LoginFragment extends Fragment {
 
         return isValid;
     }
+
+
 }

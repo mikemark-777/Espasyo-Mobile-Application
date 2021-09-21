@@ -51,8 +51,5 @@ public class AuthViewModel extends AndroidViewModel {
         repository.updateEmailAddress(currentUser, currentEmail, newEmail, password);
     }
 
-    public int getUserRole(Activity activity, String UID) {
-        return repository.getUserRole(activity, UID);
-    }
 
 }
