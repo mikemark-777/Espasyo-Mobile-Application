@@ -26,6 +26,7 @@ import com.capstone.espasyo.student.SampleStudentDashboard;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 
 
 public class LoginFragment extends Fragment {
@@ -55,14 +56,21 @@ public class LoginFragment extends Fragment {
                 if(firebaseUser != null) {
                     if(firebaseUser.isEmailVerified()) {
                         //TODO: GET USER DATA AND CHECK IF IT IS A STUDENT OR LANDLADY
-                        int user = 2;
+                        String UID = firebaseUser.getUid();
 
-                        if(user == 1) {
-                            Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
-                            startActivity(intent);
-                        } else if(user == 2){
+                        int userRole = viewModel.getUserRole(getActivity(),UID);
+
+                        //Navigate to different modules depending on the user's role
+                        if(userRole == ADMIN_CODE) {
+
+                        } else if(userRole == LANDLORD_CODE){
                             Intent intent = new Intent(getActivity(), SampleLandlordDashboard.class);
                             startActivity(intent);
+                            getActivity().finish();
+                        } else if(userRole == STUDENT_CODE) {
+                            Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
+                            startActivity(intent);
+                            getActivity().finish();
                         }
                     } else {
                         navController.navigate(R.id.action_loginFragment_to_emailVerificationFragment);

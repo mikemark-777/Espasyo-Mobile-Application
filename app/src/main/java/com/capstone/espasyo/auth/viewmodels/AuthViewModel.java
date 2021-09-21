@@ -1,5 +1,6 @@
 package com.capstone.espasyo.auth.viewmodels;
 
+import android.app.Activity;
 import android.app.Application;
 import android.widget.Toast;
 
@@ -48,6 +49,10 @@ public class AuthViewModel extends AndroidViewModel {
 
     public void updateEmailAddress(FirebaseUser currentUser,String currentEmail, String newEmail, String password) {
         repository.updateEmailAddress(currentUser, currentEmail, newEmail, password);
+    }
+
+    public int getUserRole(Activity activity, String UID) {
+        return repository.getUserRole(activity, UID);
     }
 
 }

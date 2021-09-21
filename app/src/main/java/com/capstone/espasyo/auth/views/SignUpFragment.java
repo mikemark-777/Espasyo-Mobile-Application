@@ -186,7 +186,7 @@ public class SignUpFragment extends Fragment {
                                     viewModel.register(newUser);
 
                                 } else {
-                                    textInputEmailLayout.setError("Email field cannot be empty");
+                                    textInputEmailLayout.setError("Email already exists");
                                 }
                             } else {
                                 Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -208,7 +208,7 @@ public class SignUpFragment extends Fragment {
     /* Check if firstName is empty */
     private Boolean isFirstNameEmpty(String firstName) {
         if(firstName.isEmpty()) {
-            textInputFirstNameLayout.setError("First Name field cannot be empty");
+            textInputFirstNameLayout.setError("First Name required");
             Log.d(TAG, "FIRSTNAME: EMPTY");
             return false;
         } else {
@@ -221,7 +221,7 @@ public class SignUpFragment extends Fragment {
     /* Check if lastName is empty */
     private Boolean isLastNameEmpty(String lastName) {
         if(lastName.isEmpty()) {
-            textInputLastNameLayout.setError("Last Name field cannot be empty");
+            textInputLastNameLayout.setError("Last Name required");
             Log.d(TAG, "LASTNAME: EMPTY");
             return false;
         } else {
@@ -235,7 +235,7 @@ public class SignUpFragment extends Fragment {
     private Boolean isEmailEmpty(String email) {
         //TODO: Must include validations if email exist in firebase auth and database
         if(email.isEmpty()) {
-            textInputEmailLayout.setError("Email field cannot be empty");
+            textInputEmailLayout.setError("Email required");
             Log.d(TAG, "EMAIL: EMPTY");
             return false;
         } else {
@@ -255,7 +255,7 @@ public class SignUpFragment extends Fragment {
 
         //check if password is empty
         if(password.isEmpty()) {
-            textInputPasswordLayout.setError("Password field cannot be empty");
+            textInputPasswordLayout.setError("Password required");
             Log.d(TAG, "PASSWORD: EMPTY");
             isPasswordEmpty = true;
         } else {
@@ -265,7 +265,7 @@ public class SignUpFragment extends Fragment {
         }
         //check if confirmPassword is empty
         if(confirmPassword.isEmpty()) {
-            textInputConfirmPasswordLayout.setError("Confirm Password field cannot be empty");
+            textInputConfirmPasswordLayout.setError("Confirm Password required");
             Log.d(TAG, "CONFIRM PASSWORD: EMPTY");
             isConfirmPasswordEmpty = true;
         } else {
@@ -284,7 +284,7 @@ public class SignUpFragment extends Fragment {
     /* Check if userRole is empty */
     private Boolean isUserRoleEmpty(String userRole) {
         if(userRole.isEmpty()) {
-            textInputRoleLayout.setError("Role field cannot be empty");
+            textInputRoleLayout.setError("Role required");
             Log.d(TAG, "ROLE: EMPTY");
             return false;
         } else {

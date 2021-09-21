@@ -1,9 +1,11 @@
 package com.capstone.espasyo.auth.repository;
 
+import android.app.Activity;
 import android.app.Application;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.capstone.espasyo.models.User;
@@ -18,9 +20,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class AuthenticationRepository {
+
     private Application application;
     private MutableLiveData<FirebaseUser> firebaseUserMutableLiveData;
     private MutableLiveData<Boolean> userLoggedMutableLiveData;
@@ -164,5 +170,18 @@ public class AuthenticationRepository {
         });
     }
 
+    private int userRole;
+    public int getUserRole(Activity activity, String UID) {
+        DocumentReference userReference = database.collection("users").document(UID);
+        userReference.addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                DocumentSnapshot user = value;
+                userRole = user.getLong("userRole").intValue();
+            }
+        });
+
+        return  userRole;
+    }
 
 }
