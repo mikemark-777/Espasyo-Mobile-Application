@@ -20,10 +20,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".landlord.SampleLandlordDashboard"
-            android:exported="true" />
+            android:name=".landlord.LandlordMainActivity"
+            android:exported="true"/>
         <activity
-            android:name=".student.SampleStudentDashboard"
+            android:name=".student.StudentMainActivity"
             android:exported="true" />
     </application>
 

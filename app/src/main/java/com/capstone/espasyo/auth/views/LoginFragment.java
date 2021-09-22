@@ -24,11 +24,10 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
-import com.capstone.espasyo.landlord.SampleLandlordDashboard;
-import com.capstone.espasyo.student.SampleStudentDashboard;
+import com.capstone.espasyo.landlord.LandlordMainActivity;
+import com.capstone.espasyo.student.StudentMainActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -85,11 +84,11 @@ public class LoginFragment extends Fragment {
                                 if(userRole == ADMIN_CODE) {
 
                                 } else if(userRole == LANDLORD_CODE){
-                                    Intent intent = new Intent(getActivity(), SampleLandlordDashboard.class);
+                                    Intent intent = new Intent(getActivity(), LandlordMainActivity.class);
                                     startActivity(intent);
                                     getActivity().finish();
                                 } else if(userRole == STUDENT_CODE) {
-                                    Intent intent = new Intent(getActivity(), SampleStudentDashboard.class);
+                                    Intent intent = new Intent(getActivity(), StudentMainActivity.class);
                                     startActivity(intent);
                                     getActivity().finish();
                                 }

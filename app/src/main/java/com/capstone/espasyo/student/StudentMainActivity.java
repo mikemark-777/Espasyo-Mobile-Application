@@ -1,4 +1,4 @@
-package com.capstone.espasyo.landlord;
+package com.capstone.espasyo.student;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -13,7 +13,7 @@ import com.capstone.espasyo.MainActivity;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 
-public class SampleLandlordDashboard extends AppCompatActivity {
+public class StudentMainActivity extends AppCompatActivity {
 
     /* Just a sample student dashboard for testing if the user logged in is student*/
 
@@ -23,16 +23,16 @@ public class SampleLandlordDashboard extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sample_landlord_dashboard);
+        setContentView(R.layout.activity_student_main);
 
-        btnLogout = findViewById(R.id.btnLogoutFromLandlord);
+        btnLogout = findViewById(R.id.btnLogoutFromStudent);
 
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         viewModel.getLoggedStatus().observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
-                if(aBoolean) {
+            public void onChanged(Boolean isUserLoggedIn) {
+                if(!isUserLoggedIn) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 }
@@ -43,8 +43,11 @@ public class SampleLandlordDashboard extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewModel.signOut();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
     }
+
 }

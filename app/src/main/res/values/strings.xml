@@ -12,5 +12,8 @@
         <item>landlord</item>
     </string-array>
 
+    <string name="landlord_menuOpen">Open</string>
+    <string name="landlord_menuClose">Close</string>
+
 
 </resources>
