@@ -9,7 +9,7 @@
         android:id="@+id/loginFragment"
         android:name="com.capstone.espasyo.auth.views.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/auth_fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment"
@@ -23,7 +23,7 @@
         android:id="@+id/signUpFragment"
         android:name="com.capstone.espasyo.auth.views.SignUpFragment"
         android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" >
+        tools:layout="@layout/auth_fragment_sign_up" >
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -35,7 +35,7 @@
         android:id="@+id/emailVerificationFragment"
         android:name="com.capstone.espasyo.auth.views.EmailVerificationFragment"
         android:label="fragment_email_verification"
-        tools:layout="@layout/fragment_email_verification" >
+        tools:layout="@layout/auth_fragment_emailVerification" >
         <action
             android:id="@+id/action_emailVerificationFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -47,7 +47,7 @@
         android:id="@+id/updateEmailFragment"
         android:name="com.capstone.espasyo.auth.views.UpdateEmailFragment"
         android:label="fragment_update_email"
-        tools:layout="@layout/fragment_update_email" >
+        tools:layout="@layout/auth_fragment_update_email" >
         <action
             android:id="@+id/action_updateEmailFragment_to_emailVerificationFragment"
             app:destination="@id/emailVerificationFragment" />

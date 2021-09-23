@@ -92,7 +92,7 @@ public class SignUpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false);
+        return inflater.inflate(R.layout.auth_fragment_sign_up, container, false);
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -121,7 +121,7 @@ public class SignUpFragment extends Fragment {
         gotoLogin = view.findViewById(R.id.gotoLogin);
         navController = Navigation.findNavController(view);
 
-        rolesAdapter = new ArrayAdapter<String>(getActivity(), R.layout.role_list_item, roles);
+        rolesAdapter = new ArrayAdapter<String>(getActivity(), R.layout.auth_role_list_item, roles);
         roleChosen.setAdapter(rolesAdapter);
 
         btnSignUp.setEnabled(false);

@@ -15,13 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
@@ -63,7 +59,7 @@ public class EmailVerificationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_email_verification, container, false);
+        return inflater.inflate(R.layout.auth_fragment_email_verification, container, false);
     }
 
     @Override
