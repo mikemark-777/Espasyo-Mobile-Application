@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/landlord_navigation_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.capstone.espasyo.landlord.views.DashboardFragment"
+        android:label="DashboardFragment" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_addPropertyFragment"
+            app:destination="@id/addPropertyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addPropertyFragment"
+        android:name="com.capstone.espasyo.landlord.views.AddPropertyFragment"
+        android:label="landlord_fragment_add_property"
+        tools:layout="@layout/landlord_fragment_add_property" />
+</navigation>
