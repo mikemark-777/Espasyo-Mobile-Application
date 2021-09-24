@@ -16,6 +16,7 @@
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp">
 
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
@@ -69,6 +70,22 @@
                 android:id="@+id/text_input_proprietorName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Proprietor Name"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_landlordName_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_landlordName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="Landlord Name"
                 android:inputType="text" />
 
@@ -91,16 +108,38 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/btnAddProperty"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:text="Add"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textAllCaps="false"
-            android:background="@drawable/custom_button" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnAddProperty"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:text="Add"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:background="@drawable/custom_button" />
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:text="Cancel"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:background="@drawable/custom_button"
+                app:backgroundTint="@color/espasyo_red_200"/>
+
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

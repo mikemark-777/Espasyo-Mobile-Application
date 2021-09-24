@@ -14,6 +14,9 @@
     <color name="espasyo_blue_500">#007EB1</color>
     <color name="espasyo_blue_700">#00668F</color>
     <color name="espasyo_orange_200">#F89E00</color>
+    <color name="espasyo_red_200">#FF8080</color>
+    <color name="espasyo_red_2500">#FF3131</color>
     <color name="espasyo_gray_200">#494949</color>
+    <color name="espasyo_white">#CFFFFA</color>
 
 </resources>

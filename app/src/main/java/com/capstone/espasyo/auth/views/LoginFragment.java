@@ -1,6 +1,8 @@
 package com.capstone.espasyo.auth.views;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -38,6 +40,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class LoginFragment extends Fragment {
 
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String USER_ROLE = "userRole";
+    private int userRole;
+
     private final int ADMIN_CODE = 1;
     private final int LANDLORD_CODE = 2;
     private final int STUDENT_CODE = 3;
@@ -74,26 +80,47 @@ public class LoginFragment extends Fragment {
                         String UID = firebaseUser.getUid();
 
                         userReference = database.collection("users").document(UID);
-                        userReference.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
-                            @Override
-                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                                DocumentSnapshot user = value;
-                                int userRole = user.getLong("userRole").intValue();
-                                //Navigate to different modules depending on the user's role
-                                if(userRole == ADMIN_CODE) {
+                        if(getUserRole() != 0) {
+                            int uRole = getUserRole();
+                            //Navigate to different modules depending on the user's role
+                            if(uRole == ADMIN_CODE) {
 
-                                } else if(userRole == LANDLORD_CODE){
-                                    Intent intent = new Intent(getActivity(), LandlordMainActivity.class);
-                                    startActivity(intent);
-                                    getActivity().finish();
-                                } else if(userRole == STUDENT_CODE) {
-                                    Intent intent = new Intent(getActivity(), StudentMainActivity.class);
-                                    startActivity(intent);
-                                    getActivity().finish();
-                                }
+                            } else if(uRole == LANDLORD_CODE){
+                                Intent intent = new Intent(getActivity(), LandlordMainActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            } else if(uRole == STUDENT_CODE) {
+                                Intent intent = new Intent(getActivity(), StudentMainActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
                             }
-                        });
+                        } else {
+                            userReference.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                                    DocumentSnapshot user = value;
+                                    int userRole = user.getLong("userRole").intValue();
+
+                                    saveUserRole(userRole);
+
+                                    //Navigate to different modules depending on the user's role
+                                    if(userRole == ADMIN_CODE) {
+
+                                    } else if(userRole == LANDLORD_CODE){
+                                        Intent intent = new Intent(getActivity(), LandlordMainActivity.class);
+                                        startActivity(intent);
+                                        getActivity().finish();
+                                    } else if(userRole == STUDENT_CODE) {
+                                        Intent intent = new Intent(getActivity(), StudentMainActivity.class);
+                                        startActivity(intent);
+                                        getActivity().finish();
+                                    }
+                                }
+                            });
+                        }
+
 
                     } else {
                         navController.navigate(R.id.action_loginFragment_to_emailVerificationFragment);
@@ -204,6 +231,21 @@ public class LoginFragment extends Fragment {
         }
 
         return isValid;
+    }
+
+    public void saveUserRole(int userRole) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt(USER_ROLE, userRole);
+        editor.apply();
+    }
+
+    public int getUserRole() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        int userRole = sharedPreferences.getInt(USER_ROLE, 0);
+
+        return userRole;
     }
 
 

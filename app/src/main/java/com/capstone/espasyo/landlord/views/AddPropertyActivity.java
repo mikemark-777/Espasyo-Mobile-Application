@@ -11,12 +11,14 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class AddPropertyActivity extends AppCompatActivity {
 
-    private Button btnAddProperty;
+    private Button btnAddProperty,
+                   btnCancel;
     private TextInputEditText phoneNumber;
 
     @Override
@@ -24,6 +26,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_add_property);
         btnAddProperty = findViewById(R.id.btnAddProperty);
+        btnCancel = findViewById(R.id.btnCancel);
         phoneNumber = findViewById(R.id.text_input_landlord_phoneNumber);
 
 
@@ -32,6 +35,14 @@ public class AddPropertyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Phone Number: " + phoneNumber.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AddPropertyActivity.this, LandlordMainActivity.class));
+                finish();
             }
         });
 

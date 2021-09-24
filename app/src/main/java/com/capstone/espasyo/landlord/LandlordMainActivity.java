@@ -65,6 +65,7 @@ public class LandlordMainActivity extends AppCompatActivity implements Navigatio
                 if (aBoolean) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

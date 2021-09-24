@@ -45,6 +45,7 @@ public class DashboardFragment extends Fragment {
             public void onClick(View v) {
                // goto add property activity
                 startActivity(new Intent(getActivity(), AddPropertyActivity.class));
+                getActivity().finish();
                /* Snackbar.make(view, "Add a property", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
             }
