@@ -4,30 +4,37 @@ import java.util.List;
 
 public class Property {
 
+    private String propertyID;
     private boolean isVerified;
+    private String propertyType;
     private String name;
     private String address;
-    private String proprietorName;
     private String landlordName;
     private String landlordPhoneNumber;
-    private List<Room> rooms;
+   // private List<Room> rooms;
 
     public Property() {
         //empty property constructor
     }
 
-
-    public Property(boolean isVerified, String name, String address, String proprietorName, String landlordName, String landlordPhoneNumber) {
+    public Property(String propertyID, boolean isVerified, String propertyType, String name, String address, String landlordName, String landlordPhoneNumber) {
+        this.propertyID = propertyID;
         this.isVerified = isVerified;
+        this.propertyType = propertyType;
         this.name = name;
         this.address = address;
-        this.proprietorName = proprietorName;
         this.landlordName = landlordName;
         this.landlordPhoneNumber = landlordPhoneNumber;
     }
 
-    public boolean isVerified() {
+    public String getPropertyID() { return propertyID; }
+
+    public boolean getIsVerified() {
         return isVerified;
+    }
+
+    public String getPropertyType() {
+        return propertyType;
     }
 
     public String getName() {
@@ -38,10 +45,6 @@ public class Property {
         return address;
     }
 
-    public String getProprietorName() {
-        return proprietorName;
-    }
-
     public String getLandlordName() {
         return landlordName;
     }
@@ -49,4 +52,5 @@ public class Property {
     public String getLandlordPhoneNumber() {
         return landlordPhoneNumber;
     }
+
 }

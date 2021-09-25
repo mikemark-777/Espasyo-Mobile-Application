@@ -1,5 +1,6 @@
 package com.capstone.espasyo.landlord.views;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,10 +13,20 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.LandlordMainActivity;
+import com.capstone.espasyo.models.Property;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.UUID;
 
 public class AddPropertyActivity extends AppCompatActivity {
+
+    private FirebaseFirestore database = FirebaseFirestore.getInstance();
+    private DocumentReference dbProperties;
 
     private Button btnAddProperty,
                    btnCancel;
@@ -34,7 +45,34 @@ public class AddPropertyActivity extends AppCompatActivity {
         btnAddProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Phone Number: " + phoneNumber.getText().toString(), Toast.LENGTH_SHORT).show();
+
+                // CREATE SAMPLE PROPERTY OBJECT
+                Property newProperty = new Property(
+                        UUID.randomUUID().toString(),
+                        false,
+                        "Apartment",
+                        "Mike's Apartment",
+                        "District VI, Bayombong, Nueva Vizcaya",
+                        "Mike Marcos",
+                        "+9368530700"
+                );
+
+                // TESTING PURPOSES
+                dbProperties = database.collection("properties").document("mm1");
+
+                dbProperties.set(newProperty).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(AddPropertyActivity.this, "Property Successfully Added", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(AddPropertyActivity.this, LandlordMainActivity.class));
+                        finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(AddPropertyActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 

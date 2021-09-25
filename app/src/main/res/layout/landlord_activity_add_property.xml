@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".landlord.views.AddPropertyActivity"
-    >
+    tools:context=".landlord.views.AddPropertyActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="40dp"
         android:layout_marginLeft="28dp"
-        android:layout_marginRight="28dp">
+        android:layout_marginTop="56dp"
+        android:layout_marginRight="28dp"
+        android:orientation="vertical">
 
 
         <TextView
@@ -43,6 +42,23 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_propertyType_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:hint="Property Type"
+            app:errorEnabled="true">
+
+            <AutoCompleteTextView
+                android:id="@+id/text_input_propertyType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_address_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
@@ -58,21 +74,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_proprietorName_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_proprietorName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Proprietor Name"
-                android:inputType="text" />
-
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_landlordName_layout"
@@ -95,8 +96,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:prefixText="+63 "
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            app:prefixText="+63 ">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/text_input_landlord_phoneNumber"
@@ -111,7 +112,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Price Range"
-            android:textColor="@color/espasyo_gray_200"/>
+            android:textColor="@color/espasyo_gray_200" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -130,7 +132,7 @@
                     android:id="@+id/text_input_minRange"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"/>
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -147,7 +149,7 @@
                     android:id="@+id/text_input_maxRange"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"/>
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -164,28 +166,26 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/custom_button"
                 android:text="Cancel"
+                android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:textAllCaps="false"
-                android:background="@drawable/custom_button"
-                app:backgroundTint="@color/espasyo_red_200"/>
+                app:backgroundTint="@color/espasyo_red_200" />
 
             <Button
                 android:id="@+id/btnAddProperty"
                 android:layout_width="148dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/custom_button"
                 android:text="Add"
-                android:textColor="@color/white"
-                android:textSize="18sp"
                 android:textAllCaps="false"
-                android:background="@drawable/custom_button" />
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
 
         </LinearLayout>
-
-
 
 
     </LinearLayout>
