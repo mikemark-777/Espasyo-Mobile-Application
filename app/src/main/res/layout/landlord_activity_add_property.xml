@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp">
@@ -108,14 +107,73 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Price Range"
+            android:textColor="@color/espasyo_gray_200"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_property_minRange_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="148dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:hint="Minimum"
+                app:errorEnabled="true">
+
+                <AutoCompleteTextView
+                    android:id="@+id/text_input_minRange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_property_maxRange_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="148dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:hint="Maximum"
+                app:errorEnabled="true">
+
+                <AutoCompleteTextView
+                    android:id="@+id/text_input_maxRange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="148dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
+                android:text="Cancel"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:background="@drawable/custom_button"
+                app:backgroundTint="@color/espasyo_red_200"/>
 
             <Button
                 android:id="@+id/btnAddProperty"
-                android:layout_width="match_parent"
+                android:layout_width="148dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:text="Add"
@@ -124,20 +182,9 @@
                 android:textAllCaps="false"
                 android:background="@drawable/custom_button" />
 
-            <Button
-                android:id="@+id/btnCancel"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:text="Cancel"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textAllCaps="false"
-                android:background="@drawable/custom_button"
-                app:backgroundTint="@color/espasyo_red_200"/>
-
 
         </LinearLayout>
+
 
 
 

@@ -10,6 +10,10 @@ public class User {
     private int userRole;
     //TODO: Must include image url
 
+    public User() {
+        //empty user constructor
+    }
+
     public User(String UID, String firstName, String lastName, String email, String password, int userRole) {
         this.UID = UID;
         this.firstName = firstName;
