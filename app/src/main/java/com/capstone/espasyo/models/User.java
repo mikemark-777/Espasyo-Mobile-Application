@@ -1,7 +1,11 @@
 package com.capstone.espasyo.models;
 
+import com.google.common.collect.Maps;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class User {
 
@@ -11,7 +15,7 @@ public class User {
     private String email;
     private String password;
     private int userRole;
-    private List<String> properties;
+    private Map<String, String> properties;
     //TODO: Must include image url
 
     public User() {
@@ -27,7 +31,7 @@ public class User {
         this.userRole = userRole;
 
         // create property list by default
-        properties = new ArrayList<>();
+        properties = new HashMap<>();
     }
 
     public void setUID(String UID) {
@@ -58,6 +62,6 @@ public class User {
         return userRole;
     }
 
-    public List<String> getProperties() { return properties; }
+    public Map<String, String> getProperties() { return properties; }
 
 }

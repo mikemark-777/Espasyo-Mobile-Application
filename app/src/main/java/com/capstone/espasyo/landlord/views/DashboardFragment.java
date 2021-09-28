@@ -1,7 +1,10 @@
 package com.capstone.espasyo.landlord.views;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,7 @@ public class DashboardFragment extends Fragment {
 
     private FloatingActionButton addPropertyFAB;
     private NavController landlord_navigation;
+    ProgressDialog progressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +40,22 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        progressDialog = new ProgressDialog(this.getContext());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading data");
+
+        progressDialog.show();
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+        }, 4000);
+
+
 
         addPropertyFAB = view.findViewById(R.id.addPropertyFAB);
 
