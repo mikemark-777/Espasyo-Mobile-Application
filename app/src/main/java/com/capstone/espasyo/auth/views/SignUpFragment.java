@@ -33,10 +33,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
 public class SignUpFragment extends Fragment {
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private AuthViewModel viewModel;
+    private NavController navController;
 
+    //UI Elements
     private TextInputLayout textInputEmailLayout,
                             textInputFirstNameLayout,
                             textInputLastNameLayout,
@@ -50,18 +59,15 @@ public class SignUpFragment extends Fragment {
                               textInputPassword,
                               textInputConfirmPassword;
 
-    private CheckBox agreeToTermsAndConditions;
-
+    private AutoCompleteTextView roleChosen;
     String [] roles = {"Student","Landlord or Landlady"};
-    AutoCompleteTextView roleChosen;
     ArrayAdapter<String> rolesAdapter;
+
+    private CheckBox agreeToTermsAndConditions;
 
     //navigate to Login using text
     private TextView gotoLogin;
-
     private Button btnSignUp;
-    private AuthViewModel viewModel;
-    private NavController navController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -155,7 +161,7 @@ public class SignUpFragment extends Fragment {
                 String confirmPass = textInputConfirmPassword.getText().toString().trim();
                 String userRole = roleChosen.getText().toString().trim();
 
-                if(confirmInput(FName, LName, email, pass, confirmPass, userRole)) {
+                if(areInputsValid(FName, LName, email, pass, confirmPass, userRole)) {
 
                     //check if email already exists
                     firebaseAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
@@ -174,14 +180,7 @@ public class SignUpFragment extends Fragment {
 
                                     String UID = "";
 
-                                    User newUser = new User(
-                                            UID,
-                                            FName,
-                                            LName,
-                                            email,
-                                            pass,
-                                            uRole
-                                    );
+                                    User newUser = new User(UID,FName,LName,email,pass,uRole);
 
                                     viewModel.register(newUser);
 
@@ -205,76 +204,77 @@ public class SignUpFragment extends Fragment {
     // ------ input validations -------------------------------
     public final String TAG = "TESTING";
 
+    //TODO: Check logic errors on isEmpty validations
+
     /* Check if firstName is empty */
-    private Boolean isFirstNameEmpty(String firstName) {
-        if(firstName.isEmpty()) {
-            textInputFirstNameLayout.setError("First Name required");
-            Log.d(TAG, "FIRSTNAME: EMPTY");
-            return false;
-        } else {
+    private Boolean isFirstNameValid(String firstName) {
+        if(!firstName.isEmpty()) {
             textInputFirstNameLayout.setError(null);
             Log.d(TAG, "FIRSTNAME: NOT EMPTY");
             return true;
+        } else {
+            textInputFirstNameLayout.setError("First Name required");
+            Log.d(TAG, "FIRSTNAME: EMPTY");
+            return false;
         }
     }
 
     /* Check if lastName is empty */
-    private Boolean isLastNameEmpty(String lastName) {
-        if(lastName.isEmpty()) {
-            textInputLastNameLayout.setError("Last Name required");
-            Log.d(TAG, "LASTNAME: EMPTY");
-            return false;
-        } else {
+    private Boolean isLastNameValid(String lastName) {
+        if(!lastName.isEmpty()) {
             textInputLastNameLayout.setError(null);
             Log.d(TAG, "LASTNAME: NOT EMPTY");
             return true;
+        } else {
+            textInputLastNameLayout.setError("Last Name required");
+            Log.d(TAG, "LASTNAME: EMPTY");
+            return false;
         }
     }
 
     /* Check if email is empty */
-    private Boolean isEmailEmpty(String email) {
+    private Boolean isEmailValid(String email) {
         //TODO: Must include validations if email exist in firebase auth and database
-        if(email.isEmpty()) {
-            textInputEmailLayout.setError("Email required");
-            Log.d(TAG, "EMAIL: EMPTY");
-            return false;
-        } else {
+        if(!email.isEmpty()) {
             textInputEmailLayout.setError(null);
             Log.d(TAG, "EMAIL: NOT EMPTY");
             return true;
+        } else {
+            textInputEmailLayout.setError("Email required");
+            Log.d(TAG, "EMAIL: EMPTY");
+            return false;
         }
     }
 
 
     /* Check if password and confirmPassword is empty */
-    private Boolean isPasswordsEmpty(String password, String confirmPassword) {
+    private Boolean arePasswordsEmpty(String password, String confirmPassword) {
 
         boolean isPasswordEmpty = false;
         boolean isConfirmPasswordEmpty = false;
-        boolean isPasswordGreaterThanFive = false;
 
         //check if password is empty
-        if(password.isEmpty()) {
-            textInputPasswordLayout.setError("Password required");
-            Log.d(TAG, "PASSWORD: EMPTY");
-            isPasswordEmpty = true;
-        } else {
+        if(!password.isEmpty()) {
             textInputPasswordLayout.setError(null);
             Log.d(TAG, "PASSWORD: NOT EMPTY");
+            isPasswordEmpty = true;
+        } else {
+            textInputPasswordLayout.setError("Password required");
+            Log.d(TAG, "PASSWORD: EMPTY");
             isPasswordEmpty = false;
         }
         //check if confirmPassword is empty
-        if(confirmPassword.isEmpty()) {
-            textInputConfirmPasswordLayout.setError("Confirm Password required");
-            Log.d(TAG, "CONFIRM PASSWORD: EMPTY");
-            isConfirmPasswordEmpty = true;
-        } else {
+        if(!confirmPassword.isEmpty()) {
             textInputConfirmPasswordLayout.setError(null);
             Log.d(TAG, "CONFIRM PASSWORD: NOT EMPTY");
+            isConfirmPasswordEmpty = true;
+        } else {
+            textInputConfirmPasswordLayout.setError("Confirm Password required");
+            Log.d(TAG, "CONFIRM PASSWORD: EMPTY");
             isConfirmPasswordEmpty = false;
         }
 
-          if(isPasswordEmpty == true && isConfirmPasswordEmpty == true) {
+          if(isPasswordEmpty && isConfirmPasswordEmpty) {
               return true;
           } else {
               return false;
@@ -282,26 +282,26 @@ public class SignUpFragment extends Fragment {
     }
 
     /* Check if userRole is empty */
-    private Boolean isUserRoleEmpty(String userRole) {
-        if(userRole.isEmpty()) {
-            textInputRoleLayout.setError("Role required");
-            Log.d(TAG, "ROLE: EMPTY");
-            return false;
-        } else {
+    private Boolean isUserRoleValid(String userRole) {
+        if(!userRole.isEmpty()) {
             textInputRoleLayout.setError(null);
             Log.d(TAG, "ROLE: NOT EMPTY");
             return true;
+        } else {
+            textInputRoleLayout.setError("Role required");
+            Log.d(TAG, "ROLE: EMPTY");
+            return false;
         }
     }
 
     /* Check if password1 and password2 are not empty and match*/
-    private Boolean validatePassword(String password1, String password2) {
+    private Boolean arePasswordsValid(String password1, String password2) {
 
-        if(isPasswordsEmpty(password1, password2) == false) {
+        if(arePasswordsEmpty(password1, password2)) {
             if(password1.length() > 5 && password2.length() > 5) {
 
                 Log.d(TAG, "PASSWORD COUNT: GREATER THAN 5");
-                if(matchPassword(password1, password2) == true) {
+                if(matchPassword(password1, password2)) {
                     return true;
                 } else {
                     return false;
@@ -332,15 +332,15 @@ public class SignUpFragment extends Fragment {
         }
     }
 
-    private Boolean confirmInput(String firstName, String lastName, String email, String password, String confirmPassword, String userRole) {
+    private Boolean areInputsValid(String firstName, String lastName, String email, String password, String confirmPassword, String userRole) {
 
-        boolean firstNameResult = isFirstNameEmpty(firstName);
-        boolean lastNameResult = isLastNameEmpty(lastName);
-        boolean emailResult = isEmailEmpty(email);
-        boolean passwordResult = validatePassword(password, confirmPassword);
-        boolean userRoleResult = isUserRoleEmpty(userRole);
+        boolean firstNameResult = isFirstNameValid(firstName);
+        boolean lastNameResult = isLastNameValid(lastName);
+        boolean emailResult = isEmailValid(email);
+        boolean passwordResult = arePasswordsValid(password, confirmPassword);
+        boolean userRoleResult = isUserRoleValid(userRole);
 
-        if(firstNameResult == true && lastNameResult == true && emailResult == true && passwordResult == true && userRoleResult == true) {
+        if(firstNameResult && lastNameResult && emailResult&& passwordResult&& userRoleResult) {
                 Log.d(TAG, "CAN PROCEED: TRUE");
                 return true;
         } else {

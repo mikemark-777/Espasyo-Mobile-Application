@@ -45,8 +45,7 @@
             android:id="@+id/text_input_propertyType_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_height="match_parent"
             android:hint="Property Type"
             app:errorEnabled="true">
 
@@ -59,7 +58,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_address_layout"
+            android:id="@+id/text_input_completeAddress_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,12 +106,12 @@
                 android:inputType="phone" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
+<!--
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Price Range"
-            android:textColor="@color/espasyo_gray_200" />
+            android:textColor="@color/espasyo_gray_200" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -120,35 +119,39 @@
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_property_minRange_layout"
+                android:id="@+id/text_input_minimumPrice_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="148dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:hint="Minimum"
+                android:hint="@string/minimumPrice_dropDown_label"
+                app:prefixText="Php "
                 app:errorEnabled="true">
 
                 <AutoCompleteTextView
-                    android:id="@+id/text_input_minRange"
+                    android:id="@+id/text_input_minimumPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:dropDownHeight="150dp"
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_property_maxRange_layout"
+                android:id="@+id/text_input_maximumPrice_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="148dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:hint="Maximum"
+                android:hint="@string/maximumPrice_dropDown_label"
+                app:prefixText="Php "
                 app:errorEnabled="true">
 
                 <AutoCompleteTextView
-                    android:id="@+id/text_input_maxRange"
+                    android:id="@+id/text_input_maximumPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:dropDownHeight="150dp"
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>

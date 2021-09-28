@@ -139,7 +139,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/dropDown_label">
+            android:hint="@string/userRole_dropDown_label">
 
             <AutoCompleteTextView
                 android:id="@+id/text_input_role_signup"

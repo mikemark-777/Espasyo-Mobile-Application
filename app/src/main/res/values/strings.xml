@@ -5,17 +5,63 @@
 
     <!-- My Strings -->
 
-    <!-- For signup fragment -->
-    <string name="dropDown_label">Choose Role</string>
-    <string-array name="userRole">
-        <item>student</item>
-        <item>landlord</item>
-    </string-array>
+        <!-- AUTHENTICATION MODULE-->
+            <!-- For signup fragment -->
+            <string name="userRole_dropDown_label">Choose Role</string>
+            <string-array name="userRole">
+                <item>student</item>
+                <item>landlord</item>
+            </string-array>
 
-    <string name="landlord_menuOpen">Open</string>
-    <string name="landlord_menuClose">Close</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+        <!-- LANDLORD MODULE-->
+            <string name="landlord_menuOpen">Open</string>
+            <string name="landlord_menuClose">Close</string>
+
+            <!-- For add property activity -->
+                <!-- Property Type Dropdown -->
+                <string name="propertyType_dropDown_label">Choose Property Type</string>
+                <string-array name="propertyType">
+                    <item>Apartment</item>
+                    <item>Boarding House</item>
+                    <item>Dormitory</item>
+                </string-array>
+
+                <!-- Minimum Price Dropdown -->
+                <string name="minimumPrice_dropDown_label">Minimum Price</string>
+                <string-array name="minimumPrices">
+                    <item>500</item>
+                    <item>1000</item>
+                    <item>2000</item>
+                    <item>3000</item>
+                    <item>4000</item>
+                    <item>5000</item>
+                    <item>6000</item>
+                    <item>7000</item>
+                    <item>8000</item>
+                    <item>9000</item>
+                    <item>10000</item>
+                    <item>11000</item>
+                    <item>12000</item>
+                </string-array>
+
+                <!-- Maximum Price Dropdown -->
+                <string name="maximumPrice_dropDown_label">Maximum Price</string>
+                <string-array name="maximumPrices">
+                    <item>500</item>
+                    <item>1000</item>
+                    <item>2000</item>
+                    <item>3000</item>
+                    <item>4000</item>
+                    <item>5000</item>
+                    <item>6000</item>
+                    <item>7000</item>
+                    <item>8000</item>
+                    <item>9000</item>
+                    <item>10000</item>
+                    <item>11000</item>
+                    <item>12000</item>
+                </string-array>
+
 
 
 </resources>

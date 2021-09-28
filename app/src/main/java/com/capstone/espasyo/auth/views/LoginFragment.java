@@ -169,7 +169,7 @@ public class LoginFragment extends Fragment {
                 String txtEmail = textInputEmail.getText().toString().trim();
                 String txtPassword = textInputPassword.getText().toString().trim();
 
-                if(confirmInput(txtEmail, txtPassword)) {
+                if(areInputsValid(txtEmail, txtPassword)) {
 
                     loginProgressBar.setVisibility(View.VISIBLE);
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -191,46 +191,43 @@ public class LoginFragment extends Fragment {
     // ------ input validations -------------------------------
     public final String TAG = "TESTING";
 
-    private boolean isEmailEmpty(String email) {
-        if(email.isEmpty()) {
-            textInputEmailLayout.setError("Email address field cannot be empty");
-            Log.d(TAG, "EMAIL: EMPTY");
-            return false;
-        } else {
+    private boolean isEmailValid(String email) {
+        if(!email.isEmpty()) {
             textInputEmailLayout.setError(null);
             Log.d(TAG, "EMAIL: NOT EMPTY");
             return true;
+        } else {
+            textInputEmailLayout.setError("Email address field cannot be empty");
+            Log.d(TAG, "EMAIL: EMPTY");
+            return false;
+
         }
     }
 
-    private boolean validatePassword(String password) {
-        if(password.isEmpty()) {
-            textInputPasswordLayout.setError("Password field cannot be empty");
-            Log.d(TAG, "PASSWORD: EMPTY");
-            return false;
-        } else {
+    private boolean isPasswordValid(String password) {
+        if(!password.isEmpty()) {
             textInputPasswordLayout.setError(null);
             Log.d(TAG, "PASSWORD: NOT EMPTY");
             return true;
+        } else {
+            textInputPasswordLayout.setError("Password field cannot be empty");
+            Log.d(TAG, "PASSWORD: EMPTY");
+            return false;
         }
     }
 
-    public boolean confirmInput(String email, String password) {
+    public boolean areInputsValid(String email, String password) {
 
-        boolean isValid = false;
+        boolean emailResult = isEmailValid(email);
+        boolean passwordResult = isPasswordValid(password);
 
-        boolean emailResult = isEmailEmpty(email);
-        boolean passwordResult = validatePassword(password);
-
-        if(emailResult == true && passwordResult == true) {
+        if(emailResult && passwordResult) {
             Log.d(TAG, "CAN PROCEED: TRUE");
-            isValid = true;
+           return true;
         } else {
             Log.d(TAG, "CAN PROCEED: FALSE");
-            isValid = false;
+            return false;
         }
-
-        return isValid;
     }
 
     public void saveUserRole(int userRole) {

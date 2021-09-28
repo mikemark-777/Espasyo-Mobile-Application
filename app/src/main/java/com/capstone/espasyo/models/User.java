@@ -1,5 +1,8 @@
 package com.capstone.espasyo.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
 
     private String UID;
@@ -8,6 +11,7 @@ public class User {
     private String email;
     private String password;
     private int userRole;
+    private List<String> properties;
     //TODO: Must include image url
 
     public User() {
@@ -21,6 +25,9 @@ public class User {
         this.email = email;
         this.password = password;
         this.userRole = userRole;
+
+        // create property list by default
+        properties = new ArrayList<>();
     }
 
     public void setUID(String UID) {
@@ -51,5 +58,6 @@ public class User {
         return userRole;
     }
 
+    public List<String> getProperties() { return properties; }
 
 }

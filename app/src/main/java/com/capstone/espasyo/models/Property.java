@@ -1,6 +1,11 @@
 package com.capstone.espasyo.models;
 
+import com.google.firebase.firestore.GeoPoint;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Property {
 
@@ -11,13 +16,13 @@ public class Property {
     private String address;
     private String landlordName;
     private String landlordPhoneNumber;
-   // private List<Room> rooms;
+    Map<String, Integer> priceRange;
 
     public Property() {
-        //empty property constructor
+        //empty property constructor **required
     }
 
-    public Property(String propertyID, boolean isVerified, String propertyType, String name, String address, String landlordName, String landlordPhoneNumber) {
+    public Property(String propertyID, boolean isVerified, String propertyType, String name, String address, String landlordName, String landlordPhoneNumber, int minimumPrice, int maximumPrice) {
         this.propertyID = propertyID;
         this.isVerified = isVerified;
         this.propertyType = propertyType;
@@ -25,6 +30,11 @@ public class Property {
         this.address = address;
         this.landlordName = landlordName;
         this.landlordPhoneNumber = landlordPhoneNumber;
+
+
+        priceRange = new HashMap<>();
+        priceRange.put("minimumPrice", minimumPrice);
+        priceRange.put("maximumPrice", maximumPrice);
     }
 
     public String getPropertyID() { return propertyID; }
@@ -53,4 +63,7 @@ public class Property {
         return landlordPhoneNumber;
     }
 
+    public Map<String, Integer> getPriceRange() {
+        return priceRange;
+    }
 }
