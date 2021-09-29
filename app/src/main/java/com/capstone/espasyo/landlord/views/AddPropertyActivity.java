@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -28,6 +29,7 @@ import java.util.UUID;
 
 public class AddPropertyActivity extends AppCompatActivity {
 
+    private FirebaseAuth fAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
     private DocumentReference dbProperties;
 
@@ -113,10 +115,12 @@ public class AddPropertyActivity extends AppCompatActivity {
                     int maximumPrice = Integer.parseInt(maxPrice);
 
                     String newPropertyID = UUID.randomUUID().toString();
+                    String propertyOwner = fAuth.getCurrentUser().getUid().toString();
 
                     // CREATE SAMPLE PROPERTY OBJECT
                     Property newProperty = new Property(
                             newPropertyID,
+                            propertyOwner,
                             false,
                             propertyType,
                             propertyName,

@@ -15,7 +15,6 @@ public class User {
     private String email;
     private String password;
     private int userRole;
-    private Map<String, String> properties;
     //TODO: Must include image url
 
     public User() {
@@ -29,9 +28,6 @@ public class User {
         this.email = email;
         this.password = password;
         this.userRole = userRole;
-
-        // create property list by default
-        properties = new HashMap<>();
     }
 
     public void setUID(String UID) {
@@ -61,7 +57,4 @@ public class User {
     public int getUserRole() {
         return userRole;
     }
-
-    public Map<String, String> getProperties() { return properties; }
-
 }
