@@ -1,5 +1,8 @@
 package com.capstone.espasyo.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
@@ -7,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Property {
+public class Property implements Parcelable {
 
     private String propertyID;
     private String owner;
@@ -17,7 +20,8 @@ public class Property {
     private String address;
     private String landlordName;
     private String landlordPhoneNumber;
-    Map<String, Integer> priceRange;
+    private int minimumPrice;
+    private int maximumPrice;
 
     public Property() {
         //empty property constructor **required
@@ -32,12 +36,34 @@ public class Property {
         this.address = address;
         this.landlordName = landlordName;
         this.landlordPhoneNumber = landlordPhoneNumber;
-
-
-        priceRange = new HashMap<>();
-        priceRange.put("minimumPrice", minimumPrice);
-        priceRange.put("maximumPrice", maximumPrice);
+        this.minimumPrice = minimumPrice;
+        this.maximumPrice = maximumPrice;
     }
+
+    protected Property(Parcel in) {
+        propertyID = in.readString();
+        owner = in.readString();
+        isVerified = in.readByte() != 0;
+        propertyType = in.readString();
+        name = in.readString();
+        address = in.readString();
+        landlordName = in.readString();
+        landlordPhoneNumber = in.readString();
+        minimumPrice = in.readInt();
+        maximumPrice = in.readInt();
+    }
+
+    public static final Creator<Property> CREATOR = new Creator<Property>() {
+        @Override
+        public Property createFromParcel(Parcel in) {
+            return new Property(in);
+        }
+
+        @Override
+        public Property[] newArray(int size) {
+            return new Property[size];
+        }
+    };
 
     public void setPropertyID(String propertyID) {
         this.propertyID = propertyID;
@@ -71,8 +97,12 @@ public class Property {
         this.landlordPhoneNumber = landlordPhoneNumber;
     }
 
-    public void setPriceRange(Map<String, Integer> priceRange) {
-        this.priceRange = priceRange;
+    public void setMinimumPrice(int minimumPrice) {
+        this.minimumPrice = minimumPrice;
+    }
+
+    public void setMaximumPrice(int maximumPrice) {
+        this.maximumPrice = maximumPrice;
     }
 
     public String getPropertyID() { return propertyID; }
@@ -105,7 +135,30 @@ public class Property {
         return landlordPhoneNumber;
     }
 
-    public Map<String, Integer> getPriceRange() {
-        return priceRange;
+    public int getMinimumPrice() {
+        return minimumPrice;
+    }
+
+    public int getMaximumPrice() {
+        return maximumPrice;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(propertyID);
+        dest.writeString(owner);
+        dest.writeByte((byte) (isVerified ? 1 : 0));
+        dest.writeString(propertyType);
+        dest.writeString(name);
+        dest.writeString(address);
+        dest.writeString(landlordName);
+        dest.writeString(landlordPhoneNumber);
+        dest.writeInt(minimumPrice);
+        dest.writeInt(maximumPrice);
     }
 }

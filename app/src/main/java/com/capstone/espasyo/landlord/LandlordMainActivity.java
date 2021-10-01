@@ -9,7 +9,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -26,12 +28,15 @@ import com.google.android.material.navigation.NavigationView;
 
 public class LandlordMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    DrawerLayout drawer;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    ActionBarDrawerToggle actionBarDrawerToggle;
-
     private AuthViewModel viewModel;
+
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+
+    public final String SHARED_PREFS = "sharedPrefs";
+    public final String USER_ROLE = "userRole";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +125,7 @@ public class LandlordMainActivity extends AppCompatActivity implements Navigatio
                 //go to landlord dashboard
                 Log.i("MENU_DRAWER_TAG", "LOGOUT, GOTO LOGIN");
                 viewModel.signOut();
+                removeUserRolePreference();
                 finish();
                 drawer.closeDrawer(GravityCompat.START);
                 break;
@@ -137,6 +143,16 @@ public class LandlordMainActivity extends AppCompatActivity implements Navigatio
             super.onBackPressed();
         }
     }
+
+    //remove USER_ROLE in sharedPreferences
+    public void removeUserRolePreference() {
+        SharedPreferences sharedPreferences = getApplication().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.remove(USER_ROLE);
+        editor.apply();
+    }
+
 
 
 }

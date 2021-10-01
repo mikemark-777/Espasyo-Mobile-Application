@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
-
+        <activity
+            android:name=".landlord.views.PropertyDetailsActivity"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -19,9 +21,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Landlord Activities -->
+        </activity> <!-- Landlord Activities -->
         <activity
             android:name=".landlord.LandlordMainActivity"
             android:exported="true" />
@@ -30,9 +30,7 @@
             android:exported="true" />
         <activity
             android:name=".landlord.views.SettingsActivity"
-            android:exported="true" />
-
-        <!-- Student Activities -->
+            android:exported="true" /> <!-- Student Activities -->
         <activity
             android:name=".student.StudentMainActivity"
             android:exported="true" />

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,7 +31,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements PropertyAdapter.OnPropertyListener {
 
     private FirebaseAuth fAuth;
     private FirebaseFirestore database;
@@ -42,7 +43,7 @@ public class DashboardFragment extends Fragment {
     private FloatingActionButton addPropertyFAB;
     private NavController landlord_navigation;
     private TextView noPropertyAddedYetText;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,24 +54,13 @@ public class DashboardFragment extends Fragment {
         fAuth    = FirebaseAuth.getInstance();
         ownedPropertyList = new ArrayList<>();
 
-        getUserProperties();
-
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.landlord_fragment_dashboard, container, false);
-
-            propertyRecyclerView = view.findViewById(R.id.propertyRecyclerView);
-            propertyRecyclerView.setHasFixedSize(true);
-            propertyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            ownedPropertyList = new ArrayList<>();
-            propertyAdapter = new PropertyAdapter(getActivity(), ownedPropertyList);
-            propertyRecyclerView.setAdapter(propertyAdapter);
-
-
+        initRecyclerView(view);
         return view;
     }
 
@@ -78,12 +68,11 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //getUserProperties();
-
         progressDialog = new ProgressDialog(this.getContext());
         progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading data");
+        progressDialog.setMessage("Loading Properties");
         progressDialog.show();
+        getUserProperties();
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -92,6 +81,7 @@ public class DashboardFragment extends Fragment {
                 }
             }
         }, 2000);
+
 
         addPropertyFAB = view.findViewById(R.id.addPropertyFAB);
         addPropertyFAB.setOnClickListener(new View.OnClickListener() {
@@ -107,8 +97,19 @@ public class DashboardFragment extends Fragment {
         });
     }
 
-    public  void  getUserProperties() {
+    public void initRecyclerView(View view) {
+        // initialize propertyRecyclerView, layoutManager and propertyAdapter
+        propertyRecyclerView = view.findViewById(R.id.propertyRecyclerView);
+        propertyRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        propertyRecyclerView.setLayoutManager(layoutManager);
+        propertyAdapter = new PropertyAdapter(getActivity(), ownedPropertyList, this);
+        propertyRecyclerView.setAdapter(propertyAdapter);
+    }
 
+
+    //get all the ownedProperty of the currentUser
+    public  void  getUserProperties() {
         //will be used to retrieve owned properties in the Properties Collection
         String currentUserID = fAuth.getCurrentUser().getUid().toString();
         CollectionReference propertiesCollection = database.collection("properties");
@@ -126,5 +127,13 @@ public class DashboardFragment extends Fragment {
                         propertyAdapter.notifyDataSetChanged();
                     }
                 });
+    }
+
+    @Override
+    public void onPropertyClick(int position) {
+        Toast.makeText(getActivity(), "Item Clicked at position " + position, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), PropertyDetailsActivity.class);
+        intent.putExtra("property", ownedPropertyList.get(position));
+        startActivity(intent);
     }
 }

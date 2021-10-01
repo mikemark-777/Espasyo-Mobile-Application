@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.601">
+        app:layout_constraintVertical_bias="0.781">
 
         <TextView
             android:id="@+id/textHello"
@@ -76,11 +76,11 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
+            android:background="@drawable/custom_button"
             android:text="Login"
-            android:textColor="@color/white"
-            android:textSize="18sp"
             android:textAllCaps="false"
-            android:background="@drawable/custom_button" />
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 
 
         <TextView
@@ -94,10 +94,18 @@
             android:textStyle="bold" />
 
 
+        <ProgressBar
+            android:id="@+id/loginProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:visibility="invisible" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="140dp"
+            android:layout_marginTop="110dp"
             android:orientation="horizontal">
 
             <TextView
@@ -121,13 +129,6 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/loginProgressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
 
 
     </LinearLayout>

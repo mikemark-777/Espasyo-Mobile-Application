@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".landlord.views.PropertyDetailsActivity">
+
+    <LinearLayout
+        android:layout_width="395dp"
+        android:layout_height="390dp"
+        android:padding="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/verificationWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/propertyIsVerified"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This property is not yet verified."
+                android:textAlignment="center"
+                android:textColor="@color/espasyo_red_200"
+                android:textSize="16dp"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="393dp"
+            android:layout_height="149dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/default_image" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="176dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/espasyo_blue_700"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3">
+
+
+            <TextView
+                android:id="@+id/propertyNameDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Property Name"
+                android:textColor="@color/white"
+                android:textSize="28dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/propertyTypeDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Property Type"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/propertyAddressDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Property Address"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/propertyLandlordDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Landlord"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/propertyLandlordPhoneNumberDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Landlord Phone Number"
+                android:textColor="@color/white" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Php "
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/propertyMinimumPriceDisplay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - Php "
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/propertyMaximumPriceDisplay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

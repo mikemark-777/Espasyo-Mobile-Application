@@ -29,8 +29,8 @@ import java.util.UUID;
 
 public class AddPropertyActivity extends AppCompatActivity {
 
-    private FirebaseAuth fAuth = FirebaseAuth.getInstance();
-    private FirebaseFirestore database = FirebaseFirestore.getInstance();
+    private final FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    private final FirebaseFirestore database = FirebaseFirestore.getInstance();
     private DocumentReference dbProperties;
 
     private TextInputLayout textInputPropertyNameLayout,
@@ -106,7 +106,6 @@ public class AddPropertyActivity extends AppCompatActivity {
                 String landlordPhoneNumber = textInputLandlordPhoneNumber.getText().toString().trim();
                 String minPrice = textInputMinimumPrice.getText().toString().trim();
                 String maxPrice = textInputMaximumPrice.getText().toString().trim();
-                
 
 
                 if (areInputsValid(propertyName, propertyType, completeAddress, landlordName, landlordPhoneNumber, minPrice, maxPrice)) {

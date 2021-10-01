@@ -2,43 +2,125 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="250dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     android:layout_marginLeft="32dp"
     android:layout_marginRight="32dp"
-    app:cardBackgroundColor="@color/espasyo_blue_200"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/espasyo_blue_700"
     app:cardElevation="4dp"
     app:cardCornerRadius="4dp">
 
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitStart"
+        android:src="@drawable/default_image" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="110dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
         android:paddingTop="16dp"
         android:paddingRight="16dp"
-        android:paddingLeft="16dp"
         android:paddingBottom="12dp"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="30dp">
 
-            
+
+
+        <LinearLayout
+            android:layout_width="313dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:textAlignment="center">
+
             <TextView
                 android:id="@+id/propertyName"
-                android:layout_width="wrap_content"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:text="Property Name"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                android:textStyle="bold"/>
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="15dp"
+                app:srcCompat="@drawable/icon_address" />
 
             <TextView
                 android:id="@+id/propertyAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cabarroguis St. District 4, Bayombong NV."
-                android:textColor="@color/espasyo_orange_200"
-                android:textSize="14sp"/>
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <ImageView
+
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="15dp"
+                app:srcCompat="@drawable/icon_person" />
+
+            <TextView
+                android:id="@+id/landlordName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dina Licupa"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="15dp"
+                app:srcCompat="@drawable/icon_phone" />
+
+            <TextView
+                android:id="@+id/landlordContactNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09551074609"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -46,19 +128,63 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_gravity="bottom"
+        android:orientation="horizontal"
         android:padding="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="Php "
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/minimumPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text="0.00"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text=" - Php "
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/maximumPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text="0.00"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/propertyType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Apartment"
-            android:textColor="@color/espasyo_white"
-            android:textSize="14sp"
-            android:layout_marginLeft="8dp"/>
+            android:textColor="#ffffff"
+            android:textSize="14dp"
+            android:textAlignment="textEnd"
+            android:layout_marginRight="6dp"/>
+
     </LinearLayout>
 
-
-
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:enabled="false"
+        android:background="@drawable/owned_property_item_selector"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
 </androidx.cardview.widget.CardView>

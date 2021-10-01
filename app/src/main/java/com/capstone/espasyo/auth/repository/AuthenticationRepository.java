@@ -34,14 +34,12 @@ public class AuthenticationRepository {
     private FirebaseFirestore database;
     private DocumentReference dbUsers;
 
-
     public AuthenticationRepository(Application application) {
         this.application = application;
         firebaseUserMutableLiveData = new MutableLiveData<>();
         userLoggedMutableLiveData = new MutableLiveData<>();
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
-
 
         if(firebaseAuth.getCurrentUser() != null) {
             firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
