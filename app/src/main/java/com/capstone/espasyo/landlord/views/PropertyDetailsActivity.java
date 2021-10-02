@@ -33,7 +33,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         String landlordPhoneNumber = property.getLandlordPhoneNumber();
         int minimumPrice = property.getMinimumPrice();
         int maximumPrice = property.getMaximumPrice();
-        List<String> rentInclusions = property.getRentInclusions();
+        //List<String> rentInclusions = property.getRentInclusions();
 
         TextView propName = findViewById(R.id.propertyNameDisplay);
         TextView propType = findViewById(R.id.propertyTypeDisplay);
@@ -45,7 +45,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         LinearLayout verificationWarning = findViewById(R.id.verificationWarning);
         ListView rentInclusionsListView = findViewById(R.id.rentInclustionsListView);
 
-        ArrayAdapter<String> rentInclusionAdapter = new ArrayAdapter<>(this, R.layout.landlord_rent_inclusion_item, rentInclusions);
+       // ArrayAdapter<String> rentInclusionAdapter = new ArrayAdapter<>(this, R.layout.landlord_rent_inclusion_item, rentInclusions);
 
 
 
@@ -56,7 +56,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         propLandlordPhoneNumber.setText(landlordPhoneNumber);
         propMinimumPrice.setText(Integer.toString(minimumPrice));
         propMaximumPrice.setText(Integer.toString(maximumPrice));
-        rentInclusionsListView.setAdapter(rentInclusionAdapter);
+       // rentInclusionsListView.setAdapter(rentInclusionAdapter);
 
         if(isVerified != true) {
             verificationWarning.setVisibility(View.VISIBLE);

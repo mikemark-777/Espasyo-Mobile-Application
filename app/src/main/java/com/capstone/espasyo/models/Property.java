@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-public class Property implements Parcelable{
+public class Property{
 
     private String propertyID;
     private String owner;
@@ -28,13 +28,18 @@ public class Property implements Parcelable{
     private String landlordPhoneNumber;
     private int minimumPrice;
     private int maximumPrice;
-    private List<String> rentInclusions;
+    private boolean isElectricityIncluded;
+    private boolean isWaterIncluded;
+    private boolean isInternetIncluded;
+    private boolean isGarbageCollectionIncluded;
+
+
 
     public Property() {
         //empty property constructor **required
     }
 
-    public Property(String propertyID, String owner, boolean isVerified, String propertyType, String name, String address, String landlordName, String landlordPhoneNumber, int minimumPrice, int maximumPrice, List<String> rentInclusions) {
+    public Property(String propertyID, String owner, boolean isVerified, String propertyType, String name, String address, String landlordName, String landlordPhoneNumber, int minimumPrice, int maximumPrice, boolean isElectricityIncluded, boolean isWaterIncluded, boolean isInternetIncluded, boolean isGarbageCollectionIncluded) {
         this.propertyID = propertyID;
         this.owner = owner;
         this.isVerified = isVerified;
@@ -45,37 +50,14 @@ public class Property implements Parcelable{
         this.landlordPhoneNumber = landlordPhoneNumber;
         this.minimumPrice = minimumPrice;
         this.maximumPrice = maximumPrice;
-        this.rentInclusions = rentInclusions;
+        this.isElectricityIncluded = isElectricityIncluded;
+        this.isWaterIncluded = isWaterIncluded;
+        this.isInternetIncluded = isInternetIncluded;
+        this.isGarbageCollectionIncluded = isGarbageCollectionIncluded;
     }
 
 
     //setters
-
-    protected Property(Parcel in) {
-        propertyID = in.readString();
-        owner = in.readString();
-        isVerified = in.readByte() != 0;
-        propertyType = in.readString();
-        name = in.readString();
-        address = in.readString();
-        landlordName = in.readString();
-        landlordPhoneNumber = in.readString();
-        minimumPrice = in.readInt();
-        maximumPrice = in.readInt();
-        rentInclusions = in.createStringArrayList();
-    }
-
-    public static final Creator<Property> CREATOR = new Creator<Property>() {
-        @Override
-        public Property createFromParcel(Parcel in) {
-            return new Property(in);
-        }
-
-        @Override
-        public Property[] newArray(int size) {
-            return new Property[size];
-        }
-    };
 
     public void setPropertyID(String propertyID) {
         this.propertyID = propertyID;
@@ -115,6 +97,22 @@ public class Property implements Parcelable{
 
     public void setMaximumPrice(int maximumPrice) {
         this.maximumPrice = maximumPrice;
+    }
+
+    public void setElectricityIncluded(boolean electricityIncluded) {
+        isElectricityIncluded = electricityIncluded;
+    }
+
+    public void setWaterIncluded(boolean waterIncluded) {
+        isWaterIncluded = waterIncluded;
+    }
+
+    public void setInternetIncluded(boolean internetIncluded) {
+        isInternetIncluded = internetIncluded;
+    }
+
+    public void setGarbageCollectionIncluded(boolean garbageCollectionIncluded) {
+        isGarbageCollectionIncluded = garbageCollectionIncluded;
     }
 
     //getters
@@ -157,27 +155,19 @@ public class Property implements Parcelable{
         return maximumPrice;
     }
 
-    public List<String> getRentInclusions() {
-        return rentInclusions;
+    public boolean isElectricityIncluded() {
+        return isElectricityIncluded;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public boolean isWaterIncluded() {
+        return isWaterIncluded;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(propertyID);
-        dest.writeString(owner);
-        dest.writeByte((byte) (isVerified ? 1 : 0));
-        dest.writeString(propertyType);
-        dest.writeString(name);
-        dest.writeString(address);
-        dest.writeString(landlordName);
-        dest.writeString(landlordPhoneNumber);
-        dest.writeInt(minimumPrice);
-        dest.writeInt(maximumPrice);
-        dest.writeStringList(rentInclusions);
+    public boolean isInternetIncluded() {
+        return isInternetIncluded;
+    }
+
+    public boolean isGarbageCollectionIncluded() {
+        return isGarbageCollectionIncluded;
     }
 }

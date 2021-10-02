@@ -56,6 +56,11 @@ public class AddPropertyActivity extends AppCompatActivity {
                      internetCheckBox,
                      garbageCheckBox;
 
+    private boolean isElectricityIncluded,
+                    isWaterIncluded,
+                    isInternetIncluded,
+                    isGarbageCollectionIncluded;
+
     List<String> rentInclusions = new ArrayList<>();
 
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
@@ -129,13 +134,16 @@ public class AddPropertyActivity extends AppCompatActivity {
                     int minimumPrice = Integer.parseInt(minPrice);
                     int maximumPrice = Integer.parseInt(maxPrice);
 
+
                     String newPropertyID = UUID.randomUUID().toString();
                     String propertyOwner = fAuth.getCurrentUser().getUid().toString();
 
                     getRentInclusions();
 
+                    Toast.makeText(AddPropertyActivity.this, "Rent Inclusions: " + isElectricityIncluded + "," + isWaterIncluded + "," + isInternetIncluded + "," + isGarbageCollectionIncluded, Toast.LENGTH_LONG).show();
+
                     // CREATE SAMPLE PROPERTY OBJECT
-                    Property newProperty = new Property(
+                   /* Property newProperty = new Property(
                             newPropertyID,
                             propertyOwner,
                             false,
@@ -145,8 +153,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                             landlordName,
                             landlordPhoneNumber,
                             minimumPrice,
-                            maximumPrice,
-                            rentInclusions
+                            maximumPrice
                     );
 
                     // TESTING PURPOSES - Refactor  soon and put in Repository or Viewmodel
@@ -164,7 +171,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(AddPropertyActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    });*/
                 } else {
                     Toast.makeText(AddPropertyActivity.this, "SOMETHING IS EMPTY", Toast.LENGTH_SHORT).show();
                 }
@@ -281,14 +288,6 @@ public class AddPropertyActivity extends AppCompatActivity {
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
 
-        Log.d(TAG, "NAME: " + propertyNameResult);
-        Log.d(TAG, "TYPE: " + propertyTypeResult);
-        Log.d(TAG, "ADDRESS: " + completeAddressResult);
-        Log.d(TAG, "LNAME: " + landlordNameResult);
-        Log.d(TAG, "LPHONE: " + landlordPhoneNumberResult);
-        Log.d(TAG, "MIN: " + minimumPriceResult);
-        Log.d(TAG, "MAX: " + maximumPriceResult);
-
         if (propertyNameResult && propertyTypeResult && completeAddressResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
             Log.d(TAG, "CAN PROCEED: TRUE");
             return true;
@@ -300,21 +299,28 @@ public class AddPropertyActivity extends AppCompatActivity {
     }
 
     public void getRentInclusions() {
-        rentInclusions.clear();
         if(electrictiyCheckBox.isChecked()) {
-            rentInclusions.add(electrictiyCheckBox.getText().toString());
+          isElectricityIncluded = true;
+        } else {
+            isElectricityIncluded = false;
         }
 
         if(waterCheckBox.isChecked()) {
-            rentInclusions.add(waterCheckBox.getText().toString());
+            isWaterIncluded = true;
+        } else {
+            isWaterIncluded = false;
         }
 
         if(internetCheckBox.isChecked()) {
-            rentInclusions.add(internetCheckBox.getText().toString());
+           isInternetIncluded = true;
+        } else {
+            isInternetIncluded = false;
         }
 
         if(garbageCheckBox.isChecked()) {
-            rentInclusions.add(garbageCheckBox.getText().toString());
+           isGarbageCollectionIncluded = true;
+        } else {
+            isGarbageCollectionIncluded = false;
         }
     }
 
