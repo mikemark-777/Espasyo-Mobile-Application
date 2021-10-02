@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
@@ -50,6 +51,13 @@ public class AddPropertyActivity extends AppCompatActivity {
             textInputMinimumPrice,
             textInputMaximumPrice;
 
+    private CheckBox electrictiyCheckBox,
+                     waterCheckBox,
+                     internetCheckBox,
+                     garbageCheckBox;
+
+    List<String> rentInclusions = new ArrayList<>();
+
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
     String[] minimumPrices = {"500", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000", "11000", "12000"};
     String[] maximumPrices = {"500", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000", "11000", "12000"};
@@ -58,14 +66,14 @@ public class AddPropertyActivity extends AppCompatActivity {
     ArrayAdapter<String> maximumPriceAdapter;
 
     private Button btnAddProperty,
-            btnCancel;
+                   btnCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_add_property);
 
-        //Initialize textInputLayouts, textInputEditTexts, autoCompleteTextView and buttons
+        //Initialize textInputLayouts, textInputEditTexts, autoCompleteTextView, checkBoxes and buttons
 
         textInputPropertyNameLayout = findViewById(R.id.text_input_propertyName_layout);
         textInputPropertyTypeLayout = findViewById(R.id.text_input_propertyType_layout);
@@ -83,6 +91,11 @@ public class AddPropertyActivity extends AppCompatActivity {
         textInputMinimumPrice = findViewById(R.id.text_input_minimumPrice);
         textInputMaximumPrice = findViewById(R.id.text_input_maximumPrice);
 
+        electrictiyCheckBox = findViewById(R.id.electricityCheckBox);
+        waterCheckBox = findViewById(R.id.waterCheckBox);
+        internetCheckBox = findViewById(R.id.internetCheckBox);
+        garbageCheckBox = findViewById(R.id.garbageCheckBox);
+
         btnAddProperty = findViewById(R.id.btnAddProperty);
         btnCancel = findViewById(R.id.btnCancel);
 
@@ -96,6 +109,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         maximumPriceAdapter = new ArrayAdapter<String>(this, R.layout.landlord_maximum_price_list_item, maximumPrices);
         textInputMaximumPrice.setAdapter(maximumPriceAdapter);
         maximumPriceAdapter.notifyDataSetChanged();
+
 
         btnAddProperty.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +132,8 @@ public class AddPropertyActivity extends AppCompatActivity {
                     String newPropertyID = UUID.randomUUID().toString();
                     String propertyOwner = fAuth.getCurrentUser().getUid().toString();
 
+                    getRentInclusions();
+
                     // CREATE SAMPLE PROPERTY OBJECT
                     Property newProperty = new Property(
                             newPropertyID,
@@ -129,7 +145,8 @@ public class AddPropertyActivity extends AppCompatActivity {
                             landlordName,
                             landlordPhoneNumber,
                             minimumPrice,
-                            maximumPrice
+                            maximumPrice,
+                            rentInclusions
                     );
 
                     // TESTING PURPOSES - Refactor  soon and put in Repository or Viewmodel
@@ -280,6 +297,25 @@ public class AddPropertyActivity extends AppCompatActivity {
             return false;
         }
 
+    }
+
+    public void getRentInclusions() {
+        rentInclusions.clear();
+        if(electrictiyCheckBox.isChecked()) {
+            rentInclusions.add(electrictiyCheckBox.getText().toString());
+        }
+
+        if(waterCheckBox.isChecked()) {
+            rentInclusions.add(waterCheckBox.getText().toString());
+        }
+
+        if(internetCheckBox.isChecked()) {
+            rentInclusions.add(internetCheckBox.getText().toString());
+        }
+
+        if(garbageCheckBox.isChecked()) {
+            rentInclusions.add(garbageCheckBox.getText().toString());
+        }
     }
 
 

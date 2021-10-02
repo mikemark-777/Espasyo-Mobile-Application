@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.models.Property;
+
+import java.util.List;
 
 public class PropertyDetailsActivity extends AppCompatActivity {
 
@@ -29,6 +33,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         String landlordPhoneNumber = property.getLandlordPhoneNumber();
         int minimumPrice = property.getMinimumPrice();
         int maximumPrice = property.getMaximumPrice();
+        List<String> rentInclusions = property.getRentInclusions();
 
         TextView propName = findViewById(R.id.propertyNameDisplay);
         TextView propType = findViewById(R.id.propertyTypeDisplay);
@@ -38,6 +43,10 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         TextView propMinimumPrice = findViewById(R.id.propertyMinimumPriceDisplay);
         TextView propMaximumPrice = findViewById(R.id.propertyMaximumPriceDisplay);
         LinearLayout verificationWarning = findViewById(R.id.verificationWarning);
+        ListView rentInclusionsListView = findViewById(R.id.rentInclustionsListView);
+
+        ArrayAdapter<String> rentInclusionAdapter = new ArrayAdapter<>(this, R.layout.landlord_rent_inclusion_item, rentInclusions);
+
 
 
         propName.setText(name);
@@ -47,6 +56,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         propLandlordPhoneNumber.setText(landlordPhoneNumber);
         propMinimumPrice.setText(Integer.toString(minimumPrice));
         propMaximumPrice.setText(Integer.toString(maximumPrice));
+        rentInclusionsListView.setAdapter(rentInclusionAdapter);
 
         if(isVerified != true) {
             verificationWarning.setVisibility(View.VISIBLE);

@@ -3,14 +3,20 @@ package com.capstone.espasyo.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
-public class Property implements Parcelable {
+public class Property implements Parcelable{
 
     private String propertyID;
     private String owner;
@@ -22,12 +28,13 @@ public class Property implements Parcelable {
     private String landlordPhoneNumber;
     private int minimumPrice;
     private int maximumPrice;
+    private List<String> rentInclusions;
 
     public Property() {
         //empty property constructor **required
     }
 
-    public Property(String propertyID, String owner, boolean isVerified, String propertyType, String name, String address, String landlordName, String landlordPhoneNumber, int minimumPrice, int maximumPrice) {
+    public Property(String propertyID, String owner, boolean isVerified, String propertyType, String name, String address, String landlordName, String landlordPhoneNumber, int minimumPrice, int maximumPrice, List<String> rentInclusions) {
         this.propertyID = propertyID;
         this.owner = owner;
         this.isVerified = isVerified;
@@ -38,7 +45,11 @@ public class Property implements Parcelable {
         this.landlordPhoneNumber = landlordPhoneNumber;
         this.minimumPrice = minimumPrice;
         this.maximumPrice = maximumPrice;
+        this.rentInclusions = rentInclusions;
     }
+
+
+    //setters
 
     protected Property(Parcel in) {
         propertyID = in.readString();
@@ -51,6 +62,7 @@ public class Property implements Parcelable {
         landlordPhoneNumber = in.readString();
         minimumPrice = in.readInt();
         maximumPrice = in.readInt();
+        rentInclusions = in.createStringArrayList();
     }
 
     public static final Creator<Property> CREATOR = new Creator<Property>() {
@@ -105,6 +117,8 @@ public class Property implements Parcelable {
         this.maximumPrice = maximumPrice;
     }
 
+    //getters
+
     public String getPropertyID() { return propertyID; }
 
     public String getOwner() {
@@ -143,6 +157,10 @@ public class Property implements Parcelable {
         return maximumPrice;
     }
 
+    public List<String> getRentInclusions() {
+        return rentInclusions;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -160,5 +178,6 @@ public class Property implements Parcelable {
         dest.writeString(landlordPhoneNumber);
         dest.writeInt(minimumPrice);
         dest.writeInt(maximumPrice);
+        dest.writeStringList(rentInclusions);
     }
 }

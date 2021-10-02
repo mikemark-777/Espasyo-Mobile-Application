@@ -196,25 +196,25 @@
 
                     <CheckBox
 
-                        android:id="@+id/ElectricityCheckBox"
+                        android:id="@+id/electricityCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Electricity" />
 
                     <CheckBox
-                        android:id="@+id/WaterCheckBox"
+                        android:id="@+id/waterCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Water" />
 
                     <CheckBox
-                        android:id="@+id/InternetCheckBox"
+                        android:id="@+id/internetCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Internet" />
 
                     <CheckBox
-                        android:id="@+id/GarbageCheckBox"
+                        android:id="@+id/garbageCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Garbage Collection" />
