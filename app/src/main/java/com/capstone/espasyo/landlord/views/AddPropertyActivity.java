@@ -91,9 +91,11 @@ public class AddPropertyActivity extends AppCompatActivity {
 
         minimumPriceAdapter = new ArrayAdapter<String>(this, R.layout.landlord_minimum_price_list_item, minimumPrices);
         textInputMinimumPrice.setAdapter(minimumPriceAdapter);
+        minimumPriceAdapter.notifyDataSetChanged();
 
         maximumPriceAdapter = new ArrayAdapter<String>(this, R.layout.landlord_maximum_price_list_item, maximumPrices);
         textInputMaximumPrice.setAdapter(maximumPriceAdapter);
+        maximumPriceAdapter.notifyDataSetChanged();
 
         btnAddProperty.setOnClickListener(new View.OnClickListener() {
             @Override

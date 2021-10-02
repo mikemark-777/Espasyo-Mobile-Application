@@ -4,4 +4,5 @@
 
     <solid android:color="@color/espasyo_orange_200"/>
     <corners android:radius="8dp"/>
+    <size android:height="40dp"/>
 </shape>
