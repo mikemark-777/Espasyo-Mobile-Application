@@ -104,6 +104,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         btnAddProperty = findViewById(R.id.btnAddProperty);
         btnCancel = findViewById(R.id.btnCancel);
 
+
         propertyTypeAdapter = new ArrayAdapter<String>(this, R.layout.landlord_property_type_list_item, propertyType);
         textInputPropertyType.setAdapter(propertyTypeAdapter);
 
@@ -114,6 +115,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         maximumPriceAdapter = new ArrayAdapter<String>(this, R.layout.landlord_maximum_price_list_item, maximumPrices);
         textInputMaximumPrice.setAdapter(maximumPriceAdapter);
         maximumPriceAdapter.notifyDataSetChanged();
+
 
 
         btnAddProperty.setOnClickListener(new View.OnClickListener() {
@@ -140,10 +142,8 @@ public class AddPropertyActivity extends AppCompatActivity {
 
                     getRentInclusions();
 
-                    Toast.makeText(AddPropertyActivity.this, "Rent Inclusions: " + isElectricityIncluded + "," + isWaterIncluded + "," + isInternetIncluded + "," + isGarbageCollectionIncluded, Toast.LENGTH_LONG).show();
-
                     // CREATE SAMPLE PROPERTY OBJECT
-                   /* Property newProperty = new Property(
+                    Property newProperty = new Property(
                             newPropertyID,
                             propertyOwner,
                             false,
@@ -153,7 +153,11 @@ public class AddPropertyActivity extends AppCompatActivity {
                             landlordName,
                             landlordPhoneNumber,
                             minimumPrice,
-                            maximumPrice
+                            maximumPrice,
+                            isElectricityIncluded,
+                            isWaterIncluded,
+                            isInternetIncluded,
+                            isGarbageCollectionIncluded
                     );
 
                     // TESTING PURPOSES - Refactor  soon and put in Repository or Viewmodel
@@ -171,7 +175,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(AddPropertyActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                         }
-                    });*/
+                    });
                 } else {
                     Toast.makeText(AddPropertyActivity.this, "SOMETHING IS EMPTY", Toast.LENGTH_SHORT).show();
                 }

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
         <activity
+            android:name=".landlord.views.AddRoomActivity"
+            android:exported="true" />
+        <activity
             android:name=".landlord.views.PropertyDetailsActivity"
             android:exported="true" />
         <activity

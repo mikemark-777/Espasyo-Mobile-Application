@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,7 +35,14 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         String landlordPhoneNumber = property.getLandlordPhoneNumber();
         int minimumPrice = property.getMinimumPrice();
         int maximumPrice = property.getMaximumPrice();
-        //List<String> rentInclusions = property.getRentInclusions();
+        boolean isElectricityIncluded = property.getIsElectricityIncluded();
+        boolean isWaterIncluded = property.getIsWaterIncluded();
+        boolean isInternetIncluded = property.getIsInternetIncluded();
+        boolean isGarbageCollectionIncluded = property.getIsGarbageCollectionIncluded();
+
+
+        Button btnAddRoom;
+
 
         TextView propName = findViewById(R.id.propertyNameDisplay);
         TextView propType = findViewById(R.id.propertyTypeDisplay);
@@ -42,11 +51,12 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         TextView propLandlordPhoneNumber = findViewById(R.id.propertyLandlordPhoneNumberDisplay);
         TextView propMinimumPrice = findViewById(R.id.propertyMinimumPriceDisplay);
         TextView propMaximumPrice = findViewById(R.id.propertyMaximumPriceDisplay);
+        CheckBox electricityRentInclusion = findViewById(R.id.electricityRentInclusion);
+        CheckBox waterRentInclusion = findViewById(R.id.waterRentInclusion);
+        CheckBox internetRentInclusion = findViewById(R.id.internetRentInclusion);
+        CheckBox garbageCollectionRentInclusion = findViewById(R.id.garbageCollectionRentInclusion);
         LinearLayout verificationWarning = findViewById(R.id.verificationWarning);
-        ListView rentInclusionsListView = findViewById(R.id.rentInclustionsListView);
-
-       // ArrayAdapter<String> rentInclusionAdapter = new ArrayAdapter<>(this, R.layout.landlord_rent_inclusion_item, rentInclusions);
-
+        btnAddRoom = findViewById(R.id.sampleAddRoom);
 
 
         propName.setText(name);
@@ -56,13 +66,24 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         propLandlordPhoneNumber.setText(landlordPhoneNumber);
         propMinimumPrice.setText(Integer.toString(minimumPrice));
         propMaximumPrice.setText(Integer.toString(maximumPrice));
-       // rentInclusionsListView.setAdapter(rentInclusionAdapter);
+        electricityRentInclusion.setChecked(isElectricityIncluded);
+        waterRentInclusion.setChecked(isWaterIncluded);
+        internetRentInclusion.setChecked(isInternetIncluded);
+        garbageCollectionRentInclusion.setChecked(isGarbageCollectionIncluded);
 
         if(isVerified != true) {
             verificationWarning.setVisibility(View.VISIBLE);
         } else {
             verificationWarning.setVisibility(View.GONE);
         }
+
+        btnAddRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PropertyDetailsActivity.this, AddRoomActivity.class));
+            }
+        });
+
 
     }
 }

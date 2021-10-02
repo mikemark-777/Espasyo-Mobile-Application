@@ -133,7 +133,7 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
     public void onPropertyClick(int position) {
         Toast.makeText(getActivity(), "Item Clicked at position " + position, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), PropertyDetailsActivity.class);
-        /*intent.putExtra("property", ownedPropertyList.get(position));
-        startActivity(intent);*/
+        intent.putExtra("property", ownedPropertyList.get(position));
+        startActivity(intent);
     }
 }

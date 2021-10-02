@@ -7,8 +7,8 @@
     tools:context=".landlord.views.PropertyDetailsActivity">
 
     <LinearLayout
-        android:layout_width="395dp"
-        android:layout_height="500dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:padding="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -129,13 +129,26 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/sampleAddRoom"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Add Room"
+                android:backgroundTint="@color/espasyo_orange_200"/>
+        </LinearLayout>
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="350dp"
                 android:layout_margin="16dp"
                 android:orientation="vertical">
 
@@ -157,14 +170,101 @@
                       android:text="Rent Inclusions"/>
               </LinearLayout>
 
-                <ListView
-                    android:id="@+id/rentInclustionsListView"
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                   android:gravity="left">
+
+                   <ImageView
+                       android:layout_width="50dp"
+                       android:layout_height="50dp"
+                       app:layout_constraintBottom_toBottomOf="parent"
+                       app:layout_constraintTop_toTopOf="parent"
+                       android:src="@drawable/icon_electricity"/>
+
+                   <CheckBox
+                       android:id="@+id/electricityRentInclusion"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="Electricity"
+                       android:textSize="16dp"
+                       android:enabled="false"/>
+
+               </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="16dp"
-                    android:listSelector="@android:color/transparent"
-                    android:divider="@null"
-                    android:dividerHeight="5dp"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/icon_water"/>
+<!--
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Water"
+                        android:textSize="20sp"/>-->
+
+                    <CheckBox
+                        android:id="@+id/waterRentInclusion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Water"
+                        android:textSize="16dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/icon_wifi"/>
+
+                    <CheckBox
+                        android:id="@+id/internetRentInclusion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Internet"
+                        android:textSize="16sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/icon_garbage"/>
+
+                    <CheckBox
+                        android:id="@+id/garbageCollectionRentInclusion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Garbage Collection"
+                        android:textSize="16dp"/>
+
+                </LinearLayout>
+
+
+
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

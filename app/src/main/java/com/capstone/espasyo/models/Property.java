@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-public class Property{
+public class Property implements Parcelable{
 
     private String propertyID;
     private String owner;
@@ -33,9 +33,7 @@ public class Property{
     private boolean isInternetIncluded;
     private boolean isGarbageCollectionIncluded;
 
-
-
-    public Property() {
+    public Property(){
         //empty property constructor **required
     }
 
@@ -58,6 +56,36 @@ public class Property{
 
 
     //setters
+
+    protected Property(Parcel in) {
+        propertyID = in.readString();
+        owner = in.readString();
+        isVerified = in.readByte() != 0;
+        propertyType = in.readString();
+        name = in.readString();
+        address = in.readString();
+        landlordName = in.readString();
+        landlordPhoneNumber = in.readString();
+        minimumPrice = in.readInt();
+        maximumPrice = in.readInt();
+        isElectricityIncluded = in.readByte() != 0;
+        isWaterIncluded = in.readByte() != 0;
+        isInternetIncluded = in.readByte() != 0;
+        isGarbageCollectionIncluded = in.readByte() != 0;
+    }
+
+
+    public static final Creator<Property> CREATOR = new Creator<Property>() {
+        @Override
+        public Property createFromParcel(Parcel in) {
+            return new Property(in);
+        }
+
+        @Override
+        public Property[] newArray(int size) {
+            return new Property[size];
+        }
+    };
 
     public void setPropertyID(String propertyID) {
         this.propertyID = propertyID;
@@ -155,19 +183,42 @@ public class Property{
         return maximumPrice;
     }
 
-    public boolean isElectricityIncluded() {
+    public boolean getIsElectricityIncluded() {
         return isElectricityIncluded;
     }
 
-    public boolean isWaterIncluded() {
+    public boolean getIsWaterIncluded() {
         return isWaterIncluded;
     }
 
-    public boolean isInternetIncluded() {
+    public boolean getIsInternetIncluded() {
         return isInternetIncluded;
     }
 
-    public boolean isGarbageCollectionIncluded() {
+    public boolean getIsGarbageCollectionIncluded() {
         return isGarbageCollectionIncluded;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(propertyID);
+        dest.writeString(owner);
+        dest.writeByte((byte) (isVerified ? 1 : 0));
+        dest.writeString(propertyType);
+        dest.writeString(name);
+        dest.writeString(address);
+        dest.writeString(landlordName);
+        dest.writeString(landlordPhoneNumber);
+        dest.writeInt(minimumPrice);
+        dest.writeInt(maximumPrice);
+        dest.writeByte((byte) (isElectricityIncluded ? 1 : 0));
+        dest.writeByte((byte) (isWaterIncluded ? 1 : 0));
+        dest.writeByte((byte) (isInternetIncluded ? 1 : 0));
+        dest.writeByte((byte) (isGarbageCollectionIncluded ? 1 : 0));
     }
 }
