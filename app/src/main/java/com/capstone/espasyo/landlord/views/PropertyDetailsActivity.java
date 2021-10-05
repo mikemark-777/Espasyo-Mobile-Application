@@ -23,7 +23,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_property_details);
-
+/*
         Intent intent = getIntent();
         Property property = intent.getParcelableExtra("property");
 
@@ -82,8 +82,17 @@ public class PropertyDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(PropertyDetailsActivity.this, AddRoomActivity.class));
             }
-        });
+        });*/
 
+        Button btnAddRoom;
+        btnAddRoom = findViewById(R.id.addRoomButton);
+
+        btnAddRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PropertyDetailsActivity.this, AddRoomActivity.class));
+            }
+        });
 
     }
 }

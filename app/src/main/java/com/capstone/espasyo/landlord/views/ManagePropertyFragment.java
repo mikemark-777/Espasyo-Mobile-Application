@@ -4,28 +4,22 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capstone.espasyo.R;
-import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.capstone.espasyo.landlord.adapters.PropertyAdapter;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
-import com.capstone.espasyo.landlord.viewmodels.ManagePropertyViewModel;
 import com.capstone.espasyo.models.Property;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

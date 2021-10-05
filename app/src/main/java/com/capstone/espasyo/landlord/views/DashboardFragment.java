@@ -22,6 +22,7 @@ import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.PropertyAdapter;
 import com.capstone.espasyo.models.Property;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -40,7 +41,7 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
     private PropertyAdapter propertyAdapter;
     private ArrayList<Property> ownedPropertyList;
 
-    private FloatingActionButton addPropertyFAB;
+    private ExtendedFloatingActionButton addPropertyFAB;
     private NavController landlord_navigation;
     private TextView noPropertyAddedYetText;
     private ProgressDialog progressDialog;
@@ -93,6 +94,19 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
                 getActivity().finish();
                /* Snackbar.make(view, "Add a property", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
+            }
+        });
+
+        //shrink and extend the FAB
+        propertyRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    addPropertyFAB.shrink();
+                } else if (dy < 0) {
+                    addPropertyFAB.extend();
+                }
             }
         });
     }
