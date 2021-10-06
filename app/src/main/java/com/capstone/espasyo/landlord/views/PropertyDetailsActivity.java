@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.models.Property;
@@ -19,14 +20,19 @@ import java.util.List;
 
 public class PropertyDetailsActivity extends AppCompatActivity {
 
+    private String propertyID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_property_details);
-/*
+
         Intent intent = getIntent();
         Property property = intent.getParcelableExtra("property");
 
+        propertyID = property.getPropertyID();
+
+/*
         boolean isVerified = property.getIsVerified();
         String name = property.getName();
         String propertyType = property.getPropertyType();
@@ -90,9 +96,19 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         btnAddRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PropertyDetailsActivity.this, AddRoomActivity.class));
+                //TODO: Must pass propertyID to addRoomActivity
+                Intent intent = new Intent(PropertyDetailsActivity.this, AddRoomActivity.class);
+                intent.putExtra("propertyID", propertyID);
+                startActivity(intent);
             }
         });
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        Toast.makeText(PropertyDetailsActivity.this, "PropertyDetailsActivity is onRestart()", Toast.LENGTH_SHORT).show();
     }
 }

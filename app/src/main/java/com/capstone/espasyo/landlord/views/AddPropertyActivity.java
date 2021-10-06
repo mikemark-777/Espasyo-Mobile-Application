@@ -30,9 +30,10 @@ import java.util.UUID;
 
 public class AddPropertyActivity extends AppCompatActivity {
 
+    //TODO: get fAuth and database instance in FirebaseConnection
     private final FirebaseAuth fAuth = FirebaseAuth.getInstance();
     private final FirebaseFirestore database = FirebaseFirestore.getInstance();
-    private DocumentReference dbProperties;
+    private DocumentReference propertiesDocumentReference;
 
     private TextInputLayout textInputPropertyNameLayout,
             textInputPropertyTypeLayout,
@@ -102,7 +103,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         garbageCheckBox = findViewById(R.id.garbageCheckBox);
 
         btnAddProperty = findViewById(R.id.btnAddProperty);
-        btnCancel = findViewById(R.id.btnCancel);
+        btnCancel = findViewById(R.id.btnCancelAddProperty);
 
 
         propertyTypeAdapter = new ArrayAdapter<String>(this, R.layout.landlord_property_type_list_item, propertyType);
@@ -161,9 +162,9 @@ public class AddPropertyActivity extends AppCompatActivity {
                     );
 
                     // TESTING PURPOSES - Refactor  soon and put in Repository or Viewmodel
-                    dbProperties = database.collection("properties").document(newPropertyID);
+                    propertiesDocumentReference = database.collection("properties").document(newPropertyID);
 
-                    dbProperties.set(newProperty).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    propertiesDocumentReference.set(newProperty).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(AddPropertyActivity.this, "Property Successfully Added", Toast.LENGTH_SHORT).show();

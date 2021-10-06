@@ -87,17 +87,17 @@
 
                     <Button
                         android:id="@+id/decrement"
-                        android:layout_width="40dp"
+                        android:layout_width="45dp"
                         android:layout_height="46dp"
                         android:text="-"
-                        android:textSize="18dp"/>
+                        android:textSize="18sp"/>
 
                     <TextView
-                        android:id="@+id/numberOfPersonsInput"
+                        android:id="@+id/text_input_numberOfPersons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1"
-                        android:textSize="18dp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
@@ -105,10 +105,10 @@
 
                     <Button
                         android:id="@+id/increment"
-                        android:layout_width="40dp"
+                        android:layout_width="45dp"
                         android:layout_height="46dp"
                         android:text="+"
-                        android:textSize="18dp"/>
+                        android:textSize="18sp"/>
 
                 </LinearLayout>
 
@@ -116,55 +116,53 @@
 
         </LinearLayout>
 
-        <Switch
-            android:id="@+id/switch1"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/roomAvailabilitySwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:paddingRight="8dp"
             android:minHeight="48dp"
             android:text="Room  Availability"
             android:textSize="18sp"
-            android:thumb="@drawable/custom_thumb"
-            android:track="@drawable/custom_track" />
+            android:checked="true"
+            android:thumb="@drawable/custom_thumb_availability"
+            app:track="@drawable/custom_track_availability" />
 
         <!--must include number of persons per room-->
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_margin="12dp"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
-                    android:text="Facilities"
-                    android:textColor="@color/black"
+                    android:text="Facilities Included"
+                    android:textColor="@color/espasyo_gray_200"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <Switch
-                    android:id="@+id/switch2"
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/bathroomSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginBottom="12dp"
                     android:minHeight="48dp"
                     android:text="Bathroom"
                     android:textSize="18sp"
+                    android:checked="true"
                     android:thumb="@drawable/custom_thumb"
-                    android:track="@drawable/custom_track" />
+                    app:track="@drawable/custom_track" />
 
-                <Switch
-                    android:id="@+id/switch3"
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/kitchenSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
@@ -173,11 +171,9 @@
                     android:text="Kitchen"
                     android:textSize="18sp"
                     android:thumb="@drawable/custom_thumb"
-                    android:track="@drawable/custom_track" />
+                    app:track="@drawable/custom_track" />
 
             </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
 
 
     </LinearLayout>
@@ -215,4 +211,6 @@
             android:textColor="@color/white"
             android:textSize="18sp" />
     </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
