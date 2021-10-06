@@ -23,7 +23,6 @@ import com.capstone.espasyo.landlord.adapters.PropertyAdapter;
 import com.capstone.espasyo.models.Property;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -61,7 +60,7 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.landlord_fragment_dashboard, container, false);
-        initRecyclerView(view);
+        initPropertyRecyclerView(view);
         return view;
     }
 
@@ -111,12 +110,12 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
         });
     }
 
-    public void initRecyclerView(View view) {
+    public void initPropertyRecyclerView(View view) {
         // initialize propertyRecyclerView, layoutManager and propertyAdapter
         propertyRecyclerView = view.findViewById(R.id.propertyRecyclerView);
         propertyRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        propertyRecyclerView.setLayoutManager(layoutManager);
+        LinearLayoutManager propertyLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        propertyRecyclerView.setLayoutManager(propertyLayoutManager);
         propertyAdapter = new PropertyAdapter(getActivity(), ownedPropertyList, this);
         propertyRecyclerView.setAdapter(propertyAdapter);
     }
@@ -134,9 +133,9 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         ownedPropertyList.clear();
-                        for(QueryDocumentSnapshot document: queryDocumentSnapshots) {
-                            Property property = document.toObject(Property.class);
-                            ownedPropertyList.add(property);
+                        for(QueryDocumentSnapshot property: queryDocumentSnapshots) {
+                            Property propertyObj = property.toObject(Property.class);
+                            ownedPropertyList.add(propertyObj);
                         }
                         propertyAdapter.notifyDataSetChanged();
                     }

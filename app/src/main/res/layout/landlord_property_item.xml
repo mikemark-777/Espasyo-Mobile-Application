@@ -10,6 +10,7 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:clickable="true"
+    android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/espasyo_blue_700"
     app:cardElevation="4dp"

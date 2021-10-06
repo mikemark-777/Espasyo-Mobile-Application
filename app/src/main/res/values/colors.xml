@@ -19,6 +19,7 @@
     <color name="espasyo_red_2500">#FF3131</color>
     <color name="espasyo_gray_200">#2E2E2E</color>
     <color name="espasyo_gray_500">#122F3A</color>
+    <color name="espasyo_green_200">#19B100</color>
     <color name="espasyo_white">#CFFFFA</color>
 
 </resources>

@@ -7,6 +7,7 @@
     tools:context=".landlord.views.PropertyDetailsActivity">
 
     <LinearLayout
+        android:id="@+id/verificationWarning"
         android:layout_width="match_parent"
         android:layout_height="22dp"
         android:layout_marginBottom="22dp"
@@ -62,6 +63,7 @@
                 android:paddingRight="16dp">
 
                 <TextView
+                    android:id="@+id/propertyNameDisplay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Property Name"
@@ -70,6 +72,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/propertyTypeDisplay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Property Type"
@@ -77,6 +80,7 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/propertyAddressDisplay"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Don Mariano Marcos, Bayombong, NV"
@@ -95,6 +99,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/propertyMinimumPriceDisplay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1000"
@@ -109,6 +114,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/propertyMaximumPriceDisplay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1500"
@@ -148,6 +154,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/propertyLandlordNameDisplay"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="Juana Dela Cruz"
@@ -156,6 +163,7 @@
                             android:textColor="@color/black"/>
 
                         <TextView
+                            android:id="@+id/propertyLandlordPhoneNumberDisplay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="+639368540758"
@@ -194,6 +202,7 @@
                     android:layout_height="wrap_content"/>
 
               <LinearLayout
+                  android:id="@+id/noRoomsYetSignal"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:gravity="center_vertical"

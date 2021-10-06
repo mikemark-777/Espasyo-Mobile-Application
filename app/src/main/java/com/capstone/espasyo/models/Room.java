@@ -92,7 +92,7 @@ public class Room implements Parcelable{
         this.numberOfPersons = numberOfPersons;
     }
 
-    public boolean isAvailable() {
+    public boolean getIsAvailable() {
         return isAvailable;
     }
 
