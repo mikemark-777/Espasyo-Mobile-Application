@@ -1,6 +1,7 @@
 package com.capstone.espasyo.landlord.views;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -120,6 +121,9 @@ public class ManagePropertyFragment extends Fragment implements PropertyAdapter.
 
     @Override
     public void onPropertyClick(int position) {
-        Toast.makeText(getActivity(), "Item Clicked at position " + position, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Item Clicked at position " + position, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), ChooseEditActivity.class);
+        intent.putExtra("property", ownedPropertyList.get(position));
+        startActivity(intent);
     }
 }

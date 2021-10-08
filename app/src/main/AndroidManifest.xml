@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
         <activity
+            android:name=".landlord.views.EditPropertyActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.ChooseEditActivity"
+            android:exported="true" />
+        <activity
             android:name=".landlord.views.AddRoomActivity"
             android:exported="true" />
         <activity

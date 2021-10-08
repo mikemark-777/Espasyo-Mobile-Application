@@ -65,59 +65,21 @@ public class AddPropertyActivity extends AppCompatActivity {
     List<String> rentInclusions = new ArrayList<>();
 
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
-    String[] minimumPrices = {"500", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000", "11000", "12000"};
-    String[] maximumPrices = {"500", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000", "10000", "11000", "12000"};
+    String[] minimumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
+    String[] maximumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
     ArrayAdapter<String> propertyTypeAdapter;
     ArrayAdapter<String> minimumPriceAdapter;
     ArrayAdapter<String> maximumPriceAdapter;
 
     private Button btnAddProperty,
-                   btnCancel;
+                   btnCancelAddProperty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_add_property);
 
-        //Initialize textInputLayouts, textInputEditTexts, autoCompleteTextView, checkBoxes and buttons
-
-        textInputPropertyNameLayout = findViewById(R.id.text_input_propertyName_layout);
-        textInputPropertyTypeLayout = findViewById(R.id.text_input_propertyType_layout);
-        textInputCompleteAddressLayout = findViewById(R.id.text_input_completeAddress_layout);
-        textInputLandlordNameLayout = findViewById(R.id.text_input_landlordName_layout);
-        textInputLandlordPhoneNumberLayout = findViewById(R.id.text_input_landlord_phoneNumber_layout);
-        textInputMinimumPriceLayout = findViewById(R.id.text_input_minimumPrice_layout);
-        textInputMaximumPriceLayout = findViewById(R.id.text_input_maximumPrice_layout);
-
-        textInputPropertyName = findViewById(R.id.text_input_propertyName);
-        textInputPropertyType = findViewById(R.id.text_input_propertyType);
-        textInputCompleteAddress = findViewById(R.id.text_input_completeAddress);
-        textInputLandlordName = findViewById(R.id.text_input_landlordName);
-        textInputLandlordPhoneNumber = findViewById(R.id.text_input_landlord_phoneNumber);
-        textInputMinimumPrice = findViewById(R.id.text_input_minimumPrice);
-        textInputMaximumPrice = findViewById(R.id.text_input_maximumPrice);
-
-        electrictiyCheckBox = findViewById(R.id.electricityCheckBox);
-        waterCheckBox = findViewById(R.id.waterCheckBox);
-        internetCheckBox = findViewById(R.id.internetCheckBox);
-        garbageCheckBox = findViewById(R.id.garbageCheckBox);
-
-        btnAddProperty = findViewById(R.id.btnAddProperty);
-        btnCancel = findViewById(R.id.btnCancelAddProperty);
-
-
-        propertyTypeAdapter = new ArrayAdapter<String>(this, R.layout.landlord_property_type_list_item, propertyType);
-        textInputPropertyType.setAdapter(propertyTypeAdapter);
-
-        minimumPriceAdapter = new ArrayAdapter<String>(this, R.layout.landlord_minimum_price_list_item, minimumPrices);
-        textInputMinimumPrice.setAdapter(minimumPriceAdapter);
-        minimumPriceAdapter.notifyDataSetChanged();
-
-        maximumPriceAdapter = new ArrayAdapter<String>(this, R.layout.landlord_maximum_price_list_item, maximumPrices);
-        textInputMaximumPrice.setAdapter(maximumPriceAdapter);
-        maximumPriceAdapter.notifyDataSetChanged();
-
-
+        initializeViews();
 
         btnAddProperty.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,29 +123,15 @@ public class AddPropertyActivity extends AppCompatActivity {
                             isGarbageCollectionIncluded
                     );
 
-                    // TESTING PURPOSES - Refactor  soon and put in Repository or Viewmodel
-                    propertiesDocumentReference = database.collection("properties").document(newPropertyID);
+                    addNewProperty(newPropertyID, newProperty);
 
-                    propertiesDocumentReference.set(newProperty).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Toast.makeText(AddPropertyActivity.this, "Property Successfully Added", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(AddPropertyActivity.this, LandlordMainActivity.class));
-                            finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(AddPropertyActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
                 } else {
                     Toast.makeText(AddPropertyActivity.this, "SOMETHING IS EMPTY", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        btnCancelAddProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AddPropertyActivity.this, LandlordMainActivity.class));
@@ -303,6 +251,46 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     }
 
+    public void initializeViews() {
+
+        //Initialize textInputLayouts, textInputEditTexts, autoCompleteTextView, checkBoxes, buttons and adapters
+        textInputPropertyNameLayout = findViewById(R.id.text_input_propertyName_layout);
+        textInputPropertyTypeLayout = findViewById(R.id.text_input_propertyType_layout);
+        textInputCompleteAddressLayout = findViewById(R.id.text_input_completeAddress_layout);
+        textInputLandlordNameLayout = findViewById(R.id.text_input_landlordName_layout);
+        textInputLandlordPhoneNumberLayout = findViewById(R.id.text_input_landlord_phoneNumber_layout);
+        textInputMinimumPriceLayout = findViewById(R.id.text_input_minimumPrice_layout);
+        textInputMaximumPriceLayout = findViewById(R.id.text_input_maximumPrice_layout);
+
+        textInputPropertyName = findViewById(R.id.text_input_propertyName);
+        textInputPropertyType = findViewById(R.id.text_input_propertyType);
+        textInputCompleteAddress = findViewById(R.id.text_input_completeAddress);
+        textInputLandlordName = findViewById(R.id.text_input_landlordName);
+        textInputLandlordPhoneNumber = findViewById(R.id.text_input_landlord_phoneNumber);
+        textInputMinimumPrice = findViewById(R.id.text_input_minimumPrice);
+        textInputMaximumPrice = findViewById(R.id.text_input_maximumPrice);
+
+        electrictiyCheckBox = findViewById(R.id.electricityCheckBox);
+        waterCheckBox = findViewById(R.id.waterCheckBox);
+        internetCheckBox = findViewById(R.id.internetCheckBox);
+        garbageCheckBox = findViewById(R.id.garbageCheckBox);
+
+        btnAddProperty = findViewById(R.id.btnAddProperty);
+        btnCancelAddProperty = findViewById(R.id.btnCancelAddProperty);
+
+
+        propertyTypeAdapter = new ArrayAdapter<String>(this, R.layout.landlord_property_type_list_item, propertyType);
+        textInputPropertyType.setAdapter(propertyTypeAdapter);
+
+        minimumPriceAdapter = new ArrayAdapter<String>(this, R.layout.landlord_minimum_price_list_item, minimumPrices);
+        textInputMinimumPrice.setAdapter(minimumPriceAdapter);
+        minimumPriceAdapter.notifyDataSetChanged();
+
+        maximumPriceAdapter = new ArrayAdapter<String>(this, R.layout.landlord_maximum_price_list_item, maximumPrices);
+        textInputMaximumPrice.setAdapter(maximumPriceAdapter);
+        maximumPriceAdapter.notifyDataSetChanged();
+    }
+
     public void getRentInclusions() {
         if(electrictiyCheckBox.isChecked()) {
           isElectricityIncluded = true;
@@ -327,6 +315,25 @@ public class AddPropertyActivity extends AppCompatActivity {
         } else {
             isGarbageCollectionIncluded = false;
         }
+    }
+
+    public void addNewProperty(String newPropertyID, Property newProperty) {
+        // TESTING PURPOSES - Refactor  soon and put in Repository or Viewmodel
+        propertiesDocumentReference = database.collection("properties").document(newPropertyID);
+
+        propertiesDocumentReference.set(newProperty).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(AddPropertyActivity.this, "Property Successfully Added", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(AddPropertyActivity.this, LandlordMainActivity.class));
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AddPropertyActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

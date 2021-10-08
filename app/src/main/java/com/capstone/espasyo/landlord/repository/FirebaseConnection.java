@@ -18,6 +18,7 @@ public class FirebaseConnection {
         return instance;
     }
 
+    //singleton pattern
     public FirebaseAuth getFirebaseAuthInstance() {
         if(fAuth == null) {
             fAuth = FirebaseAuth.getInstance();
@@ -25,6 +26,7 @@ public class FirebaseConnection {
         return  fAuth;
     }
 
+    //singleton pattern
     public FirebaseFirestore getFirebaseFirestoreInstance() {
         if(database == null) {
             database = FirebaseFirestore.getInstance();

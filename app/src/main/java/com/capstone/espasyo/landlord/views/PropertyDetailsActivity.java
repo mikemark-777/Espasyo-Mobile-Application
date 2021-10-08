@@ -1,30 +1,25 @@
 package com.capstone.espasyo.landlord.views;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
-import com.capstone.espasyo.landlord.adapters.PropertyAdapter;
 import com.capstone.espasyo.landlord.adapters.RoomAdapter;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.Room;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -174,8 +169,6 @@ public class PropertyDetailsActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        initRoomRecyclerView();
-        roomAdapter.notifyDataSetChanged();
         Toast.makeText(PropertyDetailsActivity.this, "PropertyDetailsActivity is onRestart()", Toast.LENGTH_SHORT).show();
     }
 }
