@@ -224,6 +224,18 @@
 
             </androidx.cardview.widget.CardView>
 
+            <Button
+                android:id="@+id/btnDeleteProperty"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/custom_button"
+                android:text="Delete Property"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:backgroundTint="@color/espasyo_red_2500" />
+
         </LinearLayout>
     </ScrollView>
 

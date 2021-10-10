@@ -1,9 +1,13 @@
 package com.capstone.espasyo.landlord.views;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -11,12 +15,18 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Property;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class EditPropertyActivity extends AppCompatActivity {
 
@@ -47,7 +57,8 @@ public class EditPropertyActivity extends AppCompatActivity {
             garbageEditCheckBox;
 
     private Button btnEditProperty,
-            btnCancelEditProperty;
+            btnCancelEditProperty,
+            btnDeleteProperty;
 
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
     String[] minimumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
@@ -61,6 +72,7 @@ public class EditPropertyActivity extends AppCompatActivity {
             isInternetIncluded,
             isGarbageCollectionIncluded;
 
+    private Property property;
     private String propertyID;
 
     @Override
@@ -80,6 +92,46 @@ public class EditPropertyActivity extends AppCompatActivity {
         and load the property data to the views that is initialized*/
         Intent intent = getIntent();
         loadPropertyData(intent);
+
+        btnEditProperty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String editedPropertyName = textEditPropertyName.getText().toString().trim();
+                String editedPropertyType = textEditPropertyType.getText().toString().trim();
+                String editedPropertyAddress = textEditCompleteAddress.getText().toString().trim();
+                String editedLandlordName = textEditLandlordName.getText().toString().trim();
+                String editedLandlordPhoneNumber = textEditLandlordPhoneNumber.getText().toString().trim();
+                String editedMinimumPrice = textEditMinimumPrice.getText().toString().trim();
+                String editedMaximumPrice = textEditMaximumPrice.getText().toString().trim();
+                boolean editedIsElectricityIncluded = electrictiyEditCheckBox.isChecked();
+                boolean editedIsWaterIncluded = waterEditCheckBox.isChecked();
+                boolean editedIsInternetIncluded = internetEditCheckBox.isChecked();
+                boolean editedIsGarbageCollectionIncluded = garbageEditCheckBox.isChecked();
+
+                //TODO: Must include input validations
+                property.setName(editedPropertyName);
+                property.setPropertyType(editedPropertyType);
+                property.setAddress(editedPropertyAddress);
+                property.setLandlordName(editedLandlordName);
+                property.setLandlordPhoneNumber(editedLandlordPhoneNumber);
+                property.setMinimumPrice(Integer.parseInt(editedMinimumPrice));
+                property.setMaximumPrice(Integer.parseInt(editedMaximumPrice));
+                property.setIsElectricityIncluded(editedIsElectricityIncluded);
+                property.setIsWaterIncluded(editedIsWaterIncluded);
+                property.setIsInternetIncluded(editedIsInternetIncluded);
+                property.setIsGarbageCollectionIncluded(editedIsGarbageCollectionIncluded);
+
+                saveChangesToProperty(property);
+
+            }
+        });
+
+        btnDeleteProperty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationDialog();
+            }
+        });
 
     }
 
@@ -110,6 +162,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         //buttons
         btnEditProperty = findViewById(R.id.btnEditProperty);
         btnCancelEditProperty = findViewById(R.id.btnCancelEditProperty);
+        btnDeleteProperty = findViewById(R.id.btnDeleteProperty);
 
         propertyTypeAdapter = new ArrayAdapter<String>(this, R.layout.landlord_property_type_list_item, propertyType);
         textEditPropertyType.setAdapter(propertyTypeAdapter);
@@ -124,9 +177,8 @@ public class EditPropertyActivity extends AppCompatActivity {
     }
 
     private void loadPropertyData(Intent intent) {
-        Property property = intent.getParcelableExtra("property");
+        property = intent.getParcelableExtra("property");
 
-        propertyID = property.getPropertyID();
         String name = property.getName();
         String propertyType = property.getPropertyType();
         String address = property.getAddress();
@@ -158,8 +210,84 @@ public class EditPropertyActivity extends AppCompatActivity {
         garbageEditCheckBox.setChecked(isGarbageCollectionIncluded);
     }
 
-    public void saveChangesToProperty() {
+    public void saveChangesToProperty(Property editedProperty) {
+        propertyID = editedProperty.getPropertyID();
+        DocumentReference propertyDocumentReference = database.collection("properties").document(propertyID);
+        
+        propertyDocumentReference.set(editedProperty).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    Toast.makeText(EditPropertyActivity.this, "Property Successfully Edited!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(EditPropertyActivity.this, "Error saving edited property: " + task.getException().toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
+
+    public void deleteProperty(String propertyID) {
+
+        //delete first the rooms of this property
+        database.collection("properties/" + propertyID + "/rooms")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for(QueryDocumentSnapshot room: task.getResult()) {
+                            database.collection("properties/" + propertyID + "/rooms")
+                                    .document(room.getId())
+                                    .delete();
+                        }
+                    }
+                });
+
+        database.collection("properties").document(propertyID)
+                .delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Toast.makeText(EditPropertyActivity.this, "Property Successfully Deleted", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    public void showConfirmationDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.landlord_delete_property_confirmation_dialog, null);
+
+        Button btnConfirmDelete = view.findViewById(R.id.btnConfirmDeleteProperty);
+        Button btnCancelDelete = view.findViewById(R.id.btnCancelDeleteProperty);
+
+        AlertDialog confirmationDialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnConfirmDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               deleteProperty(property.getPropertyID());
+               confirmationDialog.cancel();
+               Intent intent = new Intent(EditPropertyActivity.this, LandlordMainActivity.class);
+               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+               startActivity(intent);
+               finish();
+            }
+        });
+
+        btnCancelDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmationDialog.cancel();
+            }
+        });
+
+        confirmationDialog.show();
+    }
+
 
 }

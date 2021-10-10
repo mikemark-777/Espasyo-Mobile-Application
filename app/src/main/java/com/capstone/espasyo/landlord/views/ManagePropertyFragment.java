@@ -121,9 +121,9 @@ public class ManagePropertyFragment extends Fragment implements PropertyAdapter.
 
     @Override
     public void onPropertyClick(int position) {
-        //Toast.makeText(getActivity(), "Item Clicked at position " + position, Toast.LENGTH_SHORT).show();
+        //pass selected property's propertyId to ChooseEditActivity
         Intent intent = new Intent(getActivity(), ChooseEditActivity.class);
-        intent.putExtra("property", ownedPropertyList.get(position));
+        intent.putExtra("propertyID", ownedPropertyList.get(position).getPropertyID());
         startActivity(intent);
     }
 }

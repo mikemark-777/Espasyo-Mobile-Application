@@ -127,19 +127,19 @@ public class Property implements Parcelable{
         this.maximumPrice = maximumPrice;
     }
 
-    public void setElectricityIncluded(boolean electricityIncluded) {
+    public void setIsElectricityIncluded(boolean electricityIncluded) {
         isElectricityIncluded = electricityIncluded;
     }
 
-    public void setWaterIncluded(boolean waterIncluded) {
+    public void setIsWaterIncluded(boolean waterIncluded) {
         isWaterIncluded = waterIncluded;
     }
 
-    public void setInternetIncluded(boolean internetIncluded) {
+    public void setIsInternetIncluded(boolean internetIncluded) {
         isInternetIncluded = internetIncluded;
     }
 
-    public void setGarbageCollectionIncluded(boolean garbageCollectionIncluded) {
+    public void setIsGarbageCollectionIncluded(boolean garbageCollectionIncluded) {
         isGarbageCollectionIncluded = garbageCollectionIncluded;
     }
 
