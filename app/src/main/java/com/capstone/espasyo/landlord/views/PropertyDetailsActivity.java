@@ -56,8 +56,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
 
         noRoomsYetSignal = findViewById(R.id.noRoomsYetSignal);
 
-        Intent intent = getIntent();
-        loadPropertyData(intent);
+        loadPropertyData();
 
         initRoomRecyclerView();
         fetchPropertyRooms();
@@ -80,8 +79,9 @@ public class PropertyDetailsActivity extends AppCompatActivity {
     // Functions -----
 
     //Load Property Details
-    public void loadPropertyData(Intent intent) {
+    public void loadPropertyData() {
         //get data from intent
+        Intent intent = getIntent();
         Property property = intent.getParcelableExtra("property");
 
         propertyID = property.getPropertyID();

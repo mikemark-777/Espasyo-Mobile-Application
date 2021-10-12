@@ -10,16 +10,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Property;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -68,7 +64,12 @@ public class ChooseEditActivity extends AppCompatActivity {
         editRoomsCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ChooseEditActivity.this, "editRoomsCardView clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ChooseEditActivity.this, "editRoomsCardView clicked!", Toast.LENGTH_SHORT).show();
+                if(selectedProperty != null) {
+                    Intent intent = new Intent(ChooseEditActivity.this, ViewRoomsToEditActivity.class);
+                    intent.putExtra("propertyID", selectedProperty.getPropertyID());
+                    startActivity(intent);
+                }
             }
         });
 
