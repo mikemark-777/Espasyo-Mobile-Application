@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +17,6 @@ import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Room;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -50,7 +48,7 @@ public class AddRoomActivity extends AppCompatActivity {
     private int numberOfPersons = 1;
 
     private Button btnAddRoom,
-            btnCancel;
+            btnCancelAddRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +58,7 @@ public class AddRoomActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String propertyID = intent.getStringExtra("propertyID");
 
-        //initialize firebaseConnection, firebase auth and firestore
+        //initialize firebaseConnection, firebaseAuth and firebaseFirestore
         firebaseConnection = FirebaseConnection.getInstance();
         fAuth = firebaseConnection.getFirebaseAuthInstance();
         database = firebaseConnection.getFirebaseFirestoreInstance();
@@ -79,7 +77,7 @@ public class AddRoomActivity extends AppCompatActivity {
         increment = findViewById(R.id.increment);
         decrement = findViewById(R.id.decrement);
         btnAddRoom = findViewById(R.id.btnAddRoom);
-        btnCancel = findViewById(R.id.btnCancelAddRoom);
+        btnCancelAddRoom = findViewById(R.id.btnCancelAddRoom);
 
         // add room
         btnAddRoom.setOnClickListener(new View.OnClickListener() {

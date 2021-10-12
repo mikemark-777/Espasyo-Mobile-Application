@@ -129,7 +129,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         btnDeleteProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showConfirmationDialog();
+                showConfirmationDeleteDialog();
             }
         });
 
@@ -256,7 +256,7 @@ public class EditPropertyActivity extends AppCompatActivity {
                 });
     }
 
-    public void showConfirmationDialog() {
+    public void showConfirmationDeleteDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.landlord_delete_property_confirmation_dialog, null);
 

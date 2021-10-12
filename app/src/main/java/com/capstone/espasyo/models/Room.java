@@ -96,11 +96,11 @@ public class Room implements Parcelable{
         return isAvailable;
     }
 
-    public void setAvailable(boolean available) {
+    public void setIsAvailable(boolean available) {
         isAvailable = available;
     }
 
-    public boolean isHasBathRoom() {
+    public boolean getHasBathRoom() {
         return hasBathRoom;
     }
 
@@ -108,7 +108,7 @@ public class Room implements Parcelable{
         this.hasBathRoom = hasBathRoom;
     }
 
-    public boolean isHasKitchen() {
+    public boolean getHasKitchen() {
         return hasKitchen;
     }
 
