@@ -126,4 +126,6 @@ public class ManagePropertyFragment extends Fragment implements PropertyAdapter.
         intent.putExtra("propertyID", ownedPropertyList.get(position).getPropertyID());
         startActivity(intent);
     }
+
+    // TODO: Handle Activity Life Cycle
 }

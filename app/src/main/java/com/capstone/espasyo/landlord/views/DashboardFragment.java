@@ -148,4 +148,6 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
         intent.putExtra("property", ownedPropertyList.get(position));
         startActivity(intent);
     }
+
+    // TODO: Handle Fragment Life Cycle
 }

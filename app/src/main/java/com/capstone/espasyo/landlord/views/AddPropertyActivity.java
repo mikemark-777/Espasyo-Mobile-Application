@@ -72,7 +72,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     ArrayAdapter<String> maximumPriceAdapter;
 
     private Button btnAddProperty,
-                   btnCancelAddProperty;
+                   btnCancelAddProperty;//TODO: add cancel functionality
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +134,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         btnCancelAddProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: add cancel functionality
                 startActivity(new Intent(AddPropertyActivity.this, LandlordMainActivity.class));
                 finish();
             }
@@ -141,13 +142,12 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     }
 
-    // Functions
-    //TODO: Add input validations
+    /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
 
-    /* ------------- Input Validations ------------*/
+    /*----------- input validations ----------*/
     public final String TAG = "[ADD PROPERTY TESTING]";
 
-    private Boolean isPropertyNameValid(String propertyName) {
+    private boolean isPropertyNameValid(String propertyName) {
         if (!propertyName.isEmpty()) {
             textInputPropertyNameLayout.setError(null);
             Log.d(TAG, "PROPERTY NAME: NOT EMPTY");
@@ -159,7 +159,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean isPropertyTypeValid(String propertyType) {
+    private boolean isPropertyTypeValid(String propertyType) {
         if (!propertyType.isEmpty()) {
             textInputPropertyTypeLayout.setError(null);
             Log.d(TAG, "PROPERTY TYPE: NOT EMPTY");
@@ -171,7 +171,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean isCompleteAddressValid(String completeAddress) {
+    private boolean isCompleteAddressValid(String completeAddress) {
         if (!completeAddress.isEmpty()) {
             textInputCompleteAddressLayout.setError(null);
             Log.d(TAG, "COMPLETE ADDRESS: NOT EMPTY");
@@ -183,7 +183,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean isLandlordNameValid(String landlordName) {
+    private boolean isLandlordNameValid(String landlordName) {
         if (!landlordName.isEmpty()) {
             textInputLandlordNameLayout.setError(null);
             Log.d(TAG, "LANDLORD NAME: NOT EMPTY");
@@ -195,7 +195,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean isLandlordPhoneNumberValid(String landlordPhoneNumbers) {
+    private boolean isLandlordPhoneNumberValid(String landlordPhoneNumbers) {
         if (!landlordPhoneNumbers.isEmpty()) {
             textInputLandlordPhoneNumberLayout.setError(null);
             Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
@@ -207,7 +207,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean isMinimumPriceValid(String minimumPrice) {
+    private boolean isMinimumPriceValid(String minimumPrice) {
         if (!minimumPrice.isEmpty()) {
             textInputMinimumPriceLayout.setError(null);
             Log.d(TAG, "MINIMUM PRICE: NOT EMPTY");
@@ -219,7 +219,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean isMaximumPriceValid(String maximumPrice) {
+    private boolean isMaximumPriceValid(String maximumPrice) {
         if (!maximumPrice.isEmpty()) {
             textInputMaximumPriceLayout.setError(null);
             Log.d(TAG, "MAXIMUM PRICE: NOT EMPTY");
@@ -251,8 +251,9 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     }
 
-    public void initializeViews() {
+    /*----------- other functions ----------*/
 
+    public void initializeViews() {
         //Initialize textInputLayouts, textInputEditTexts, autoCompleteTextView, checkBoxes, buttons and adapters
         textInputPropertyNameLayout = findViewById(R.id.text_input_propertyName_layout);
         textInputPropertyTypeLayout = findViewById(R.id.text_input_propertyType_layout);
@@ -337,7 +338,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     }
 
 
-    // Activity Life Cycle
+    // TODO: Handle Activity Life Cycle
     @Override
     public void onBackPressed() {
         //super.onBackPressed();

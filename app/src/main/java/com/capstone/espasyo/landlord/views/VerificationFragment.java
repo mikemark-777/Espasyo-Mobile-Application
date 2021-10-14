@@ -17,4 +17,6 @@ public class VerificationFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.landlord_fragment_verification, container, false);
     }
+
+    // TODO: Handle Activity Life Cycle
 }

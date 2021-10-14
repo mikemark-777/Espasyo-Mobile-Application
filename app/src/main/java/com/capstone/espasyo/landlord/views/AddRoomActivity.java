@@ -34,21 +34,23 @@ public class AddRoomActivity extends AppCompatActivity {
     private DocumentReference roomsDocumentReference;
 
     private TextInputLayout textInputRoomNameLayout,
-                            textInputRoomPriceLayout;
+            textInputRoomPriceLayout;
 
     private TextInputEditText textInputRoomName,
-                              textInputRoomPrice;
+            textInputRoomPrice;
 
     private SwitchCompat roomAvailabilitySwitch,
-                         bathroomSwitch,
-                         kitchenSwitch;
+            bathroomSwitch,
+            kitchenSwitch;
 
     private TextView textInputNumberOfPersons;
     private Button increment, decrement;
     private int numberOfPersons = 1;
 
     private Button btnAddRoom,
-            btnCancelAddRoom;
+            btnCancelAddRoom; //TODO: add cancel functionality
+
+    String propertyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,18 +58,121 @@ public class AddRoomActivity extends AppCompatActivity {
         setContentView(R.layout.landlord_activity_add_room);
 
         Intent intent = getIntent();
-        String propertyID = intent.getStringExtra("propertyID");
+        propertyID = intent.getStringExtra("propertyID");
 
         //initialize firebaseConnection, firebaseAuth and firebaseFirestore
         firebaseConnection = FirebaseConnection.getInstance();
         fAuth = firebaseConnection.getFirebaseAuthInstance();
         database = firebaseConnection.getFirebaseFirestoreInstance();
 
-        //initialize textInputLayouts, textInputEditTexts, textView (numberOfRooms input), switches and buttons
+        initializeViews();
+
+        // add room
+        btnAddRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String roomName = textInputRoomName.getText().toString().trim();
+                String roomPriceInString = textInputRoomPrice.getText().toString().trim();
+                int numberOfPersonInRoom = Integer.parseInt(textInputNumberOfPersons.getText().toString().trim());
+                boolean isRoomAvailable = roomAvailabilitySwitch.isChecked();
+                boolean hasBathroom = bathroomSwitch.isChecked();
+                boolean hasKitchen = kitchenSwitch.isChecked();
+
+                if (areInputsValid(roomName, roomPriceInString)) {
+                    //TODO: Must add input validations here
+                    int roomPrice = Integer.parseInt(roomPriceInString);
+                    //New Room Object
+                    String newRoomID = UUID.randomUUID().toString();
+                    //Get Property ID where this room belongs (get through Intent)
+                    Room newRoom = new Room(
+                            propertyID,
+                            newRoomID,
+                            roomName,
+                            roomPrice,
+                            numberOfPersonInRoom,
+                            isRoomAvailable,
+                            hasBathroom,
+                            hasKitchen
+                    );
+
+                    addNewRoom(propertyID, newRoomID, newRoom);
+
+                }
+            }
+        });
+
+        // Increment and Decrement number of persons per room --------------------
+        increment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (numberOfPersons < 9) {
+                    numberOfPersons++;
+                    textInputNumberOfPersons.setText(String.valueOf(numberOfPersons));
+                }
+            }
+        });
+
+        decrement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (numberOfPersons > 1) {
+                    numberOfPersons--;
+                    textInputNumberOfPersons.setText(String.valueOf(numberOfPersons));
+                }
+            }
+        });
+    }
+
+    /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
+
+    /*----------- input validations ----------*/
+    public final String TAG = "[ADD ROOM TESTING]";
+
+    private boolean isRoomNameValid(String roomName) {
+        if (!roomName.isEmpty()) {
+            textInputRoomNameLayout.setError(null);
+            Log.d(TAG, "ROOM NAME: NOT EMPTY");
+            return true;
+        } else {
+            textInputRoomNameLayout.setError("Room Name Required");
+            Log.d(TAG, "ROOM NAME: EMPTY");
+            return false;
+        }
+    }
+
+    private boolean isRoomPriceEmpty(String roomPrice) {
+        if (!roomPrice.isEmpty()) {
+            textInputRoomPriceLayout.setError(null);
+            Log.d(TAG, "ROOM PRICE: NOT EMPTY");
+            return true;
+        } else {
+            textInputRoomPriceLayout.setError("Room Price Required");
+            Log.d(TAG, "ROOM PRICE: EMPTY");
+            return false;
+        }
+    }
+
+    private boolean areInputsValid(String roomName, String roomPrice) {
+        boolean roomNameResult = isRoomNameValid(roomName);
+        boolean roomPriceResult = isRoomPriceEmpty(roomPrice);
+
+        if (roomNameResult && roomPriceResult) {
+            Log.d(TAG, "CAN PROCEED: TRUE");
+            return true;
+        } else {
+            Log.d(TAG, "CAN PROCEED: FALSE");
+            return false;
+        }
+    }
+
+    /*----------- other functions ----------*/
+
+    //initialize textInputLayouts, textInputEditTexts, textView (numberOfRooms input), switches and buttons
+    public void initializeViews() {
         textInputRoomNameLayout = findViewById(R.id.text_input_room_name_layout);
         textInputRoomPriceLayout = findViewById(R.id.text_input_room_price_layout);
         textInputRoomName = findViewById(R.id.text_input_room_name);
-        textInputRoomPrice= findViewById(R.id.text_input_room_price);
+        textInputRoomPrice = findViewById(R.id.text_input_room_price);
         textInputNumberOfPersons = findViewById(R.id.text_input_numberOfPersons);
         roomAvailabilitySwitch = findViewById(R.id.roomAvailabilitySwitch);
         bathroomSwitch = findViewById(R.id.bathroomSwitch);
@@ -78,75 +183,26 @@ public class AddRoomActivity extends AppCompatActivity {
         decrement = findViewById(R.id.decrement);
         btnAddRoom = findViewById(R.id.btnAddRoom);
         btnCancelAddRoom = findViewById(R.id.btnCancelAddRoom);
+    }
 
-        // add room
-        btnAddRoom.setOnClickListener(new View.OnClickListener() {
+    public void addNewRoom(String propertyID, String newRoomID, Room newRoom) {
+
+        // TESTING PURPOSES - Add newRoom to properties/{propertyID}/rooms/{newRoomID}
+        roomsDocumentReference = database.collection("properties").document(propertyID)
+                .collection("rooms").document(newRoomID);
+        roomsDocumentReference.set(newRoom).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onClick(View v) {
-                String roomName = textInputRoomName.getText().toString().trim();
-                int roomPrice = Integer.parseInt(textInputRoomPrice.getText().toString().trim());
-                int numberOfPersonInRoom =Integer.parseInt(textInputNumberOfPersons.getText().toString().trim());
-                boolean isRoomAvailable = roomAvailabilitySwitch.isChecked();
-                boolean hasBathroom = bathroomSwitch.isChecked();
-                boolean hasKitchen = kitchenSwitch.isChecked();
-
-                //TODO: Must add input validations here
-
-                //New Room Object
-                String newRoomID = UUID.randomUUID().toString();
-                //Get Property ID where this room belongs (get through Intent)
-                Room newRoom = new Room(
-                        propertyID,
-                        newRoomID,
-                        roomName,
-                        roomPrice,
-                        numberOfPersonInRoom,
-                        isRoomAvailable,
-                        hasBathroom,
-                        hasKitchen
-                );
-
-                // TESTING PURPOSES - Add newRoom to properties/{propertyID}/rooms/{newRoomID}
-                roomsDocumentReference = database.collection("properties").document(propertyID)
-                                                      .collection("rooms").document(newRoomID);
-                roomsDocumentReference.set(newRoom).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            Toast.makeText(AddRoomActivity.this, "New Room Successfully Added", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("ADD ROOM", "Adding room error: " + e.toString());
-                    }
-                });
-
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(AddRoomActivity.this, "New Room Successfully Added", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
-        });
-
-
-        // Increment and Decrement number of persons per room --------------------
-        increment.setOnClickListener(new View.OnClickListener() {
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onClick(View v) {
-               if(numberOfPersons < 9) {
-                   numberOfPersons++;
-                   textInputNumberOfPersons.setText(String.valueOf(numberOfPersons));
-               }
-            }
-        });
-
-        decrement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               if(numberOfPersons > 1) {
-                   numberOfPersons--;
-                   textInputNumberOfPersons.setText(String.valueOf(numberOfPersons));
-               }
+            public void onFailure(@NonNull Exception e) {
+                Log.d("ADD ROOM", "Adding room error: " + e.toString());
             }
         });
     }
-}
+} 

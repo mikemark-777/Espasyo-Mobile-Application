@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -57,7 +58,7 @@ public class EditPropertyActivity extends AppCompatActivity {
             garbageEditCheckBox;
 
     private Button btnEditProperty,
-            btnCancelEditProperty,
+            btnCancelEditProperty,//TODO: add cancel functionality
             btnDeleteProperty;
 
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
@@ -96,6 +97,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         btnEditProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String editedPropertyName = textEditPropertyName.getText().toString().trim();
                 String editedPropertyType = textEditPropertyType.getText().toString().trim();
                 String editedPropertyAddress = textEditCompleteAddress.getText().toString().trim();
@@ -109,20 +111,23 @@ public class EditPropertyActivity extends AppCompatActivity {
                 boolean editedIsGarbageCollectionIncluded = garbageEditCheckBox.isChecked();
 
                 //TODO: Must include input validations
-                property.setName(editedPropertyName);
-                property.setPropertyType(editedPropertyType);
-                property.setAddress(editedPropertyAddress);
-                property.setLandlordName(editedLandlordName);
-                property.setLandlordPhoneNumber(editedLandlordPhoneNumber);
-                property.setMinimumPrice(Integer.parseInt(editedMinimumPrice));
-                property.setMaximumPrice(Integer.parseInt(editedMaximumPrice));
-                property.setIsElectricityIncluded(editedIsElectricityIncluded);
-                property.setIsWaterIncluded(editedIsWaterIncluded);
-                property.setIsInternetIncluded(editedIsInternetIncluded);
-                property.setIsGarbageCollectionIncluded(editedIsGarbageCollectionIncluded);
 
-                saveChangesToProperty(property);
+                if (areInputsValid(editedPropertyName, editedPropertyType, editedPropertyAddress, editedLandlordName, editedLandlordPhoneNumber, editedMinimumPrice, editedMaximumPrice)) {
 
+                    property.setName(editedPropertyName);
+                    property.setPropertyType(editedPropertyType);
+                    property.setAddress(editedPropertyAddress);
+                    property.setLandlordName(editedLandlordName);
+                    property.setLandlordPhoneNumber(editedLandlordPhoneNumber);
+                    property.setMinimumPrice(Integer.parseInt(editedMinimumPrice));
+                    property.setMaximumPrice(Integer.parseInt(editedMaximumPrice));
+                    property.setIsElectricityIncluded(editedIsElectricityIncluded);
+                    property.setIsWaterIncluded(editedIsWaterIncluded);
+                    property.setIsInternetIncluded(editedIsInternetIncluded);
+                    property.setIsGarbageCollectionIncluded(editedIsGarbageCollectionIncluded);
+
+                    saveChangesToProperty(property);
+                }
             }
         });
 
@@ -135,9 +140,119 @@ public class EditPropertyActivity extends AppCompatActivity {
 
     }
 
-    private void initializeViews() {
-        //Initialize textInputLayouts, textInputEditTexts, autoCompleteTextView, checkBoxes, buttons and adapters
+    /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
 
+    /*----------- input validations ----------*/
+    public final String TAG = "[EDIT PROPERTY TESTING]";
+
+    public boolean isPropertyNameValid(String propertyName) {
+        if (!propertyName.isEmpty()) {
+            textEditPropertyNameLayout.setError(null);
+            Log.d(TAG, "PROPERTY NAME: NOT EMPTY");
+            return true;
+        } else {
+            textEditPropertyNameLayout.setError("Property Name Required");
+            Log.d(TAG, "PROPERTY NAME: EMPTY");
+            return false;
+        }
+    }
+
+    public boolean isPropertyTypeValid(String propertyType) {
+        if (!propertyType.isEmpty()) {
+            textEditPropertyTypeLayout.setError(null);
+            Log.d(TAG, "PROPERTY TYPE: NOT EMPTY");
+            return true;
+        } else {
+            textEditPropertyTypeLayout.setError("Property Type Required");
+            Log.d(TAG, "PROPERTY TYPE: EMPTY");
+            return false;
+        }
+    }
+
+    public boolean isCompleteAddressValid(String completeAddress) {
+        if (!completeAddress.isEmpty()) {
+            textEditCompleteAddressLayout.setError(null);
+            Log.d(TAG, "COMPLETE ADDRESS: NOT EMPTY");
+            return true;
+        } else {
+            textEditCompleteAddressLayout.setError("Complete Address Required");
+            Log.d(TAG, "COMPLETE ADDRESS: EMPTY");
+            return false;
+        }
+    }
+
+    public boolean isLandlordNameValid(String landlordName) {
+        if (!landlordName.isEmpty()) {
+            textEditLandlordNameLayout.setError(null);
+            Log.d(TAG, "LANDLORD NAME: NOT EMPTY");
+            return true;
+        } else {
+            textEditLandlordNameLayout.setError("Landlord Name Required");
+            Log.d(TAG, "LANDLORD NAME: EMPTY");
+            return false;
+        }
+    }
+
+    public boolean isLandlordPhoneNumberValid(String landlordPhoneNumber) {
+        if (!landlordPhoneNumber.isEmpty()) {
+            textEditLandlordPhoneNumberLayout.setError(null);
+            Log.d(TAG, "LANDLORD NUMBER: NOT EMPTY");
+            return true;
+        } else {
+            textEditLandlordPhoneNumberLayout.setError("Landlord Number Required");
+            Log.d(TAG, "LANDLORD NUMBER: EMPTY");
+            return false;
+        }
+    }
+
+    public boolean isMinimumPriceValid(String minimumPrice) {
+        if (!minimumPrice.isEmpty()) {
+            textEditMinimumPriceLayout.setError(null);
+            Log.d(TAG, "MINIMUM PRICE: NOT EMPTY");
+            return true;
+        } else {
+            textEditMinimumPriceLayout.setError("Minimum Price Required");
+            Log.d(TAG, "MINIMUM PRICE: EMPTY");
+            return false;
+        }
+    }
+
+    public boolean isMaximumPriceValid(String maximumPrice) {
+        if (!maximumPrice.isEmpty()) {
+            textEditMaximumPriceLayout.setError(null);
+            Log.d(TAG, "MAXIMUM PRICE: NOT EMPTY");
+            return true;
+        } else {
+            textEditMaximumPriceLayout.setError("Maximum Price Required");
+            Log.d(TAG, "MAXIMUM PRICE: EMPTY");
+            return false;
+        }
+    }
+
+    private boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String landlordName, String landlordPhoneNumber, String minimumPrice, String maximumPrice) {
+
+        boolean propertyNameResult = isPropertyNameValid(propertyName);
+        boolean propertyTypeResult = isPropertyTypeValid(propertyType);
+        boolean completeAddressResult = isCompleteAddressValid(completeAddress);
+        boolean landlordNameResult = isLandlordNameValid(landlordName);
+        boolean landlordPhoneNumberResult = isLandlordPhoneNumberValid(landlordPhoneNumber);
+        boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
+        boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
+
+
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
+            Log.d(TAG, "CAN PROCEED: TRUE");
+            return true;
+        } else {
+            Log.d(TAG, "CAN PROCEED: FALSE");
+            return false;
+        }
+    }
+
+    /*----------- other functions ----------*/
+
+    //Initialize textInputLayouts, textInputEditTexts, autoCompleteTextView, checkBoxes, buttons and adapters
+    private void initializeViews() {
         //textInputLayouts
         textEditPropertyNameLayout = findViewById(R.id.text_edit_propertyName_layout);
         textEditPropertyTypeLayout = findViewById(R.id.text_edit_propertyType_layout);
@@ -213,11 +328,11 @@ public class EditPropertyActivity extends AppCompatActivity {
     public void saveChangesToProperty(Property editedProperty) {
         propertyID = editedProperty.getPropertyID();
         DocumentReference propertyDocumentReference = database.collection("properties").document(propertyID);
-        
+
         propertyDocumentReference.set(editedProperty).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     Toast.makeText(EditPropertyActivity.this, "Property Successfully Edited!", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
@@ -226,34 +341,6 @@ public class EditPropertyActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    public void deleteProperty(String propertyID) {
-
-        //delete first the rooms of this property
-        database.collection("properties/" + propertyID + "/rooms")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        for(QueryDocumentSnapshot room: task.getResult()) {
-                            database.collection("properties/" + propertyID + "/rooms")
-                                    .document(room.getId())
-                                    .delete();
-                        }
-                    }
-                });
-
-        database.collection("properties").document(propertyID)
-                .delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            Toast.makeText(EditPropertyActivity.this, "Property Successfully Deleted", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
     }
 
     public void showConfirmationDeleteDialog() {
@@ -270,12 +357,12 @@ public class EditPropertyActivity extends AppCompatActivity {
         btnConfirmDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               deleteProperty(property.getPropertyID());
-               confirmationDialog.cancel();
-               Intent intent = new Intent(EditPropertyActivity.this, LandlordMainActivity.class);
-               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-               startActivity(intent);
-               finish();
+                deleteProperty(property.getPropertyID());
+                confirmationDialog.cancel();
+                Intent intent = new Intent(EditPropertyActivity.this, LandlordMainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -289,5 +376,33 @@ public class EditPropertyActivity extends AppCompatActivity {
         confirmationDialog.show();
     }
 
+    public void deleteProperty(String propertyID) {
 
+        //delete first the rooms of this property
+        database.collection("properties/" + propertyID + "/rooms")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (QueryDocumentSnapshot room : task.getResult()) {
+                            database.collection("properties/" + propertyID + "/rooms")
+                                    .document(room.getId())
+                                    .delete();
+                        }
+                    }
+                });
+
+        database.collection("properties").document(propertyID)
+                .delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(EditPropertyActivity.this, "Property Successfully Deleted", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    // TODO: Handle Activity Life Cycle
 }

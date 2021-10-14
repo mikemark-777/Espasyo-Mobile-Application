@@ -7,6 +7,7 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -63,7 +64,6 @@ public class EditRoomActivity extends AppCompatActivity {
         initializeUI();
         displayRoomData();
 
-
         incrementEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,21 +87,25 @@ public class EditRoomActivity extends AppCompatActivity {
         btnEditRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String editedRoomName = textEditRoomName.getText().toString().trim();
-                int editedRoomPrice = Integer.parseInt(textEditRoomPrice.getText().toString().trim());
+                String editedRoomPrice = textEditRoomPrice.getText().toString().trim();
                 int editedNumberOfPersons =Integer.parseInt(textEditNumberOfPersons.getText().toString().trim());
                 boolean editedRoomAvailability = editRoomAvailabilitySwitch.isChecked();
                 boolean editedHasBathroom = editBathroomSwitch.isChecked();
                 boolean editedHasKitchen = editKitchenSwitch.isChecked();
 
-                room.setRoomName(editedRoomName);
-                room.setPrice(editedRoomPrice);
-                room.setNumberOfPersons(editedNumberOfPersons);
-                room.setIsAvailable(editedRoomAvailability);
-                room.setHasBathRoom(editedHasBathroom);
-                room.setHasKitchen(editedHasKitchen);
+                if(areInputsValid(editedRoomName, editedRoomPrice)) {
 
-                saveChangesToRoom(room);
+                    room.setRoomName(editedRoomName);
+                    room.setPrice(Integer.parseInt(editedRoomPrice));
+                    room.setNumberOfPersons(editedNumberOfPersons);
+                    room.setIsAvailable(editedRoomAvailability);
+                    room.setHasBathRoom(editedHasBathroom);
+                    room.setHasKitchen(editedHasKitchen);
+
+                    saveChangesToRoom(room);
+                }
             }
         });
 
@@ -120,6 +124,52 @@ public class EditRoomActivity extends AppCompatActivity {
         });
 
     }
+
+    /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
+
+    /*----------- input validations ----------*/
+
+    public final String TAG = "[EDIT ROOM TESTING]";
+
+    public boolean isRoomNameValid(String roomName) {
+        if(!roomName.isEmpty()) {
+            textEditRoomNameLayout.setError(null);
+            Log.d(TAG, "ROOM NAME: NOT EMPTY");
+            return true;
+        } else {
+            textEditRoomNameLayout.setError("Room Name Required");
+            Log.d(TAG, "ROOM NAME: EMPTY");
+            return false;
+        }
+    }
+
+    public boolean isRoomPriceValid(String roomPrice) {
+        if(!roomPrice.isEmpty()) {
+            textEditRoomPriceLayout.setError(null);
+            Log.d(TAG, "ROOM PRICE: NOT EMPTY");
+            return true;
+        } else {
+            textEditRoomPriceLayout.setError("Room Price Required");
+            Log.d(TAG, "ROOM PRICE: EMPTY");
+            return false;
+        }
+    }
+
+    public boolean areInputsValid(String roomName, String roomPrice) {
+
+        boolean roomNameResult = isRoomNameValid(roomName);
+        boolean roomPriceResult = isRoomPriceValid(roomPrice);
+
+        if(roomNameResult && roomPriceResult) {
+            Log.d(TAG, "CAN PROCEED: TRUE");
+            return true;
+        } else {
+            Log.d(TAG, "CAN PROCEED: FALSE");
+            return false;
+        }
+    }
+
+    /*----------- other functions ----------*/
 
     public void initializeUI() {
         //initialize textInputLayouts, textInputEditTexts, textViews (numberOfRooms input), switches and buttons
@@ -152,12 +202,12 @@ public class EditRoomActivity extends AppCompatActivity {
         boolean hasBathroom = room.getHasBathRoom();
         boolean hasKitchen = room.getHasKitchen();
 
-       textEditRoomName.setText(roomName);
-       textEditRoomPrice.setText(String.valueOf(roomPrice));
-       textEditNumberOfPersons.setText(String.valueOf(numberOfPersons));
-       editRoomAvailabilitySwitch.setChecked(isRoomAvailable);
-       editBathroomSwitch.setChecked(hasBathroom);
-       editKitchenSwitch.setChecked(hasKitchen);
+        textEditRoomName.setText(roomName);
+        textEditRoomPrice.setText(String.valueOf(roomPrice));
+        textEditNumberOfPersons.setText(String.valueOf(numberOfPersons));
+        editRoomAvailabilitySwitch.setChecked(isRoomAvailable);
+        editBathroomSwitch.setChecked(hasBathroom);
+        editKitchenSwitch.setChecked(hasKitchen);
     }
 
     public void saveChangesToRoom(Room editedRoom) {
@@ -165,7 +215,7 @@ public class EditRoomActivity extends AppCompatActivity {
         String roomID = editedRoom.getRoomID();
 
         DocumentReference roomDocumentReference = database.collection("properties").document(propertyID)
-                                                          .collection("rooms").document(roomID);
+                .collection("rooms").document(roomID);
 
         roomDocumentReference.set(editedRoom).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -179,22 +229,6 @@ public class EditRoomActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    public void deleteRoom(Room roomToDelete) {
-        String propertyID = roomToDelete.getPropertyID();
-        String roomID = roomToDelete.getRoomID();
-        database.collection("properties").document(propertyID)
-                .collection("rooms").document(roomID)
-                .delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            Toast.makeText(EditRoomActivity.this, "Room Successfully Deleted", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
     }
 
     public void showConfirmationDeleteRoom() {
@@ -227,8 +261,20 @@ public class EditRoomActivity extends AppCompatActivity {
         confirmationDialog.show();
     }
 
+    public void deleteRoom(Room roomToDelete) {
+        String propertyID = roomToDelete.getPropertyID();
+        String roomID = roomToDelete.getRoomID();
+        database.collection("properties").document(propertyID)
+                .collection( "rooms").document(roomID)
+                .delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Toast.makeText(EditRoomActivity.this, "Room Successfully Deleted", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 
-
-    //input validations
-    //TODO: Add input validations
 }
