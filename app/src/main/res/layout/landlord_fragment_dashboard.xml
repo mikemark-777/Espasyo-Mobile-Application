@@ -6,22 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <TextView
-        android:id="@+id/noPropertyAddedYetText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No Property added yet"
-        android:textColor="@color/espasyo_gray_200"
-        android:textSize="18sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
-
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="392dp"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/espasyo_blue_700"
         android:orientation="vertical"
@@ -43,7 +30,7 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.capstone.espasyo.landlord.widgets.PropertyRecyclerView
         android:id="@+id/propertyRecyclerView"
         android:layout_width="370dp"
         android:layout_height="570dp"
@@ -68,5 +55,13 @@
         android:src="@drawable/icon_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <include
+        android:id="@+id/empty_property_state_dashboard"
+        layout="@layout/landlord_empty_property_recyclerview"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

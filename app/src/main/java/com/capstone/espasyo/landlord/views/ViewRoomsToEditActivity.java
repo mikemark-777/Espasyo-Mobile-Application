@@ -87,4 +87,9 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
         intent.putExtra("room", propertyRooms.get(position));
         startActivity(intent);
     }
+
+    /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
+
+    // TODO: Handle Activity Life Cycle
+
 }

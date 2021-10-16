@@ -277,4 +277,6 @@ public class EditRoomActivity extends AppCompatActivity {
                 });
     }
 
+    // TODO: Handle Activity Life Cycle
+
 }

@@ -1,9 +1,11 @@
 package com.capstone.espasyo.landlord.views;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.models.Property;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -71,7 +74,8 @@ public class AddPropertyActivity extends AppCompatActivity {
     ArrayAdapter<String> minimumPriceAdapter;
     ArrayAdapter<String> maximumPriceAdapter;
 
-    private Button btnAddProperty,
+    private Button btnGetMapLocation,
+                   btnAddProperty,
                    btnCancelAddProperty;//TODO: add cancel functionality
 
     @Override
@@ -80,6 +84,14 @@ public class AddPropertyActivity extends AppCompatActivity {
         setContentView(R.layout.landlord_activity_add_property);
 
         initializeViews();
+
+        btnGetMapLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddPropertyActivity.this, LocationPickerActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnAddProperty.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,6 +288,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         internetCheckBox = findViewById(R.id.internetCheckBox);
         garbageCheckBox = findViewById(R.id.garbageCheckBox);
 
+        btnGetMapLocation = findViewById(R.id.getMapLocation);
         btnAddProperty = findViewById(R.id.btnAddProperty);
         btnCancelAddProperty = findViewById(R.id.btnCancelAddProperty);
 
@@ -348,5 +361,12 @@ public class AddPropertyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    //get data from LocationPickerActivity and put latitude, longitude , address in property object
+    //also put address data in complete address textbox
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

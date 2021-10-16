@@ -13,4 +13,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_settings);
     }
+
+    // TODO: Handle Activity Life Cycle
 }

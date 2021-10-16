@@ -205,4 +205,6 @@ public class AddRoomActivity extends AppCompatActivity {
             }
         });
     }
+
+    // TODO: Handle Activity Life Cycle
 } 

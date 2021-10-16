@@ -75,6 +75,8 @@ public class ChooseEditActivity extends AppCompatActivity {
 
     }
 
+    /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
+
     private void initializeCardViews() {
         editPropertyCardView = findViewById(R.id.editPropertyCardView);
         editRoomsCardView = findViewById(R.id.editRoomsCardView);
@@ -103,6 +105,8 @@ public class ChooseEditActivity extends AppCompatActivity {
             }
         }, 2000);
     }
+
+    // TODO: Handle Activity Life Cycle
 
     @Override
     protected void onRestart() {

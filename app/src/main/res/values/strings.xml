@@ -5,6 +5,9 @@
 
     <!-- My Strings -->
 
+    <!-- Map API Key -->
+    <string name="map_key" translatable="false">AIzaSyB2ezTnYYFo9v1RzBton0tbcWhkoiXnx3E</string>
+
     <!-- AUTHENTICATION MODULE-->
     <!-- For signup fragment -->
     <string name="userRole_dropDown_label">Choose Role</string>

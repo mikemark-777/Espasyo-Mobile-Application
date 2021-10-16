@@ -165,10 +165,13 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         });
     }
 
+    // TODO: Handle Activity Life Cycle
     //propertyDetailActivity Lifecycle -------------------------------------------------------------
     @Override
     protected void onRestart() {
         super.onRestart();
         Toast.makeText(PropertyDetailsActivity.this, "PropertyDetailsActivity is onRestart()", Toast.LENGTH_SHORT).show();
     }
+
+
 }
