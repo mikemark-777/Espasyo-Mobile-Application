@@ -1,9 +1,14 @@
 package com.capstone.espasyo.landlord.views;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -65,6 +70,10 @@ public class AddPropertyActivity extends AppCompatActivity {
                     isInternetIncluded,
                     isGarbageCollectionIncluded;
 
+    private double latitude, longitude;
+
+    private ActivityResultLauncher<Intent> someActivityResultLauncher;
+
     List<String> rentInclusions = new ArrayList<>();
 
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
@@ -85,11 +94,29 @@ public class AddPropertyActivity extends AppCompatActivity {
 
         initializeViews();
 
+        //will handle all the data from the LocationPickerActivity
+       someActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            // There are no request codes
+                            Intent data = result.getData();
+                            String completeAddress = data.getStringExtra("address");
+                            latitude = data.getDoubleExtra("latitude",0);
+                            longitude = data.getDoubleExtra("longitude",0);
+
+                            textInputCompleteAddress.setText(completeAddress);
+                        }
+                    }
+                });
+
+
         btnGetMapLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddPropertyActivity.this, LocationPickerActivity.class);
-                startActivity(intent);
+                openLocationPickerActivityForResult();
             }
         });
 
@@ -368,5 +395,19 @@ public class AddPropertyActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                String completeAddress = data.getStringExtra("address");
+                latitude = data.getDoubleExtra("latitude",0);
+                longitude = data.getDoubleExtra("longitude",0);
+
+                textInputCompleteAddress.setText(completeAddress);
+            }
+        }
+    }
+
+    public void openLocationPickerActivityForResult() {
+        Intent intent = new Intent(AddPropertyActivity.this, LocationPickerActivity.class);
+        someActivityResultLauncher.launch(intent);
     }
 }
