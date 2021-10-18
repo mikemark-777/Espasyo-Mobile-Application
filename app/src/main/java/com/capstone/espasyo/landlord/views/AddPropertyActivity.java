@@ -61,15 +61,16 @@ public class AddPropertyActivity extends AppCompatActivity {
             textInputMaximumPrice;
 
     private CheckBox electricityCheckBox,
-                     waterCheckBox,
-                     internetCheckBox,
-                     garbageCheckBox;
+            waterCheckBox,
+            internetCheckBox,
+            garbageCheckBox;
 
     private boolean isElectricityIncluded,
-                    isWaterIncluded,
-                    isInternetIncluded,
-                    isGarbageCollectionIncluded;
+            isWaterIncluded,
+            isInternetIncluded,
+            isGarbageCollectionIncluded;
 
+    private String completeAddress;
     private double latitude, longitude;
 
     private ActivityResultLauncher<Intent> someActivityResultLauncher;
@@ -84,8 +85,8 @@ public class AddPropertyActivity extends AppCompatActivity {
     ArrayAdapter<String> maximumPriceAdapter;
 
     private Button btnGetMapLocation,
-                   btnAddProperty,
-                   btnCancelAddProperty;//TODO: add cancel functionality
+            btnAddProperty,
+            btnCancelAddProperty;//TODO: add cancel functionality
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         initializeViews();
 
         //will handle all the data from the LocationPickerActivity
-       someActivityResultLauncher = registerForActivityResult(
+        someActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -103,10 +104,16 @@ public class AddPropertyActivity extends AppCompatActivity {
                         if (result.getResultCode() == Activity.RESULT_OK) {
                             // There are no request codes
                             Intent data = result.getData();
-                            String completeAddress = data.getStringExtra("address");
-                            latitude = data.getDoubleExtra("latitude",0);
-                            longitude = data.getDoubleExtra("longitude",0);
+                            String street = data.getStringExtra("street");
+                            String barangay = data.getStringExtra("barangay");
+                            String municipality = data.getStringExtra("municipality");
+                            String landmark = data.getStringExtra("landmark");
+                            latitude = data.getDoubleExtra("latitude", 0);
+                            longitude = data.getDoubleExtra("longitude", 0);
 
+
+                            completeAddress = formatStringLocation(street, barangay, municipality, landmark);
+                            Toast.makeText(AddPropertyActivity.this, "Location Picked: "  + completeAddress, Toast.LENGTH_SHORT).show();
                             textInputCompleteAddress.setText(completeAddress);
                         }
                     }
@@ -298,7 +305,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
 
-        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult  && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
             Log.d(TAG, "CAN PROCEED: TRUE");
             return true;
         } else {
@@ -353,26 +360,26 @@ public class AddPropertyActivity extends AppCompatActivity {
     }
 
     public void getRentInclusions() {
-        if(electricityCheckBox.isChecked()) {
-          isElectricityIncluded = true;
+        if (electricityCheckBox.isChecked()) {
+            isElectricityIncluded = true;
         } else {
             isElectricityIncluded = false;
         }
 
-        if(waterCheckBox.isChecked()) {
+        if (waterCheckBox.isChecked()) {
             isWaterIncluded = true;
         } else {
             isWaterIncluded = false;
         }
 
-        if(internetCheckBox.isChecked()) {
-           isInternetIncluded = true;
+        if (internetCheckBox.isChecked()) {
+            isInternetIncluded = true;
         } else {
             isInternetIncluded = false;
         }
 
-        if(garbageCheckBox.isChecked()) {
-           isGarbageCollectionIncluded = true;
+        if (garbageCheckBox.isChecked()) {
+            isGarbageCollectionIncluded = true;
         } else {
             isGarbageCollectionIncluded = false;
         }
@@ -397,6 +404,39 @@ public class AddPropertyActivity extends AppCompatActivity {
         });
     }
 
+    //get data from LocationPickerActivity and put latitude, longitude , address in property object
+    //also put address data in complete address textbox
+    /*@Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                String completeAddress = data.getStringExtra("address");
+                latitude = data.getDoubleExtra("latitude",0);
+                longitude = data.getDoubleExtra("longitude",0);
+
+                textInputCompleteAddress.setText(completeAddress);
+            }
+        }
+    }*/
+
+    public void openLocationPickerActivityForResult() {
+        Intent intent = new Intent(AddPropertyActivity.this, LocationPickerActivity.class);
+        someActivityResultLauncher.launch(intent);
+    }
+
+    //this will check if the landmark is blank, if so, format location string, if not return whole woth landmark
+    public String formatStringLocation(String street, String barangay, String municipality, String landmark) {
+        String formattedLocationString = "";
+        if(landmark.equals("")) {
+            formattedLocationString = street + " " + barangay + " " +municipality;
+        } else {
+            formattedLocationString = street + " " + barangay + " " + municipality + " " + landmark;
+        }
+
+        return  formattedLocationString;
+    }
+
 
     // TODO: Handle Activity Life Cycle
     @Override
@@ -410,24 +450,4 @@ public class AddPropertyActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    //get data from LocationPickerActivity and put latitude, longitude , address in property object
-    //also put address data in complete address textbox
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
-                String completeAddress = data.getStringExtra("address");
-                latitude = data.getDoubleExtra("latitude",0);
-                longitude = data.getDoubleExtra("longitude",0);
-
-                textInputCompleteAddress.setText(completeAddress);
-            }
-        }
-    }
-
-    public void openLocationPickerActivityForResult() {
-        Intent intent = new Intent(AddPropertyActivity.this, LocationPickerActivity.class);
-        someActivityResultLauncher.launch(intent);
-    }
 }

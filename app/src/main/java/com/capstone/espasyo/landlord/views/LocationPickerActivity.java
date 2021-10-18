@@ -1,7 +1,6 @@
 package com.capstone.espasyo.landlord.views;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
@@ -15,14 +14,13 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.landlord.customdialogs.ConfirmPickedPropertyLocationDialog;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,11 +33,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationPickerActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class LocationPickerActivity extends AppCompatActivity implements OnMapReadyCallback, ConfirmPickedPropertyLocationDialog.ConfirmedLocationDialogListener {
 
     private FusedLocationProviderClient client;
     private SupportMapFragment mapFragment;
@@ -49,21 +46,26 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     private NetworkInfo networkInfo;
     private GoogleMap gMap;
     private Geocoder geocoder;
-    private double selectedLat, selectedLong;
+
+
+    private double selectedLat,
+                   selectedLong;
+
     private List<Address> addresses;
     private String selectedAddress;
+    private String houseNumber,
+                   street,
+                   barangay,
+                   municipality,
+                   landmark;
 
-    private EditText textInputLocation_houseNumber,
-            textInputLocation_street,
+    private EditText textInputLocation_street,
             textInputLocation_barangay,
             textInputLocation_municipality,
             textInputLocation_landmark;
 
 
-    private Button
-            FABGetCurrentLocation,
-            btnChangePropertyLocation,
-            btnConfirmPickedPropertyLocation;
+    private Button FABGetCurrentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +74,11 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
         barangaySearchView = findViewById(R.id.barangaySearchView);
 
-        textInputLocation_houseNumber = findViewById(R.id.text_input_location_houseNumber);
         textInputLocation_street = findViewById(R.id.text_input_location_street);
         textInputLocation_barangay = findViewById(R.id.text_input_location_barangay);
         textInputLocation_municipality = findViewById(R.id.text_input_location_municipality);
         textInputLocation_landmark = findViewById(R.id.text_input_location_landmark);
 
-        btnConfirmPickedPropertyLocation = findViewById(R.id.btnConfirmPickedPropertyLocation);
-        btnChangePropertyLocation = findViewById(R.id.btnChangeLocation);
         FABGetCurrentLocation = findViewById(R.id.FABGetCurrentLocation);
 
 
@@ -124,37 +123,15 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
-        btnConfirmPickedPropertyLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO: Must have Input validations
-                //TODO: Must check if user has set the latitude and longitude, if not, inform
-                String finalSelectedLocation = getConfirmedLocation();
-                double finalLatitude = selectedLat;
-                double finalLongitude = selectedLong;
-
-                Intent intent = new Intent();
-                intent.putExtra("address", finalSelectedLocation);
-                intent.putExtra("latitude", finalLatitude);
-                intent.putExtra("longitude", finalLongitude);
-                setResult(RESULT_OK, intent);
-
-                //end google map sessions
-                gMap = null;
-                finish();
-            }
-        });
-
-
-        btnChangePropertyLocation.setOnClickListener(new View.OnClickListener() {
+        /*btnChangePropertyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 gMap.clear();
-                /*gMap = null;
-                finish();*/
+                *//*gMap = null;
+                finish();*//*
             }
-        });
+        });*/
     }
 
 
@@ -175,7 +152,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
         gMap = googleMap;
-        gMap.setMapType(gMap.MAP_TYPE_HYBRID);
+        gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 
         LatLng BayombongDefault = new LatLng(16.4845001, 121.1563895);
         gMap.addMarker(new MarkerOptions().position(BayombongDefault).title("Bayombong")).showInfoWindow();
@@ -191,62 +168,19 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                 if (networkInfo.isAvailable() && networkInfo.isConnected()) {
                     double latitude = latLng.latitude;
                     double longitude = latLng.longitude;
+
                     //resets/clears everytime user pick a location
-                    //addresses.clear();
                     gMap.clear();
                     getAddress(latitude, longitude);
                 } else {
                     Toast.makeText(LocationPickerActivity.this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
                 }
 
-
             }
         });
 
     }
 
-    private void getAddress(double latitude, double longitude) {
-
-        if (latitude != 0) {
-            try {
-                addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            if (addresses != null) {
-                String address = addresses.get(0).getAddressLine(0);
-
-                //set the location information
-                String street = addresses.get(0).getThoroughfare();
-                String municipality = addresses.get(0).getLocality();
-                String postalCode = addresses.get(0).getPremises();
-
-                textInputLocation_street.setText(street);
-                textInputLocation_municipality.setText(municipality);
-
-                setLatitudeLongitude(latitude, longitude);
-                selectedAddress = street + ", " + municipality;
-
-
-                if (address != null) {
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    LatLng latLng = new LatLng(latitude, longitude);
-                    markerOptions.position(latLng).title(postalCode);
-                    gMap.addMarker(markerOptions).showInfoWindow();
-
-                    Toast.makeText(LocationPickerActivity.this, "Location: " + street + " ," + municipality, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(LocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(LocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(LocationPickerActivity.this, "LatLng Null", Toast.LENGTH_SHORT).show();
-        }
-
-    }
 
     public void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(LocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -254,8 +188,6 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         } else {
 
         }
-
-        gMap.clear();
 
         Task<Location> task = client.getLastLocation();
 
@@ -285,25 +217,105 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
     }
 
+    //get the specific address of the specific coordinates of a place
+    private void getAddress(double latitude, double longitude) {
+
+        if (latitude != 0) {
+            try {
+                addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (addresses != null) {
+                String address = addresses.get(0).getAddressLine(0);
+
+                //set the location information
+                String street = addresses.get(0).getThoroughfare();
+                String municipality = addresses.get(0).getLocality();
+                String postalCode = addresses.get(0).getPremises();
+
+                // setLatitudeLongitude(latitude, longitude);
+                selectedAddress = street + ", " + municipality;
+
+                setLatitudeLongitude(latitude, longitude);
+                getConfirmedLocation( street, "", municipality, "", selectedLat, selectedLong);
+
+
+                if (address != null) {
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    LatLng latLng = new LatLng(latitude, longitude);
+                    markerOptions.position(latLng).title(postalCode);
+                    gMap.addMarker(markerOptions).showInfoWindow();
+                    showConfirmPickedPropertyLocationDialog();
+                    Toast.makeText(LocationPickerActivity.this, "Location: " + street + " ," + municipality, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(LocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(LocationPickerActivity.this, "LatLng Null", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     private void checkConnection() {
         connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
     }
 
+    //must delete
     private void setLatitudeLongitude(double latitude, double longitude) {
         selectedLat = latitude;
         selectedLong = longitude;
     }
 
-    private String getConfirmedLocation() {
+    private void getConfirmedLocation(String pickedStreet, String pickedBarangay, String pickedMunicipality, String pickedLandmark, double pickedLatitude, double pickedLongitude) {
 
-        String street = textInputLocation_street.getText().toString();
-        String barangay = textInputLocation_barangay.getText().toString();
-        String municipality = textInputLocation_municipality.getText().toString();
+        //location information
+        street = pickedStreet;
+        barangay = pickedBarangay;
+        municipality = pickedMunicipality;
+        landmark = pickedLandmark;
 
-        selectedAddress = street + ", " + barangay + ", " + municipality;
+        //map coordinates
+        selectedLat = pickedLatitude;
+        selectedLong = pickedLongitude;
 
-        return selectedAddress;
     }
 
+    public void showConfirmPickedPropertyLocationDialog() {
+        //TODO: Must have Input validations
+        //TODO: Must check if user has set the latitude and longitude, if not, inform
+        Bundle args = new Bundle();
+        args.putString("houseNumber", houseNumber);
+        args.putString("street", street);
+        args.putString("barangay", barangay);
+        args.putString("municipality", municipality);
+        args.putString("landmark", landmark);
+        args.putDouble("latitude", selectedLat);
+        args.putDouble("longitude", selectedLong);
+
+        //create an instance of the custom confirm dialog
+        ConfirmPickedPropertyLocationDialog confirmLocationDialog = new ConfirmPickedPropertyLocationDialog();
+        confirmLocationDialog.setArguments(args);
+        confirmLocationDialog.show(getSupportFragmentManager(), "confirmLocationDialog");
+    }
+
+
+    @Override
+    public void getConfirmedLocationData(String street, String barangay, String municipality, String landmark, double latitude, double longitude) {
+        Intent intent = new Intent();
+        intent.putExtra("street", street);
+        intent.putExtra("barangay", barangay);
+        intent.putExtra("municipality", municipality);
+        intent.putExtra("landmark", landmark);
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("longitude", longitude);
+        setResult(RESULT_OK, intent);
+        gMap = null;
+        finish();
+    }
 }
