@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +22,6 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.models.Property;
-import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -46,6 +44,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     private TextInputLayout textInputPropertyNameLayout,
             textInputPropertyTypeLayout,
             textInputCompleteAddressLayout,
+            textInputProprietorNameLayout,
             textInputLandlordNameLayout,
             textInputLandlordPhoneNumberLayout,
             textInputMinimumPriceLayout,
@@ -53,6 +52,7 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     private TextInputEditText textInputPropertyName,
             textInputCompleteAddress,
+            textInputProprietorName,
             textInputLandlordName,
             textInputLandlordPhoneNumber;
 
@@ -60,7 +60,7 @@ public class AddPropertyActivity extends AppCompatActivity {
             textInputMinimumPrice,
             textInputMaximumPrice;
 
-    private CheckBox electrictiyCheckBox,
+    private CheckBox electricityCheckBox,
                      waterCheckBox,
                      internetCheckBox,
                      garbageCheckBox;
@@ -127,13 +127,14 @@ public class AddPropertyActivity extends AppCompatActivity {
                 String propertyName = textInputPropertyName.getText().toString().trim();
                 String propertyType = textInputPropertyType.getText().toString().trim();
                 String completeAddress = textInputCompleteAddress.getText().toString().trim();
+                String proprietorName = textInputProprietorName.getText().toString().trim();
                 String landlordName = textInputLandlordName.getText().toString().trim();
                 String landlordPhoneNumber = textInputLandlordPhoneNumber.getText().toString().trim();
                 String minPrice = textInputMinimumPrice.getText().toString().trim();
                 String maxPrice = textInputMaximumPrice.getText().toString().trim();
 
 
-                if (areInputsValid(propertyName, propertyType, completeAddress, landlordName, landlordPhoneNumber, minPrice, maxPrice)) {
+                if (areInputsValid(propertyName, propertyType, completeAddress, proprietorName, landlordName, landlordPhoneNumber, minPrice, maxPrice)) {
 
                     int minimumPrice = Integer.parseInt(minPrice);
                     int maximumPrice = Integer.parseInt(maxPrice);
@@ -148,10 +149,14 @@ public class AddPropertyActivity extends AppCompatActivity {
                     Property newProperty = new Property(
                             newPropertyID,
                             propertyOwner,
+                            latitude,
+                            longitude,
+                            false,
                             false,
                             propertyType,
                             propertyName,
                             completeAddress,
+                            proprietorName,
                             landlordName,
                             landlordPhoneNumber,
                             minimumPrice,
@@ -222,6 +227,18 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isProprietorNameValid(String proprietorName) {
+        if (!proprietorName.isEmpty()) {
+            textInputProprietorNameLayout.setError(null);
+            Log.d(TAG, "PROPRIETOR NAME: NOT EMPTY");
+            return true;
+        } else {
+            textInputProprietorNameLayout.setError("Proprietor Name Required");
+            Log.d(TAG, "PROPRIETOR NAME: EMPTY");
+            return false;
+        }
+    }
+
     private boolean isLandlordNameValid(String landlordName) {
         if (!landlordName.isEmpty()) {
             textInputLandlordNameLayout.setError(null);
@@ -270,17 +287,18 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    public boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String landlordName, String landlordPhoneNumber, String minimumPrice, String maximumPrice) {
+    public boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String proprietorName, String landlordName, String landlordPhoneNumber, String minimumPrice, String maximumPrice) {
 
         boolean propertyNameResult = isPropertyNameValid(propertyName);
         boolean propertyTypeResult = isPropertyTypeValid(propertyType);
         boolean completeAddressResult = isCompleteAddressValid(completeAddress);
+        boolean proprietorNameResult = isProprietorNameValid(proprietorName);
         boolean landlordNameResult = isLandlordNameValid(landlordName);
         boolean landlordPhoneNumberResult = isLandlordPhoneNumberValid(landlordPhoneNumber);
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
 
-        if (propertyNameResult && propertyTypeResult && completeAddressResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult  && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
             Log.d(TAG, "CAN PROCEED: TRUE");
             return true;
         } else {
@@ -297,6 +315,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         textInputPropertyNameLayout = findViewById(R.id.text_input_propertyName_layout);
         textInputPropertyTypeLayout = findViewById(R.id.text_input_propertyType_layout);
         textInputCompleteAddressLayout = findViewById(R.id.text_input_completeAddress_layout);
+        textInputProprietorNameLayout = findViewById(R.id.text_input_proprietorName_layout);
         textInputLandlordNameLayout = findViewById(R.id.text_input_landlordName_layout);
         textInputLandlordPhoneNumberLayout = findViewById(R.id.text_input_landlord_phoneNumber_layout);
         textInputMinimumPriceLayout = findViewById(R.id.text_input_minimumPrice_layout);
@@ -305,12 +324,13 @@ public class AddPropertyActivity extends AppCompatActivity {
         textInputPropertyName = findViewById(R.id.text_input_propertyName);
         textInputPropertyType = findViewById(R.id.text_input_propertyType);
         textInputCompleteAddress = findViewById(R.id.text_input_completeAddress);
+        textInputProprietorName = findViewById(R.id.text_input_proprietorName);
         textInputLandlordName = findViewById(R.id.text_input_landlordName);
         textInputLandlordPhoneNumber = findViewById(R.id.text_input_landlord_phoneNumber);
         textInputMinimumPrice = findViewById(R.id.text_input_minimumPrice);
         textInputMaximumPrice = findViewById(R.id.text_input_maximumPrice);
 
-        electrictiyCheckBox = findViewById(R.id.electricityCheckBox);
+        electricityCheckBox = findViewById(R.id.electricityCheckBox);
         waterCheckBox = findViewById(R.id.waterCheckBox);
         internetCheckBox = findViewById(R.id.internetCheckBox);
         garbageCheckBox = findViewById(R.id.garbageCheckBox);
@@ -333,7 +353,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     }
 
     public void getRentInclusions() {
-        if(electrictiyCheckBox.isChecked()) {
+        if(electricityCheckBox.isChecked()) {
           isElectricityIncluded = true;
         } else {
             isElectricityIncluded = false;
