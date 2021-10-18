@@ -31,12 +31,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationPickerActivity extends AppCompatActivity implements OnMapReadyCallback, ConfirmPickedPropertyLocationDialog.ConfirmedLocationDialogListener {
+public class LocationPickerActivity extends AppCompatActivity implements OnMapReadyCallback, ConfirmPickedPropertyLocationDialog.ConfirmLocationDialogListener {
 
     private FusedLocationProviderClient client;
     private SupportMapFragment mapFragment;
@@ -65,21 +66,26 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
             textInputLocation_landmark;
 
 
-    private Button FABGetCurrentLocation;
+    private Button btnGetPickedPropertyLocation;
+    private FloatingActionButton
+                    FABChangeMapType,
+                    FABGetCurrentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_location_picker);
 
-        barangaySearchView = findViewById(R.id.barangaySearchView);
+        barangaySearchView = findViewById(R.id.locationSearchView_edit);
 
         textInputLocation_street = findViewById(R.id.text_input_location_street);
         textInputLocation_barangay = findViewById(R.id.text_input_location_barangay);
         textInputLocation_municipality = findViewById(R.id.text_input_location_municipality);
         textInputLocation_landmark = findViewById(R.id.text_input_location_landmark);
 
+        FABChangeMapType = findViewById(R.id.FABChangeMapType);
         FABGetCurrentLocation = findViewById(R.id.FABGetCurrentLocation);
+        btnGetPickedPropertyLocation = findViewById(R.id.btnGetPickedPropertyLocation);
 
 
         geocoder = new Geocoder(LocationPickerActivity.this, Locale.getDefault());
@@ -115,6 +121,17 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
+        FABChangeMapType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(gMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
+                    gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                } else if(gMap.getMapType() == GoogleMap.MAP_TYPE_SATELLITE) {
+                    gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                }
+            }
+        });
+
         //get current location automatically
         FABGetCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,15 +140,12 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
-        /*btnChangePropertyLocation.setOnClickListener(new View.OnClickListener() {
+        btnGetPickedPropertyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                gMap.clear();
-                *//*gMap = null;
-                finish();*//*
+                showConfirmPickedPropertyLocationDialog();
             }
-        });*/
+        });
     }
 
 
@@ -152,7 +166,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
         gMap = googleMap;
-        gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         LatLng BayombongDefault = new LatLng(16.4845001, 121.1563895);
         gMap.addMarker(new MarkerOptions().position(BayombongDefault).title("Bayombong")).showInfoWindow();
@@ -211,6 +225,8 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                     } else {
                         Toast.makeText(LocationPickerActivity.this, "Location Null", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(LocationPickerActivity.this, "Task not successfull", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -247,7 +263,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                     LatLng latLng = new LatLng(latitude, longitude);
                     markerOptions.position(latLng).title(postalCode);
                     gMap.addMarker(markerOptions).showInfoWindow();
-                    showConfirmPickedPropertyLocationDialog();
+                    btnGetPickedPropertyLocation.setEnabled(true);
                     Toast.makeText(LocationPickerActivity.this, "Location: " + street + " ," + municipality, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(LocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
@@ -318,4 +334,15 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         gMap = null;
         finish();
     }
+
+    @Override
+    public void changeLocationData() {
+        //will reset all the map data, picked location data and other data
+        gMap.clear();
+        LatLng BayombongDefault = new LatLng(16.4845001, 121.1563895);
+        gMap.addMarker(new MarkerOptions().position(BayombongDefault).title("Bayombong")).showInfoWindow();
+        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(BayombongDefault, 16.0f));
+        btnGetPickedPropertyLocation.setEnabled(false);
+    }
+
 }

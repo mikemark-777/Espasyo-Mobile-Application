@@ -1,9 +1,14 @@
 package com.capstone.espasyo.landlord.views;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
@@ -38,6 +44,7 @@ public class EditPropertyActivity extends AppCompatActivity {
     private TextInputLayout textEditPropertyNameLayout,
             textEditPropertyTypeLayout,
             textEditCompleteAddressLayout,
+            textEditProprietorNameLayout,
             textEditLandlordNameLayout,
             textEditLandlordPhoneNumberLayout,
             textEditMinimumPriceLayout,
@@ -45,6 +52,7 @@ public class EditPropertyActivity extends AppCompatActivity {
 
     private TextInputEditText textEditPropertyName,
             textEditCompleteAddress,
+            textEditProprietorName,
             textEditLandlordName,
             textEditLandlordPhoneNumber;
 
@@ -61,6 +69,8 @@ public class EditPropertyActivity extends AppCompatActivity {
             btnCancelEditProperty,//TODO: add cancel functionality
             btnDeleteProperty;
 
+    private ImageButton btnEditMapLocation;
+
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
     String[] minimumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
     String[] maximumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
@@ -72,6 +82,8 @@ public class EditPropertyActivity extends AppCompatActivity {
             isWaterIncluded,
             isInternetIncluded,
             isGarbageCollectionIncluded;
+
+    private ActivityResultLauncher<Intent> EditLocationPickerActivityResultLauncher;
 
     private Property property;
     private String propertyID;
@@ -94,6 +106,31 @@ public class EditPropertyActivity extends AppCompatActivity {
         Intent intent = getIntent();
         loadPropertyData(intent);
 
+        //will handle all the data from the LocationPickerActivity
+        EditLocationPickerActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            /*// There are no request codes
+                            Intent data = result.getData();
+                            String street = data.getStringExtra("street");
+                            String barangay = data.getStringExtra("barangay");
+                            String municipality = data.getStringExtra("municipality");
+                            String landmark = data.getStringExtra("landmark");
+                            latitude = data.getDoubleExtra("latitude", 0);
+                            longitude = data.getDoubleExtra("longitude", 0);
+
+
+                            completeAddress = formatStringLocation(street, barangay, municipality, landmark);
+                            Toast.makeText(AddPropertyActivity.this, "Location Picked: "  + completeAddress, Toast.LENGTH_SHORT).show();
+                            textInputCompleteAddress.setText(completeAddress);*/
+                            Toast.makeText(EditPropertyActivity.this, "I'm Back!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
         btnEditProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +138,7 @@ public class EditPropertyActivity extends AppCompatActivity {
                 String editedPropertyName = textEditPropertyName.getText().toString().trim();
                 String editedPropertyType = textEditPropertyType.getText().toString().trim();
                 String editedPropertyAddress = textEditCompleteAddress.getText().toString().trim();
+                String editedProprietorName = textEditProprietorName.getTransitionName().toString().trim();
                 String editedLandlordName = textEditLandlordName.getText().toString().trim();
                 String editedLandlordPhoneNumber = textEditLandlordPhoneNumber.getText().toString().trim();
                 String editedMinimumPrice = textEditMinimumPrice.getText().toString().trim();
@@ -112,11 +150,12 @@ public class EditPropertyActivity extends AppCompatActivity {
 
                 //TODO: Must include input validations
 
-                if (areInputsValid(editedPropertyName, editedPropertyType, editedPropertyAddress, editedLandlordName, editedLandlordPhoneNumber, editedMinimumPrice, editedMaximumPrice)) {
+                if (areInputsValid(editedPropertyName, editedPropertyType, editedPropertyAddress, editedProprietorName, editedLandlordName, editedLandlordPhoneNumber, editedMinimumPrice, editedMaximumPrice)) {
 
                     property.setName(editedPropertyName);
                     property.setPropertyType(editedPropertyType);
                     property.setAddress(editedPropertyAddress);
+                    property.setProprietorName(editedProprietorName);
                     property.setLandlordName(editedLandlordName);
                     property.setLandlordPhoneNumber(editedLandlordPhoneNumber);
                     property.setMinimumPrice(Integer.parseInt(editedMinimumPrice));
@@ -131,13 +170,19 @@ public class EditPropertyActivity extends AppCompatActivity {
             }
         });
 
+        btnEditMapLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLocationPickerActivityForResult();
+            }
+        });
+
         btnDeleteProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showConfirmationDeleteDialog();
             }
         });
-
     }
 
     /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
@@ -177,6 +222,18 @@ public class EditPropertyActivity extends AppCompatActivity {
         } else {
             textEditCompleteAddressLayout.setError("Complete Address Required");
             Log.d(TAG, "COMPLETE ADDRESS: EMPTY");
+            return false;
+        }
+    }
+
+    public boolean isProprietorNameValid(String proprietorName) {
+        if (!proprietorName.isEmpty()) {
+            textEditProprietorNameLayout.setError(null);
+            Log.d(TAG, "PROPRIETOR NAME: NOT EMPTY");
+            return true;
+        } else {
+            textEditProprietorNameLayout.setError("Proprietor Name Required");
+            Log.d(TAG, "PROPRIETOR NAME: EMPTY");
             return false;
         }
     }
@@ -229,11 +286,12 @@ public class EditPropertyActivity extends AppCompatActivity {
         }
     }
 
-    private boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String landlordName, String landlordPhoneNumber, String minimumPrice, String maximumPrice) {
+    private boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String proprietorName, String landlordName, String landlordPhoneNumber, String minimumPrice, String maximumPrice) {
 
         boolean propertyNameResult = isPropertyNameValid(propertyName);
         boolean propertyTypeResult = isPropertyTypeValid(propertyType);
         boolean completeAddressResult = isCompleteAddressValid(completeAddress);
+        boolean proprietorNameResult = isProprietorNameValid(proprietorName);
         boolean landlordNameResult = isLandlordNameValid(landlordName);
         boolean landlordPhoneNumberResult = isLandlordPhoneNumberValid(landlordPhoneNumber);
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
@@ -257,6 +315,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         textEditPropertyNameLayout = findViewById(R.id.text_edit_propertyName_layout);
         textEditPropertyTypeLayout = findViewById(R.id.text_edit_propertyType_layout);
         textEditCompleteAddressLayout = findViewById(R.id.text_edit_completeAddress_layout);
+        textEditLandlordNameLayout = findViewById(R.id.text_edit_proprietorName_layout);
         textEditLandlordNameLayout = findViewById(R.id.text_edit_landlordName_layout);
         textEditLandlordPhoneNumberLayout = findViewById(R.id.text_edit_landlord_phoneNumber_layout);
         textEditMinimumPriceLayout = findViewById(R.id.text_edit_minimumPrice_layout);
@@ -265,6 +324,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         textEditPropertyName = findViewById(R.id.text_edit_propertyName);
         textEditPropertyType = findViewById(R.id.text_edit_propertyType);
         textEditCompleteAddress = findViewById(R.id.text_edit_completeAddress);
+        textEditProprietorName = findViewById(R.id.text_edit_proprietorName);
         textEditLandlordName = findViewById(R.id.text_edit_landlordName);
         textEditLandlordPhoneNumber = findViewById(R.id.text_edit_landlord_phoneNumber);
         textEditMinimumPrice = findViewById(R.id.text_edit_minimumPrice);
@@ -276,6 +336,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         garbageEditCheckBox = findViewById(R.id.garbageEditCheckBox);
         //buttons
         btnEditProperty = findViewById(R.id.btnEditProperty);
+        btnEditMapLocation = findViewById(R.id.btnEditMapLocation);
         btnCancelEditProperty = findViewById(R.id.btnCancelEditProperty);
         btnDeleteProperty = findViewById(R.id.btnDeleteProperty);
 
@@ -297,6 +358,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         String name = property.getName();
         String propertyType = property.getPropertyType();
         String address = property.getAddress();
+        String proprietorName = property.getProprietorName();
         String landlordName = property.getLandlordName();
         String landlordPhoneNumber = property.getLandlordPhoneNumber();
         int minimumPrice = property.getMinimumPrice();
@@ -315,6 +377,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         textEditPropertyName.setText(name);
         textEditPropertyType.setText(textEditPropertyType.getAdapter().getItem(propertyTypePosition).toString(), false);
         textEditCompleteAddress.setText(address);
+        textEditProprietorName.setText(proprietorName);
         textEditLandlordName.setText(landlordName);
         textEditLandlordPhoneNumber.setText(landlordPhoneNumber);
         textEditMinimumPrice.setText(textEditMinimumPrice.getAdapter().getItem(minimumPricePosition).toString(), false);
@@ -403,6 +466,13 @@ public class EditPropertyActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    public void openLocationPickerActivityForResult() {
+        Intent intent = new Intent(EditPropertyActivity.this, EditLocationPickerActivity.class);
+        EditLocationPickerActivityResultLauncher.launch(intent);
+    }
+
 
     // TODO: Handle Activity Life Cycle
 }

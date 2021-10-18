@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".landlord.views.LocationPickerActivity">
+    tools:context=".landlord.views.EditLocationPickerActivity">
 
 
     <androidx.appcompat.widget.SearchView
@@ -24,7 +24,7 @@
         app:queryHint="Search Street, Barangay..." />
 
     <fragment
-        android:id="@+id/mapFragment"
+        android:id="@+id/mapFragment_edit"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,7 +37,7 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/FABGetCurrentLocation"
+        android:id="@+id/FABGetCurrentLocation_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
@@ -46,15 +46,15 @@
         android:contentDescription="get user location"
         android:src="@drawable/icon_getlocation"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="@id/mapFragment"
-        app:layout_constraintEnd_toEndOf="@id/mapFragment"
+        app:layout_constraintBottom_toBottomOf="@id/mapFragment_edit"
+        app:layout_constraintEnd_toEndOf="@id/mapFragment_edit"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@id/mapFragment"
+        app:layout_constraintStart_toStartOf="@id/mapFragment_edit"
         app:layout_constraintTop_toBottomOf="@+id/locationSearchView_edit"
         app:layout_constraintVertical_bias="0.968" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/FABChangeMapType"
+        android:id="@+id/FABChangeMapType_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
@@ -63,15 +63,15 @@
         android:contentDescription="get user location"
         android:src="@drawable/icon_map_type"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="@id/mapFragment"
-        app:layout_constraintEnd_toEndOf="@id/mapFragment"
+        app:layout_constraintBottom_toBottomOf="@id/mapFragment_edit"
+        app:layout_constraintEnd_toEndOf="@id/mapFragment_edit"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@id/mapFragment"
+        app:layout_constraintStart_toStartOf="@id/mapFragment_edit"
         app:layout_constraintTop_toBottomOf="@+id/locationSearchView_edit"
         app:layout_constraintVertical_bias="0.845" />
 
     <ImageView
-        android:id="@+id/btnBackToAddPropertyActivity"
+        android:id="@+id/btnBackToAddPropertyActivity_edit"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="24dp"
@@ -83,7 +83,7 @@
 
 
     <Button
-        android:id="@+id/btnGetPickedPropertyLocation"
+        android:id="@+id/btnGetPickedPropertyLocation_edit"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_marginBottom="-8dp"

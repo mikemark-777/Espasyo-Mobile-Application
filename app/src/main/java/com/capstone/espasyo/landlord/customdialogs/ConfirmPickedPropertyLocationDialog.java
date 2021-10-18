@@ -3,22 +3,23 @@ package com.capstone.espasyo.landlord.customdialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.capstone.espasyo.R;
+import com.google.android.gms.maps.OnMapReadyCallback;
 
 public class ConfirmPickedPropertyLocationDialog extends DialogFragment {
 
-    private ConfirmedLocationDialogListener listener;
+    private ConfirmLocationDialogListener listener;
     private LayoutInflater inflater;
     private EditText textInputLocation_street,
                      textInputLocation_barangay,
@@ -67,7 +68,15 @@ public class ConfirmPickedPropertyLocationDialog extends DialogFragment {
                 double finalLatitude = latitude;
                 double finalLongitude = longitude;
 
-                listener.getConfirmedLocationData(street, barangay, municipality, landmark, finalLatitude, finalLongitude);
+                if(areInputsValid(street, barangay, municipality)) {
+                    if(isLatLangValid(latitude, longitude)) {
+                        listener.getConfirmedLocationData(street, barangay, municipality, landmark, finalLatitude, finalLongitude);
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Please Fill Out Everything", Toast.LENGTH_SHORT).show();
+                }
+
+
 
             }
         });
@@ -75,7 +84,8 @@ public class ConfirmPickedPropertyLocationDialog extends DialogFragment {
         btnChangePropertyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                createdConfirmLocationDialog.dismiss();
+                listener.changeLocationData();
             }
         });
 
@@ -94,18 +104,55 @@ public class ConfirmPickedPropertyLocationDialog extends DialogFragment {
         btnConfirmPickedPropertyLocation = view.findViewById(R.id.btnConfirmPickedPropertyLocation);
     }
 
+    // input validations
+
+    public boolean isStreetValid(String street) {
+        return !street.isEmpty();
+    }
+
+    public boolean isBarangayValid(String barangay) {
+        return !barangay.isEmpty();
+    }
+
+    public boolean isMunicipalityValid(String municipality) {
+        return !municipality.isEmpty();
+    }
+
+    public boolean isLatLangValid(double latitude, double longitude) {
+        if(latitude > 0 && latitude > 0) {
+            return true;
+        } else {
+            Toast.makeText(getActivity(), "Please select location with latitude and longitude", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    public boolean areInputsValid(String street, String barangay, String municipality) {
+        boolean streetResult = isStreetValid(street);
+        boolean barangayResult = isBarangayValid(barangay);
+        boolean municipalityResult = isMunicipalityValid(municipality);
+
+        if(streetResult && barangayResult && municipalityResult) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            listener = (ConfirmedLocationDialogListener) context;
+            listener = (ConfirmLocationDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()+
             "must implement ConfirmedLocationDialogListener");
         }
     }
 
-    public interface ConfirmedLocationDialogListener {
+    public interface ConfirmLocationDialogListener {
         void getConfirmedLocationData(String street, String barangay, String municipality, String landmark, double latitude, double longitude);
+        void changeLocationData();
     }
 }

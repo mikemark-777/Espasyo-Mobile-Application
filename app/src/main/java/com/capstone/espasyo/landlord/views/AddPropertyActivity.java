@@ -5,7 +5,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -73,7 +72,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     private String completeAddress;
     private double latitude, longitude;
 
-    private ActivityResultLauncher<Intent> someActivityResultLauncher;
+    private ActivityResultLauncher<Intent> LocationPickerActivityResultLauncher;
 
     List<String> rentInclusions = new ArrayList<>();
 
@@ -96,7 +95,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         initializeViews();
 
         //will handle all the data from the LocationPickerActivity
-        someActivityResultLauncher = registerForActivityResult(
+        LocationPickerActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -422,16 +421,16 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     public void openLocationPickerActivityForResult() {
         Intent intent = new Intent(AddPropertyActivity.this, LocationPickerActivity.class);
-        someActivityResultLauncher.launch(intent);
+        LocationPickerActivityResultLauncher.launch(intent);
     }
 
     //this will check if the landmark is blank, if so, format location string, if not return whole woth landmark
     public String formatStringLocation(String street, String barangay, String municipality, String landmark) {
         String formattedLocationString = "";
         if(landmark.equals("")) {
-            formattedLocationString = street + " " + barangay + " " +municipality;
+            formattedLocationString = street + ", " + barangay + ", " +municipality;
         } else {
-            formattedLocationString = street + " " + barangay + " " + municipality + " " + landmark;
+            formattedLocationString = street + ", " + barangay + ", " + municipality + ", " + landmark;
         }
 
         return  formattedLocationString;
