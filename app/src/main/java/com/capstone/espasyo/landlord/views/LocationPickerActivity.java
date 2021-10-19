@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,7 +48,8 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
     private int LOCATION_PERMISSION_CODE = 1;
     private ConnectivityManager connectivityManager;
-    private NetworkInfo networkInfo;
+    private NetworkInfo  mobileConnection;
+    private NetworkInfo wifiConnection;
 
     private GoogleMap gMap;
     private Geocoder geocoder;
@@ -75,6 +77,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         setContentView(R.layout.landlord_activity_location_picker);
 
         initializeViews();
+        checkPermission();
 
         geocoder = new Geocoder(LocationPickerActivity.this, Locale.getDefault());
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
@@ -172,9 +175,8 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
-                checkConnection();
 
-                if (networkInfo.isAvailable() && networkInfo.isConnected()) {
+                if (isConnectedToInternet()) {
                     double latitude = latLng.latitude;
                     double longitude = latLng.longitude;
 
@@ -189,7 +191,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
                     getAddress(latitude, longitude);
                 } else {
-                    Toast.makeText(LocationPickerActivity.this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LocationPickerActivity.this, "Please Check Your Internet Connection", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -226,10 +228,10 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
 
                     } else {
-                        Toast.makeText(LocationPickerActivity.this, "Location Null", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LocationPickerActivity.this, "Location is null", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(LocationPickerActivity.this, "Task not successfull", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LocationPickerActivity.this, "Task not successfull", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -260,21 +262,30 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                     setConfirmedLocation(street, "", municipality, "", latitude, longitude);
 
                 } else {
-                    Toast.makeText(LocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_LONG).show();
                 }
 
             } else {
-                Toast.makeText(LocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(LocationPickerActivity.this, "LatLng Null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LocationPickerActivity.this, "LatLng Null", Toast.LENGTH_LONG).show();
         }
 
     }
 
-    private void checkConnection() {
+    //this will check the connection of the user (network connection)
+    private boolean isConnectedToInternet() {
         connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
-        networkInfo = connectivityManager.getActiveNetworkInfo();
+        mobileConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        wifiConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if(mobileConnection != null && mobileConnection.isConnected() || wifiConnection != null && wifiConnection.isConnected()) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     private void setConfirmedLocation(String pickedStreet, String pickedBarangay, String pickedMunicipality, String pickedLandmark, double pickedLatitude, double pickedLongitude) {

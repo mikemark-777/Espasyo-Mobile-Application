@@ -17,6 +17,7 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -35,7 +36,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.List;
@@ -79,6 +79,10 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_edit_location_picker);
+
+        if(!isConnectedToInternet()) {
+            showNoInternetDialog();
+        }
 
         initializeViews();
 
@@ -174,8 +178,6 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
 
-                checkPermission();
-
                 if (isConnectedToInternet()) {
                     double latitude = latLng.latitude;
                     double longitude = latLng.longitude;
@@ -191,7 +193,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
 
                     getAddress(latitude, longitude);
                 } else {
-                    Toast.makeText(EditLocationPickerActivity.this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditLocationPickerActivity.this, "Please Check Your Internet Connection", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -247,7 +249,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
                         getAddress(latitude, longitude);
 
                     } else {
-                        Toast.makeText(EditLocationPickerActivity.this, "Location Null", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditLocationPickerActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(EditLocationPickerActivity.this, "Task not successful", Toast.LENGTH_SHORT).show();
@@ -281,29 +283,14 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
                     setConfirmedLocation(street, "", municipality, "", latitude, longitude);
 
                 } else {
-                    Toast.makeText(EditLocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditLocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_LONG).show();
                 }
 
             } else {
-                Toast.makeText(EditLocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditLocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(EditLocationPickerActivity.this, "LatLng Null", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    //this will check the connection of the user (network connection)
-    private boolean isConnectedToInternet() {
-        connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
-        mobileConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        wifiConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        if(mobileConnection != null && mobileConnection.isConnected() || wifiConnection != null && wifiConnection.isConnected()) {
-            return true;
-        } else {
-            Toast.makeText(EditLocationPickerActivity.this, "Please Check Internet Connection", Toast.LENGTH_LONG).show();
-            return false;
+            Toast.makeText(EditLocationPickerActivity.this, "Coordinates are null", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -409,6 +396,39 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         } else {
             Toast.makeText(EditLocationPickerActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    //this will check the connection of the user (network connection)
+    private boolean isConnectedToInternet() {
+        connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+        mobileConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        wifiConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if(mobileConnection != null && mobileConnection.isConnected() || wifiConnection != null && wifiConnection.isConnected()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void showNoInternetDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.landlord_no_internet_connection_dialog, null);
+
+        Button btnOkayInternetConnection = view.findViewById(R.id.btnOkayInternetConnection);
+
+        AlertDialog noInternetDialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnOkayInternetConnection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noInternetDialog.dismiss();
+            }
+        });
+
+        noInternetDialog.show();
     }
 
 }
