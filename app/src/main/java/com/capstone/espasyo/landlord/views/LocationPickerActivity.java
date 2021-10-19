@@ -1,11 +1,14 @@
 package com.capstone.espasyo.landlord.views;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -16,7 +19,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
@@ -41,52 +44,37 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
     private FusedLocationProviderClient client;
     private SupportMapFragment mapFragment;
-    private SearchView barangaySearchView;
-    private int REQUEST_CODE = 111;
+
+    private int LOCATION_PERMISSION_CODE = 1;
     private ConnectivityManager connectivityManager;
     private NetworkInfo networkInfo;
+
     private GoogleMap gMap;
     private Geocoder geocoder;
 
-
     private double selectedLat,
-                   selectedLong;
+            selectedLong;
 
-    private List<Address> addresses;
-    private String selectedAddress;
-    private String houseNumber,
-                   street,
-                   barangay,
-                   municipality,
-                   landmark;
+    private List<Address> listOfAddresses;
 
-    private EditText textInputLocation_street,
-            textInputLocation_barangay,
-            textInputLocation_municipality,
-            textInputLocation_landmark;
+    private String street,
+            barangay,
+            municipality,
+            landmark;
 
-
+    private SearchView locationSearchView;
+    private ImageView btnBackToAddPropertyActivity;
     private Button btnGetPickedPropertyLocation;
     private FloatingActionButton
-                    FABChangeMapType,
-                    FABGetCurrentLocation;
+            FABChangeMapType,
+            FABGetCurrentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_location_picker);
 
-        barangaySearchView = findViewById(R.id.locationSearchView_edit);
-
-        textInputLocation_street = findViewById(R.id.text_input_location_street);
-        textInputLocation_barangay = findViewById(R.id.text_input_location_barangay);
-        textInputLocation_municipality = findViewById(R.id.text_input_location_municipality);
-        textInputLocation_landmark = findViewById(R.id.text_input_location_landmark);
-
-        FABChangeMapType = findViewById(R.id.FABChangeMapType);
-        FABGetCurrentLocation = findViewById(R.id.FABGetCurrentLocation);
-        btnGetPickedPropertyLocation = findViewById(R.id.btnGetPickedPropertyLocation);
-
+        initializeViews();
 
         geocoder = new Geocoder(LocationPickerActivity.this, Locale.getDefault());
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
@@ -94,23 +82,26 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         client = LocationServices.getFusedLocationProviderClient(LocationPickerActivity.this);
 
         //search for location
-        barangaySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        locationSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                String location = barangaySearchView.getQuery().toString();
-                addresses = null;
+                String location = locationSearchView.getQuery().toString();
+                listOfAddresses = null;
 
                 if (location != null || !location.equals("")) {
                     try {
-                        addresses = geocoder.getFromLocationName(location, 1);
+                        listOfAddresses = geocoder.getFromLocationName(location, 1);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    Address address = addresses.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                    gMap.addMarker(new MarkerOptions().position(latLng).title(location));
-                    gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, gMap.getMaxZoomLevel()));
+                    gMap.clear();
+
+                    Address addressResult = listOfAddresses.get(0);
+                    LatLng searchedLocation = new LatLng(addressResult.getLatitude(), addressResult.getLongitude());
+                    gMap.addMarker(new MarkerOptions().position(searchedLocation).title(location));
+                    gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(searchedLocation, gMap.getMaxZoomLevel()));
+                    btnGetPickedPropertyLocation.setEnabled(false);
                 }
                 return false;
             }
@@ -121,12 +112,22 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
+        btnBackToAddPropertyActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                setResult(RESULT_CANCELED, intent);
+                gMap = null;
+                finish();
+            }
+        });
+
         FABChangeMapType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(gMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
+                if (gMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
                     gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                } else if(gMap.getMapType() == GoogleMap.MAP_TYPE_SATELLITE) {
+                } else if (gMap.getMapType() == GoogleMap.MAP_TYPE_SATELLITE) {
                     gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 }
             }
@@ -148,19 +149,14 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
+    public void initializeViews() {
+        locationSearchView = findViewById(R.id.locationSearchView);
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //getCurrentLocation();
-            }
-        } else {
-            Toast.makeText(LocationPickerActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
-        }
+        btnBackToAddPropertyActivity = findViewById(R.id.btnBackToAddPropertyActivity);
+        FABChangeMapType = findViewById(R.id.FABChangeMapType);
+        FABGetCurrentLocation = findViewById(R.id.FABGetCurrentLocation);
+        btnGetPickedPropertyLocation = findViewById(R.id.btnGetPickedPropertyLocation);
     }
-
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -176,7 +172,6 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
-
                 checkConnection();
 
                 if (networkInfo.isAvailable() && networkInfo.isConnected()) {
@@ -185,6 +180,13 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
                     //resets/clears everytime user pick a location
                     gMap.clear();
+
+                    //display the marker on the location where the user clicks
+                    LatLng usersLocation = new LatLng(latitude, longitude);
+                    MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("Is this your property's location?");
+                    gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMap.getMaxZoomLevel()));
+                    gMap.addMarker(markerOptions).showInfoWindow();
+
                     getAddress(latitude, longitude);
                 } else {
                     Toast.makeText(LocationPickerActivity.this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
@@ -198,9 +200,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
     public void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(LocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LocationPickerActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-        } else {
-
+            ActivityCompat.requestPermissions(LocationPickerActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
         }
 
         Task<Location> task = client.getLastLocation();
@@ -215,10 +215,13 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                         double latitude = location.getLatitude();
                         double longitude = location.getLongitude();
 
+                        gMap.clear();
+
                         LatLng usersLocation = new LatLng(latitude, longitude);
                         MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("You are here");
                         gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMap.getMaxZoomLevel()));
                         gMap.addMarker(markerOptions).showInfoWindow();
+
                         getAddress(latitude, longitude);
 
 
@@ -236,38 +239,30 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     //get the specific address of the specific coordinates of a place
     private void getAddress(double latitude, double longitude) {
 
-        if (latitude != 0) {
+        if (latitude != 0 && longitude != 0) {
             try {
-                addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                listOfAddresses = geocoder.getFromLocation(latitude, longitude, 1);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            if (addresses != null) {
-                String address = addresses.get(0).getAddressLine(0);
+            if (listOfAddresses != null) {
+                //get the first address in the listOfAddress
+                Address selectedAddress = listOfAddresses.get(0);
 
-                //set the location information
-                String street = addresses.get(0).getThoroughfare();
-                String municipality = addresses.get(0).getLocality();
-                String postalCode = addresses.get(0).getPremises();
+                if (selectedAddress != null) {
 
-                // setLatitudeLongitude(latitude, longitude);
-                selectedAddress = street + ", " + municipality;
+                    //set the address information from the selected address
+                    String street = selectedAddress.getThoroughfare();
+                    String municipality = selectedAddress.getLocality();
 
-                setLatitudeLongitude(latitude, longitude);
-                getConfirmedLocation( street, "", municipality, "", selectedLat, selectedLong);
-
-
-                if (address != null) {
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    LatLng latLng = new LatLng(latitude, longitude);
-                    markerOptions.position(latLng).title(postalCode);
-                    gMap.addMarker(markerOptions).showInfoWindow();
                     btnGetPickedPropertyLocation.setEnabled(true);
-                    Toast.makeText(LocationPickerActivity.this, "Location: " + street + " ," + municipality, Toast.LENGTH_SHORT).show();
+                    setConfirmedLocation(street, "", municipality, "", latitude, longitude);
+
                 } else {
                     Toast.makeText(LocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
                 }
+
             } else {
                 Toast.makeText(LocationPickerActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
             }
@@ -282,13 +277,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         networkInfo = connectivityManager.getActiveNetworkInfo();
     }
 
-    //must delete
-    private void setLatitudeLongitude(double latitude, double longitude) {
-        selectedLat = latitude;
-        selectedLong = longitude;
-    }
-
-    private void getConfirmedLocation(String pickedStreet, String pickedBarangay, String pickedMunicipality, String pickedLandmark, double pickedLatitude, double pickedLongitude) {
+    private void setConfirmedLocation(String pickedStreet, String pickedBarangay, String pickedMunicipality, String pickedLandmark, double pickedLatitude, double pickedLongitude) {
 
         //location information
         street = pickedStreet;
@@ -303,10 +292,8 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     }
 
     public void showConfirmPickedPropertyLocationDialog() {
-        //TODO: Must have Input validations
-        //TODO: Must check if user has set the latitude and longitude, if not, inform
+
         Bundle args = new Bundle();
-        args.putString("houseNumber", houseNumber);
         args.putString("street", street);
         args.putString("barangay", barangay);
         args.putString("municipality", municipality);
@@ -319,7 +306,6 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         confirmLocationDialog.setArguments(args);
         confirmLocationDialog.show(getSupportFragmentManager(), "confirmLocationDialog");
     }
-
 
     @Override
     public void getConfirmedLocationData(String street, String barangay, String municipality, String landmark, double latitude, double longitude) {
@@ -343,6 +329,50 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         gMap.addMarker(new MarkerOptions().position(BayombongDefault).title("Bayombong")).showInfoWindow();
         gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(BayombongDefault, 16.0f));
         btnGetPickedPropertyLocation.setEnabled(false);
+    }
+
+    // check for permissions for location access
+    public void checkPermission() {
+        if(ContextCompat.checkSelfPermission(LocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //do nothing because the permissions are granted
+        } else {
+            requestLocationPermission();
+        }
+    }
+
+    public void requestLocationPermission() {
+
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission Needed")
+                    .setMessage("Location permission is needed to access your location.")
+                    .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(LocationPickerActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).create().show();
+
+        } else {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(LocationPickerActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(LocationPickerActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

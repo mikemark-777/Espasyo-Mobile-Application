@@ -83,6 +83,9 @@ public class EditPropertyActivity extends AppCompatActivity {
             isInternetIncluded,
             isGarbageCollectionIncluded;
 
+    private String completeAddress;
+    private double latitude, longitude;
+
     private ActivityResultLauncher<Intent> EditLocationPickerActivityResultLauncher;
 
     private Property property;
@@ -113,7 +116,7 @@ public class EditPropertyActivity extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK) {
-                            /*// There are no request codes
+                            // There are no request codes
                             Intent data = result.getData();
                             String street = data.getStringExtra("street");
                             String barangay = data.getStringExtra("barangay");
@@ -124,9 +127,10 @@ public class EditPropertyActivity extends AppCompatActivity {
 
 
                             completeAddress = formatStringLocation(street, barangay, municipality, landmark);
-                            Toast.makeText(AddPropertyActivity.this, "Location Picked: "  + completeAddress, Toast.LENGTH_SHORT).show();
-                            textInputCompleteAddress.setText(completeAddress);*/
-                            Toast.makeText(EditPropertyActivity.this, "I'm Back!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditPropertyActivity.this, "Location Picked: Lat("  + latitude + ") , (" + longitude + ")", Toast.LENGTH_SHORT).show();
+                            textEditCompleteAddress.setText(completeAddress);
+                        } else if (result.getResultCode() == Activity.RESULT_CANCELED){
+                            Toast.makeText(EditPropertyActivity.this, "Location and address not changed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -138,7 +142,9 @@ public class EditPropertyActivity extends AppCompatActivity {
                 String editedPropertyName = textEditPropertyName.getText().toString().trim();
                 String editedPropertyType = textEditPropertyType.getText().toString().trim();
                 String editedPropertyAddress = textEditCompleteAddress.getText().toString().trim();
-                String editedProprietorName = textEditProprietorName.getTransitionName().toString().trim();
+                double editedLatitude = latitude;
+                double editedLongitude = longitude;
+                String editedProprietorName = textEditProprietorName.getText().toString().trim();
                 String editedLandlordName = textEditLandlordName.getText().toString().trim();
                 String editedLandlordPhoneNumber = textEditLandlordPhoneNumber.getText().toString().trim();
                 String editedMinimumPrice = textEditMinimumPrice.getText().toString().trim();
@@ -155,6 +161,8 @@ public class EditPropertyActivity extends AppCompatActivity {
                     property.setName(editedPropertyName);
                     property.setPropertyType(editedPropertyType);
                     property.setAddress(editedPropertyAddress);
+                    property.setLatitude(editedLatitude);
+                    property.setLongitude(editedLongitude);
                     property.setProprietorName(editedProprietorName);
                     property.setLandlordName(editedLandlordName);
                     property.setLandlordPhoneNumber(editedLandlordPhoneNumber);
@@ -173,7 +181,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         btnEditMapLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openLocationPickerActivityForResult();
+                openEditLocationPickerActivityForResult();
             }
         });
 
@@ -298,7 +306,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
 
 
-        if (propertyNameResult && propertyTypeResult && completeAddressResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
             Log.d(TAG, "CAN PROCEED: TRUE");
             return true;
         } else {
@@ -315,7 +323,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         textEditPropertyNameLayout = findViewById(R.id.text_edit_propertyName_layout);
         textEditPropertyTypeLayout = findViewById(R.id.text_edit_propertyType_layout);
         textEditCompleteAddressLayout = findViewById(R.id.text_edit_completeAddress_layout);
-        textEditLandlordNameLayout = findViewById(R.id.text_edit_proprietorName_layout);
+        textEditProprietorNameLayout = findViewById(R.id.text_edit_proprietorName_layout);
         textEditLandlordNameLayout = findViewById(R.id.text_edit_landlordName_layout);
         textEditLandlordPhoneNumberLayout = findViewById(R.id.text_edit_landlord_phoneNumber_layout);
         textEditMinimumPriceLayout = findViewById(R.id.text_edit_minimumPrice_layout);
@@ -468,9 +476,33 @@ public class EditPropertyActivity extends AppCompatActivity {
     }
 
 
-    public void openLocationPickerActivityForResult() {
+    public void openEditLocationPickerActivityForResult() {
         Intent intent = new Intent(EditPropertyActivity.this, EditLocationPickerActivity.class);
+
+        //get property name, address,  and address coordinates (latitude and longitude to be passed in EditLocationPickerActivity)
+        String propertyName = property.getName();
+        String address = property.getAddress();
+        double latitude = property.getLatitude();
+        double longitude = property.getLongitude();
+
+        intent.putExtra("propertyName", propertyName);
+        intent.putExtra("address", address);
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("longitude", longitude);
+
         EditLocationPickerActivityResultLauncher.launch(intent);
+    }
+
+    //this will check if the landmark is blank, if so, format location string, if not return whole woth landmark
+    public String formatStringLocation(String street, String barangay, String municipality, String landmark) {
+        String formattedLocationString = "";
+        if(landmark.equals("")) {
+            formattedLocationString = street + ", " + barangay + ", " +municipality;
+        } else {
+            formattedLocationString = street + ", " + barangay + ", " + municipality + ", " + landmark;
+        }
+
+        return  formattedLocationString;
     }
 
 

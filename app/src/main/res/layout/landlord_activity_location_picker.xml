@@ -8,7 +8,7 @@
 
 
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/locationSearchView_edit"
+        android:id="@+id/locationSearchView"
         android:layout_width="250dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
@@ -41,41 +41,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="88dp"
         android:contentDescription="get user location"
-        android:src="@drawable/icon_getlocation"
+        android:src="@drawable/icon_mylocation"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="@id/mapFragment"
-        app:layout_constraintEnd_toEndOf="@id/mapFragment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@id/mapFragment"
-        app:layout_constraintTop_toBottomOf="@+id/locationSearchView_edit"
-        app:layout_constraintVertical_bias="0.968" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/FABChangeMapType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:contentDescription="get user location"
         android:src="@drawable/icon_map_type"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="@id/mapFragment"
+        app:layout_constraintBottom_toTopOf="@+id/FABGetCurrentLocation"
         app:layout_constraintEnd_toEndOf="@id/mapFragment"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@id/mapFragment"
-        app:layout_constraintTop_toBottomOf="@+id/locationSearchView_edit"
-        app:layout_constraintVertical_bias="0.845" />
+        app:layout_constraintTop_toBottomOf="@+id/locationSearchView"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/btnBackToAddPropertyActivity"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toStartOf="@+id/locationSearchView_edit"
+        app:layout_constraintEnd_toStartOf="@+id/locationSearchView"
         app:layout_constraintHorizontal_bias="0.262"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

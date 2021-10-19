@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.landlord.views.EditPropertyActivity;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
 public class ConfirmPickedPropertyLocationDialog extends DialogFragment {
@@ -52,13 +53,11 @@ public class ConfirmPickedPropertyLocationDialog extends DialogFragment {
         textInputLocation_landmark.setText(landmark);
 
         AlertDialog createdConfirmLocationDialog = builder.create();
-        createdConfirmLocationDialog.setView(view);
+        createdConfirmLocationDialog.setView(view);Toast.makeText(getActivity(), "Location Picked: Lat("  + latitude + ") , (" + longitude + ")", Toast.LENGTH_SHORT).show();
 
         btnConfirmPickedPropertyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Must have Input validations
-                //TODO: Must check if user has set the latitude and longitude, if not, inform
 
                 //get the data from the textviews and the given latitude and longitude
                 String street = textInputLocation_street.getText().toString();
@@ -71,13 +70,13 @@ public class ConfirmPickedPropertyLocationDialog extends DialogFragment {
                 if(areInputsValid(street, barangay, municipality)) {
                     if(isLatLangValid(latitude, longitude)) {
                         listener.getConfirmedLocationData(street, barangay, municipality, landmark, finalLatitude, finalLongitude);
+                    } else {
+
+                        Toast.makeText(getActivity(), "Please select location with latitude and longitude", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getActivity(), "Please Fill Out Everything", Toast.LENGTH_SHORT).show();
                 }
-
-
-
             }
         });
 
@@ -88,7 +87,6 @@ public class ConfirmPickedPropertyLocationDialog extends DialogFragment {
                 listener.changeLocationData();
             }
         });
-
         return createdConfirmLocationDialog;
     }
 
@@ -122,7 +120,6 @@ public class ConfirmPickedPropertyLocationDialog extends DialogFragment {
         if(latitude > 0 && latitude > 0) {
             return true;
         } else {
-            Toast.makeText(getActivity(), "Please select location with latitude and longitude", Toast.LENGTH_SHORT).show();
             return false;
         }
     }

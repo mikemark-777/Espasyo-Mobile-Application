@@ -3,6 +3,7 @@
     package="com.capstone.espasyo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -15,7 +16,8 @@
         android:theme="@style/Theme.Espasyo">
         <activity
             android:name=".landlord.views.EditLocationPickerActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/map_key" />
@@ -30,7 +32,8 @@
 
         <activity
             android:name=".landlord.views.LocationPickerActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/map_key" />
@@ -40,10 +43,12 @@
             android:exported="true" />
         <activity
             android:name=".landlord.views.EditRoomActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".landlord.views.EditPropertyActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".landlord.views.ChooseEditActivity"
             android:exported="true" />

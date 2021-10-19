@@ -114,6 +114,8 @@ public class AddPropertyActivity extends AppCompatActivity {
                             completeAddress = formatStringLocation(street, barangay, municipality, landmark);
                             Toast.makeText(AddPropertyActivity.this, "Location Picked: "  + completeAddress, Toast.LENGTH_SHORT).show();
                             textInputCompleteAddress.setText(completeAddress);
+                        } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
+                            Toast.makeText(AddPropertyActivity.this, "Location and address not set", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -424,7 +426,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         LocationPickerActivityResultLauncher.launch(intent);
     }
 
-    //this will check if the landmark is blank, if so, format location string, if not return whole woth landmark
+    //this will check if the landmark is blank, if so, format location string, if not return whole with landmark
     public String formatStringLocation(String street, String barangay, String municipality, String landmark) {
         String formattedLocationString = "";
         if(landmark.equals("")) {
