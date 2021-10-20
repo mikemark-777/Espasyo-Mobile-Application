@@ -405,21 +405,6 @@ public class AddPropertyActivity extends AppCompatActivity {
         });
     }
 
-    //get data from LocationPickerActivity and put latitude, longitude , address in property object
-    //also put address data in complete address textbox
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
-                String completeAddress = data.getStringExtra("address");
-                latitude = data.getDoubleExtra("latitude",0);
-                longitude = data.getDoubleExtra("longitude",0);
-
-                textInputCompleteAddress.setText(completeAddress);
-            }
-        }
-    }*/
 
     public void openLocationPickerActivityForResult() {
         Intent intent = new Intent(AddPropertyActivity.this, LocationPickerActivity.class);

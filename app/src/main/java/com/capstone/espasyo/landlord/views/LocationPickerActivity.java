@@ -17,6 +17,7 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -35,7 +36,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.List;
@@ -76,6 +76,12 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_location_picker);
 
+
+        if(!isConnectedToInternet()) {
+            showNoInternetConnectionDialog();
+        }
+
+
         initializeViews();
         checkPermission();
 
@@ -88,23 +94,36 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         locationSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                String location = locationSearchView.getQuery().toString();
-                listOfAddresses = null;
+                if(ActivityCompat.checkSelfPermission(LocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if(isConnectedToInternet()) {
+                        String location = locationSearchView.getQuery().toString();
+                        listOfAddresses = null;
 
-                if (location != null || !location.equals("")) {
-                    try {
-                        listOfAddresses = geocoder.getFromLocationName(location, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        if (location != null || !location.equals("")) {
+                            try {
+                                listOfAddresses = geocoder.getFromLocationName(location, 1);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            gMap.clear();
+
+                            if(!listOfAddresses.isEmpty()) {
+                                Address addressResult = listOfAddresses.get(0);
+                                LatLng searchedLocation = new LatLng(addressResult.getLatitude(), addressResult.getLongitude());
+                                gMap.addMarker(new MarkerOptions().position(searchedLocation).title(location));
+                                gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(searchedLocation, gMap.getMaxZoomLevel()));
+                                btnGetPickedPropertyLocation.setEnabled(false);
+                            } else {
+                                //TODO: Must create a dialog saying no address found
+                                Toast.makeText(LocationPickerActivity.this, "No Location Found. Please be more specific", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            showNoInternetConnectionDialog();
+                        }
                     }
-
-                    gMap.clear();
-
-                    Address addressResult = listOfAddresses.get(0);
-                    LatLng searchedLocation = new LatLng(addressResult.getLatitude(), addressResult.getLongitude());
-                    gMap.addMarker(new MarkerOptions().position(searchedLocation).title(location));
-                    gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(searchedLocation, gMap.getMaxZoomLevel()));
-                    btnGetPickedPropertyLocation.setEnabled(false);
+                } else {
+                    requestLocationPermission();
                 }
                 return false;
             }
@@ -140,7 +159,13 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         FABGetCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getCurrentLocation();
+
+                if(isConnectedToInternet()) {
+                    getCurrentLocation();
+                } else {
+                    showNoInternetConnectionDialog();
+                }
+
             }
         });
 
@@ -175,24 +200,28 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
+              if(ActivityCompat.checkSelfPermission(LocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                  if (isConnectedToInternet()) {
+                      double latitude = latLng.latitude;
+                      double longitude = latLng.longitude;
 
-                if (isConnectedToInternet()) {
-                    double latitude = latLng.latitude;
-                    double longitude = latLng.longitude;
+                      //resets/clears everytime user pick a location
+                      gMap.clear();
 
-                    //resets/clears everytime user pick a location
-                    gMap.clear();
+                      //display the marker on the location where the user clicks
+                      LatLng usersLocation = new LatLng(latitude, longitude);
+                      MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("Is this your property's location?");
+                      gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMap.getMaxZoomLevel()));
+                      gMap.addMarker(markerOptions).showInfoWindow();
 
-                    //display the marker on the location where the user clicks
-                    LatLng usersLocation = new LatLng(latitude, longitude);
-                    MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("Is this your property's location?");
-                    gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMap.getMaxZoomLevel()));
-                    gMap.addMarker(markerOptions).showInfoWindow();
+                      getAddress(latitude, longitude);
+                  } else {
+                      showNoInternetConnectionDialog();
+                  }
+              } else {
+                  requestLocationPermission();
+              }
 
-                    getAddress(latitude, longitude);
-                } else {
-                    Toast.makeText(LocationPickerActivity.this, "Please Check Your Internet Connection", Toast.LENGTH_LONG).show();
-                }
 
             }
         });
@@ -201,40 +230,46 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
 
     public void getCurrentLocation() {
+
+        //check if the user has granted the permission for this functionality to access location
         if (ActivityCompat.checkSelfPermission(LocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LocationPickerActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
-        }
+            if(isConnectedToInternet()) {
+                Task<Location> task = client.getLastLocation();
 
-        Task<Location> task = client.getLastLocation();
+                task.addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful()) {
+                            Location location = task.getResult();
+                            if (location != null) {
 
-        task.addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                if (task.isSuccessful()) {
-                    Location location = task.getResult();
-                    if (location != null) {
+                                double latitude = location.getLatitude();
+                                double longitude = location.getLongitude();
 
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
+                                gMap.clear();
 
-                        gMap.clear();
+                                LatLng usersLocation = new LatLng(latitude, longitude);
+                                MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("You are here");
+                                gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMap.getMaxZoomLevel()));
+                                gMap.addMarker(markerOptions).showInfoWindow();
 
-                        LatLng usersLocation = new LatLng(latitude, longitude);
-                        MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("You are here");
-                        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMap.getMaxZoomLevel()));
-                        gMap.addMarker(markerOptions).showInfoWindow();
-
-                        getAddress(latitude, longitude);
+                                getAddress(latitude, longitude);
 
 
-                    } else {
-                        Toast.makeText(LocationPickerActivity.this, "Location is null", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(LocationPickerActivity.this, "Location is null", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(LocationPickerActivity.this, "Task not successfull", Toast.LENGTH_LONG).show();
+                        }
                     }
-                } else {
-                    Toast.makeText(LocationPickerActivity.this, "Task not successfull", Toast.LENGTH_LONG).show();
-                }
+                });
+            } else {
+                showNoInternetConnectionDialog();
             }
-        });
+        } else {
+            requestLocationPermission();
+        }
 
     }
 
@@ -270,20 +305,6 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
             }
         } else {
             Toast.makeText(LocationPickerActivity.this, "LatLng Null", Toast.LENGTH_LONG).show();
-        }
-
-    }
-
-    //this will check the connection of the user (network connection)
-    private boolean isConnectedToInternet() {
-        connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
-        mobileConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        wifiConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        if(mobileConnection != null && mobileConnection.isConnected() || wifiConnection != null && wifiConnection.isConnected()) {
-            return true;
-        } else {
-            return false;
         }
 
     }
@@ -342,6 +363,8 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         btnGetPickedPropertyLocation.setEnabled(false);
     }
 
+    /*------------------------- Check and Request Location Permissions ----------------------------------*/
+
     // check for permissions for location access
     public void checkPermission() {
         if(ContextCompat.checkSelfPermission(LocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -384,6 +407,42 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         } else {
             Toast.makeText(LocationPickerActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /*------------------------- Check Internet Connections ----------------------------------*/
+
+    //this will check the connection of the user (network connection)
+    private boolean isConnectedToInternet() {
+        connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+        mobileConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        wifiConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if(mobileConnection != null && mobileConnection.isConnected() || wifiConnection != null && wifiConnection.isConnected()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public void showNoInternetConnectionDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.landlord_no_internet_connection_dialog, null);
+
+        Button btnOkayInternetConnection = view.findViewById(R.id.btnOkayInternetConnection);
+
+        AlertDialog noInternetDialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnOkayInternetConnection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noInternetDialog.dismiss();
+            }
+        });
+
+        noInternetDialog.show();
     }
 
 }

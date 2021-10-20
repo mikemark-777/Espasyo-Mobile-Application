@@ -33,6 +33,8 @@ public class AuthenticationRepository {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore database;
     private DocumentReference dbUsers;
+    private DocumentReference dbStudents;
+    private DocumentReference dbLandlords;
 
     public AuthenticationRepository(Application application) {
         this.application = application;
@@ -69,7 +71,8 @@ public class AuthenticationRepository {
 
                     firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
                     String UID = firebaseAuth.getCurrentUser().getUid(); //get currentUser's UID
-                    saveUserData(newUser, UID); //save user data to database
+                    saveUserData(newUser, UID); //save user data to users collection
+                    saveUserDataToTheirCollection(newUser); //save user data to their respective collection (landlord or student collection)
 
                     sendEmailVerification();
 
@@ -166,6 +169,40 @@ public class AuthenticationRepository {
                 Toast.makeText(application, "Failed to create account", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void saveUserDataToTheirCollection(User newUser) {
+
+        String UID = newUser.getUID();
+        int role = newUser.getUserRole();
+
+        if(role == 2) {
+            dbLandlords = database.collection("landlords").document(UID);
+            dbLandlords.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(application, "Failed to save landlord data to landlords collection", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else if(role == 3) {
+            dbStudents = database.collection("students").document(UID);
+            dbStudents.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(application, "Failed to save student data to student collection", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 }

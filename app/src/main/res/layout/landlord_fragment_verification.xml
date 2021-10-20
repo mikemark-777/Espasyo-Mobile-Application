@@ -4,9 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.capstone.espasyo.landlord.widgets.VerificationRequestRecyclerView
+        android:id="@+id/verificationRequestRecyclerView"
+        android:layout_width="370dp"
+        android:layout_height="570dp"
+        android:layout_margin="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/composeVerificationRequestFAB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/composeVerificationRequestFAB"
-        app:icon="@drawable/icon_add"
         android:text="Compose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +24,16 @@
         android:layout_marginBottom="24dp"
         android:contentDescription="compose verification request"
         android:src="@drawable/icon_add"
+        app:icon="@drawable/icon_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <include
+        android:id="@+id/empty_verification_request_state_verifFragment"
+        layout="@layout/landlord_empty_verification_request_recyclerview"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

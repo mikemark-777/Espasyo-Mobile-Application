@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
         <activity
+            android:name=".landlord.views.ChoosePropertyToVerify"
+            android:exported="true" />
+        <activity
             android:name=".landlord.views.EditLocationPickerActivity"
             android:exported="true"
             android:windowSoftInputMode="stateHidden">
@@ -44,11 +47,11 @@
         <activity
             android:name=".landlord.views.EditRoomActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".landlord.views.EditPropertyActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".landlord.views.ChooseEditActivity"
             android:exported="true" />

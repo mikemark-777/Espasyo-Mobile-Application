@@ -1,20 +1,12 @@
 package com.capstone.espasyo.landlord.views;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.PropertyAdapter;
@@ -31,7 +23,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class DashboardFragment extends Fragment implements PropertyAdapter.OnPropertyListener {
+public class ChoosePropertyToVerify extends AppCompatActivity implements PropertyAdapter.OnPropertyListener{
 
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth fAuth;
@@ -47,8 +39,9 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
     private ProgressDialog progressDialog;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.landlord_activity_choose_property_to_verify);
 
         //Initialize
         firebaseConnection = FirebaseConnection.getInstance();
@@ -56,67 +49,25 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
         fAuth    = firebaseConnection.getFirebaseAuthInstance();
         ownedPropertyList = new ArrayList<>();
 
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.landlord_fragment_dashboard, container, false);
-        initPropertyRecyclerView(view);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+        initPropertyRecyclerView();
         fetchUserProperties();
-
-        addPropertyFAB = view.findViewById(R.id.addPropertyFAB);
-        addPropertyFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // goto add property activity
-                startActivity(new Intent(getActivity(), AddPropertyActivity.class));
-                getActivity().finish();
-            }
-        });
-
-        //shrink and extend the FAB
-        propertyRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    addPropertyFAB.shrink();
-                } else if (dy < 0) {
-                    addPropertyFAB.extend();
-                }
-            }
-        });
     }
+
     /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
 
-    public void initPropertyRecyclerView(View view) {
+    public void initPropertyRecyclerView() {
         // initialize propertyRecyclerView, layoutManager and propertyAdapter
-        mEmptyView = view.findViewById(R.id.empty_property_state_dashboardFragment);
-        propertyRecyclerView = (PropertyRecyclerView) view.findViewById(R.id.propertyRecyclerView);
+        mEmptyView = findViewById(R.id.empty_property_state_dashboardFragment);
+        propertyRecyclerView = (PropertyRecyclerView) findViewById(R.id.propertyRecyclerView_verify);
         propertyRecyclerView.showIfEmpty(mEmptyView);
         propertyRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager propertyLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager propertyLayoutManager = new LinearLayoutManager(ChoosePropertyToVerify.this, LinearLayoutManager.VERTICAL, false);
         propertyRecyclerView.setLayoutManager(propertyLayoutManager);
-        propertyAdapter = new PropertyAdapter(getActivity(), ownedPropertyList, this);
+        propertyAdapter = new PropertyAdapter(ChoosePropertyToVerify.this, ownedPropertyList, this);
         propertyRecyclerView.setAdapter(propertyAdapter);
     }
 
-    //get all the ownedProperty of the currentUser
-    public  void fetchUserProperties() {
-
-        progressDialog = new ProgressDialog(this.getContext());
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading Properties");
-        progressDialog.show();
-
+    public void fetchUserProperties() {
         //will be used to retrieve owned properties in the Properties Collection
         String currentUserID = fAuth.getCurrentUser().getUid().toString();
         CollectionReference propertiesCollection = database.collection("properties");
@@ -134,23 +85,10 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
                         propertyAdapter.notifyDataSetChanged();
                     }
                 });
-
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-            }
-        }, 2000);
     }
 
     @Override
     public void onPropertyClick(int position) {
-        Intent intent = new Intent(getActivity(), PropertyDetailsActivity.class);
-        intent.putExtra("property", ownedPropertyList.get(position));
-        startActivity(intent);
-    }
 
-    // TODO: Handle Fragment Life Cycle
+    }
 }

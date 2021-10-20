@@ -81,15 +81,16 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         setContentView(R.layout.landlord_activity_edit_location_picker);
 
         if(!isConnectedToInternet()) {
-            showNoInternetDialog();
+            showNoInternetConnectionDialog();
         }
 
         initializeViews();
+        checkPermission();
 
         Intent intent = getIntent();
         getDataFromIntent(intent);
 
-        checkPermission();
+
 
         geocoder = new Geocoder(EditLocationPickerActivity.this, Locale.getDefault());
         mapFragment_edit = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment_edit);
@@ -100,20 +101,34 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         locationSearchView_edit.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                String location = locationSearchView_edit.getQuery().toString();
-                listOfAddresses = null;
 
-                if (location != null || !location.equals("")) {
-                    try {
-                        listOfAddresses = geocoder.getFromLocationName(location, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                if(ActivityCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if(isConnectedToInternet()) {
+                        String location = locationSearchView_edit.getQuery().toString();
+                        listOfAddresses = null;
+
+                        if (location != null || !location.equals("")) {
+                            try {
+                                listOfAddresses = geocoder.getFromLocationName(location, 1);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            if(!listOfAddresses.isEmpty()) {
+                                Address addressResult = listOfAddresses.get(0);
+                                LatLng searchedLocation = new LatLng(addressResult.getLatitude(), addressResult.getLongitude());
+                                gMapEdit.addMarker(new MarkerOptions().position(searchedLocation).title(location));
+                                gMapEdit.animateCamera(CameraUpdateFactory.newLatLngZoom(searchedLocation, gMapEdit.getMaxZoomLevel()));
+                            } else {
+                                //TODO: Must create a dialog saying no address found
+                                Toast.makeText(EditLocationPickerActivity.this, "No Location Found. Please be more specific", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } else {
+                        showNoInternetConnectionDialog();
                     }
-
-                    Address addressResult = listOfAddresses.get(0);
-                    LatLng searchedLocation = new LatLng(addressResult.getLatitude(), addressResult.getLongitude());
-                    gMapEdit.addMarker(new MarkerOptions().position(searchedLocation).title(location));
-                    gMapEdit.animateCamera(CameraUpdateFactory.newLatLngZoom(searchedLocation, gMapEdit.getMaxZoomLevel()));
+                } else {
+                    requestLocationPermission();
                 }
                 return false;
             }
@@ -149,7 +164,12 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         FABGetCurrentLocation_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getCurrentLocation();
+                if(isConnectedToInternet()) {
+                    getCurrentLocation();
+                } else {
+                    showNoInternetConnectionDialog();
+                }
+
             }
         });
 
@@ -177,24 +197,28 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         gMapEdit.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
+             if(ActivityCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                 if (isConnectedToInternet()) {
+                     double latitude = latLng.latitude;
+                     double longitude = latLng.longitude;
 
-                if (isConnectedToInternet()) {
-                    double latitude = latLng.latitude;
-                    double longitude = latLng.longitude;
+                     //resets/clears everytime user pick a location
+                     gMapEdit.clear();
 
-                    //resets/clears everytime user pick a location
-                    gMapEdit.clear();
+                     //display the marker on the location where the user clicks
+                     LatLng usersLocation = new LatLng(latitude, longitude);
+                     MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("Is this your property's location?");
+                     gMapEdit.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMapEdit.getMaxZoomLevel()));
+                     gMapEdit.addMarker(markerOptions).showInfoWindow();
 
-                    //display the marker on the location where the user clicks
-                    LatLng usersLocation = new LatLng(latitude, longitude);
-                    MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("Is this your property's location?");
-                    gMapEdit.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMapEdit.getMaxZoomLevel()));
-                    gMapEdit.addMarker(markerOptions).showInfoWindow();
+                     getAddress(latitude, longitude);
+                 } else {
+                     showNoInternetConnectionDialog();
+                 }
+             } else {
+                 requestLocationPermission();
+             }
 
-                    getAddress(latitude, longitude);
-                } else {
-                    Toast.makeText(EditLocationPickerActivity.this, "Please Check Your Internet Connection", Toast.LENGTH_LONG).show();
-                }
 
             }
         });
@@ -224,39 +248,43 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
     public void getCurrentLocation() {
 
         if (ActivityCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(EditLocationPickerActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
-        }
+            if(isConnectedToInternet()) {
+                //will get the location of the user
+                Task<Location> task = client.getLastLocation();
 
-        //will get the location of the user
-        Task<Location> task = client.getLastLocation();
+                task.addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful()) {
+                            Location location = task.getResult();
+                            if (location != null) {
 
-        task.addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                if (task.isSuccessful()) {
-                    Location location = task.getResult();
-                    if (location != null) {
+                                double latitude = location.getLatitude();
+                                double longitude = location.getLongitude();
 
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
+                                //display the marker on the users current location
+                                LatLng usersLocation = new LatLng(latitude, longitude);
+                                MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("You are here!");
+                                gMapEdit.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMapEdit.getMaxZoomLevel()));
+                                gMapEdit.addMarker(markerOptions).showInfoWindow();
 
-                        //display the marker on the users current location
-                        LatLng usersLocation = new LatLng(latitude, longitude);
-                        MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("You are here!");
-                        gMapEdit.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMapEdit.getMaxZoomLevel()));
-                        gMapEdit.addMarker(markerOptions).showInfoWindow();
+                                getAddress(latitude, longitude);
 
-                        getAddress(latitude, longitude);
-
-                    } else {
-                        Toast.makeText(EditLocationPickerActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(EditLocationPickerActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(EditLocationPickerActivity.this, "Task not successful", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                } else {
-                    Toast.makeText(EditLocationPickerActivity.this, "Task not successful", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+                });
 
+            } else {
+                showNoInternetConnectionDialog();
+            }
+        } else {
+            requestLocationPermission();
+        }
     }
 
     //get the specific address of the specific coordinates of a place
@@ -354,6 +382,8 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         btnGetPickedPropertyLocation_edit.setEnabled(false);
     }
 
+    /*------------------------- Check and Request Permissions ----------------------------------*/
+
     // check for permissions for location access
     public void checkPermission() {
         if(ContextCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -398,6 +428,8 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         }
     }
 
+    /*------------------------- Check Internet Connections ----------------------------------*/
+
     //this will check the connection of the user (network connection)
     private boolean isConnectedToInternet() {
         connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
@@ -411,7 +443,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         }
     }
 
-    public void showNoInternetDialog() {
+    public void showNoInternetConnectionDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.landlord_no_internet_connection_dialog, null);
 
