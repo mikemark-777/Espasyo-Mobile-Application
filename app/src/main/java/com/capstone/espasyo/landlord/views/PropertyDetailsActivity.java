@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.RoomAdapter;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.landlord.widgets.RoomRecyclerView;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.Room;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,7 +38,8 @@ public class PropertyDetailsActivity extends AppCompatActivity {
 
     private LinearLayout noRoomsYetSignal;
 
-    private RecyclerView roomRecyclerView;
+    private RoomRecyclerView roomRecyclerView;
+    private View roomRecylerViewEmptyState;
     private RoomAdapter roomAdapter;
     private ArrayList<Room> propertyRooms;
 
@@ -140,7 +142,9 @@ public class PropertyDetailsActivity extends AppCompatActivity {
 
     //initialize roomRecyclerView, layoutManager, and roomAdapter
     public void initRoomRecyclerView() {
-        roomRecyclerView = findViewById(R.id.roomsRecyclerView);
+        roomRecyclerView = (RoomRecyclerView) findViewById(R.id.roomsRecyclerView);
+        roomRecylerViewEmptyState = findViewById(R.id.empty_room_state_propertyDetailsActivity);
+        roomRecyclerView.showIfEmpty(roomRecylerViewEmptyState);
         roomRecyclerView.setHasFixedSize(true);
         LinearLayoutManager roomLayoutManager = new LinearLayoutManager(PropertyDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
         roomRecyclerView.setLayoutManager(roomLayoutManager);

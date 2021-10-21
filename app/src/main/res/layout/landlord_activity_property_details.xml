@@ -14,6 +14,7 @@
         android:background="@color/espasyo_red_200"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -340,32 +341,19 @@
                 android:layout_marginTop="12dp"
                 android:padding="16dp">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Rooms"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/roomsRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <LinearLayout
-                    android:id="@+id/noRoomsYetSignal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="This property don't have any rooms yet."
-                        android:textAlignment="center"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Rooms"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"/>
 
                     <Button
                         android:id="@+id/addRoomButton"
@@ -373,6 +361,30 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Add room" />
+
+                </LinearLayout>
+
+
+
+                <com.capstone.espasyo.landlord.widgets.RoomRecyclerView
+                    android:id="@+id/roomsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <include
+                    android:id="@+id/empty_room_state_propertyDetailsActivity"
+                    layout="@layout/landlord_empty_room_recyclerview"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/noRoomsYetSignal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
 
                 </LinearLayout>
 

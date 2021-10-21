@@ -38,7 +38,7 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
     private FirebaseFirestore database;
 
     private PropertyRecyclerView propertyRecyclerView;
-    private View mEmptyView;
+    private View propertyRecyclerViewEmptyState;
     private PropertyAdapter propertyAdapter;
     private ArrayList<Property> ownedPropertyList;
 
@@ -99,9 +99,9 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
 
     public void initPropertyRecyclerView(View view) {
         // initialize propertyRecyclerView, layoutManager and propertyAdapter
-        mEmptyView = view.findViewById(R.id.empty_property_state_dashboardFragment);
+        propertyRecyclerViewEmptyState = view.findViewById(R.id.empty_property_state_dashboardFragment);
         propertyRecyclerView = (PropertyRecyclerView) view.findViewById(R.id.propertyRecyclerView);
-        propertyRecyclerView.showIfEmpty(mEmptyView);
+        propertyRecyclerView.showIfEmpty(propertyRecyclerViewEmptyState);
         propertyRecyclerView.setHasFixedSize(true);
         LinearLayoutManager propertyLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         propertyRecyclerView.setLayoutManager(propertyLayoutManager);
@@ -144,6 +144,7 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
             }
         }, 2000);
     }
+
 
     @Override
     public void onPropertyClick(int position) {
