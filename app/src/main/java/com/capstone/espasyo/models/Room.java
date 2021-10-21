@@ -18,7 +18,7 @@ public class Room implements Parcelable{
 
 
     public Room() {
-        //empty room constructor
+        //empty room constructor ** required
     }
 
     public Room(String propertyID, String roomID, String roomName, int price, int numberOfPersonsInRoom, boolean isAvailable,  boolean hasBathroom, boolean hasKitchen) {

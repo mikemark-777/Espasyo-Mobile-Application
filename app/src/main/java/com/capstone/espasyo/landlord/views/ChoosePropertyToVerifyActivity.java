@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import com.capstone.espasyo.landlord.adapters.PropertyAdapter;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.landlord.widgets.PropertyRecyclerView;
 import com.capstone.espasyo.models.Property;
+import com.capstone.espasyo.models.VerificationRequest;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,8 +24,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
-public class ChoosePropertyToVerify extends AppCompatActivity implements PropertyAdapter.OnPropertyListener{
+public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements PropertyAdapter.OnPropertyListener{
 
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth fAuth;
@@ -61,9 +64,9 @@ public class ChoosePropertyToVerify extends AppCompatActivity implements Propert
         propertyRecyclerView = (PropertyRecyclerView) findViewById(R.id.propertyRecyclerView_verify);
         propertyRecyclerView.showIfEmpty(mEmptyView);
         propertyRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager propertyLayoutManager = new LinearLayoutManager(ChoosePropertyToVerify.this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager propertyLayoutManager = new LinearLayoutManager(ChoosePropertyToVerifyActivity.this, LinearLayoutManager.VERTICAL, false);
         propertyRecyclerView.setLayoutManager(propertyLayoutManager);
-        propertyAdapter = new PropertyAdapter(ChoosePropertyToVerify.this, ownedPropertyList, this);
+        propertyAdapter = new PropertyAdapter(ChoosePropertyToVerifyActivity.this, ownedPropertyList, this);
         propertyRecyclerView.setAdapter(propertyAdapter);
     }
 
@@ -80,7 +83,10 @@ public class ChoosePropertyToVerify extends AppCompatActivity implements Propert
                         ownedPropertyList.clear();
                         for(QueryDocumentSnapshot property: queryDocumentSnapshots) {
                             Property propertyObj = property.toObject(Property.class);
-                            ownedPropertyList.add(propertyObj);
+                            //will only get not verified properties
+                            if(!propertyObj.getIsVerified()) {
+                                ownedPropertyList.add(propertyObj);
+                            }
                         }
                         propertyAdapter.notifyDataSetChanged();
                     }
@@ -89,6 +95,33 @@ public class ChoosePropertyToVerify extends AppCompatActivity implements Propert
 
     @Override
     public void onPropertyClick(int position) {
+
+        //get the data of the clicked property they want to be verified
+        Property chosenProperty = ownedPropertyList.get(position);
+
+        String propertyID = chosenProperty.getPropertyID();
+        String propertyName = chosenProperty.getName();
+        String proprietorName = chosenProperty.getProprietorName();
+        String landlordName = chosenProperty.getLandlordName();
+        String landlordPhoneNumber = chosenProperty.getLandlordPhoneNumber();
+
+
+        String verificationRequestID = UUID.randomUUID().toString();
+        boolean isVerified = false;
+        // create a new verification request object and set initial data to it
+        VerificationRequest newVerificationRequest = new VerificationRequest();
+
+        newVerificationRequest.setVerificationRequestID(verificationRequestID);
+        newVerificationRequest.setIsVerified(isVerified);
+        newVerificationRequest.setPropertyID(propertyID);
+        newVerificationRequest.setPropertyName(propertyName);
+        newVerificationRequest.setProprietorName(proprietorName);
+        newVerificationRequest.setLandlordName(landlordName);
+        newVerificationRequest.setLandlordContactNumber(landlordPhoneNumber);
+
+        Intent intent = new Intent(ChoosePropertyToVerifyActivity.this, UploadBusinessPermitsActivity.class);
+        intent.putExtra("initialVerificationRequest", newVerificationRequest);
+        startActivity(intent);
 
     }
 }

@@ -175,7 +175,7 @@
 
     <ImageView
         android:id="@+id/verifiedIconDisplay"
-        android:layout_width="14dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_margin="8dp"

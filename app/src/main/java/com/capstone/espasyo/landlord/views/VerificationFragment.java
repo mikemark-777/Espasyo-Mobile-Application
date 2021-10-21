@@ -67,7 +67,7 @@ public class VerificationFragment extends Fragment implements VerificationReques
             @Override
             public void onClick(View v) {
                 // goto add compose  activity
-                startActivity(new Intent(getActivity(), ChoosePropertyToVerify.class));
+                startActivity(new Intent(getActivity(), ChoosePropertyToVerifyActivity.class));
             }
         });
     }

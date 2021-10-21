@@ -15,39 +15,50 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
             android:text="Step 1: "
             android:textColor="@color/white"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Choose Property you want to be verified"
             android:textColor="@color/white"
-            android:textSize="14dp"
-            android:layout_marginTop="16dp"/>
+            android:textSize="14dp" />
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/espasyo_blue_700"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.capstone.espasyo.landlord.widgets.PropertyRecyclerView
         android:id="@+id/propertyRecyclerView_verify"
-        android:layout_width="370dp"
-        android:layout_height="570dp"
+        android:layout_width="371dp"
+        android:layout_height="571dp"
         android:layout_margin="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintVertical_bias="0.109" />
+        app:layout_constraintVertical_bias="0.52" />
 
     <include
         android:id="@+id/empty_property_state_dashboardFragment"
