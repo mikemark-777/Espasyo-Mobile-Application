@@ -43,7 +43,6 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
     private ArrayList<Property> ownedPropertyList;
 
     private ExtendedFloatingActionButton addPropertyFAB;
-    private TextView noPropertyAddedYetText;
     private ProgressDialog progressDialog;
 
     @Override

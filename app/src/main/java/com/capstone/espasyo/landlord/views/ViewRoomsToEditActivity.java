@@ -88,6 +88,12 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
         startActivity(intent);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        fetchPropertyRooms();
+    }
+
     /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
 
     // TODO: Handle Activity Life Cycle

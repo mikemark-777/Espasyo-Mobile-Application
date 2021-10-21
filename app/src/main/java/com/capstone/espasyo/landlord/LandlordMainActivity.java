@@ -153,6 +153,4 @@ public class LandlordMainActivity extends AppCompatActivity implements Navigatio
         editor.apply();
     }
 
-
-
 }

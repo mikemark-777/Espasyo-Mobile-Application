@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
-import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Room;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,8 +44,7 @@ public class EditRoomActivity extends AppCompatActivity {
     private Button incrementEdit, decrementEdit;
     private int numberOfPersons = 1;
     private Button btnEditRoom,
-                   btnCancelEditRoom,
-                   btnDeleteRoom;
+                   btnCancelEditRoom;
     private ImageView imageViewDeleteRoom,
                       imageButtonBackToViewRoomsToEdit;
 
@@ -185,7 +183,6 @@ public class EditRoomActivity extends AppCompatActivity {
         decrementEdit = findViewById(R.id.decrement_Edit);
         btnEditRoom = findViewById(R.id.btnEditRoom);
         btnCancelEditRoom = findViewById(R.id.btnCancelEditRoom);
-        btnDeleteRoom = findViewById(R.id.btnDeleteRoom);
         imageViewDeleteRoom = findViewById(R.id.imageViewDeleteRoom);
         imageButtonBackToViewRoomsToEdit = findViewById(R.id.imageButtonBackToViewRoomsToEdit);
     }

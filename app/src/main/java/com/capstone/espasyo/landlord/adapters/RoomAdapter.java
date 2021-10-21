@@ -10,10 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capstone.espasyo.R;
-import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.Room;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder> {
@@ -21,6 +19,9 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
     private Context context;
     private ArrayList<Room> roomList;
     //private PropertyAdapter.OnPropertyListener onPropertyListener;
+
+    final String AVAILABLE = "Available";
+    final String UNAVAILABLE = "Unavailable";
 
     public RoomAdapter(Context context, ArrayList<Room> roomList) {
         this.context = context;
@@ -37,9 +38,18 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
     @Override
     public void onBindViewHolder(@NonNull RoomAdapter.RoomViewHolder holder, int position) {
         Room room = roomList.get(position);
+
+        if(room.getIsAvailable()) {
+            holder.availability.setText(AVAILABLE);
+            //set color of availability text when it is available
+            holder.availability.setTextColor(context.getResources().getColor(R.color.espasyo_green_200));
+        } else {
+            holder.availability.setText(UNAVAILABLE);
+            //set color of availability text when it is unavailable
+            holder.availability.setTextColor(context.getResources().getColor(R.color.espasyo_red_2500));
+        }
         holder.roomName.setText(room.getRoomName());
         holder.roomPrice.setText(String.valueOf(room.getPrice()));
-        holder.availability.setText(String.valueOf(room.getIsAvailable()));
         holder.numberOfPerson.setText(String.valueOf(room.getNumberOfPersons()));
     }
 
