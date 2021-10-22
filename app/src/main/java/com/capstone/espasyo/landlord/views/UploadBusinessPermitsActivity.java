@@ -4,12 +4,20 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +27,8 @@ import com.capstone.espasyo.R;
 import com.capstone.espasyo.models.VerificationRequest;
 
 public class UploadBusinessPermitsActivity extends AppCompatActivity {
+
+    private final int CAMERA_PERMISSION_CODE = 101;
 
     private ImageView barangayBusinessPermitUploadImage;
     private Uri barangayBusinessPermitImageURI;
@@ -51,7 +61,7 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
                             barangayBusinessPermitImageURI = result.getData().getData();
                             barangayBusinessPermitUploadImage.setImageURI(barangayBusinessPermitImageURI);
                         } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
-                            Toast.makeText(UploadBusinessPermitsActivity.this, "Location and address not set", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadBusinessPermitsActivity.this, "Picture not picked", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -60,7 +70,9 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
         barangayBusinessPermitUploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                choosePicture();
+                chooseImageSource();
+                /*checkPermissions();
+                choosePicture();*/
             }
         });
 
@@ -99,5 +111,76 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
         PicturePickerActivityResultLauncher.launch(intent);
     }
 
+    public void checkPermissions() {
+        if(ContextCompat.checkSelfPermission(UploadBusinessPermitsActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            //do nothing because the permissions are granted
+        } else {
+            requestCameraPermission();
+        }
+    }
 
+    public void chooseImageSource() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(UploadBusinessPermitsActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.landlord_choose_image_source, null);
+        builder.setView(dialogView);
+
+        ImageView btnImageSelectFromGallery = dialogView.findViewById(R.id.btn_image_selectFromGallery);
+        ImageView btnImageSelectFromCamera = dialogView.findViewById(R.id.btn_image_selectFromCamera);
+
+        AlertDialog chooseImagewSourceDialog = builder.create();
+        chooseImagewSourceDialog.show();
+
+        btnImageSelectFromGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(UploadBusinessPermitsActivity.this, "Will select from gallery", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnImageSelectFromCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(UploadBusinessPermitsActivity.this, "Will select from camera", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+
+    public void requestCameraPermission() {
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission Needed")
+                    .setMessage("This permissions are needed for this functionality.")
+                    .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(UploadBusinessPermitsActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, CAMERA_PERMISSION_CODE);
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).create().show();
+
+        } else {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, CAMERA_PERMISSION_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == CAMERA_PERMISSION_CODE) {
+            if(grantResults.length < 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //openCamera();
+            } else {
+                Toast.makeText(UploadBusinessPermitsActivity.this, "Camera Permission is required to Use Camera", Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
 }
