@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 
@@ -121,7 +123,21 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
 
         Intent intent = new Intent(ChoosePropertyToVerifyActivity.this, UploadBusinessPermitsActivity.class);
         intent.putExtra("initialVerificationRequest", newVerificationRequest);
-        startActivity(intent);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(progressDialog.isShowing()) {
+                    startActivity(intent);
+                    progressDialog.dismiss();
+                }
+            }
+        }, 2000);
 
     }
 }

@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:text="Step 1: "
+            android:text="Step 2: "
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Choose Property you want to be verified"
+            android:text="Upload your business permits"
             android:textColor="@color/white"
             android:textSize="14dp" />
 
@@ -50,37 +50,87 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="590dp"
         android:layout_margin="16dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <TextView
             android:id="@+id/propertyName_uploadBP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="propertyName"/>
+            android:text="propertyName" />
 
         <TextView
             android:id="@+id/proprietorName_uploadBP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="proprietorName"/>
+            android:text="proprietorName" />
 
         <TextView
             android:id="@+id/landlordName_uploadBP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="landlordName"/>
+            android:text="landlordName" />
 
         <TextView
             android:id="@+id/landlordPhoneNumber_uploadBP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="landlordPhoneNumber"/>
+            android:text="landlordPhoneNumber" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="16dp"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Barangay Business Permit"
+                app:layout_constraintBottom_toTopOf="@+id/barangay_business_permit_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/barangay_business_permit_image"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="32dp"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/img_upload_business_permit" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="122dp"
+                android:layout_height="16dp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barangay_business_permit_image"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     </LinearLayout>
 

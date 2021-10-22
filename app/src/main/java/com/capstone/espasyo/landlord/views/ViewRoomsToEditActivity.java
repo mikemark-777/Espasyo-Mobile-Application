@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.EditRoomAdapter;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.landlord.widgets.RoomRecyclerView;
 import com.capstone.espasyo.models.Room;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +29,8 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
     private FirebaseAuth fAuth;
     private FirebaseFirestore database;
 
-    private RecyclerView editRoomRecyclerView;
+    private RoomRecyclerView editRoomRecyclerView;
+    private View roomRecylerViewEmptyState;
     private EditRoomAdapter editRoomAdapter;
     private ArrayList<Room> propertyRooms;
 
@@ -56,7 +59,8 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
     }
 
     public void initEditRoomRecyclerView()  {
-        editRoomRecyclerView = findViewById(R.id.editRoomRecyclerView);
+        editRoomRecyclerView = (RoomRecyclerView) findViewById(R.id.editRoomRecyclerView);
+        roomRecylerViewEmptyState = findViewById(R.id.empty_room_state_propertyDetailsActivity);
         editRoomRecyclerView.setHasFixedSize(true);
         LinearLayoutManager editRoomLayoutManager = new LinearLayoutManager(ViewRoomsToEditActivity.this, LinearLayoutManager.VERTICAL, false);
         editRoomRecyclerView.setLayoutManager(editRoomLayoutManager);

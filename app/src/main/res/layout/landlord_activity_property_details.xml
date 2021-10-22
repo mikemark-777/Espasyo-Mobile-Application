@@ -373,7 +373,7 @@
 
                 <include
                     android:id="@+id/empty_room_state_propertyDetailsActivity"
-                    layout="@layout/landlord_empty_room_recyclerview"
+                    layout="@layout/landlord_empty_room_recyclerview_small"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
