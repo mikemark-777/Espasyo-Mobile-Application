@@ -10,6 +10,8 @@
 
     <!-- For uploading image functionalities-->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -77,7 +79,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Landlord Activities -->
+        </activity>
+
+        <!-- Landlord Activities -->
         <activity
             android:name=".landlord.LandlordMainActivity"
             android:exported="true" />
@@ -86,10 +90,23 @@
             android:exported="true" />
         <activity
             android:name=".landlord.views.SettingsActivity"
-            android:exported="true" /> <!-- Student Activities -->
+            android:exported="true" />
+
+        <!-- Student Activities -->
         <activity
             android:name=".student.StudentMainActivity"
             android:exported="true" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.capstone.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
     </application>
 
 </manifest>

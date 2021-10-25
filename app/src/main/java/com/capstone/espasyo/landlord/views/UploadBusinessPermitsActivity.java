@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Activity;
@@ -17,6 +18,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,19 +29,31 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.models.VerificationRequest;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class UploadBusinessPermitsActivity extends AppCompatActivity {
 
     private final int CAMERA_PERMISSION_CODE = 101;
+    private final int CAMERA_REQUEST_CODE = 102;
 
     private ImageView barangayBusinessPermitUploadImage;
     private Uri barangayBusinessPermitImageURI;
 
     private TextView propertyNameDisplay,
-             proprietorNameDisplay,
-             landlordNameDisplay,
-             landlordPhoneNumberDisplay;
+            proprietorNameDisplay,
+            landlordNameDisplay,
+            landlordPhoneNumberDisplay;
 
-    private ActivityResultLauncher<Intent> PicturePickerActivityResultLauncher;
+    private String currentImagePath;
+    private final int REQUEST_TAKE_PHOTO = 1;
+
+    //will handle all the data from the LocationPickerActivity
+    private ActivityResultLauncher<Intent> pickFromGalleryActivityResultLauncher;
+
+    private ActivityResultLauncher<Intent> pickFromCameraActivityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +62,7 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
 
         initializeViews();
 
-        Intent intent = getIntent();
-        getDataFromIntent(intent);
-
-
-        //will handle all the data from the LocationPickerActivity
-        PicturePickerActivityResultLauncher = registerForActivityResult(
+        pickFromGalleryActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -66,14 +76,49 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
                     }
                 });
 
+        pickFromCameraActivityResultLauncher  = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
 
-        barangayBusinessPermitUploadImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseImageSource();
-                /*checkPermissions();
-                choosePicture();*/
-            }
+                        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+
+                            Toast.makeText(UploadBusinessPermitsActivity.this, "getResultCode != null and is okay", Toast.LENGTH_SHORT).show();
+                            //get request code from intent
+                            Intent i = result.getData();
+                            int requestCode = i.getIntExtra("requestCode", 0);
+
+                            if(requestCode == CAMERA_REQUEST_CODE) {
+                                File f = new File(currentImagePath);
+                                barangayBusinessPermitUploadImage.setImageURI(Uri.fromFile(f));
+                            } else {
+                                Toast.makeText(UploadBusinessPermitsActivity.this, "Wrong requestCode", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
+                            Toast.makeText(UploadBusinessPermitsActivity.this, "FROM CAMERA: Picture not picked", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if(result.getData() != null) {
+                                Toast.makeText(UploadBusinessPermitsActivity.this, "getData: NOT NULL", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(UploadBusinessPermitsActivity.this, currentImagePath, Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+
+
+                    }
+                });
+
+        Intent intent = getIntent();
+        getDataFromIntent(intent);
+
+        checkPermissions();
+
+        barangayBusinessPermitUploadImage.setOnClickListener(v -> {
+            chooseImageSource();
+            /*checkPermissions();
+            choosePicture();*/
         });
 
 
@@ -104,19 +149,11 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
 
     }
 
-    public void choosePicture() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        PicturePickerActivityResultLauncher.launch(intent);
-    }
-
-    public void checkPermissions() {
-        if(ContextCompat.checkSelfPermission(UploadBusinessPermitsActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            //do nothing because the permissions are granted
-        } else {
-            requestCameraPermission();
-        }
+    public void openGallery() {
+        Intent openGallery = new Intent();
+        openGallery.setType("image/*");
+        openGallery.setAction(Intent.ACTION_GET_CONTENT);
+        pickFromGalleryActivityResultLauncher.launch(openGallery);
     }
 
     public void chooseImageSource() {
@@ -128,12 +165,15 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
         ImageView btnImageSelectFromGallery = dialogView.findViewById(R.id.btn_image_selectFromGallery);
         ImageView btnImageSelectFromCamera = dialogView.findViewById(R.id.btn_image_selectFromCamera);
 
-        AlertDialog chooseImagewSourceDialog = builder.create();
-        chooseImagewSourceDialog.show();
+        AlertDialog chooseImageSourceDialog = builder.create();
+        chooseImageSourceDialog.show();
 
         btnImageSelectFromGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: check if user has granted the permission for accessing gallery
+                chooseImageSourceDialog.dismiss();
+                openGallery();
                 Toast.makeText(UploadBusinessPermitsActivity.this, "Will select from gallery", Toast.LENGTH_SHORT).show();
             }
         });
@@ -141,10 +181,59 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
         btnImageSelectFromCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dispatchTakePictureIntent();
                 Toast.makeText(UploadBusinessPermitsActivity.this, "Will select from camera", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    private void dispatchTakePictureIntent() {
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //makes sure that there's a camera activity to handle the intent
+        if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            //create the file where the photo will go
+            File imageFile = null;
+            try {
+                imageFile = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //continue only if the File was successfully created
+            if(imageFile != null) {
+                Uri imageURI = FileProvider.getUriForFile(this,
+                        "com.capstone.android.fileprovider",
+                        imageFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
+                takePictureIntent.putExtra("requestCode", CAMERA_REQUEST_CODE);
+                pickFromCameraActivityResultLauncher.launch(takePictureIntent);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        //create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        //save a file: path for use with ACTION_VIEW intents
+        currentImagePath = image.getAbsolutePath();
+        return image;
+    }
+    
+    public void checkPermissions() {
+        if(ContextCompat.checkSelfPermission(UploadBusinessPermitsActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            //do nothing because the permissions are granted
+        } else {
+            requestCameraPermission();
+        }
     }
 
 
