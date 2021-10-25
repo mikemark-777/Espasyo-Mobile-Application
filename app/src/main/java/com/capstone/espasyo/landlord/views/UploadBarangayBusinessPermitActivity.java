@@ -13,6 +13,7 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +23,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,13 +37,15 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class UploadBusinessPermitsActivity extends AppCompatActivity {
+public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
 
     private final int CAMERA_PERMISSION_CODE = 101;
     private final int CAMERA_REQUEST_CODE = 102;
 
     private ImageView barangayBusinessPermitUploadImage;
     private Uri barangayBusinessPermitImageURI;
+
+    private Button btnNextBarangayBusinessPermit;
 
     private TextView propertyNameDisplay,
             proprietorNameDisplay,
@@ -58,7 +63,7 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.landlord_activity_upload_business_permits);
+        setContentView(R.layout.landlord_activity_upload_barangay_business_permit);
 
         initializeViews();
 
@@ -68,10 +73,15 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+
+                            Uri contentUri = result.getData().getData();
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                            String imageFileName = "capture_" + timeStamp + "." + getFileExtenstion(contentUri);
                             barangayBusinessPermitImageURI = result.getData().getData();
                             barangayBusinessPermitUploadImage.setImageURI(barangayBusinessPermitImageURI);
+
                         } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
-                            Toast.makeText(UploadBusinessPermitsActivity.this, "Picture not picked", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Picture not picked", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -82,31 +92,20 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
 
-                        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            File f = new File(currentImagePath);
 
-                            Toast.makeText(UploadBusinessPermitsActivity.this, "getResultCode != null and is okay", Toast.LENGTH_SHORT).show();
-                            //get request code from intent
-                            Intent i = result.getData();
-                            int requestCode = i.getIntExtra("requestCode", 0);
+                            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                            Uri contentUri = Uri.fromFile(f);
+                            mediaScanIntent.setData(contentUri);
+                            sendBroadcast(mediaScanIntent);
 
-                            if(requestCode == CAMERA_REQUEST_CODE) {
-                                File f = new File(currentImagePath);
-                                barangayBusinessPermitUploadImage.setImageURI(Uri.fromFile(f));
-                            } else {
-                                Toast.makeText(UploadBusinessPermitsActivity.this, "Wrong requestCode", Toast.LENGTH_SHORT).show();
-                            }
+                            //set the barangay business permit image to the image captured
+                            barangayBusinessPermitUploadImage.setImageURI(Uri.fromFile(f));
+
                         } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
-                            Toast.makeText(UploadBusinessPermitsActivity.this, "FROM CAMERA: Picture not picked", Toast.LENGTH_SHORT).show();
-                        } else {
-                            if(result.getData() != null) {
-                                Toast.makeText(UploadBusinessPermitsActivity.this, "getData: NOT NULL", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(UploadBusinessPermitsActivity.this, currentImagePath, Toast.LENGTH_SHORT).show();
-                            }
-
+                            Toast.makeText(UploadBarangayBusinessPermitActivity.this, "FROM CAMERA: Picture not picked", Toast.LENGTH_SHORT).show();
                         }
-
-
                     }
                 });
 
@@ -121,11 +120,19 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
             choosePicture();*/
         });
 
+        btnNextBarangayBusinessPermit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UploadBarangayBusinessPermitActivity.this, UploadMunicipalBusinessPermitActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
     public void initializeViews() {
-
+        btnNextBarangayBusinessPermit = findViewById(R.id.btn_next_barangayBusinessPermit);
         barangayBusinessPermitUploadImage = findViewById(R.id.barangay_business_permit_image);
 
         propertyNameDisplay = findViewById(R.id.propertyName_uploadBP);
@@ -150,14 +157,12 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
     }
 
     public void openGallery() {
-        Intent openGallery = new Intent();
-        openGallery.setType("image/*");
-        openGallery.setAction(Intent.ACTION_GET_CONTENT);
-        pickFromGalleryActivityResultLauncher.launch(openGallery);
+        Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickFromGalleryActivityResultLauncher.launch(openGalleryIntent);
     }
 
     public void chooseImageSource() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(UploadBusinessPermitsActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(UploadBarangayBusinessPermitActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.landlord_choose_image_source, null);
         builder.setView(dialogView);
@@ -174,24 +179,25 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
                 //TODO: check if user has granted the permission for accessing gallery
                 chooseImageSourceDialog.dismiss();
                 openGallery();
-                Toast.makeText(UploadBusinessPermitsActivity.this, "Will select from gallery", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Will select from gallery", Toast.LENGTH_SHORT).show();
             }
         });
 
         btnImageSelectFromCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                chooseImageSourceDialog.dismiss();
                 dispatchTakePictureIntent();
-                Toast.makeText(UploadBusinessPermitsActivity.this, "Will select from camera", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Will select from camera", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void dispatchTakePictureIntent() {
 
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //makes sure that there's a camera activity to handle the intent
-        if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        if(openCameraIntent.resolveActivity(getPackageManager()) != null) {
             //create the file where the photo will go
             File imageFile = null;
             try {
@@ -205,18 +211,19 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
                 Uri imageURI = FileProvider.getUriForFile(this,
                         "com.capstone.android.fileprovider",
                         imageFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
-                takePictureIntent.putExtra("requestCode", CAMERA_REQUEST_CODE);
-                pickFromCameraActivityResultLauncher.launch(takePictureIntent);
+                openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
+                pickFromCameraActivityResultLauncher.launch(openCameraIntent);
             }
+        } else {
+            Toast.makeText(UploadBarangayBusinessPermitActivity.this, "There is no program to handle this process.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private File createImageFile() throws IOException {
         //create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        String imageFileName = "capture_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,
                 ".jpg",
@@ -227,9 +234,14 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
         currentImagePath = image.getAbsolutePath();
         return image;
     }
+
+    public String getFileExtenstion(Uri contentUri) {
+        ContentResolver c = getContentResolver();
+        return MimeTypeMap.getFileExtensionFromUrl(c.getType(contentUri));
+    }
     
     public void checkPermissions() {
-        if(ContextCompat.checkSelfPermission(UploadBusinessPermitsActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if(ContextCompat.checkSelfPermission(UploadBarangayBusinessPermitActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             //do nothing because the permissions are granted
         } else {
             requestCameraPermission();
@@ -245,7 +257,7 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
                     .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(UploadBusinessPermitsActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, CAMERA_PERMISSION_CODE);
+                            ActivityCompat.requestPermissions(UploadBarangayBusinessPermitActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, CAMERA_PERMISSION_CODE);
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -267,7 +279,7 @@ public class UploadBusinessPermitsActivity extends AppCompatActivity {
             if(grantResults.length < 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //openCamera();
             } else {
-                Toast.makeText(UploadBusinessPermitsActivity.this, "Camera Permission is required to Use Camera", Toast.LENGTH_LONG).show();
+                Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Camera Permission is required to Use Camera", Toast.LENGTH_LONG).show();
             }
         }
 

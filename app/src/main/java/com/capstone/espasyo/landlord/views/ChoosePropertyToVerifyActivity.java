@@ -121,7 +121,7 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         newVerificationRequest.setLandlordName(landlordName);
         newVerificationRequest.setLandlordContactNumber(landlordPhoneNumber);
 
-        Intent intent = new Intent(ChoosePropertyToVerifyActivity.this, UploadBusinessPermitsActivity.class);
+        Intent intent = new Intent(ChoosePropertyToVerifyActivity.this, UploadBarangayBusinessPermitActivity.class);
         intent.putExtra("initialVerificationRequest", newVerificationRequest);
 
         progressDialog = new ProgressDialog(this);

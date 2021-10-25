@@ -20,8 +20,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
+
         <activity
-            android:name=".landlord.views.UploadBusinessPermitsActivity"
+            android:name=".landlord.views.UploadBarangayBusinessPermitActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".landlord.views.UploadMunicipalBusinessPermitActivity"
             android:exported="true" />
         <activity
             android:name=".landlord.views.ChoosePropertyToVerifyActivity"
@@ -104,7 +109,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
     </application>

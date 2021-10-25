@@ -39,6 +39,7 @@
         android:id="@+id/imageView4"
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintBottom_toTopOf="@+id/textView9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
