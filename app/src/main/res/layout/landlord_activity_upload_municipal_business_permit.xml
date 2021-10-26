@@ -110,7 +110,7 @@
                 app:layout_constraintVertical_bias="0.184" />
 
             <ImageView
-                android:id="@+id/barangay_business_permit_image"
+                android:id="@+id/municipal_business_permit_image"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:layout_marginTop="56dp"
