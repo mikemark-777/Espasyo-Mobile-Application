@@ -134,6 +134,7 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
             public void run() {
                 if(progressDialog.isShowing()) {
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     progressDialog.dismiss();
                 }
             }

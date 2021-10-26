@@ -137,6 +137,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                     Intent intent = attachImageDataToIntent(imageName, barangayBusinessPermitImageURI);
                     intent.putExtra("initialVerificationRequest", verificationRequest);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
                 }else {
                     Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Please pick image", Toast.LENGTH_SHORT).show();
