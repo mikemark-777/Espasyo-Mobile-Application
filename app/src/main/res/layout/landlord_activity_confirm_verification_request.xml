@@ -62,71 +62,78 @@
         </LinearLayout>
 
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/propertyName_confirmVerification"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Property Name" />
-
-            <TextView
-                android:id="@+id/propertyAddress_confirmVerification"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Address" />
-
-            <TextView
-                android:id="@+id/proprietorName_confirmVerification"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Proprietor Name" />
-
-            <TextView
-                android:id="@+id/landlordName_confirmVerification"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Landlord Name" />
-
-            <TextView
-                android:id="@+id/landlordPhoneNumber_confirmVerification"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Landlord Phone Number" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Barangay Business Permit"
-                android:textAlignment="center"/>
-
-            <ImageView
-                android:id="@+id/displayBarangayBusinessPermit_confirmVerification"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
                 android:padding="16dp"
-                android:src="@drawable/img_upload_business_permit"/>
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Municipal Business Permit"
-                android:textAlignment="center" />
+                <TextView
+                    android:id="@+id/propertyName_confirmVerification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Property Name" />
 
-            <ImageView
-                android:id="@+id/displayMunicipalBusinessPermit_confirmVerification"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:padding="16dp"
-                android:src="@drawable/img_upload_business_permit"/>
+                <TextView
+                    android:id="@+id/propertyAddress_confirmVerification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Address" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/proprietorName_confirmVerification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Proprietor Name" />
+
+                <TextView
+                    android:id="@+id/landlordName_confirmVerification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Landlord Name" />
+
+                <TextView
+                    android:id="@+id/landlordPhoneNumber_confirmVerification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Landlord Phone Number" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Barangay Business Permit"
+                    android:textAlignment="center"/>
+
+                <ImageView
+                    android:id="@+id/displayBarangayBusinessPermit_confirmVerification"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:padding="16dp"
+                    android:src="@drawable/img_upload_business_permit"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Municipal Business Permit"
+                    android:textAlignment="center" />
+
+                <ImageView
+                    android:id="@+id/displayMunicipalBusinessPermit_confirmVerification"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:padding="16dp"
+                    android:src="@drawable/img_upload_business_permit"/>
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 

@@ -103,6 +103,7 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
 
         String propertyID = chosenProperty.getPropertyID();
         String propertyName = chosenProperty.getName();
+        String propertyAddress = chosenProperty.getAddress();
         String proprietorName = chosenProperty.getProprietorName();
         String landlordName = chosenProperty.getLandlordName();
         String landlordPhoneNumber = chosenProperty.getLandlordPhoneNumber();
@@ -117,6 +118,7 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         newVerificationRequest.setIsVerified(isVerified);
         newVerificationRequest.setPropertyID(propertyID);
         newVerificationRequest.setPropertyName(propertyName);
+        newVerificationRequest.setPropertyAddress(propertyAddress);
         newVerificationRequest.setProprietorName(proprietorName);
         newVerificationRequest.setLandlordName(landlordName);
         newVerificationRequest.setLandlordContactNumber(landlordPhoneNumber);
