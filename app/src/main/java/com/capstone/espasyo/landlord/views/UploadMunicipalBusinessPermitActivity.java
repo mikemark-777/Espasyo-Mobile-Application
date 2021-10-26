@@ -22,7 +22,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         getDataFromIntent(intent);
-
     }
 
     public void getDataFromIntent(Intent intent) {

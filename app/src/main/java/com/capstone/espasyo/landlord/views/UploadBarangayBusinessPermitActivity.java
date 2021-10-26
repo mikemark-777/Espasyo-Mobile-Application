@@ -17,6 +17,7 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -53,7 +54,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
             landlordPhoneNumberDisplay;
 
     private String currentImagePath;
-    private String imageName;
+    private String imageName = "";
 
     private ActivityResultLauncher<Intent> pickFromGalleryActivityResultLauncher;
     private ActivityResultLauncher<Intent> pickFromCameraActivityResultLauncher;
@@ -78,10 +79,11 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                                     Uri contentUri = result.getData().getData();
                                     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                                     String imageFileName = "capture_" + timeStamp + "." + getFileExtenstion(contentUri);
-                                    barangayBusinessPermitImageURI = result.getData().getData();
+
 
                                     //set imageName to global varaiable and image Uri to barangayBusinessPermitUploadImage
                                     imageName = imageFileName;
+                                    barangayBusinessPermitImageURI = contentUri;
                                     barangayBusinessPermitUploadImage.setImageURI(barangayBusinessPermitImageURI);
 
                                 } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
@@ -105,11 +107,12 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                                     mediaScanIntent.setData(contentUri);
                                     sendBroadcast(mediaScanIntent);
 
-                                    barangayBusinessPermitImageURI = contentUri;
-
                                     //set the barangay business permit image to the image captured
                                     imageName = f.getName();
+                                    barangayBusinessPermitImageURI = contentUri;
                                     barangayBusinessPermitUploadImage.setImageURI(barangayBusinessPermitImageURI);
+
+
 
                                 } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
                                     Toast.makeText(UploadBarangayBusinessPermitActivity.this, "FROM CAMERA: Picture not picked", Toast.LENGTH_SHORT).show();
@@ -130,11 +133,20 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
         btnNextBarangayBusinessPermit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = attachImageDataToIntent(imageName, barangayBusinessPermitImageURI);
-                startActivity(intent);
+
+
+                /*if(!imageName.equals("") && barangayBusinessPermitImageURI.equals(Uri.EMPTY)) {
+                    Intent intent = attachImageDataToIntent(imageName, barangayBusinessPermitImageURI);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Please pick image", Toast.LENGTH_SHORT).show();
+                }*/
+
             }
         });
     }
+
+
 
     public void initializeViews() {
         btnNextBarangayBusinessPermit = findViewById(R.id.btn_next_barangayBusinessPermit);

@@ -130,7 +130,8 @@
                 android:backgroundTint="@color/espasyo_blue_200"
                 android:text="Next"
                 android:textAllCaps="false"
-                android:textColor="@color/black"
+                android:textColor="@color/espasyo_blue_700"
+                android:enabled="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
