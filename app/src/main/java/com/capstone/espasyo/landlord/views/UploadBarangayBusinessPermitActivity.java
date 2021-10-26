@@ -48,10 +48,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
 
     private Button btnNextBarangayBusinessPermit;
 
-    private TextView propertyNameDisplay,
-            proprietorNameDisplay,
-            landlordNameDisplay,
-            landlordPhoneNumberDisplay;
+    private TextView propertyNameDisplay;
 
     private String currentImagePath;
     private String imageName = "";
@@ -77,9 +74,9 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                                 if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
 
                                     Uri contentUri = result.getData().getData();
+
                                     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                                     String imageFileName = "capture_" + timeStamp + "." + getFileExtenstion(contentUri);
-
 
                                     //set imageName to global varaiable and image Uri to barangayBusinessPermitUploadImage
                                     imageName = imageFileName;
@@ -135,41 +132,33 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                /*if(!imageName.equals("") && barangayBusinessPermitImageURI.equals(Uri.EMPTY)) {
+                if(!imageName.equals("") && !barangayBusinessPermitImageURI.equals(Uri.EMPTY)) {
+                  
                     Intent intent = attachImageDataToIntent(imageName, barangayBusinessPermitImageURI);
+                    intent.putExtra("initialVerificationRequest", verificationRequest);
                     startActivity(intent);
+
                 }else {
                     Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Please pick image", Toast.LENGTH_SHORT).show();
-                }*/
+                }
 
             }
         });
     }
-
-
 
     public void initializeViews() {
         btnNextBarangayBusinessPermit = findViewById(R.id.btn_next_barangayBusinessPermit);
         barangayBusinessPermitUploadImage = findViewById(R.id.barangay_business_permit_image);
 
         propertyNameDisplay = findViewById(R.id.propertyName_uploadBP);
-        proprietorNameDisplay = findViewById(R.id.proprietorName_uploadBP);
-        landlordNameDisplay = findViewById(R.id.landlordName_uploadBP);
-        landlordPhoneNumberDisplay = findViewById(R.id.landlordPhoneNumber_uploadBP);
     }
 
     public void getDataFromIntent(Intent intent) {
 
         verificationRequest = intent.getParcelableExtra("initialVerificationRequest");
         String propertyName = verificationRequest.getPropertyName();
-        String proprietorName = verificationRequest.getProprietorName();
-        String landlordName = verificationRequest.getLandlordName();
-        String landlordPhoneNumber = verificationRequest.getLandlordContactNumber();
 
         propertyNameDisplay.setText(propertyName);
-        proprietorNameDisplay.setText(proprietorName);
-        landlordNameDisplay.setText(landlordName);
-        landlordPhoneNumberDisplay.setText(landlordPhoneNumber);
 
     }
 
@@ -361,6 +350,6 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                 Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Storage Permission is required to Access Storage", Toast.LENGTH_LONG).show();
             }
         }
-
     }
+
 }

@@ -14,6 +14,7 @@ public class VerificationRequest implements Parcelable {
     private String declinedVerificationDescription;
     private String propertyID;
     private String propertyName;
+    private String propertyAddress;
     private String proprietorName;
     private String landlordName;
     private String landlordContactNumber;
@@ -24,12 +25,14 @@ public class VerificationRequest implements Parcelable {
         //empty verification request constructor **required
     }
 
+
     protected VerificationRequest(Parcel in) {
         verificationRequestID = in.readString();
         isVerified = in.readByte() != 0;
         declinedVerificationDescription = in.readString();
         propertyID = in.readString();
         propertyName = in.readString();
+        propertyAddress = in.readString();
         proprietorName = in.readString();
         landlordName = in.readString();
         landlordContactNumber = in.readString();
@@ -71,6 +74,10 @@ public class VerificationRequest implements Parcelable {
 
     public void setPropertyName(String propertyName) {
         this.propertyName = propertyName;
+    }
+
+    public void setPropertyAddress(String propertyAddress) {
+        this.propertyAddress = propertyAddress;
     }
 
     public void setProprietorName(String proprietorName) {
@@ -121,6 +128,10 @@ public class VerificationRequest implements Parcelable {
         return propertyName;
     }
 
+    public String getPropertyAddress() {
+        return propertyAddress;
+    }
+
     public String getProprietorName() {
         return proprietorName;
     }
@@ -157,6 +168,7 @@ public class VerificationRequest implements Parcelable {
         dest.writeString(declinedVerificationDescription);
         dest.writeString(propertyID);
         dest.writeString(propertyName);
+        dest.writeString(propertyAddress);
         dest.writeString(proprietorName);
         dest.writeString(landlordName);
         dest.writeString(landlordContactNumber);

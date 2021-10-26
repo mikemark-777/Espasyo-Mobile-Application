@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.capstone.espasyo">
-
-    <!-- For map functionalities-->
+    <!-- For map functionalities -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <!-- For uploading image functionalities-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- For uploading image functionalities -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -20,11 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
-
+        <activity
+            android:name=".landlord.views.ConfirmVerificationRequestActivity"
+            android:exported="true" />
         <activity
             android:name=".landlord.views.UploadBarangayBusinessPermitActivity"
             android:exported="true" />
-
         <activity
             android:name=".landlord.views.UploadMunicipalBusinessPermitActivity"
             android:exported="true" />
@@ -84,9 +82,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Landlord Activities -->
+        </activity> <!-- Landlord Activities -->
         <activity
             android:name=".landlord.LandlordMainActivity"
             android:exported="true" />
@@ -95,9 +91,7 @@
             android:exported="true" />
         <activity
             android:name=".landlord.views.SettingsActivity"
-            android:exported="true" />
-
-        <!-- Student Activities -->
+            android:exported="true" /> <!-- Student Activities -->
         <activity
             android:name=".student.StudentMainActivity"
             android:exported="true" />
@@ -111,7 +105,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

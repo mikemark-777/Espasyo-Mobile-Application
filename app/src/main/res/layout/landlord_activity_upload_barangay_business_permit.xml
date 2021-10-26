@@ -75,24 +75,6 @@
             android:layout_height="wrap_content"
             android:text="propertyName" />
 
-        <TextView
-            android:id="@+id/proprietorName_uploadBP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="proprietorName" />
-
-        <TextView
-            android:id="@+id/landlordName_uploadBP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="landlordName" />
-
-        <TextView
-            android:id="@+id/landlordPhoneNumber_uploadBP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="landlordPhoneNumber" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
