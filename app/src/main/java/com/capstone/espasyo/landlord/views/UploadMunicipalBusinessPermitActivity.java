@@ -261,7 +261,8 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
     //will get the file extension of the Uri being passed (.jpeg, .png etc.)
     public String getFileExtenstion(Uri contentUri) {
         ContentResolver c = getContentResolver();
-        return MimeTypeMap.getFileExtensionFromUrl(c.getType(contentUri));
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(c.getType(contentUri));
     }
 
     public void checkPermissions() {

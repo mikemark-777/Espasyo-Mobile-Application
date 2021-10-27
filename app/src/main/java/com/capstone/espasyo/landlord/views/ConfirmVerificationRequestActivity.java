@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,7 +31,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseStorage storage;
-    private StorageReference businessPermitStoragReference;
+    private StorageReference storageReference;
 
     private TextView displayPropertyNameConfirmVerification,
                      displayAddressConfirmVerification,
@@ -43,10 +44,18 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
     private Button btnConfirmVerificationRequest;
 
+    // this is the verification request that has the data from the steps 1-3 of the compose verification process
     private VerificationRequest verificationRequest;
 
+    // this will hold the barangay business permit-image-name and URIs
+    private String barangayBusinessPermitImageName;
+    private String municipalBusinessPermitImageName;
     private Uri barangayBusinessPermitImageURI;
     private Uri municipalBusinessPermitImageURI;
+
+    //this will be the URLs of the barangay and municipal business permits that will be saved to the VerificationRequest object
+    private String barangayBusinessPermitImageURL;
+    private String municipalBusinessPermitImageURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,40 +65,80 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         //initialize firebase connections
         firebaseConnection = FirebaseConnection.getInstance();
         storage = firebaseConnection.getFirebaseStorageInstance();
-        businessPermitStoragReference = storage.getReference();
+        storageReference = storage.getReference();
 
         initializeViews();
         Intent intent = getIntent();
         getDataFromIntent(intent);
 
+
+
         btnConfirmVerificationRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadVerificationImages(barangayBusinessPermitImageURI);
+                uploadBusinessPermitImages(barangayBusinessPermitImageName ,barangayBusinessPermitImageURI, municipalBusinessPermitImageName, municipalBusinessPermitImageURI);
             }
         });
     }
 
-    public void uploadVerificationImages(Uri barangayBusinessPermit) {
+    public void uploadBusinessPermitImages(String barangayBusinessPermitImageName, Uri barangayBusinessPermitImageURI, String municipalBusinessPermitImageName, Uri municipalBusinessPermitImageURI) {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Business Permit Uploading...");
+        progressDialog.setTitle("Uploading Business Permits ...");
         progressDialog.show();
 
-        String barangayBusinessPermitImageKey = UUID.randomUUID().toString();
-        StorageReference barangayBusinessPermitRef = businessPermitStoragReference.child("images/" + barangayBusinessPermitImageKey);
+        StorageReference barangayBusinessPermitRef = storageReference.child("images/businessPermits/" + barangayBusinessPermitImageName);
+        StorageReference municipalBusinessPermitRef = storageReference.child("images/businessPermits/" + municipalBusinessPermitImageName);
 
-        barangayBusinessPermitRef.putFile(barangayBusinessPermit)
+        // this process will upload the barangay business permit to storage
+        barangayBusinessPermitRef.putFile(barangayBusinessPermitImageURI)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Snackbar.make(findViewById(android.R.id.content), "Image Uploaded", Snackbar.LENGTH_LONG).show();
+                        barangayBusinessPermitRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                barangayBusinessPermitImageURL = uri.toString();
+                            }
+                        });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(ConfirmVerificationRequestActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progressPercent  = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        progressDialog.setMessage("Percentage: " + (int) progressPercent + "%");
+                    }
+                });
+
+        // this process will upload the municipal business permit to storage
+        municipalBusinessPermitRef.putFile(municipalBusinessPermitImageURI)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Snackbar.make(findViewById(android.R.id.content), "Image Uploaded", Snackbar.LENGTH_LONG).show();
+                        municipalBusinessPermitRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                municipalBusinessPermitImageURL = uri.toString();
+                                progressDialog.dismiss();
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ConfirmVerificationRequestActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
                     }
                 })
                 .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -124,10 +173,12 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         String landlordName = verificationRequest.getLandlordName();
         String landlordPhoneNumber = verificationRequest.getLandlordContactNumber();
 
-        //get the barangay and municipal businesspermit String URI from intent
+        //get the barangay and municipal businesspermit String URI and imageNames from intent
+        barangayBusinessPermitImageName = intent.getStringExtra("barangayBusinessPermitImageName");
         String barangayBusinessPermitStringURI = intent.getStringExtra("barangayBusinessPermitImageURI");
         barangayBusinessPermitImageURI = Uri.parse(barangayBusinessPermitStringURI);
 
+        municipalBusinessPermitImageName = intent.getStringExtra("barangayBusinessPermitImageName");
         String municipalBusinessPermitStringURI = intent.getStringExtra("municipalBusinessPermitImageURI");
         municipalBusinessPermitImageURI = Uri.parse(municipalBusinessPermitStringURI);
 

@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.models.VerificationRequest;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,6 +67,12 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
 
         initializeViews();
         requestCameraPermissions();
+
+/*        Picasso.get()
+                .load(sampleURLPath)
+                .placeholder(R.drawable.img_upload_business_permit)
+                .into(barangayBusinessPermitUploadImage);*/
+
                 //will handle all the data from the gallery
                 pickFromGalleryActivityResultLauncher = registerForActivityResult(
                         new ActivityResultContracts.StartActivityForResult(),
@@ -77,7 +84,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                                     Uri contentUri = result.getData().getData();
 
                                     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                                    String imageFileName = "capture_" + timeStamp + "." + getFileExtenstion(contentUri);
+                                    String imageFileName = "espasyo_image_" + timeStamp + "." + getFileExtenstion(contentUri);
 
                                     //set imageName to global varaiable and image Uri to barangayBusinessPermitUploadImage
                                     imageName = imageFileName;
@@ -109,8 +116,6 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                                     imageName = f.getName();
                                     barangayBusinessPermitImageURI = contentUri;
                                     barangayBusinessPermitUploadImage.setImageURI(barangayBusinessPermitImageURI);
-
-
 
                                 } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
                                     Toast.makeText(UploadBarangayBusinessPermitActivity.this, "FROM CAMERA: Picture not picked", Toast.LENGTH_SHORT).show();
@@ -266,7 +271,8 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
     //will get the file extension of the Uri being passed (.jpeg, .png etc.)
     public String getFileExtenstion(Uri contentUri) {
         ContentResolver c = getContentResolver();
-        return MimeTypeMap.getFileExtensionFromUrl(c.getType(contentUri));
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(c.getType(contentUri));
     }
     
     public void checkPermissions() {
