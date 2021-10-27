@@ -12,12 +12,10 @@
         android:layout_height="120dp"
         android:background="@color/espasyo_blue_700"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textView11"
@@ -67,29 +65,58 @@
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="1.0">
 
         <TextView
-            android:id="@+id/propertyName_uploadBP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="propertyName" />
+            android:layout_marginBottom="8dp"
+            android:text="Please attach a photo of your Municipal Business Permit"
+            android:textColor="@color/espasyo_gray_500"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="We require a municipal-issued business permit that shows the validity of your property you want to be verified. This is one of the requirements for you to be verified to publish your property to the system."
+            android:textSize="12sp" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp">
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Municipal Business Permit"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
                 app:layout_constraintBottom_toTopOf="@+id/municipal_business_permit_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.184" />
+                app:layout_constraintVertical_bias="0.184" >
+
+                <TextView
+                    android:id="@+id/propertyName_uploadBP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="propertyName"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Municipal Business Permit" />
+
+            </LinearLayout>
+
 
             <ImageView
                 android:id="@+id/municipal_business_permit_image"
@@ -103,6 +130,18 @@
                 app:srcCompat="@drawable/img_upload_business_permit" />
 
             <Button
+                android:id="@+id/button3"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Upload Image"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/municipal_business_permit_image" />
+
+
+            <Button
                 android:id="@+id/btn_next_municipalBusinessPermit"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
@@ -110,10 +149,10 @@
                 android:layout_marginEnd="2dp"
                 android:layout_marginBottom="2dp"
                 android:backgroundTint="@color/espasyo_blue_200"
+                android:enabled="true"
                 android:text="Next"
                 android:textAllCaps="false"
                 android:textColor="@color/espasyo_blue_700"
-                android:enabled="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -131,22 +170,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Upload Image"
-                android:textAllCaps="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.294"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/municipal_business_permit_image" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

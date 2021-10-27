@@ -47,6 +47,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
     private Uri barangayBusinessPermitImageURI;
 
     private Button btnNextBarangayBusinessPermit;
+    private Button btnBackBarangayBusinessPermit;
 
     private TextView propertyNameDisplay;
 
@@ -127,6 +128,13 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
             }
         });
 
+        btnBackBarangayBusinessPermit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         btnNextBarangayBusinessPermit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +157,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
 
     public void initializeViews() {
         btnNextBarangayBusinessPermit = findViewById(R.id.btn_next_barangayBusinessPermit);
+        btnBackBarangayBusinessPermit = findViewById(R.id.btn_back_barangayBusinessPermit);
         barangayBusinessPermitUploadImage = findViewById(R.id.barangay_business_permit_image);
 
         propertyNameDisplay = findViewById(R.id.propertyName_uploadBP);
@@ -352,5 +361,6 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
             }
         }
     }
+
 
 }

@@ -7,134 +7,171 @@
     tools:context=".landlord.views.ConfirmVerificationRequestActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/espasyo_blue_700"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
         <LinearLayout
-            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="@color/espasyo_blue_700"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <ImageView
+                android:id="@+id/imageButtonBackToViewRoomsToEdit"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:src="@drawable/icon_back_normal"/>
 
             <TextView
                 android:id="@+id/textView11"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Confirm Verification Request"
+                android:text="Confirmation"
                 android:textColor="@color/white"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textAlignment="center"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Step 4: "
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Confirm Your Verification Request"
-                    android:textColor="@color/white"
-                    android:textSize="14dp" />
-
-            </LinearLayout>
         </LinearLayout>
 
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Step 4: "
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Confirm Your Verification Request"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="580dp"
+        android:layout_marginBottom="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="620dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/propertyName_confirmVerification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Property Name" />
+
+            <TextView
+                android:id="@+id/propertyAddress_confirmVerification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address" />
+
+            <TextView
+                android:id="@+id/proprietorName_confirmVerification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Proprietor Name" />
+
+            <TextView
+                android:id="@+id/landlordName_confirmVerification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Landlord Name" />
+
+            <TextView
+                android:id="@+id/landlordPhoneNumber_confirmVerification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Landlord Phone Number" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Barangay Business Permit"
+                android:textAlignment="center" />
+
+            <ImageView
+                android:id="@+id/displayBarangayBusinessPermit_confirmVerification"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:padding="16dp"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="vertical">
+                android:src="@drawable/img_upload_business_permit" />
 
-                <TextView
-                    android:id="@+id/propertyName_confirmVerification"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Property Name" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Municipal Business Permit"
+                android:textAlignment="center" />
 
-                <TextView
-                    android:id="@+id/propertyAddress_confirmVerification"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Address" />
+            <ImageView
+                android:id="@+id/displayMunicipalBusinessPermit_confirmVerification"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:padding="16dp"
+                android:src="@drawable/img_upload_business_permit" />
 
-                <TextView
-                    android:id="@+id/proprietorName_confirmVerification"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Proprietor Name" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/landlordName_confirmVerification"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Landlord Name" />
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-                <TextView
-                    android:id="@+id/landlordPhoneNumber_confirmVerification"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Landlord Phone Number" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Barangay Business Permit"
-                    android:textAlignment="center"/>
-
-                <ImageView
-                    android:id="@+id/displayBarangayBusinessPermit_confirmVerification"
-                    android:layout_width="250dp"
-                    android:layout_height="250dp"
-                    android:padding="16dp"
-                    android:src="@drawable/img_upload_business_permit"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Municipal Business Permit"
-                    android:textAlignment="center" />
-
-                <ImageView
-                    android:id="@+id/displayMunicipalBusinessPermit_confirmVerification"
-                    android:layout_width="250dp"
-                    android:layout_height="250dp"
-                    android:padding="16dp"
-                    android:src="@drawable/img_upload_business_permit"/>
-
-            </LinearLayout>
-
-        </ScrollView>
+        <Button
+            android:id="@+id/btnConfirmVerifricationRequest"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginBottom="-8dp"
+            android:backgroundTint="@color/espasyo_orange_200"
+            android:text="Confirm Verification Request"
+            android:textAllCaps="false"
+            android:layout_weight="1"/>
 
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
