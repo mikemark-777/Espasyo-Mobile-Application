@@ -162,7 +162,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/btnConfirmVerifricationRequest"
+            android:id="@+id/btnConfirmVerificationRequest"
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:layout_marginBottom="-8dp"

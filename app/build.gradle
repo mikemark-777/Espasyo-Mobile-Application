@@ -40,11 +40,12 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
 
     /* ---------------- Firebase Dependencies ----------------*/
-    // AUTHENTICATION
+    //FIREBASE AUTHENTICATION
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     // FIRESTORE DATABASE
     implementation 'com.google.firebase:firebase-firestore:23.0.3'
-
+    //FIREBASE STORAGE
+    implementation 'com.google.firebase:firebase-storage:20.0.0'
 
     /* ---------------- Google Maps Dependencies ----------------*/
     // MAPS

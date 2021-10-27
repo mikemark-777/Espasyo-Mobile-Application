@@ -2,11 +2,13 @@ package com.capstone.espasyo.landlord.repository;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class FirebaseConnection {
 
     private  FirebaseAuth fAuth;
     private  FirebaseFirestore database;
+    private FirebaseStorage storage;
 
     private static FirebaseConnection instance;
 
@@ -33,5 +35,13 @@ public class FirebaseConnection {
         }
         return  database;
     }
+
+    public FirebaseStorage getFirebaseStorageInstance() {
+        if(storage == null) {
+            storage = FirebaseStorage.getInstance();
+        }
+        return storage;
+    }
+
 
 }
