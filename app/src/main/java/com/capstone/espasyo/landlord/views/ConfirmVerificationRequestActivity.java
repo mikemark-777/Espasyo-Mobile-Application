@@ -25,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -86,7 +87,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         btnConfirmVerificationRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadBusinessPermits();
+              /*  uploadBusinessPermits();*/
             }
         });
     }
@@ -113,71 +114,29 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         String proprietorName = verificationRequest.getProprietorName();
         String landlordName = verificationRequest.getLandlordName();
         String landlordPhoneNumber = verificationRequest.getLandlordContactNumber();
+        String barangayBusinessPermitURL = verificationRequest.getBarangayBusinessPermitImageURL();
+        String municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
 
-        //get the barangay and municipal businesspermit String URI and imageNames from intent
-        barangayBusinessPermitImageName = intent.getStringExtra("barangayBusinessPermitImageName");
-        String barangayBusinessPermitStringURI = intent.getStringExtra("barangayBusinessPermitImageURI");
-        barangayBusinessPermitImageURI = Uri.parse(barangayBusinessPermitStringURI);
+        //will display the images of barangay and municipal business permit based on their given URLs from firebase storage
+        Picasso.get()
+                .load(barangayBusinessPermitURL)
+                .placeholder(R.drawable.img_upload_business_permit)
+                .into(displayBarangayBusinessPermit);
 
-        municipalBusinessPermitImageName = intent.getStringExtra("barangayBusinessPermitImageName");
-        String municipalBusinessPermitStringURI = intent.getStringExtra("municipalBusinessPermitImageURI");
-        municipalBusinessPermitImageURI = Uri.parse(municipalBusinessPermitStringURI);
+        Picasso.get()
+                .load(municipalBusinessPermitURL)
+                .placeholder(R.drawable.img_upload_business_permit)
+                .into(displayMunicipalBusinessPermit);
 
         displayPropertyNameConfirmVerification.setText(propertyName);
         displayAddressConfirmVerification.setText(address);
         displayProprietorNameConfirmVerification.setText(proprietorName);
         displayLandlordNameConfirmVerification.setText(landlordName);
         displayLandlordPhoneNumberConfirmVerification.setText(landlordPhoneNumber);
-
-        //set imageURI of barangay and municipal business permit
-        displayBarangayBusinessPermit.setImageURI(barangayBusinessPermitImageURI);
-        displayMunicipalBusinessPermit.setImageURI(municipalBusinessPermitImageURI);
     }
 
     public void uploadBusinessPermits() {
-        
-        Uri[] businessPermitImageURIs = new Uri[2];
-        businessPermitImageURIs[0] = barangayBusinessPermitImageURI;
-        businessPermitImageURIs[1] = municipalBusinessPermitImageURI;
 
-        String[] businessPermitImageNames = new String[2];
-        businessPermitImageNames[0] = barangayBusinessPermitImageName;
-        businessPermitImageNames[1] = municipalBusinessPermitImageName;
-
-            progressDialog.setTitle("Uploading Business Permits ...");
-            progressDialog.show();
-            downloadURLs = new ArrayList<String>();
-
-            for (int i = 0; i < 2; i++) {
-                storageReference = storage.getReference("images");
-                final StorageReference businessPermitRef = storageReference.child(businessPermitImageNames[i]);
-                businessPermitRef.putFile(businessPermitImageURIs[i]).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        businessPermitRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                String imageURL = uri.toString();
-                                downloadURLs.add(imageURL);
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(ConfirmVerificationRequestActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
-                        progressDialog.dismiss();
-                    }
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                        double progressPercent  = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                        progressDialog.setMessage("Percentage: " + (int) progressPercent + "%");
-                    }
-                });
-            }
-
-        //progressDialog.dismiss();
     }
 
 }

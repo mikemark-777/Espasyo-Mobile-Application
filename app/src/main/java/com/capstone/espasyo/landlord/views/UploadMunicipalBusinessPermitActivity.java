@@ -13,6 +13,7 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,7 +31,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.VerificationRequest;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,34 +47,48 @@ import java.util.Date;
 
 public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
 
+    //for the firebase connections
+    private FirebaseConnection firebaseConnection;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+
+    private ProgressDialog progressDialog;
 
     private final int CAMERA_PERMISSION_CODE = 101;
     private final int STORAGE_PERMISSION_CODE = 201;
 
-    private ImageView  municipalBusinessPermitUploadImage;
+    private ImageView municipalBusinessPermitImageView;
+    private String municipalBusinessPermitImageName = "";
     private Uri municipalBusinessPermitImageURI;
 
-    private Button btnNextMunicipalBusinessPermit;
-
+    private Button btnNext;
+    private Button btnBack;
+    private Button btnChooseImage;
     private TextView propertyNameDisplay;
 
     private String currentImagePath;
-    private String municipalBusinessPermitImageName = "";
 
     private ActivityResultLauncher<Intent> pickFromGalleryActivityResultLauncher;
     private ActivityResultLauncher<Intent> pickFromCameraActivityResultLauncher;
 
+    //this will hold the initial verification request from STEP-2
     private VerificationRequest verificationRequest;
-    private String barangayBusinessPermitImageName;
-    private String barangayBusinessPermitImageURI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_upload_municipal_business_permit);
 
+        //initialize firebase connections
+        firebaseConnection = FirebaseConnection.getInstance();
+        storage = firebaseConnection.getFirebaseStorageInstance();
+        storageReference = storage.getReference();
+
         initializeViews();
         requestCameraPermissions();
+        Intent intent = getIntent();
+        getDataFromIntent(intent);
+
         //will handle all the data from the gallery
         pickFromGalleryActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -78,21 +100,21 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                             Uri contentUri = result.getData().getData();
 
                             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                            String imageFileName = "capture_" + timeStamp + "." + getFileExtenstion(contentUri);
+                            String imageFileName = "espasyo_image_" + timeStamp + "." + getFileExtenstion(contentUri);
 
-                            //set imageName to global varaiable and image Uri to barangayBusinessPermitUploadImage
+                            //set municipalBusinessPermitImageName to global variable and image Uri to municipalBusinessPermitImageView
                             municipalBusinessPermitImageName = imageFileName;
                             municipalBusinessPermitImageURI = contentUri;
-                            municipalBusinessPermitUploadImage.setImageURI(municipalBusinessPermitImageURI);
+                            municipalBusinessPermitImageView.setImageURI(municipalBusinessPermitImageURI);
 
-                        } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
+                        } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
                             Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "FROM GALLERY: Picture not picked", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
         //will handle all the data from the camera
-        pickFromCameraActivityResultLauncher  = registerForActivityResult(
+        pickFromCameraActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -109,65 +131,62 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                             //set the municipal business permit image to the image captured
                             municipalBusinessPermitImageName = f.getName();
                             municipalBusinessPermitImageURI = contentUri;
-                            municipalBusinessPermitUploadImage.setImageURI(municipalBusinessPermitImageURI);
+                            municipalBusinessPermitImageView.setImageURI(municipalBusinessPermitImageURI);
 
-                        } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
+                        } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
                             Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "FROM CAMERA: Picture not picked", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
-
-        Intent intent = getIntent();
-        getDataFromIntent(intent);
-
-        municipalBusinessPermitUploadImage.setOnClickListener(new View.OnClickListener() {
+        //will open choice where to get the image
+        btnChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chooseImageSource();
             }
         });
 
-        btnNextMunicipalBusinessPermit.setOnClickListener(new View.OnClickListener() {
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
+            }
+        });
 
-                if(!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
-
-                    Intent intent = attachImageDataToIntent(barangayBusinessPermitImageName, barangayBusinessPermitImageURI, municipalBusinessPermitImageName, municipalBusinessPermitImageURI);
-                    intent.putExtra("initialVerificationRequest", verificationRequest);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
+        //will open confirmation dialog to confirm that the image will be attached
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
+                    showConfirmationDialog();
                 } else {
-                    Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Please pick image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Please pick an image", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     public void initializeViews() {
-        municipalBusinessPermitUploadImage = findViewById(R.id.municipal_business_permit_image);
-        btnNextMunicipalBusinessPermit = findViewById(R.id.btn_next_municipalBusinessPermit);
-        municipalBusinessPermitUploadImage = findViewById(R.id.municipal_business_permit_image);
+        municipalBusinessPermitImageView = findViewById(R.id.imageview_municipalBP);
+        btnNext = findViewById(R.id.btn_next_municipalBP);
+        btnBack = findViewById(R.id.btn_back_municipalBP);
+        btnChooseImage = findViewById(R.id.btnChooseImage_municipalBP);
 
-        propertyNameDisplay = findViewById(R.id.propertyName_uploadBP);
+        propertyNameDisplay = findViewById(R.id.propertyName_municipalBP);
+
+        //initialize the progressDialog for the uploading of business permits
+        progressDialog = new ProgressDialog(UploadMunicipalBusinessPermitActivity.this);
     }
 
     public void getDataFromIntent(Intent intent) {
-       /* Uri barangayImageUri = Uri.parse(intent.getStringExtra("barangayBusinessPermitImageURI"));
-        municipalBusinessPermitUploadImage.setImageURI(barangayImageUri);*/
-
         verificationRequest = intent.getParcelableExtra("initialVerificationRequest");
-        barangayBusinessPermitImageName = intent.getStringExtra("barangayBusinessPermitImageName");
-        barangayBusinessPermitImageURI = intent.getStringExtra("barangayBusinessPermitImageURI");
-
         String propertyName = verificationRequest.getPropertyName();
 
         propertyNameDisplay.setText(propertyName);
     }
 
-    //wwill open the dialog for the user to choose where they can get image
+    //will let user choose where to get the image
     public void chooseImageSource() {
         AlertDialog.Builder builder = new AlertDialog.Builder(UploadMunicipalBusinessPermitActivity.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -189,6 +208,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                 chooseImageSourceDialog.dismiss();
             }
         });
+
         //image button to select image in camera
         btnImageSelectFromCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,7 +222,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
 
     public void openGallery() {
         // will check if the storage access is granted by the user
-        if(ContextCompat.checkSelfPermission(UploadMunicipalBusinessPermitActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(UploadMunicipalBusinessPermitActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             pickFromGalleryActivityResultLauncher.launch(openGalleryIntent);
         } else {
@@ -212,11 +232,11 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
 
     private void openCamera() {
         // will check if the camera access is granted by the user
-        if(ContextCompat.checkSelfPermission(UploadMunicipalBusinessPermitActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(UploadMunicipalBusinessPermitActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 
             Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             //makes sure that there's a camera activity to handle the intent
-            if(openCameraIntent.resolveActivity(getPackageManager()) != null) {
+            if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
                 //create the file where the photo will go
                 File imageFile = null;
                 try {
@@ -226,7 +246,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                 }
 
                 //continue only if the File was successfully created
-                if(imageFile != null) {
+                if (imageFile != null) {
                     Uri imageURI = FileProvider.getUriForFile(this,
                             "com.capstone.android.fileprovider",
                             imageFile);
@@ -245,14 +265,13 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         //create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "capture_" + timeStamp + "_";
+        String imageFileName = "espasyo_image_" + timeStamp;
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,
                 ".jpg",
                 storageDir
         );
-
         //save a file: path for use with ACTION_VIEW intents
         currentImagePath = image.getAbsolutePath();
         return image;
@@ -265,37 +284,17 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         return mime.getExtensionFromMimeType(c.getType(contentUri));
     }
 
-    public void checkPermissions() {
-        if(ContextCompat.checkSelfPermission(UploadMunicipalBusinessPermitActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            //do nothing because the permissions are granted
-        } else {
-            requestCameraPermissions();
-        }
-    }
-
-    public Intent attachImageDataToIntent(String barangayBusinessPermitImageName, String barangayBusinessPermitImageURI, String municipalBusinessPermitImageName, Uri municipalBusinessPermitImageURI) {
-        Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, ConfirmVerificationRequestActivity.class);
-        String municipalBusinessPermitStringImageURI = municipalBusinessPermitImageURI.toString();
-
-        intent.putExtra("barangayBusinessPermitImageName", barangayBusinessPermitImageName);
-        intent.putExtra("barangayBusinessPermitImageURI", barangayBusinessPermitImageURI);
-        intent.putExtra("municipalBusinessPermitImageName", this.municipalBusinessPermitImageName);
-        intent.putExtra("municipalBusinessPermitImageURI", municipalBusinessPermitStringImageURI);
-
-        return  intent;
-    }
-
     public void requestStoragePermission() {
-        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             new AlertDialog.Builder(this)
                     .setTitle("Permission Needed")
                     .setMessage("This permissions are needed to access the your gallery")
                     .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(UploadMunicipalBusinessPermitActivity.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE,
+                            ActivityCompat.requestPermissions(UploadMunicipalBusinessPermitActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                            STORAGE_PERMISSION_CODE);
+                                    STORAGE_PERMISSION_CODE);
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -305,24 +304,24 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
             }).create().show();
 
         } else {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE,
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_PERMISSION_CODE);
+                    STORAGE_PERMISSION_CODE);
         }
     }
 
     public void requestCameraPermissions() {
-        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             new AlertDialog.Builder(this)
                     .setTitle("Permission Needed")
                     .setMessage("This permissions are needed to access your camera.")
                     .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(UploadMunicipalBusinessPermitActivity.this, new String[] {Manifest.permission.CAMERA,
+                            ActivityCompat.requestPermissions(UploadMunicipalBusinessPermitActivity.this, new String[]{Manifest.permission.CAMERA,
                                             Manifest.permission.READ_EXTERNAL_STORAGE,
                                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                            CAMERA_PERMISSION_CODE);
+                                    CAMERA_PERMISSION_CODE);
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -332,30 +331,88 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
             }).create().show();
 
         } else {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA,
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA,
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            CAMERA_PERMISSION_CODE);
+                    CAMERA_PERMISSION_CODE);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == CAMERA_PERMISSION_CODE) {
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //will do nothing since camera and other permissions are granted
             } else {
                 Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Camera Permission is required to Use Camera", Toast.LENGTH_LONG).show();
             }
         }
 
-        if(requestCode == STORAGE_PERMISSION_CODE) {
-            if(grantResults.length >  0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //will do nothing since storage permission is granted
             } else {
                 Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Storage Permission is required to Access Storage", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public void showConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Attachment")
+                .setMessage("Make sure you have uploaded the updated and authentic Municipal Business Permit. This will be attached to this verification request.")
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        attachMunicipalBusinessPermit(municipalBusinessPermitImageName, municipalBusinessPermitImageURI);
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
+    }
+
+    public void attachMunicipalBusinessPermit(String municipalBusinessPermitImageName, Uri municipalBusinessPermitImageURI) {
+        progressDialog.setTitle("Attaching Municipal Business Permit to Verification Request...");
+        progressDialog.show();
+
+        //TODO: must specify who is the landlord who uploaded and make directory in firebase storage
+        storageReference = storage.getReference("images");
+        final StorageReference businessPermitRef = storageReference.child(municipalBusinessPermitImageName);
+        businessPermitRef.putFile(municipalBusinessPermitImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                businessPermitRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String municipalBusinessPermitImageURL = uri.toString();
+                        Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, ConfirmVerificationRequestActivity.class);
+
+                        //attach the image url to verification request
+                        verificationRequest.setMunicipalBusinessPermitImageURL(municipalBusinessPermitImageURL);
+
+                        intent.putExtra("initialVerificationRequest", verificationRequest);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                progressDialog.setMessage("Percentage: " + (int) progressPercent + "%");
+            }
+        });
     }
 }

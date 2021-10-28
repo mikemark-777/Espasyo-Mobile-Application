@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="Please attach a photo of your Municipal Business Permit"
+            android:text="Attach a photo of your Municipal Business Permit"
             android:textColor="@color/espasyo_gray_500"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -96,14 +96,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/municipal_business_permit_image"
+                app:layout_constraintBottom_toTopOf="@+id/imageview_municipalBP"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.184" >
 
                 <TextView
-                    android:id="@+id/propertyName_uploadBP"
+                    android:id="@+id/propertyName_municipalBP"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="propertyName"
@@ -119,7 +119,7 @@
 
 
             <ImageView
-                android:id="@+id/municipal_business_permit_image"
+                android:id="@+id/imageview_municipalBP"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:layout_marginTop="56dp"
@@ -130,19 +130,19 @@
                 app:srcCompat="@drawable/img_upload_business_permit" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btnChooseImage_municipalBP"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Upload Image"
+                android:text="Choose Image"
                 android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/municipal_business_permit_image" />
+                app:layout_constraintTop_toBottomOf="@+id/imageview_municipalBP" />
 
 
             <Button
-                android:id="@+id/btn_next_municipalBusinessPermit"
+                android:id="@+id/btn_next_municipalBP"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -157,7 +157,7 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btn_back_municipalBP"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
