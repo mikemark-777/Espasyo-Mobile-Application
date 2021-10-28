@@ -107,6 +107,8 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                                 if (result.getResultCode() == Activity.RESULT_OK) {
                                     File f = new File(currentImagePath);
 
+                                    //Toast.makeText(UploadBarangayBusinessPermitActivity.this, "CurrentImagePath: " + currentImagePath, Toast.LENGTH_SHORT).show();
+
                                     Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                                     Uri contentUri = Uri.fromFile(f);
                                     mediaScanIntent.setData(contentUri);
