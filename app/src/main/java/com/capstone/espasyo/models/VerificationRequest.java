@@ -9,8 +9,8 @@ public class VerificationRequest implements Parcelable {
 
     private String verificationRequestID;
     private boolean isVerified;
-    private Date dateSubmitted;
-    private Date dateVerified;
+    private String dateSubmitted;
+    private String dateVerified;
     private String declinedVerificationDescription;
     private String propertyID;
     private String propertyName;
@@ -25,10 +25,11 @@ public class VerificationRequest implements Parcelable {
         //empty verification request constructor **required
     }
 
-
     protected VerificationRequest(Parcel in) {
         verificationRequestID = in.readString();
         isVerified = in.readByte() != 0;
+        dateSubmitted = in.readString();
+        dateVerified = in.readString();
         declinedVerificationDescription = in.readString();
         propertyID = in.readString();
         propertyName = in.readString();
@@ -60,11 +61,11 @@ public class VerificationRequest implements Parcelable {
         isVerified = verified;
     }
 
-    public void setDateSubmitted(Date dateSubmitted) {
+    public void setDateSubmitted(String dateSubmitted) {
         this.dateSubmitted = dateSubmitted;
     }
 
-    public void setDateVerified(Date dateVerified) {
+    public void setDateVerified(String dateVerified) {
         this.dateVerified = dateVerified;
     }
 
@@ -112,11 +113,11 @@ public class VerificationRequest implements Parcelable {
         return isVerified;
     }
 
-    public Date getDateSubmitted() {
+    public String getDateSubmitted() {
         return dateSubmitted;
     }
 
-    public Date getDateVerified() {
+    public String getDateVerified() {
         return dateVerified;
     }
 
@@ -165,6 +166,8 @@ public class VerificationRequest implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(verificationRequestID);
         dest.writeByte((byte) (isVerified ? 1 : 0));
+        dest.writeString(dateSubmitted);
+        dest.writeString(dateVerified);
         dest.writeString(declinedVerificationDescription);
         dest.writeString(propertyID);
         dest.writeString(propertyName);

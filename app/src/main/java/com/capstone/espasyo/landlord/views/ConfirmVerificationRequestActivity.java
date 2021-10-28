@@ -21,19 +21,24 @@ import com.capstone.espasyo.models.VerificationRequest;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
     private FirebaseConnection firebaseConnection;
-    private FirebaseStorage storage;
-    private StorageReference storageReference;
+    private FirebaseFirestore database;
+    private DocumentReference verificationRequestsDocumentReference;
 
     private TextView displayPropertyNameConfirmVerification,
                      displayAddressConfirmVerification,
@@ -51,33 +56,14 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
     // this is the verification request that has the data from the steps 1-3 of the compose verification process
     private VerificationRequest verificationRequest;
 
-    //this will hold the barangay and municipal business permit to be uploaded synchronously
-    private ArrayList<Uri> businessPermitURIs;
-
-    private ArrayList<String> downloadURLs;
-
-    // this will hold the barangay business permit-image-name and URIs
-    private String barangayBusinessPermitImageName;
-    private String municipalBusinessPermitImageName;
-    private Uri barangayBusinessPermitImageURI;
-    private Uri municipalBusinessPermitImageURI;
-
-    //this will be the URLs of the barangay and municipal business permits that will be saved to the VerificationRequest object
-    private String barangayBusinessPermitImageURL;
-    private String municipalBusinessPermitImageURL;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_confirm_verification_request);
 
-        //initialize the progressDialog for the uploading of business permits
-        progressDialog = new ProgressDialog(ConfirmVerificationRequestActivity.this);
-
         //initialize firebase connections
         firebaseConnection = FirebaseConnection.getInstance();
-        storage = firebaseConnection.getFirebaseStorageInstance();
-        storageReference = storage.getReference();
+        database = FirebaseConnection.getInstance().getFirebaseFirestoreInstance();
 
         initializeViews();
         Intent intent = getIntent();
@@ -88,6 +74,12 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
               /*  uploadBusinessPermits();*/
+
+                Toast.makeText(ConfirmVerificationRequestActivity.this, "Current Date: " + getDateSubmitted(), Toast.LENGTH_SHORT).show();
+
+                String dateSubmitted = getDateSubmitted();
+                verificationRequest.setDateSubmitted(dateSubmitted);
+                uploadVerificationRequest(verificationRequest);
             }
         });
     }
@@ -104,6 +96,8 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         displayMunicipalBusinessPermit = findViewById(R.id.displayMunicipalBusinessPermit_confirmVerification);
 
         btnConfirmVerificationRequest = findViewById(R.id.btnConfirmVerificationRequest);
+        //initialize the progressDialog for the uploading of business permits
+        progressDialog = new ProgressDialog(ConfirmVerificationRequestActivity.this);
     }
 
     public void getDataFromIntent(Intent intent) {
@@ -135,8 +129,39 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         displayLandlordPhoneNumberConfirmVerification.setText(landlordPhoneNumber);
     }
 
-    public void uploadBusinessPermits() {
+    public void uploadVerificationRequest(VerificationRequest newVerificationRequest) {
 
+        String newVerificationRequestID = newVerificationRequest.getVerificationRequestID();
+
+        verificationRequestsDocumentReference = database.collection("verificationRequests").document(newVerificationRequestID);
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+        }, 2000);
+
+
+        verificationRequestsDocumentReference.set(newVerificationRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                //TODO: Set how to exit the three steps using activityResultLauncher from verificationFragment
+                Toast.makeText(ConfirmVerificationRequestActivity.this, "Verification Request has been sent to the admin", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ConfirmVerificationRequestActivity.this, "Failed to Upload Verification Request.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public String getDateSubmitted() {
+        Date currentDate = Calendar.getInstance().getTime();
+        return DateFormat.getDateInstance(DateFormat.FULL).format(currentDate);
     }
 
 }

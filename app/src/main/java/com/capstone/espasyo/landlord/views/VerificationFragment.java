@@ -1,12 +1,18 @@
 package com.capstone.espasyo.landlord.views;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -37,6 +43,7 @@ public class VerificationFragment extends Fragment implements VerificationReques
     private ExtendedFloatingActionButton composeVerificationRequestFAB;
     private ProgressDialog progressDialog;
 
+    private ActivityResultLauncher<Intent> LocationPickerActivityResultLauncher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +53,21 @@ public class VerificationFragment extends Fragment implements VerificationReques
         database = firebaseConnection.getFirebaseFirestoreInstance();
         fAuth    = firebaseConnection.getFirebaseAuthInstance();
         ownedPropertyVerifications = new ArrayList<>();
+
+        //will handle all the data from the LocationPickerActivity
+        LocationPickerActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            // There are no request codes
+                        } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
+                            Toast.makeText(getActivity(), "Cancelled: Back in Verification Fragment", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
     }
 
     @Nullable
@@ -67,7 +89,8 @@ public class VerificationFragment extends Fragment implements VerificationReques
             @Override
             public void onClick(View v) {
                 // goto add compose  activity
-                startActivity(new Intent(getActivity(), ChoosePropertyToVerifyActivity.class));
+                //startActivity(new Intent(getActivity(), ChoosePropertyToVerifyActivity.class));
+                LocationPickerActivityResultLauncher.launch(new Intent(getActivity(), ChoosePropertyToVerifyActivity.class));
             }
         });
     }

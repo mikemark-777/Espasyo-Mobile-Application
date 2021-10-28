@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.capstone.espasyo.R;
@@ -43,6 +44,8 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
     private TextView noPropertyAddedYetText;
     private ProgressDialog progressDialog;
 
+    private Button cancelVerificationRequestCompose;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,16 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
 
         initPropertyRecyclerView();
         fetchUserProperties();
+
+        cancelVerificationRequestCompose = findViewById(R.id.btn_cancel_verificationRequestCompose);
+
+        cancelVerificationRequestCompose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
     }
 
     /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
