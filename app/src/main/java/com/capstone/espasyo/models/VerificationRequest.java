@@ -35,7 +35,6 @@ public class VerificationRequest implements Parcelable {
         municipalBusinessPermitImageURL = in.readString();
     }
 
-
     public static final Creator<VerificationRequest> CREATOR = new Creator<VerificationRequest>() {
         @Override
         public VerificationRequest createFromParcel(Parcel in) {

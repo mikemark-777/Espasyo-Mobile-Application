@@ -86,6 +86,7 @@ public class EditRoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                //TODO: Check if the room data has been edited, if not tell the user
                 String editedRoomName = textEditRoomName.getText().toString().trim();
                 String editedRoomPrice = textEditRoomPrice.getText().toString().trim();
                 int editedNumberOfPersons =Integer.parseInt(textEditNumberOfPersons.getText().toString().trim());
@@ -104,6 +105,13 @@ public class EditRoomActivity extends AppCompatActivity {
 
                     saveChangesToRoom(room);
                 }
+            }
+        });
+
+        btnCancelEditRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

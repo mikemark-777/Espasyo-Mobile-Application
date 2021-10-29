@@ -19,6 +19,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
@@ -66,10 +67,10 @@ public class EditPropertyActivity extends AppCompatActivity {
             garbageEditCheckBox;
 
     private Button btnEditProperty,
-            btnCancelEditProperty,//TODO: add cancel functionality
-            btnDeleteProperty;
+            btnCancelEditProperty;
 
     private ImageButton btnEditMapLocation;
+    private ImageView btnDeleteProperty;
 
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
     String[] minimumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
@@ -175,6 +176,13 @@ public class EditPropertyActivity extends AppCompatActivity {
 
                     saveChangesToProperty(property);
                 }
+            }
+        });
+
+        btnCancelEditProperty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -346,7 +354,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         btnEditProperty = findViewById(R.id.btnEditProperty);
         btnEditMapLocation = findViewById(R.id.btnEditMapLocation);
         btnCancelEditProperty = findViewById(R.id.btnCancelEditProperty);
-        btnDeleteProperty = findViewById(R.id.btnDeleteProperty);
+        btnDeleteProperty = findViewById(R.id.imageViewDeleteProperty);
 
         propertyTypeAdapter = new ArrayAdapter<String>(this, R.layout.landlord_property_type_list_item, propertyType);
         textEditPropertyType.setAdapter(propertyTypeAdapter);

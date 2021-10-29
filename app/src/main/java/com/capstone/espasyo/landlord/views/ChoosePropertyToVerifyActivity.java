@@ -41,7 +41,6 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
     private ArrayList<Property> ownedPropertyList;
 
     private ExtendedFloatingActionButton addPropertyFAB;
-    private TextView noPropertyAddedYetText;
     private ProgressDialog progressDialog;
 
     private Button cancelVerificationRequestCompose;

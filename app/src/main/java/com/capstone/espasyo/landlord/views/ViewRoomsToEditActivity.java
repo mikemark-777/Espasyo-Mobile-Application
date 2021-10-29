@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
@@ -35,6 +36,7 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
     private ArrayList<Room> propertyRooms;
 
     private String propertyID;
+    private ImageView btnBackToChooseEditActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,14 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
         getDataFromIntent();
         initEditRoomRecyclerView();
         fetchPropertyRooms();
+
+        btnBackToChooseEditActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     public void getDataFromIntent() {
@@ -59,13 +69,15 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
     }
 
     public void initEditRoomRecyclerView()  {
+        roomRecylerViewEmptyState = findViewById(R.id.empty_room_state_viewRoomsToEdit);
         editRoomRecyclerView = (RoomRecyclerView) findViewById(R.id.editRoomRecyclerView);
-        roomRecylerViewEmptyState = findViewById(R.id.empty_room_state_propertyDetailsActivity);
+        editRoomRecyclerView.showIfEmpty(roomRecylerViewEmptyState);
         editRoomRecyclerView.setHasFixedSize(true);
         LinearLayoutManager editRoomLayoutManager = new LinearLayoutManager(ViewRoomsToEditActivity.this, LinearLayoutManager.VERTICAL, false);
         editRoomRecyclerView.setLayoutManager(editRoomLayoutManager);
         editRoomAdapter = new EditRoomAdapter(ViewRoomsToEditActivity.this, propertyRooms, this);
         editRoomRecyclerView.setAdapter(editRoomAdapter);
+        btnBackToChooseEditActivity = findViewById(R.id.btn_back_to_ChooseEditActivity);
     }
 
     public void fetchPropertyRooms() {

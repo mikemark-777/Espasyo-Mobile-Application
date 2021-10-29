@@ -143,7 +143,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
     //initialize roomRecyclerView, layoutManager, and roomAdapter
     public void initRoomRecyclerView() {
         roomRecyclerView = (RoomRecyclerView) findViewById(R.id.roomsRecyclerView);
-        roomRecylerViewEmptyState = findViewById(R.id.empty_room_state_propertyDetailsActivity);
+        roomRecylerViewEmptyState = findViewById(R.id.empty_room_state_propertyDetailsActivity_PDA);
         roomRecyclerView.showIfEmpty(roomRecylerViewEmptyState);
         roomRecyclerView.setHasFixedSize(true);
         LinearLayoutManager roomLayoutManager = new LinearLayoutManager(PropertyDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);

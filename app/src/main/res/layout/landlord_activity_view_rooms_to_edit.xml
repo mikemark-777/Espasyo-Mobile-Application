@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/btn_back_to_ChooseEditActivity"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="16dp"
@@ -28,7 +28,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Rooms"
+            android:text="Rooms"
             android:textColor="@color/white"
             android:textSize="22sp"
             android:textStyle="bold"

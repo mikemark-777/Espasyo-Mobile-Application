@@ -73,7 +73,7 @@ public class RoomRecyclerView extends RecyclerView {
 
                 //will check if the rooms are greater than 7 and if so, it will show the SHOW MORE Button
                 if(getAdapter().getItemCount() > 7) {
-
+                    //todo: implement this
                 }
             }
         }

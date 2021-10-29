@@ -85,7 +85,7 @@ public class ChooseEditActivity extends AppCompatActivity {
     private void getSelectedProperty(String selectedPropertyID) {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading");
+        progressDialog.setMessage("Loading...");
         progressDialog.show();
         DocumentReference selectedPropertyDocumentReference = database.collection("properties").document(selectedPropertyID);
         selectedPropertyDocumentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -111,6 +111,5 @@ public class ChooseEditActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        getSelectedProperty(selectedPropertyID);
     }
 }

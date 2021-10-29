@@ -8,19 +8,16 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.PropertyAdapter;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.landlord.widgets.PropertyRecyclerView;
 import com.capstone.espasyo.models.Property;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,13 +36,12 @@ public class ManagePropertyFragment extends Fragment implements PropertyAdapter.
     private FirebaseAuth fAuth;
     private FirebaseFirestore database;
 
-    private RecyclerView propertyRecyclerView;
+    private PropertyRecyclerView propertyRecyclerView;
+    private View propertyRecyclerViewEmptyState;
     private PropertyAdapter propertyAdapter;
     private ArrayList<Property> ownedPropertyList;
 
     private FloatingActionButton addPropertyFAB;
-    private NavController landlord_navigation;
-    private TextView noPropertyAddedYetText;
     private ProgressDialog progressDialog;
 
     @Override
@@ -64,7 +60,7 @@ public class ManagePropertyFragment extends Fragment implements PropertyAdapter.
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.landlord_fragment_manage_property, container, false);
-        initRecyclerView(view);
+        initPropertyRecyclerView(view);
         return view;
     }
 
@@ -88,9 +84,11 @@ public class ManagePropertyFragment extends Fragment implements PropertyAdapter.
         }, 2000);
     }
 
-    public void initRecyclerView(View view) {
+    public void initPropertyRecyclerView(View view) {
         // initialize propertyRecyclerView, layoutManager and propertyAdapter
-        propertyRecyclerView = view.findViewById(R.id.propertyRecyclerView_manage);
+        propertyRecyclerViewEmptyState = view.findViewById(R.id.empty_property_state_managePropertyFragment);
+        propertyRecyclerView = (PropertyRecyclerView) view.findViewById(R.id.propertyRecyclerView_manage);
+        propertyRecyclerView.showIfEmpty(propertyRecyclerViewEmptyState);
         propertyRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         propertyRecyclerView.setLayoutManager(layoutManager);

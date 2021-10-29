@@ -8,11 +8,13 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.VerificationRequestAdapter;
@@ -41,6 +43,7 @@ public class VerificationFragment extends Fragment implements VerificationReques
     private ArrayList<VerificationRequest> ownedPropertyVerifications;
 
     private ExtendedFloatingActionButton composeVerificationRequestFAB;
+    private SwipeRefreshLayout verificationRequestRVSwipeRefresh;
     private ProgressDialog progressDialog;
 
     @Override
@@ -65,15 +68,35 @@ public class VerificationFragment extends Fragment implements VerificationReques
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //get verification request issued by the current user
+        progressDialog = new ProgressDialog(this.getContext());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading Verification Requests...");
+        progressDialog.show();
         fetchSentVerificationRequest();
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+        }, 2000);
 
+        //Toast.makeText(getActivity(), "Verification Fragment onViewCreated()", Toast.LENGTH_SHORT).show();
         composeVerificationRequestFAB = view.findViewById(R.id.composeVerificationRequestFAB);
         composeVerificationRequestFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // goto add compose  activity
                 startActivity(new Intent(getActivity(), ChoosePropertyToVerifyActivity.class));
+            }
+        });
+
+        verificationRequestRVSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchSentVerificationRequest();
+                verificationRequestRVSwipeRefresh.setRefreshing(false);
             }
         });
     }
@@ -90,15 +113,11 @@ public class VerificationFragment extends Fragment implements VerificationReques
         verificationRequestsRecyclerView.setLayoutManager(verificationRequestLayoutManager);
         verificationRequestAdapter = new VerificationRequestAdapter(getActivity(), ownedPropertyVerifications, this);
         verificationRequestsRecyclerView.setAdapter(verificationRequestAdapter);
+        verificationRequestRVSwipeRefresh = view.findViewById(R.id.verificationRequestSwipeRefresh);
     }
 
 
     public void fetchSentVerificationRequest() {
-        progressDialog = new ProgressDialog(this.getContext());
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading Verification Requests...");
-        progressDialog.show();
-
         //get the current user and compare it to the requestee who issued a verification request. If match, get the verificationrequest
         String currentUser = fAuth.getCurrentUser().getUid().toString();
 
@@ -116,15 +135,6 @@ public class VerificationFragment extends Fragment implements VerificationReques
                         verificationRequestAdapter.notifyDataSetChanged();
                     }
                 });
-
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-            }
-        }, 2000);
     }
 
     @Override
@@ -133,6 +143,12 @@ public class VerificationFragment extends Fragment implements VerificationReques
 
     }
 
-
     // TODO: Handle Activity Life Cycle
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //fetchSentVerificationRequest();
+    }
+
 }
