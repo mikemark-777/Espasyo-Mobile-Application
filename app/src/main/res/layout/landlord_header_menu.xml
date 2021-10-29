@@ -7,16 +7,17 @@
     android:padding="20dp">
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/landlordavatar" />
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/avatar_landlord" />
 
     <TextView
+        android:id="@+id/landlordEmail_drawer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="landlord@gmail.com"
-        android:textColor="@color/gray"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textColor="@color/white"
+        android:textSize="14sp" />
 </LinearLayout>

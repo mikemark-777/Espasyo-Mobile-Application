@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,6 +43,16 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         holder.propertyType.setText(property.getPropertyType());
         holder.landlordName.setText(property.getLandlordName());
         holder.landlordContactNumber.setText(property.getLandlordPhoneNumber());
+        holder.minimumPrice.setText(String.valueOf(property.getMinimumPrice()));
+        holder.maximumPrice.setText(String.valueOf(property.getMaximumPrice()));
+
+
+        if(property.getIsVerified()) {
+            holder.verifiedIcon.setImageResource(R.drawable.icon_verified);
+        } else {
+            holder.verifiedIcon.setImageResource(R.drawable.icon_unverified);
+        }
+
     }
 
     @Override
@@ -51,7 +62,8 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
 
     public static class PropertyViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView propertyName, propertyAddress, propertyType, landlordName, landlordContactNumber;
+        TextView propertyName, propertyAddress, propertyType, landlordName, landlordContactNumber, minimumPrice, maximumPrice;
+        ImageView verifiedIcon;
         OnPropertyListener onPropertyListener;
 
         public PropertyViewHolder(@NonNull View itemView, OnPropertyListener onPropertyListener) {
@@ -61,6 +73,9 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             propertyType = itemView.findViewById(R.id.propertyType);
             landlordName = itemView.findViewById(R.id.landlordName);
             landlordContactNumber = itemView.findViewById(R.id.landlordContactNumber);
+            minimumPrice = itemView.findViewById(R.id.minimumPrice_propertyItem);
+            maximumPrice = itemView.findViewById(R.id.maximumPrice_propertyItem);
+            verifiedIcon = itemView.findViewById(R.id.propertyItem_iconVerified);
             this.onPropertyListener = onPropertyListener;
 
             itemView.setOnClickListener(this);

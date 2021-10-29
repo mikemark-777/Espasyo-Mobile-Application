@@ -15,7 +15,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.TextView;
 
 import com.capstone.espasyo.MainActivity;
 import com.capstone.espasyo.R;
@@ -25,9 +26,11 @@ import com.capstone.espasyo.landlord.views.ManagePropertyFragment;
 import com.capstone.espasyo.landlord.views.SettingsActivity;
 import com.capstone.espasyo.landlord.views.VerificationFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LandlordMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    private FirebaseAuth fAuth;
     private AuthViewModel viewModel;
 
     private DrawerLayout drawer;
@@ -37,20 +40,35 @@ public class LandlordMainActivity extends AppCompatActivity implements Navigatio
 
     public final String SHARED_PREFS = "sharedPrefs";
     public final String USER_ROLE = "userRole";
+    private TextView landlordEmailTextView;
+    private String landlordEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_main);
 
+        fAuth = FirebaseAuth.getInstance();
         drawer = findViewById(R.id.landlord_drawer_layout);
         navigationView = findViewById(R.id.landlordNavigationView);
         toolbar = findViewById(R.id.landlord_toolbar);
 
+
         setSupportActionBar(toolbar);
         toolbar.setTitle("Dashboard");
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.landlord_menuOpen, R.string.landlord_menuClose);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.landlord_menuOpen, R.string.landlord_menuClose) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+
+                landlordEmailTextView = drawerView.findViewById(R.id.landlordEmail_drawer);
+
+                //get current user's email
+                landlordEmail= fAuth.getCurrentUser().getEmail();
+                landlordEmailTextView.setText(landlordEmail);
+            }
+        };
         drawer.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
