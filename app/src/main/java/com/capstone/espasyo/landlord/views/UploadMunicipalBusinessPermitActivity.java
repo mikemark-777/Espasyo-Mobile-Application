@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -73,6 +74,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
 
     //this will hold the initial verification request from STEP-2
     private VerificationRequest verificationRequest;
+    private Property chosenProperty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +152,11 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
+                    showDiscardDialog();
+                } else {
+                    finish();
+                }
             }
         });
 
@@ -181,6 +187,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
 
     public void getDataFromIntent(Intent intent) {
         verificationRequest = intent.getParcelableExtra("initialVerificationRequest");
+        chosenProperty = intent.getParcelableExtra("chosenProperty");
         String propertyName = verificationRequest.getPropertyName();
 
         propertyNameDisplay.setText(propertyName);
@@ -380,7 +387,8 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         progressDialog.show();
 
         //TODO: must specify who is the landlord who uploaded and make directory in firebase storage
-        storageReference = storage.getReference("images");
+        String requesteeID = verificationRequest.getRequesteeID();
+        storageReference = storage.getReference("landlords/" + requesteeID + "/verificationRequest");
         final StorageReference businessPermitRef = storageReference.child(municipalBusinessPermitImageName);
         businessPermitRef.putFile(municipalBusinessPermitImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -395,6 +403,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                         verificationRequest.setMunicipalBusinessPermitImageURL(municipalBusinessPermitImageURL);
 
                         intent.putExtra("initialVerificationRequest", verificationRequest);
+                        intent.putExtra("chosenProperty", chosenProperty);
                         startActivity(intent);
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         progressDialog.dismiss();
@@ -414,5 +423,24 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                 progressDialog.setMessage("Percentage: " + (int) progressPercent + "%");
             }
         });
+    }
+
+    public void showDiscardDialog() {
+
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm discard uploaded image")
+                .setMessage("Are you sure you want to discard the uploaded image?")
+                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
     }
 }

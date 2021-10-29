@@ -175,9 +175,11 @@ public class PropertyDetailsActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         fetchPropertyRooms();
-        Toast.makeText(PropertyDetailsActivity.this, "PropertyDetailsActivity is onRestart()", Toast.LENGTH_SHORT).show();
-
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

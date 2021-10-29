@@ -16,7 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -55,6 +57,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
     // this is the verification request that has the data from the steps 1-3 of the compose verification process
     private VerificationRequest verificationRequest;
+    private Property chosenProperty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +72,9 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         Intent intent = getIntent();
         getDataFromIntent(intent);
 
-
         btnConfirmVerificationRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  uploadBusinessPermits();*/
-
-                Toast.makeText(ConfirmVerificationRequestActivity.this, "Current Date: " + getDateSubmitted(), Toast.LENGTH_SHORT).show();
-
                 String dateSubmitted = getDateSubmitted();
                 verificationRequest.setDateSubmitted(dateSubmitted);
                 uploadVerificationRequest(verificationRequest);
@@ -102,12 +100,13 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
     public void getDataFromIntent(Intent intent) {
         verificationRequest = intent.getParcelableExtra("initialVerificationRequest");
+        chosenProperty = intent.getParcelableExtra("chosenProperty"); //for displaying purposes
 
-        String propertyName = verificationRequest.getPropertyName();
-        String address = verificationRequest.getPropertyAddress();
-        String proprietorName = verificationRequest.getProprietorName();
-        String landlordName = verificationRequest.getLandlordName();
-        String landlordPhoneNumber = verificationRequest.getLandlordContactNumber();
+        String propertyName = chosenProperty.getName();
+        String address = chosenProperty.getAddress();
+        String proprietorName = chosenProperty.getProprietorName();
+        String landlordName = chosenProperty.getLandlordName();
+        String landlordPhoneNumber = chosenProperty.getLandlordPhoneNumber();
         String barangayBusinessPermitURL = verificationRequest.getBarangayBusinessPermitImageURL();
         String municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
 
@@ -132,24 +131,18 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
     public void uploadVerificationRequest(VerificationRequest newVerificationRequest) {
 
         String newVerificationRequestID = newVerificationRequest.getVerificationRequestID();
-
         verificationRequestsDocumentReference = database.collection("verificationRequests").document(newVerificationRequestID);
-
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-            }
-        }, 2000);
-
+        progressDialog.setTitle("Sending Verification Request...");
+        progressDialog.show();
 
         verificationRequestsDocumentReference.set(newVerificationRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                //TODO: Set how to exit the three steps using activityResultLauncher from verificationFragment
+                //landlordMainActivity has been set its launchMode to singleTask, which will clear everything on its top once it has been started again
                 Toast.makeText(ConfirmVerificationRequestActivity.this, "Verification Request has been sent to the admin", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ConfirmVerificationRequestActivity.this, LandlordMainActivity.class);
+                startActivity(intent);
+                finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -157,6 +150,13 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
                 Toast.makeText(ConfirmVerificationRequestActivity.this, "Failed to Upload Verification Request.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+            }
+        }, 3500);
     }
 
     public String getDateSubmitted() {

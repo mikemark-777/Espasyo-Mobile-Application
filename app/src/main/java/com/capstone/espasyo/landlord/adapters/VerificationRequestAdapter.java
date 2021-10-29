@@ -37,7 +37,19 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
 
     @Override
     public void onBindViewHolder(@NonNull VerificationRequestViewHolder holder, int position) {
+        VerificationRequest verificationRequest = ownedPropertyVerifications.get(position);
+        String propertyName = verificationRequest.getPropertyName();
+        String dateSubmitted = verificationRequest.getDateSubmitted();
+        boolean isVerified = verificationRequest.isVerified();
 
+        if(isVerified == false) {
+            holder.verifiedIconDisplay.setImageResource(R.drawable.icon_unverified);
+        } else {
+            holder.verifiedIconDisplay.setImageResource(R.drawable.icon_verified);
+        }
+
+        holder.propertyName.setText(propertyName);
+        holder.dateSubmitted.setText(dateSubmitted);
     }
 
 
@@ -48,7 +60,7 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
 
     public static class  VerificationRequestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView propertyName, propertyAddress, propertyType, landlordName, landlordContactNumber;
+        TextView propertyName, propertyAddress, propertyType, landlordName, landlordContactNumber, dateSubmitted;
         ImageView verifiedIconDisplay;
         OnVerificationRequestListener onVerificationRequestListener;
 
@@ -59,6 +71,7 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
             propertyType = itemView.findViewById(R.id.propertyType_verification);
             landlordName = itemView.findViewById(R.id.landlordName_verification);
             landlordContactNumber = itemView.findViewById(R.id.landlordContactNumber_verification);
+            dateSubmitted = itemView.findViewById(R.id.dateSubmitted_verification);
             verifiedIconDisplay = itemView.findViewById(R.id.verifiedIconDisplay);
             this.onVerificationRequestListener = onVerificationRequestListener;
         }

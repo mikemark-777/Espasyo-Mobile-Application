@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -61,6 +62,10 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
     private String barangayBusinessPermitImageName = "";
     private Uri barangayBusinessPermitImageURI;
 
+    // for checking if uploaded another image
+    private String uploadedBBPImageName;
+    private Uri uploadedBBPImageURI;
+
     private Button btnNext;
     private Button btnBack;
     private Button btnChooseImage;
@@ -73,6 +78,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
 
     //this will hold the initial verification request from STEP-1
     private VerificationRequest verificationRequest;
+    private Property chosenProperty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +156,11 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                if (!barangayBusinessPermitImageName.equals("") && !barangayBusinessPermitImageURI.equals(Uri.EMPTY)) {
+                    showDiscardDialog();
+                } else {
+                    finish();
+                }
             }
         });
 
@@ -158,6 +168,9 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!barangayBusinessPermitImageName.equals("") && !barangayBusinessPermitImageURI.equals(Uri.EMPTY)) {
+                    if(!checkIfImageIsChanged(barangayBusinessPermitImageName, barangayBusinessPermitImageURI, uploadedBBPImageName, uploadedBBPImageURI)) {
+                        Intent intent = new Intent(UploadBarangayBusinessPermitActivity.this, UploadMunicipalBusinessPermitActivity.class);
+                    }
                     showConfirmationDialog();
                 } else {
                     Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Please pick an image", Toast.LENGTH_SHORT).show();
@@ -180,7 +193,8 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
 
     public void getDataFromIntent(Intent intent) {
         verificationRequest = intent.getParcelableExtra("initialVerificationRequest");
-        String propertyName = verificationRequest.getPropertyName();
+        chosenProperty = intent.getParcelableExtra("chosenProperty");
+        String propertyName = chosenProperty.getName();
 
         propertyNameDisplay.setText(propertyName);
     }
@@ -380,7 +394,8 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
         progressDialog.show();
 
         //TODO: must specify who is the landlord who uploaded and make directory in firebase storage
-        storageReference = storage.getReference("images");
+        String requesteeID = verificationRequest.getRequesteeID();
+        storageReference = storage.getReference("landlords/" + requesteeID + "/verificationRequest");
         final StorageReference businessPermitRef = storageReference.child(barangayBusinessPermitImageName);
         businessPermitRef.putFile(barangayBusinessPermitImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -391,10 +406,15 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                         String barangayBusinessPermitImageURL = uri.toString();
                         Intent intent = new Intent(UploadBarangayBusinessPermitActivity.this, UploadMunicipalBusinessPermitActivity.class);
 
+                        //set the currentBBPImageName and currentBBPImageURI to check later if the user is back and he is uploading a new image
+                        uploadedBBPImageName = barangayBusinessPermitImageName;
+                        uploadedBBPImageURI = barangayBusinessPermitImageURI;
+
                         //attach the image url to verification request
                         verificationRequest.setBarangayBusinessPermitImageURL(barangayBusinessPermitImageURL);
 
                         intent.putExtra("initialVerificationRequest", verificationRequest);
+                        intent.putExtra("chosenProperty", chosenProperty);
                         startActivity(intent);
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         progressDialog.dismiss();
@@ -414,6 +434,33 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                 progressDialog.setMessage("Percentage: " + (int) progressPercent + "%");
             }
         });
+    }
+
+    public void showDiscardDialog() {
+
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm discard uploaded image")
+                .setMessage("Are you sure you want to discard the uploaded image?")
+                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
+    }
+
+    public boolean checkIfImageIsChanged(String newBBPImageName,Uri newBBPImageURI, String currentBBPImageName, Uri currentBBPIImageURI) {
+        if(newBBPImageName.equals(currentBBPImageName) && newBBPImageURI.equals(currentBBPIImageURI)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }

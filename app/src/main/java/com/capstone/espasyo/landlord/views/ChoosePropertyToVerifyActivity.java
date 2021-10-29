@@ -114,12 +114,9 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         //get the data of the clicked property they want to be verified
         Property chosenProperty = ownedPropertyList.get(position);
 
+        String requesteeID = chosenProperty.getOwner();
         String propertyID = chosenProperty.getPropertyID();
         String propertyName = chosenProperty.getName();
-        String propertyAddress = chosenProperty.getAddress();
-        String proprietorName = chosenProperty.getProprietorName();
-        String landlordName = chosenProperty.getLandlordName();
-        String landlordPhoneNumber = chosenProperty.getLandlordPhoneNumber();
 
 
         String verificationRequestID = UUID.randomUUID().toString();
@@ -128,16 +125,14 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         VerificationRequest newVerificationRequest = new VerificationRequest();
 
         newVerificationRequest.setVerificationRequestID(verificationRequestID);
-        newVerificationRequest.setIsVerified(isVerified);
+        newVerificationRequest.setVerified(isVerified);
+        newVerificationRequest.setRequesteeID(requesteeID);
         newVerificationRequest.setPropertyID(propertyID);
         newVerificationRequest.setPropertyName(propertyName);
-        newVerificationRequest.setPropertyAddress(propertyAddress);
-        newVerificationRequest.setProprietorName(proprietorName);
-        newVerificationRequest.setLandlordName(landlordName);
-        newVerificationRequest.setLandlordContactNumber(landlordPhoneNumber);
 
         Intent intent = new Intent(ChoosePropertyToVerifyActivity.this, UploadBarangayBusinessPermitActivity.class);
         intent.putExtra("initialVerificationRequest", newVerificationRequest);
+        intent.putExtra("chosenProperty", chosenProperty);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);

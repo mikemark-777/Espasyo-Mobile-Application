@@ -167,7 +167,7 @@
             android:layout_height="65dp"
             android:layout_marginBottom="-8dp"
             android:backgroundTint="@color/espasyo_orange_200"
-            android:text="Confirm Verification Request"
+            android:text="Send Verification Request"
             android:textAllCaps="false"
             android:layout_weight="1"/>
 

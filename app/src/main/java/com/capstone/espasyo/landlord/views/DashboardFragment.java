@@ -113,7 +113,7 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
 
         progressDialog = new ProgressDialog(this.getContext());
         progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading Properties");
+        progressDialog.setMessage("Loading Properties...");
         progressDialog.show();
 
         //will be used to retrieve owned properties in the Properties Collection

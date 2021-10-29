@@ -12,12 +12,9 @@ public class VerificationRequest implements Parcelable {
     private String dateSubmitted;
     private String dateVerified;
     private String declinedVerificationDescription;
+    private String requesteeID;
     private String propertyID;
     private String propertyName;
-    private String propertyAddress;
-    private String proprietorName;
-    private String landlordName;
-    private String landlordContactNumber;
     private String barangayBusinessPermitImageURL;
     private String municipalBusinessPermitImageURL;
 
@@ -31,15 +28,13 @@ public class VerificationRequest implements Parcelable {
         dateSubmitted = in.readString();
         dateVerified = in.readString();
         declinedVerificationDescription = in.readString();
+        requesteeID = in.readString();
         propertyID = in.readString();
         propertyName = in.readString();
-        propertyAddress = in.readString();
-        proprietorName = in.readString();
-        landlordName = in.readString();
-        landlordContactNumber = in.readString();
         barangayBusinessPermitImageURL = in.readString();
         municipalBusinessPermitImageURL = in.readString();
     }
+
 
     public static final Creator<VerificationRequest> CREATOR = new Creator<VerificationRequest>() {
         @Override
@@ -57,7 +52,7 @@ public class VerificationRequest implements Parcelable {
         this.verificationRequestID = verificationRequestID;
     }
 
-    public void setIsVerified(boolean verified) {
+    public void setVerified(boolean verified) {
         isVerified = verified;
     }
 
@@ -73,28 +68,16 @@ public class VerificationRequest implements Parcelable {
         this.declinedVerificationDescription = declinedVerificationDescription;
     }
 
-    public void setPropertyName(String propertyName) {
-        this.propertyName = propertyName;
-    }
-
-    public void setPropertyAddress(String propertyAddress) {
-        this.propertyAddress = propertyAddress;
-    }
-
-    public void setProprietorName(String proprietorName) {
-        this.proprietorName = proprietorName;
-    }
-
-    public void setLandlordName(String landlordName) {
-        this.landlordName = landlordName;
-    }
-
-    public void setLandlordContactNumber(String landlordContactNumber) {
-        this.landlordContactNumber = landlordContactNumber;
+    public void setRequesteeID(String requesteeID) {
+        this.requesteeID = requesteeID;
     }
 
     public void setPropertyID(String propertyID) {
         this.propertyID = propertyID;
+    }
+
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
     }
 
     public void setBarangayBusinessPermitImageURL(String barangayBusinessPermitImageURL) {
@@ -108,6 +91,7 @@ public class VerificationRequest implements Parcelable {
     public String getVerificationRequestID() {
         return verificationRequestID;
     }
+
 
     public boolean isVerified() {
         return isVerified;
@@ -125,28 +109,16 @@ public class VerificationRequest implements Parcelable {
         return declinedVerificationDescription;
     }
 
-    public String getPropertyName() {
-        return propertyName;
-    }
-
-    public String getPropertyAddress() {
-        return propertyAddress;
-    }
-
-    public String getProprietorName() {
-        return proprietorName;
-    }
-
-    public String getLandlordName() {
-        return landlordName;
-    }
-
-    public String getLandlordContactNumber() {
-        return landlordContactNumber;
+    public String getRequesteeID() {
+        return requesteeID;
     }
 
     public String getPropertyID() {
         return propertyID;
+    }
+
+    public String getPropertyName() {
+        return propertyName;
     }
 
     public String getBarangayBusinessPermitImageURL() {
@@ -169,12 +141,9 @@ public class VerificationRequest implements Parcelable {
         dest.writeString(dateSubmitted);
         dest.writeString(dateVerified);
         dest.writeString(declinedVerificationDescription);
+        dest.writeString(requesteeID);
         dest.writeString(propertyID);
         dest.writeString(propertyName);
-        dest.writeString(propertyAddress);
-        dest.writeString(proprietorName);
-        dest.writeString(landlordName);
-        dest.writeString(landlordContactNumber);
         dest.writeString(barangayBusinessPermitImageURL);
         dest.writeString(municipalBusinessPermitImageURL);
     }

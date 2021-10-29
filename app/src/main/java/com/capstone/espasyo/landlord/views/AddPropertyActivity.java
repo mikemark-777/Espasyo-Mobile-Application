@@ -120,7 +120,6 @@ public class AddPropertyActivity extends AppCompatActivity {
                     }
                 });
 
-
         btnGetMapLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
