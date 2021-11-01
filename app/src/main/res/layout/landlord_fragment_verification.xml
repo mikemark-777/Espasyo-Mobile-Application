@@ -35,8 +35,8 @@
         android:layout_marginRight="24dp"
         android:layout_marginBottom="24dp"
         android:contentDescription="compose verification request"
-        android:src="@drawable/icon_add"
         app:icon="@drawable/icon_add"
+        app:backgroundTint="@color/espasyo_blue_100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

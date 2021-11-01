@@ -39,7 +39,7 @@ public class FirebaseConnection {
     public FirebaseStorage getFirebaseStorageInstance() {
         if(storage == null) {
             storage = FirebaseStorage.getInstance();
-        }
+         }
         return storage;
     }
 

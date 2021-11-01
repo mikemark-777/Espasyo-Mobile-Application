@@ -101,6 +101,13 @@ public class AddRoomActivity extends AppCompatActivity {
             }
         });
 
+        btnCancelAddRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         // Increment and Decrement number of persons per room --------------------
         increment.setOnClickListener(new View.OnClickListener() {
             @Override

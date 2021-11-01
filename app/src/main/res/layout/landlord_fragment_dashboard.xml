@@ -10,7 +10,7 @@
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/espasyo_blue_700"
+        android:background="@color/espasyo_blue_200"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -30,17 +30,30 @@
 
     </LinearLayout>
 
-    <com.capstone.espasyo.landlord.widgets.PropertyRecyclerView
-        android:id="@+id/propertyRecyclerView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/dashboardSwipeRefresh"
         android:layout_width="370dp"
         android:layout_height="570dp"
-        android:layout_margin="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintVertical_bias="0.109" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <com.capstone.espasyo.landlord.widgets.PropertyRecyclerView
+            android:id="@+id/propertyRecyclerView"
+            android:layout_width="370dp"
+            android:layout_height="570dp"
+            android:layout_margin="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.47"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+            app:layout_constraintVertical_bias="0.109" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/addPropertyFAB"
@@ -53,6 +66,7 @@
         android:layout_marginBottom="24dp"
         android:contentDescription="add property"
         android:src="@drawable/icon_add"
+        app:backgroundTint="@color/espasyo_blue_100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

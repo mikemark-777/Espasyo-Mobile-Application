@@ -18,7 +18,7 @@
             android:id="@+id/landlord_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/espasyo_blue_700"
+            android:background="@color/espasyo_blue_200"
             android:elevation="0dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>

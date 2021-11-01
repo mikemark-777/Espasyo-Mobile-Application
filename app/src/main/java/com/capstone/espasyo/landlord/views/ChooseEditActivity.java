@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
@@ -30,6 +31,7 @@ public class ChooseEditActivity extends AppCompatActivity {
     private Property selectedProperty;
     private String selectedPropertyID;
 
+    private ImageView imageButtonBackToManageProperty;
     private CardView editPropertyCardView;
     private CardView editRoomsCardView;
 
@@ -43,12 +45,19 @@ public class ChooseEditActivity extends AppCompatActivity {
         firebaseConnection = FirebaseConnection.getInstance();
         database = firebaseConnection.getFirebaseFirestoreInstance();
 
-        initializeCardViews();
+        initializeViews();
 
         Intent intent = getIntent();
         selectedPropertyID = intent.getStringExtra("propertyID");
 
         getSelectedProperty(selectedPropertyID);
+
+        imageButtonBackToManageProperty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         editPropertyCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +66,7 @@ public class ChooseEditActivity extends AppCompatActivity {
                     Intent intent = new Intent(ChooseEditActivity.this, EditPropertyActivity.class);
                     intent.putExtra("property", selectedProperty);
                     startActivity(intent);
+                   overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                }
             }
         });
@@ -69,6 +79,7 @@ public class ChooseEditActivity extends AppCompatActivity {
                     Intent intent = new Intent(ChooseEditActivity.this, ViewRoomsToEditActivity.class);
                     intent.putExtra("propertyID", selectedProperty.getPropertyID());
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
             }
         });
@@ -77,7 +88,8 @@ public class ChooseEditActivity extends AppCompatActivity {
 
     /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
 
-    private void initializeCardViews() {
+    private void initializeViews() {
+        imageButtonBackToManageProperty = findViewById(R.id.imageButtonBackToManageProperty);
         editPropertyCardView = findViewById(R.id.editPropertyCardView);
         editRoomsCardView = findViewById(R.id.editRoomsCardView);
     }

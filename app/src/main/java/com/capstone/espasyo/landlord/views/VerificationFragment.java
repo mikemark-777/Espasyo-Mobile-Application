@@ -1,6 +1,5 @@
 package com.capstone.espasyo.landlord.views;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +7,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.VerificationRequestAdapter;
+import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.landlord.widgets.VerificationRequestRecyclerView;
 import com.capstone.espasyo.models.VerificationRequest;
@@ -44,11 +43,12 @@ public class VerificationFragment extends Fragment implements VerificationReques
 
     private ExtendedFloatingActionButton composeVerificationRequestFAB;
     private SwipeRefreshLayout verificationRequestRVSwipeRefresh;
-    private ProgressDialog progressDialog;
+    private CustomProgressDialog progressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //Initialize
         firebaseConnection = FirebaseConnection.getInstance();
         database = firebaseConnection.getFirebaseFirestoreInstance();
@@ -68,16 +68,13 @@ public class VerificationFragment extends Fragment implements VerificationReques
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        progressDialog = new ProgressDialog(this.getContext());
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading Verification Requests...");
-        progressDialog.show();
+        progressDialog.showProgressDialog("Loading Verification Requests...", false);
         fetchSentVerificationRequest();
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 if(progressDialog.isShowing()) {
-                    progressDialog.dismiss();
+                    progressDialog.dismissProgressDialog();
                 }
             }
         }, 2000);
@@ -96,7 +93,13 @@ public class VerificationFragment extends Fragment implements VerificationReques
             @Override
             public void onRefresh() {
                 fetchSentVerificationRequest();
-                verificationRequestRVSwipeRefresh.setRefreshing(false);
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        verificationRequestRVSwipeRefresh.setRefreshing(false);
+                    }
+                }, 2000);
+
             }
         });
     }
@@ -114,6 +117,9 @@ public class VerificationFragment extends Fragment implements VerificationReques
         verificationRequestAdapter = new VerificationRequestAdapter(getActivity(), ownedPropertyVerifications, this);
         verificationRequestsRecyclerView.setAdapter(verificationRequestAdapter);
         verificationRequestRVSwipeRefresh = view.findViewById(R.id.verificationRequestSwipeRefresh);
+
+        //initialize custom progress dialog
+        progressDialog = new CustomProgressDialog(getActivity());
     }
 
 

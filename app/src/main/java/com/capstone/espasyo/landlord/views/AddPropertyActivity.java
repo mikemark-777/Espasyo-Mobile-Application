@@ -185,8 +185,6 @@ public class AddPropertyActivity extends AppCompatActivity {
         btnCancelAddProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: add cancel functionality
-                startActivity(new Intent(AddPropertyActivity.this, LandlordMainActivity.class));
                 finish();
             }
         });
@@ -305,7 +303,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
 
-        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
             Log.d(TAG, "CAN PROCEED: TRUE");
             return true;
         } else {

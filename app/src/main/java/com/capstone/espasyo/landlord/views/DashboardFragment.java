@@ -1,6 +1,5 @@
 package com.capstone.espasyo.landlord.views;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,16 +7,17 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.PropertyAdapter;
+import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.landlord.widgets.PropertyRecyclerView;
 import com.capstone.espasyo.models.Property;
@@ -43,7 +43,10 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
     private ArrayList<Property> ownedPropertyList;
 
     private ExtendedFloatingActionButton addPropertyFAB;
-    private ProgressDialog progressDialog;
+    private SwipeRefreshLayout dashboardRVSwipeRefresh;
+    private CustomProgressDialog progressDialog;
+
+    private boolean isVisited = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,7 +57,6 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
         database = firebaseConnection.getFirebaseFirestoreInstance();
         fAuth    = firebaseConnection.getFirebaseAuthInstance();
         ownedPropertyList = new ArrayList<>();
-
     }
 
     @Nullable
@@ -69,15 +71,27 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        fetchUserProperties();
+        //if the fragment has loaded the data and still available, do not fetch data on firebase
+        if(isVisited == false && ownedPropertyList.isEmpty()) {
+            progressDialog.showProgressDialog("Loading Properties..." , false);
+            fetchUserProperties();
+            isVisited = true;
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(progressDialog.isShowing()) {
+                        progressDialog.dismissProgressDialog();
+                    }
+                }
+            }, 2000);
 
-        addPropertyFAB = view.findViewById(R.id.addPropertyFAB);
+        }
+
         addPropertyFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                // goto add property activity
                 startActivity(new Intent(getActivity(), AddPropertyActivity.class));
-                getActivity().finish();
             }
         });
 
@@ -93,6 +107,19 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
                 }
             }
         });
+
+        dashboardRVSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchUserProperties();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dashboardRVSwipeRefresh.setRefreshing(false);
+                    }
+                }, 2000);
+            }
+        });
     }
     /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
 
@@ -106,21 +133,22 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
         propertyRecyclerView.setLayoutManager(propertyLayoutManager);
         propertyAdapter = new PropertyAdapter(getActivity(), ownedPropertyList, this);
         propertyRecyclerView.setAdapter(propertyAdapter);
+
+
+        //initialize the addProperty FloatingActionButton and other ui
+        addPropertyFAB = view.findViewById(R.id.addPropertyFAB);
+        progressDialog = new CustomProgressDialog(getActivity());
+        dashboardRVSwipeRefresh = view.findViewById(R.id.dashboardSwipeRefresh);
     }
 
     //get all the ownedProperty of the currentUser
     public  void fetchUserProperties() {
 
-        progressDialog = new ProgressDialog(this.getContext());
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading Properties...");
-        progressDialog.show();
-
         //will be used to retrieve owned properties in the Properties Collection
         String currentUserID = fAuth.getCurrentUser().getUid().toString();
         CollectionReference propertiesCollection = database.collection("properties");
 
-        propertiesCollection.whereEqualTo("owner", currentUserID)
+            propertiesCollection.whereEqualTo("owner", currentUserID)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -133,17 +161,7 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
                         propertyAdapter.notifyDataSetChanged();
                     }
                 });
-
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-            }
-        }, 2000);
     }
-
 
     @Override
     public void onPropertyClick(int position) {

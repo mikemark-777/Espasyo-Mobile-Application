@@ -6,36 +6,47 @@
     android:layout_height="match_parent"
     tools:context=".landlord.views.AddPropertyActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/espasyo_blue_200"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Property"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginTop="56dp"
+        android:paddingTop="8dp"
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
             android:orientation="vertical">
-
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="15dp"
-                android:text="Add Property"
-                android:textColor="@color/black"
-                android:textSize="28sp"
-                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_propertyName_layout"
@@ -95,8 +106,8 @@
                     android:id="@+id/getMapLocation"
                     android:layout_width="150dp"
                     android:layout_height="65dp"
-                    android:text="Get"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="Get" />
 
             </LinearLayout>
 
@@ -131,13 +142,6 @@
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <!--
-                   <TextView
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:text="Price Range"
-                       android:textColor="@color/espasyo_gray_200" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_landlord_phoneNumber_layout"
@@ -205,7 +209,10 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:layout_margin="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="90dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="4dp">
@@ -248,7 +255,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Garbage Collection" />
-
 
                 </LinearLayout>
 

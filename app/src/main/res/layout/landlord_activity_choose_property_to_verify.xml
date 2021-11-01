@@ -11,7 +11,7 @@
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="@color/espasyo_blue_700"
+        android:background="@color/espasyo_blue_200"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -70,7 +70,8 @@ public class EditPropertyActivity extends AppCompatActivity {
             btnCancelEditProperty;
 
     private ImageButton btnEditMapLocation;
-    private ImageView btnDeleteProperty;
+    private ImageView btnDeleteProperty,
+                      imageButtonBackToChooseEdit;
 
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
     String[] minimumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
@@ -197,6 +198,13 @@ public class EditPropertyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showConfirmationDeleteDialog();
+            }
+        });
+
+        imageButtonBackToChooseEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -355,6 +363,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         btnEditMapLocation = findViewById(R.id.btnEditMapLocation);
         btnCancelEditProperty = findViewById(R.id.btnCancelEditProperty);
         btnDeleteProperty = findViewById(R.id.imageViewDeleteProperty);
+        imageButtonBackToChooseEdit = findViewById(R.id.imageButtonBackToChooseEdit);
 
         propertyTypeAdapter = new ArrayAdapter<String>(this, R.layout.landlord_property_type_list_item, propertyType);
         textEditPropertyType.setAdapter(propertyTypeAdapter);
