@@ -18,6 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
         <activity
+            android:name=".landlord.views.RoomDetailsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.ViewPropertyOnMapActivity"
+            android:exported="true">
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/map_key" />
+        </activity>
+        <activity
             android:name=".landlord.views.ConfirmVerificationRequestActivity"
             android:exported="true" />
         <activity
@@ -82,12 +92,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Landlord Activities -->
+        </activity> <!-- Landlord Activities -->
         <activity
             android:name=".landlord.LandlordMainActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".landlord.views.AddPropertyActivity"
             android:exported="true" />

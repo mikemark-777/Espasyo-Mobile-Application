@@ -18,10 +18,11 @@
     <color name="espasyo_orange_200">#F89E00</color>
     <color name="espasyo_orange_500">#FFC107</color>
     <color name="espasyo_red_200">#FF8080</color>
-    <color name="espasyo_red_2500">#FF3131</color>
-    <color name="espasyo_gray_200">#2E2E2E</color>
-    <color name="espasyo_gray_500">#122F3A</color>
+    <color name="espasyo_red_500">#FF3131</color>
+    <color name="espasyo_gray_100">#949494</color>
+    <color name="espasyo_gray_200">#4A4A4A</color>
+    <color name="espasyo_gray_500">#323232</color>
     <color name="espasyo_green_200">#19B100</color>
-    <color name="espasyo_white">#CFFFFA</color>
+    <color name="espasyo_white">#FFFFFF</color>
 
 </resources>

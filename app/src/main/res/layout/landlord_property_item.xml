@@ -72,7 +72,9 @@
                 android:layout_height="wrap_content"
                 android:text="Cabarroguis St. District 4, Bayombong NV."
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:ellipsize="end"
+                android:maxLines="1"/>
 
         </LinearLayout>
 

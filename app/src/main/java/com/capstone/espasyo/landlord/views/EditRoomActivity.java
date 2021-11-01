@@ -45,8 +45,7 @@ public class EditRoomActivity extends AppCompatActivity {
     private int numberOfPersons = 1;
     private Button btnEditRoom,
                    btnCancelEditRoom;
-    private ImageView imageViewDeleteRoom,
-                      imageButtonBackToViewRoomsToEdit;
+    private ImageView imageViewDeleteRoom;
 
     private Room room;
 
@@ -122,13 +121,6 @@ public class EditRoomActivity extends AppCompatActivity {
             }
         });
 
-        imageButtonBackToViewRoomsToEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
     }
 
     /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
@@ -192,7 +184,6 @@ public class EditRoomActivity extends AppCompatActivity {
         btnEditRoom = findViewById(R.id.btnEditRoom);
         btnCancelEditRoom = findViewById(R.id.btnCancelEditRoom);
         imageViewDeleteRoom = findViewById(R.id.imageViewDeleteRoom);
-        imageButtonBackToViewRoomsToEdit = findViewById(R.id.imageButtonBackToViewRoomsToEdit);
     }
 
     public void displayRoomData() {

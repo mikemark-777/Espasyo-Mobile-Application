@@ -90,8 +90,6 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         Intent intent = getIntent();
         getDataFromIntent(intent);
 
-
-
         geocoder = new Geocoder(EditLocationPickerActivity.this, Locale.getDefault());
         mapFragment_edit = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment_edit);
         mapFragment_edit.getMapAsync(this);

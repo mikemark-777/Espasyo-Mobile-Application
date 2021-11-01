@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,8 @@ public class PropertyDetailsActivity extends AppCompatActivity {
     private RoomAdapter roomAdapter;
     private ArrayList<Room> propertyRooms;
 
+    private Property property;
+    private ImageButton imageButtonViewPropertyOnMap;
     private String propertyID;
 
     @Override
@@ -59,7 +63,6 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         noRoomsYetSignal = findViewById(R.id.noRoomsYetSignal);
 
         loadPropertyData();
-
         initRoomRecyclerView();
         fetchPropertyRooms();
 
@@ -76,6 +79,16 @@ public class PropertyDetailsActivity extends AppCompatActivity {
             }
         });
 
+        imageButtonViewPropertyOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PropertyDetailsActivity.this, ViewPropertyOnMapActivity.class);
+                intent.putExtra("chosenProperty", property);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
+
     }
 
     // Functions -----
@@ -84,7 +97,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
     public void loadPropertyData() {
         //get data from intent
         Intent intent = getIntent();
-        Property property = intent.getParcelableExtra("property");
+        property = intent.getParcelableExtra("property");
 
         propertyID = property.getPropertyID();
         boolean isVerified = property.getIsVerified();
@@ -95,12 +108,10 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         String landlordPhoneNumber = property.getLandlordPhoneNumber();
         int minimumPrice = property.getMinimumPrice();
         int maximumPrice = property.getMaximumPrice();
-/*
         boolean isElectricityIncluded = property.getIsElectricityIncluded();
         boolean isWaterIncluded = property.getIsWaterIncluded();
         boolean isInternetIncluded = property.getIsInternetIncluded();
         boolean isGarbageCollectionIncluded = property.getIsGarbageCollectionIncluded();
-*/
 
         TextView propName = findViewById(R.id.propertyNameDisplay);
         TextView propType = findViewById(R.id.propertyTypeDisplay);
@@ -110,14 +121,24 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         TextView propMinimumPrice = findViewById(R.id.propertyMinimumPriceDisplay);
         TextView propMaximumPrice = findViewById(R.id.propertyMaximumPriceDisplay);
 
-  /*
-        CheckBox electricityRentInclusion = findViewById(R.id.electricityRentInclusion);
-        CheckBox waterRentInclusion = findViewById(R.id.waterRentInclusion);
-        CheckBox internetRentInclusion = findViewById(R.id.internetRentInclusion);
-        CheckBox garbageCollectionRentInclusion = findViewById(R.id.garbageCollectionRentInclusion);
- */
+        ImageView electricityImageView = findViewById(R.id.icon_electricity);
+        ImageView waterImageView = findViewById(R.id.icon_water);
+        ImageView internetImageView = findViewById(R.id.icon_internet);
+        ImageView garbageCollectionImageView = findViewById(R.id.icon_garbage);
         LinearLayout verificationWarning = findViewById(R.id.verificationWarning);
 
+        if(!isElectricityIncluded) {
+            electricityImageView.setImageResource(R.drawable.icon_no_electricity);
+        }
+        if(!isWaterIncluded) {
+            waterImageView.setImageResource(R.drawable.icon_no_water);
+        }
+        if(!isInternetIncluded) {
+            internetImageView.setImageResource(R.drawable.icon_no_internet);
+        }
+        if(!isGarbageCollectionIncluded) {
+            garbageCollectionImageView.setImageResource(R.drawable.icon_no_garbage);
+        }
 
         propName.setText(name);
         propType.setText(propertyType);
@@ -127,12 +148,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         propMinimumPrice.setText(Integer.toString(minimumPrice));
         propMaximumPrice.setText(Integer.toString(maximumPrice));
 
- /*      electricityRentInclusion.setChecked(isElectricityIncluded);
-        waterRentInclusion.setChecked(isWaterIncluded);
-        internetRentInclusion.setChecked(isInternetIncluded);
-        garbageCollectionRentInclusion.setChecked(isGarbageCollectionIncluded);
-*/
-
+        //set the visibility of the information about the verification of the property
         if(isVerified != true) {
             verificationWarning.setVisibility(View.VISIBLE);
         } else {
@@ -150,6 +166,9 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         roomRecyclerView.setLayoutManager(roomLayoutManager);
         roomAdapter = new RoomAdapter(PropertyDetailsActivity.this, propertyRooms);
         roomRecyclerView.setAdapter(roomAdapter);
+
+        //initialize views aside from recyclerview
+        imageButtonViewPropertyOnMap = findViewById(R.id.imageButtonViewPropertyOnMap);
     }
 
     public void fetchPropertyRooms() {

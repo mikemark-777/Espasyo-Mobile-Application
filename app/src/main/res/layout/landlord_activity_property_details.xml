@@ -81,40 +81,36 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/oswald_bold"
                         android:text="Php "
                         android:textColor="@color/espasyo_gray_200"
-                        android:textSize="24dp" />
+                        android:textSize="24dp"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/propertyMinimumPriceDisplay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/oswald_bold"
                         android:text="1000"
                         android:textColor="@color/espasyo_gray_500"
-                        android:textSize="24dp" />
+                        android:textSize="24dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/oswald_bold"
                         android:text=" - Php "
                         android:textColor="@color/espasyo_gray_500"
-                        android:textSize="24dp" />
+                        android:textSize="24dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/propertyMaximumPriceDisplay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/oswald_bold"
                         android:text="1500"
                         android:textColor="@color/espasyo_gray_500"
-                        android:textSize="24dp" />
+                        android:textSize="24dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
 
@@ -135,7 +131,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <ImageView
@@ -155,13 +151,31 @@
 
                 </LinearLayout>
 
-
-                <TextView
-                    android:id="@+id/propertyAddressDisplay"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Don Mariano Marcos, Bayombong, NV"
-                    android:textSize="14sp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/propertyAddressDisplay"
+                        android:layout_width="230dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Don Mariano Marcos, Bayombong, NV"
+                        android:textSize="14sp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:layout_weight="1"/>
+
+                    <ImageButton
+                        android:id="@+id/imageButtonViewPropertyOnMap"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/icon_map"
+                        android:clickable="true"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -223,6 +237,7 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/icon_water"
                                 android:layout_width="25dp"
                                 android:layout_height="30dp"
                                 android:src="@drawable/icon_water" />
@@ -243,6 +258,7 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/icon_internet"
                                 android:layout_width="25dp"
                                 android:layout_height="30dp"
                                 android:src="@drawable/icon_internet" />
@@ -250,7 +266,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Wi-Fi"
+                                android:text="Internet"
                                 android:textSize="12dp" />
                         </LinearLayout>
 
@@ -262,6 +278,7 @@
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/icon_garbage"
                                 android:layout_width="25dp"
                                 android:layout_height="30dp"
                                 android:src="@drawable/icon_garbage" />

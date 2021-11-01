@@ -46,7 +46,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
         } else {
             holder.availability.setText(UNAVAILABLE);
             //set color of availability text when it is unavailable
-            holder.availability.setTextColor(context.getResources().getColor(R.color.espasyo_red_2500));
+            holder.availability.setTextColor(context.getResources().getColor(R.color.espasyo_red_500));
         }
         holder.roomName.setText(room.getRoomName());
         holder.roomPrice.setText(String.valueOf(room.getPrice()));
