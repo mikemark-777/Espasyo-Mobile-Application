@@ -27,6 +27,8 @@ import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Property;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -466,7 +468,7 @@ public class EditPropertyActivity extends AppCompatActivity {
 
     public void deleteProperty(String propertyID) {
 
-        //delete first the rooms of this property
+        //first delete the rooms of this property
         database.collection("properties/" + propertyID + "/rooms")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -480,6 +482,22 @@ public class EditPropertyActivity extends AppCompatActivity {
                     }
                 });
 
+
+        //next is to delete the verification request linked to this property (if issued)
+        String verificationID = property.getVerificationID();
+
+        if(!verificationID.equals("")) {
+            database.collection("verificationRequests").document(verificationID)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+
+                        }
+            });
+        }
+
+        //lastly is to delete the property itself
         database.collection("properties").document(propertyID)
                 .delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -491,7 +509,6 @@ public class EditPropertyActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
     public void openEditLocationPickerActivityForResult() {
         Intent intent = new Intent(EditPropertyActivity.this, EditLocationPickerActivity.class);

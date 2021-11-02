@@ -120,6 +120,8 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
 
         String verificationRequestID = UUID.randomUUID().toString();
         boolean isVerified = false;
+
+
         // create a new verification request object and set initial data to it
         VerificationRequest newVerificationRequest = new VerificationRequest();
 

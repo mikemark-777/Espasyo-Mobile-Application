@@ -49,7 +49,9 @@
                 android:text="Property Name"
                 android:textColor="#000000"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1"/>
 
         </LinearLayout>
 

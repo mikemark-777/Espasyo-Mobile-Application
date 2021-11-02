@@ -21,12 +21,13 @@
             android:id="@+id/linearLayout7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:src="@drawable/img_room_door"/>
 
             <LinearLayout

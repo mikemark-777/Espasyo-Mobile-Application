@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Deleting property will delete all of its data including rooms. \nDo you want to delete it?" />
+        android:text="Deleting this property will delete all of its data including rooms and attached verification request. \n\nDo you want to delete it?" />
 
     <LinearLayout
         android:layout_width="match_parent"

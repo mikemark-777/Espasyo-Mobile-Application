@@ -120,8 +120,10 @@
                     android:layout_height="wrap_content"
                     android:text="Ferdan's Apartment"
                     android:textColor="@color/black"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

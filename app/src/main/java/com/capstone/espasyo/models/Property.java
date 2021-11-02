@@ -24,6 +24,7 @@ public class Property implements Parcelable{
     private double longitude;
     private boolean isVerified;
     private boolean isLocked;
+    private String verificationID;
     private String propertyType;
     private String name;
     private String address;
@@ -41,7 +42,7 @@ public class Property implements Parcelable{
         //empty property constructor **required`
     }
 
-    public Property(String propertyID, String owner, double latitude, double longitude, boolean isVerified, boolean isLocked,  String propertyType, String name, String address,
+/*    public Property(String propertyID, String owner, double latitude, double longitude, boolean isVerified, boolean isLocked, String verificationID, String propertyType, String name, String address,
                     String proprietorName, String landlordName, String landlordPhoneNumber, int minimumPrice, int maximumPrice, boolean isElectricityIncluded, boolean isWaterIncluded, boolean isInternetIncluded, boolean isGarbageCollectionIncluded) {
         this.propertyID = propertyID;
         this.owner = owner;
@@ -49,6 +50,7 @@ public class Property implements Parcelable{
         this.longitude = longitude;
         this.isVerified = isVerified;
         this.isLocked = isLocked;
+        this.verificationID = verificationID;
         this.propertyType = propertyType;
         this.name = name;
         this.address = address;
@@ -61,8 +63,7 @@ public class Property implements Parcelable{
         this.isWaterIncluded = isWaterIncluded;
         this.isInternetIncluded = isInternetIncluded;
         this.isGarbageCollectionIncluded = isGarbageCollectionIncluded;
-    }
-
+    }*/
 
     protected Property(Parcel in) {
         propertyID = in.readString();
@@ -71,6 +72,7 @@ public class Property implements Parcelable{
         longitude = in.readDouble();
         isVerified = in.readByte() != 0;
         isLocked = in.readByte() != 0;
+        verificationID = in.readString();
         propertyType = in.readString();
         name = in.readString();
         address = in.readString();
@@ -121,6 +123,10 @@ public class Property implements Parcelable{
 
     public void setIsLocked(boolean locked) {
         isLocked = locked;
+    }
+
+    public void setVerificationID(String verificationID) {
+        this.verificationID = verificationID;
     }
 
     public void setPropertyType(String propertyType) {
@@ -195,6 +201,10 @@ public class Property implements Parcelable{
         return isLocked;
     }
 
+    public String getVerificationID() {
+        return verificationID;
+    }
+
     public String getPropertyType() {
         return propertyType;
     }
@@ -243,31 +253,31 @@ public class Property implements Parcelable{
         return isGarbageCollectionIncluded;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(propertyID);
-        parcel.writeString(owner);
-        parcel.writeDouble(latitude);
-        parcel.writeDouble(longitude);
-        parcel.writeByte((byte) (isVerified ? 1 : 0));
-        parcel.writeByte((byte) (isLocked ? 1 : 0));
-        parcel.writeString(propertyType);
-        parcel.writeString(name);
-        parcel.writeString(address);
-        parcel.writeString(proprietorName);
-        parcel.writeString(landlordName);
-        parcel.writeString(landlordPhoneNumber);
-        parcel.writeInt(minimumPrice);
-        parcel.writeInt(maximumPrice);
-        parcel.writeByte((byte) (isElectricityIncluded ? 1 : 0));
-        parcel.writeByte((byte) (isWaterIncluded ? 1 : 0));
-        parcel.writeByte((byte) (isInternetIncluded ? 1 : 0));
-        parcel.writeByte((byte) (isGarbageCollectionIncluded ? 1 : 0));
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(propertyID);
+        dest.writeString(owner);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+        dest.writeByte((byte) (isVerified ? 1 : 0));
+        dest.writeByte((byte) (isLocked ? 1 : 0));
+        dest.writeString(verificationID);
+        dest.writeString(propertyType);
+        dest.writeString(name);
+        dest.writeString(address);
+        dest.writeString(proprietorName);
+        dest.writeString(landlordName);
+        dest.writeString(landlordPhoneNumber);
+        dest.writeInt(minimumPrice);
+        dest.writeInt(maximumPrice);
+        dest.writeByte((byte) (isElectricityIncluded ? 1 : 0));
+        dest.writeByte((byte) (isWaterIncluded ? 1 : 0));
+        dest.writeByte((byte) (isInternetIncluded ? 1 : 0));
+        dest.writeByte((byte) (isGarbageCollectionIncluded ? 1 : 0));
     }
 }

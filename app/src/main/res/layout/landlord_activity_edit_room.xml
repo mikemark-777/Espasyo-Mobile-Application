@@ -43,18 +43,21 @@
 
     <ScrollView
         android:id="@+id/scrollView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="212dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="80dp"
+        android:paddingTop="8dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
         <LinearLayout
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|center_vertical"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -174,7 +177,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
                     android:text="Facilities Included"
                     android:textColor="@color/espasyo_gray_200"
                     android:textSize="20sp"
@@ -184,8 +186,8 @@
                     android:id="@+id/editBathroomSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:checked="true"
                     android:minHeight="48dp"
                     android:text="Bathroom"
@@ -197,8 +199,9 @@
                     android:id="@+id/editKitchenSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:checked="true"
                     android:minHeight="48dp"
                     android:text="Kitchen"
                     android:textSize="18sp"

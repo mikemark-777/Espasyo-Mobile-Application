@@ -20,8 +20,10 @@ import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -138,11 +140,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         verificationRequestsDocumentReference.set(newVerificationRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                //landlordMainActivity has been set its launchMode to singleTask, which will clear everything on its top once it has been started again
-                Toast.makeText(ConfirmVerificationRequestActivity.this, "Verification Request has been sent to the admin", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ConfirmVerificationRequestActivity.this, LandlordMainActivity.class);
-                startActivity(intent);
-                finish();
+                attachVerificationRequestIDToProperty(newVerificationRequestID);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -162,6 +160,27 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
     public String getDateSubmitted() {
         Date currentDate = Calendar.getInstance().getTime();
         return DateFormat.getDateInstance(DateFormat.FULL).format(currentDate);
+    }
+
+    public void attachVerificationRequestIDToProperty(String verificationID) {
+
+        String propertyID = chosenProperty.getPropertyID();
+        chosenProperty.setVerificationID(verificationID);
+
+        DocumentReference propertyDocumentReference = database.collection("properties").document(propertyID);
+        propertyDocumentReference.set(chosenProperty).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(ConfirmVerificationRequestActivity.this, "Verification Request has been sent to the admin", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ConfirmVerificationRequestActivity.this, LandlordMainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(ConfirmVerificationRequestActivity.this, "Error saving verification ID to property: " + task.getException().toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 }

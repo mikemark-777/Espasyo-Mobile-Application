@@ -31,167 +31,180 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="80dp"
+        android:paddingTop="8dp"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_room_name_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            app:helperTextEnabled="true"
-            app:helperTextTextColor="#2E2E2E"
-            app:prefixText="Room ">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/text_input_room_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Room Name"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
-
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_room_price_layout"
+                android:id="@+id/text_input_room_name_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
                 app:errorEnabled="true"
+                app:helperTextEnabled="true"
                 app:helperTextTextColor="#2E2E2E"
-                app:prefixText="Php "
-                app:suffixText=".00">
+                app:prefixText="Room ">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/text_input_room_price"
+                    android:id="@+id/text_input_room_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Room Price"
-                    android:inputType="number" />
+                    android:hint="Room Name"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="3dp">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_room_price_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:text="Number of persons"
-                    android:textSize="12sp" />
+                    android:layout_marginRight="16dp"
+                    app:errorEnabled="true"
+                    app:helperTextTextColor="#2E2E2E"
+                    app:prefixText="Php "
+                    app:suffixText=".00">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/text_input_room_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Room Price"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/decrement"
-                        android:layout_width="45dp"
-                        android:layout_height="46dp"
-                        android:text="-"
-                        android:textSize="18sp" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="3dp">
 
                     <TextView
-                        android:id="@+id/text_input_numberOfPersons"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:text="1"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:text="Number of persons"
+                        android:textSize="12sp" />
 
-                    <Button
-                        android:id="@+id/increment"
-                        android:layout_width="45dp"
-                        android:layout_height="46dp"
-                        android:text="+"
-                        android:textSize="18sp" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/decrement"
+                            android:layout_width="45dp"
+                            android:layout_height="46dp"
+                            android:text="-"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/text_input_numberOfPersons"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp"
+                            android:text="1"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/increment"
+                            android:layout_width="45dp"
+                            android:layout_height="46dp"
+                            android:text="+"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/roomAvailabilitySwitch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:checked="true"
-            android:minHeight="48dp"
-            android:paddingRight="8dp"
-            android:text="Room  Availability"
-            android:textSize="18sp"
-            android:thumb="@drawable/custom_thumb_availability"
-            app:track="@drawable/custom_track_availability" />
-
-        <!--must include number of persons per room-->
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="Facilities Included"
-                android:textColor="@color/espasyo_gray_200"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/bathroomSwitch"
+                android:id="@+id/roomAvailabilitySwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
                 android:layout_marginBottom="12dp"
                 android:checked="true"
                 android:minHeight="48dp"
-                android:text="Bathroom"
+                android:paddingRight="8dp"
+                android:text="Room  Availability"
                 android:textSize="18sp"
-                android:thumb="@drawable/custom_thumb"
-                app:track="@drawable/custom_track" />
+                android:thumb="@drawable/custom_thumb_availability"
+                app:track="@drawable/custom_track_availability" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/kitchenSwitch"
+            <!--must include number of persons per room-->
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="12dp"
-                android:minHeight="48dp"
-                android:text="Kitchen"
-                android:textSize="18sp"
-                android:thumb="@drawable/custom_thumb"
-                app:track="@drawable/custom_track" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:text="Facilities Included"
+                    android:textColor="@color/espasyo_gray_200"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/bathroomSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:checked="true"
+                    android:minHeight="48dp"
+                    android:text="Bathroom"
+                    android:textSize="18sp"
+                    android:thumb="@drawable/custom_thumb"
+                    app:track="@drawable/custom_track" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/kitchenSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:minHeight="48dp"
+                    android:text="Kitchen"
+                    android:textSize="18sp"
+                    android:thumb="@drawable/custom_thumb"
+                    app:track="@drawable/custom_track" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
 
-    </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/linearLayout5"

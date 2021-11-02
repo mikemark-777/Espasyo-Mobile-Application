@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,6 +43,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
     public void onBindViewHolder(@NonNull RoomAdapter.RoomViewHolder holder, int position) {
         Room room = roomList.get(position);
 
+        //check the availability state and see display appropriate data
         if(room.getIsAvailable()) {
             holder.availability.setText(AVAILABLE);
             //set color of availability text when it is available
@@ -51,9 +53,22 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
             //set color of availability text when it is unavailable
             holder.availability.setTextColor(context.getResources().getColor(R.color.espasyo_red_500));
         }
+
+        //check the availability of the facilities included (bathroom and kitchen) and display the appropriate data
+        if(room.getHasBathRoom()) {
+            holder.hasBathroom.setImageResource(R.drawable.icon_bathroom);
+        } else {
+            holder.hasBathroom.setImageResource(R.drawable.icon_no_bathroom);
+        }
+
+        if(room.getHasKitchen()) {
+            holder.hasKitchen.setImageResource(R.drawable.icon_kitchen);
+        } else {
+            holder.hasKitchen.setImageResource(R.drawable.icon_no_kitchen);
+        }
+
         holder.roomName.setText(room.getRoomName());
         holder.roomPrice.setText(String.valueOf(room.getPrice()));
-        holder.numberOfPerson.setText(String.valueOf(room.getNumberOfPersons()));
     }
 
     @Override
@@ -63,14 +78,16 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
 
     public static class RoomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        TextView roomName, roomPrice, numberOfPerson, availability;
+        TextView roomName, roomPrice, availability;
+        ImageView hasBathroom, hasKitchen;
         OnRoomListener onRoomListener;
         public RoomViewHolder(@NonNull View itemView, OnRoomListener onRoomListener) {
             super(itemView);
             roomName = itemView.findViewById(R.id.roomName);
             roomPrice = itemView.findViewById(R.id.roomPrice);
             availability = itemView.findViewById(R.id.availability);
-            numberOfPerson = itemView.findViewById(R.id.numberOfPersons);
+            hasBathroom = itemView.findViewById(R.id.icon_hasBathroom_roomItem);
+            hasKitchen = itemView.findViewById(R.id.icon_hasKitchen_roomItem);
             this.onRoomListener = onRoomListener;
 
             itemView.setOnClickListener(this);

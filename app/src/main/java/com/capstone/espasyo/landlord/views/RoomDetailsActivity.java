@@ -70,11 +70,11 @@ public class RoomDetailsActivity extends AppCompatActivity {
         }
 
         if(!hasBathroom) {
-            hasBathroomImageView.setImageResource(R.drawable.icon_unverified);
+            hasBathroomImageView.setImageResource(R.drawable.icon_no_bathroom);
         }
 
         if(!hasKitchen) {
-            hasKitchenImageView.setImageResource(R.drawable.icon_unverified);
+            hasKitchenImageView.setImageResource(R.drawable.icon_no_kitchen);
         }
 
     }

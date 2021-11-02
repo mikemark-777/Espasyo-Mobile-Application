@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Room "
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"/>
 
@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Room Name"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"/>
 
@@ -106,6 +106,7 @@
                     android:layout_marginRight="16dp"/>
 
                 <ImageView
+                    android:id="@+id/icon_hasBathroom_roomItem"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:padding="1dp"
@@ -113,10 +114,11 @@
                     android:layout_marginRight="16dp"/>
 
                 <ImageView
+                    android:id="@+id/icon_hasKitchen_roomItem"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:padding="3dp"
-                    android:src="@drawable/icon_toilet"/>
+                    android:src="@drawable/icon_kitchen"/>
 
 
 

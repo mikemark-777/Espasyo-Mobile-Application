@@ -153,26 +153,25 @@ public class AddPropertyActivity extends AppCompatActivity {
                     getRentInclusions();
 
                     // CREATE SAMPLE PROPERTY OBJECT
-                    Property newProperty = new Property(
-                            newPropertyID,
-                            propertyOwner,
-                            latitude,
-                            longitude,
-                            false,
-                            false,
-                            propertyType,
-                            propertyName,
-                            completeAddress,
-                            proprietorName,
-                            landlordName,
-                            landlordPhoneNumber,
-                            minimumPrice,
-                            maximumPrice,
-                            isElectricityIncluded,
-                            isWaterIncluded,
-                            isInternetIncluded,
-                            isGarbageCollectionIncluded
-                    );
+                    Property newProperty = new Property();
+                        newProperty.setPropertyID(newPropertyID);
+                        newProperty.setOwner(propertyOwner);
+                        newProperty.setLatitude(latitude);
+                        newProperty.setLongitude(longitude);
+                        newProperty.setIsVerified(false);
+                        newProperty.setIsLocked(false);
+                        newProperty.setPropertyType(propertyType);
+                        newProperty.setName(propertyName);
+                        newProperty.setAddress(completeAddress);
+                        newProperty.setProprietorName(proprietorName);
+                        newProperty.setLandlordName(landlordName);
+                        newProperty.setLandlordPhoneNumber(landlordPhoneNumber);
+                        newProperty.setMinimumPrice(minimumPrice);
+                        newProperty.setMaximumPrice(maximumPrice);
+                        newProperty.setIsElectricityIncluded(isElectricityIncluded);
+                        newProperty.setIsWaterIncluded(isWaterIncluded);
+                        newProperty.setIsInternetIncluded(isInternetIncluded);
+                        newProperty.setIsGarbageCollectionIncluded(isGarbageCollectionIncluded);
 
                     addNewProperty(newPropertyID, newProperty);
 

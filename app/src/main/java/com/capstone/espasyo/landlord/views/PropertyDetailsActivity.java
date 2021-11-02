@@ -201,7 +201,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
 
     @Override
     public void onRoomClick(int position) {
-
         Intent intent = new Intent(PropertyDetailsActivity.this, RoomDetailsActivity.class);
         intent.putExtra("chosenRoom", propertyRooms.get(position));
         startActivity(intent);
