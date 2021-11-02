@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.landlord.adapters.EditRoomAdapter;
 import com.capstone.espasyo.landlord.adapters.RoomAdapter;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.landlord.widgets.RoomRecyclerView;
@@ -32,13 +33,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropertyDetailsActivity extends AppCompatActivity {
+public class PropertyDetailsActivity extends AppCompatActivity implements RoomAdapter.OnRoomListener {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth fAuth;
     private FirebaseFirestore database;
-
-    private LinearLayout noRoomsYetSignal;
 
     private RoomRecyclerView roomRecyclerView;
     private View roomRecylerViewEmptyState;
@@ -59,8 +58,6 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         fAuth = firebaseConnection.getFirebaseAuthInstance();
         database = firebaseConnection.getFirebaseFirestoreInstance();
         propertyRooms = new ArrayList<>();
-
-        noRoomsYetSignal = findViewById(R.id.noRoomsYetSignal);
 
         loadPropertyData();
         initRoomRecyclerView();
@@ -164,7 +161,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         roomRecyclerView.setHasFixedSize(true);
         LinearLayoutManager roomLayoutManager = new LinearLayoutManager(PropertyDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
         roomRecyclerView.setLayoutManager(roomLayoutManager);
-        roomAdapter = new RoomAdapter(PropertyDetailsActivity.this, propertyRooms);
+        roomAdapter = new RoomAdapter(PropertyDetailsActivity.this, propertyRooms, this);
         roomRecyclerView.setAdapter(roomAdapter);
 
         //initialize views aside from recyclerview
@@ -200,5 +197,13 @@ public class PropertyDetailsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    public void onRoomClick(int position) {
+
+        Intent intent = new Intent(PropertyDetailsActivity.this, RoomDetailsActivity.class);
+        intent.putExtra("chosenRoom", propertyRooms.get(position));
+        startActivity(intent);
     }
 }

@@ -1,6 +1,7 @@
 package com.capstone.espasyo.landlord.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,21 +19,23 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
 
     private Context context;
     private ArrayList<Room> roomList;
+    private OnRoomListener onRoomListener;
     //private PropertyAdapter.OnPropertyListener onPropertyListener;
 
     final String AVAILABLE = "Available";
     final String UNAVAILABLE = "Unavailable";
 
-    public RoomAdapter(Context context, ArrayList<Room> roomList) {
+    public RoomAdapter(Context context, ArrayList<Room> roomList, OnRoomListener onRoomListener) {
         this.context = context;
         this.roomList = roomList;
+        this.onRoomListener = onRoomListener;
     }
 
     @NonNull
     @Override
-    public RoomAdapter.RoomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RoomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.landlord_room_item, parent, false);
-        return new RoomViewHolder(view);
+        return new RoomViewHolder(view, onRoomListener);
     }
 
     @Override
@@ -58,16 +61,29 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
         return roomList.size();
     }
 
-    public static class RoomViewHolder extends RecyclerView.ViewHolder {
+    public static class RoomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView roomName, roomPrice, numberOfPerson, availability;
-        public RoomViewHolder(@NonNull View itemView) {
+        OnRoomListener onRoomListener;
+        public RoomViewHolder(@NonNull View itemView, OnRoomListener onRoomListener) {
             super(itemView);
             roomName = itemView.findViewById(R.id.roomName);
             roomPrice = itemView.findViewById(R.id.roomPrice);
             availability = itemView.findViewById(R.id.availability);
             numberOfPerson = itemView.findViewById(R.id.numberOfPersons);
+            this.onRoomListener = onRoomListener;
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            onRoomListener.onRoomClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnRoomListener {
+        void onRoomClick(int position);
     }
 
 }

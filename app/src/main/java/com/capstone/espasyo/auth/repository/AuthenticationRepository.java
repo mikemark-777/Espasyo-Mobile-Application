@@ -120,6 +120,7 @@ public class AuthenticationRepository {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()) {
+
                                         sendEmailVerification();
                                         firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
                                         Toast.makeText(application, "Email Address successfully updated", Toast.LENGTH_SHORT).show();
@@ -203,6 +204,10 @@ public class AuthenticationRepository {
                 }
             });
         }
+    }
+
+    public void updateLandlordEmail() {
+        //todo: update landlord table if the landlord changes email
     }
 
 }

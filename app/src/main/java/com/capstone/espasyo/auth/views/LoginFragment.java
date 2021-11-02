@@ -59,6 +59,7 @@ public class LoginFragment extends Fragment {
 
     private FirebaseFirestore database;
     private DocumentReference userReference;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,24 +74,24 @@ public class LoginFragment extends Fragment {
         viewModel.getUserData().observe(this, new Observer<FirebaseUser>() {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
-                if(firebaseUser != null) {
-                    if(firebaseUser.isEmailVerified()) {
+                if (firebaseUser != null) {
+                    if (firebaseUser.isEmailVerified()) {
 
                         //Get currentUser's UID
                         String UID = firebaseUser.getUid();
 
                         userReference = database.collection("users").document(UID);
 
-                        if(getUserRole() != 0) {
+                        if (getUserRole() != 0) {
                             int uRole = getUserRole();
                             //Navigate to different modules depending on the user's role
-                            if(uRole == ADMIN_CODE) {
+                            if (uRole == ADMIN_CODE) {
 
-                            } else if(uRole == LANDLORD_CODE){
+                            } else if (uRole == LANDLORD_CODE) {
                                 Intent intent = new Intent(getActivity(), LandlordMainActivity.class);
                                 startActivity(intent);
                                 getActivity().finish();
-                            } else if(uRole == STUDENT_CODE) {
+                            } else if (uRole == STUDENT_CODE) {
                                 Intent intent = new Intent(getActivity(), StudentMainActivity.class);
                                 startActivity(intent);
                                 getActivity().finish();
@@ -106,13 +107,13 @@ public class LoginFragment extends Fragment {
                                     saveUserRole(userRole);
 
                                     //Navigate to different modules depending on the user's role
-                                    if(userRole == ADMIN_CODE) {
+                                    if (userRole == ADMIN_CODE) {
 
-                                    } else if(userRole == LANDLORD_CODE){
+                                    } else if (userRole == LANDLORD_CODE) {
                                         Intent intent = new Intent(getActivity(), LandlordMainActivity.class);
                                         startActivity(intent);
                                         getActivity().finish();
-                                    } else if(userRole == STUDENT_CODE) {
+                                    } else if (userRole == STUDENT_CODE) {
                                         Intent intent = new Intent(getActivity(), StudentMainActivity.class);
                                         startActivity(intent);
                                         getActivity().finish();
@@ -169,7 +170,7 @@ public class LoginFragment extends Fragment {
                 String txtEmail = textInputEmail.getText().toString().trim();
                 String txtPassword = textInputPassword.getText().toString().trim();
 
-                if(areInputsValid(txtEmail, txtPassword)) {
+                if (areInputsValid(txtEmail, txtPassword)) {
 
                     loginProgressBar.setVisibility(View.VISIBLE);
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -192,7 +193,7 @@ public class LoginFragment extends Fragment {
     public final String TAG = "TESTING";
 
     private boolean isEmailValid(String email) {
-        if(!email.isEmpty()) {
+        if (!email.isEmpty()) {
             textInputEmailLayout.setError(null);
             Log.d(TAG, "EMAIL: NOT EMPTY");
             return true;
@@ -205,7 +206,7 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean isPasswordValid(String password) {
-        if(!password.isEmpty()) {
+        if (!password.isEmpty()) {
             textInputPasswordLayout.setError(null);
             Log.d(TAG, "PASSWORD: NOT EMPTY");
             return true;
@@ -221,9 +222,9 @@ public class LoginFragment extends Fragment {
         boolean emailResult = isEmailValid(email);
         boolean passwordResult = isPasswordValid(password);
 
-        if(emailResult && passwordResult) {
+        if (emailResult && passwordResult) {
             Log.d(TAG, "CAN PROCEED: TRUE");
-           return true;
+            return true;
         } else {
             Log.d(TAG, "CAN PROCEED: FALSE");
             return false;

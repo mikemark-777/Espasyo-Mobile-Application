@@ -381,8 +381,6 @@
 
                 </LinearLayout>
 
-
-
                 <com.capstone.espasyo.landlord.widgets.RoomRecyclerView
                     android:id="@+id/roomsRecyclerView"
                     android:layout_width="match_parent"
@@ -395,15 +393,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/noRoomsYetSignal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-
-                </LinearLayout>
 
             </LinearLayout>
 

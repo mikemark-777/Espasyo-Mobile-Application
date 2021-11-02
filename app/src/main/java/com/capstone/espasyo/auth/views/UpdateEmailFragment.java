@@ -10,11 +10,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
@@ -37,6 +40,7 @@ public class UpdateEmailFragment extends Fragment {
                               textInputPassword;
 
     private Button btnChangeEmail;
+    private ProgressBar updateEmailProgressBar;
     private AuthViewModel viewModel;
     private NavController navController;
     private Boolean isEmailChanged = false;
@@ -92,6 +96,8 @@ public class UpdateEmailFragment extends Fragment {
         textInputPassword = view.findViewById(R.id.text_input_password_updateemail);
 
         btnChangeEmail = view.findViewById(R.id.btnChangeEmail);
+        //progress bar
+        updateEmailProgressBar = view.findViewById(R.id.updateEmailProgressBar);
 
         btnChangeEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,11 +108,21 @@ public class UpdateEmailFragment extends Fragment {
                 String password = textInputPassword.getText().toString();
 
                 if(confirmInput(currentEmailAddress, newEmailAddress, password)) {
-                    viewModel.updateEmailAddress(currentUser, currentEmailAddress ,newEmailAddress ,password);
-                    isEmailChanged = true;
-                    textInputCurrentEmailAddress.setText("");
-                    textInputNewEmailAddress.setText("");
-                    textInputPassword.setText("");
+
+                    updateEmailProgressBar.setVisibility(View.VISIBLE);
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateEmailProgressBar.setVisibility(View.INVISIBLE);
+                            viewModel.updateEmailAddress(currentUser, currentEmailAddress ,newEmailAddress ,password);
+                            isEmailChanged = true;
+                            textInputCurrentEmailAddress.setText("");
+                            textInputNewEmailAddress.setText("");
+                            textInputPassword.setText("");
+                        }
+                    }, 4000);
+
+
                 } else {
                     Toast.makeText(getActivity(), "Please fill out everything", Toast.LENGTH_SHORT).show();
                 }

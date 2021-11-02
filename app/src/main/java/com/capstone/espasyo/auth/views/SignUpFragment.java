@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,12 +35,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 public class SignUpFragment extends Fragment {
 
@@ -67,6 +64,7 @@ public class SignUpFragment extends Fragment {
 
     //navigate to Login using text
     private TextView gotoLogin;
+    private ProgressBar signUpProgressBar;
     private Button btnSignUp;
 
     @Override
@@ -122,6 +120,9 @@ public class SignUpFragment extends Fragment {
 
         //Checkbox
         agreeToTermsAndConditions = view.findViewById(R.id.agreeToTermsAndConditions);
+
+        //progress bar
+        signUpProgressBar = view.findViewById(R.id.signUpProgressBar);
 
         btnSignUp = view.findViewById(R.id.btnSignUp);
         gotoLogin = view.findViewById(R.id.gotoLogin);
@@ -181,8 +182,14 @@ public class SignUpFragment extends Fragment {
                                     String UID = "";
 
                                     User newUser = new User(UID,FName,LName,email,pass,uRole);
-
-                                    viewModel.register(newUser);
+                                    signUpProgressBar.setVisibility(View.VISIBLE);
+                                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            signUpProgressBar.setVisibility(View.INVISIBLE);
+                                            viewModel.register(newUser);
+                                        }
+                                    }, 4000);
 
                                 } else {
                                     textInputEmailLayout.setError("Email already exists");
