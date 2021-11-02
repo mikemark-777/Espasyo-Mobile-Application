@@ -354,7 +354,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
+                android:layout_height="wrap_content"
                 android:background="#EDEDED"
                 android:orientation="vertical"
                 android:layout_marginTop="12dp"
@@ -395,6 +395,23 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:paddingTop="8dp"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical|center_horizontal">
+
+                    <TextView
+                        android:id="@+id/showAllRooms_propertyDetails"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Show all rooms"
+                        android:textColor="@color/espasyo_blue_700"
+                        android:visibility="gone"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

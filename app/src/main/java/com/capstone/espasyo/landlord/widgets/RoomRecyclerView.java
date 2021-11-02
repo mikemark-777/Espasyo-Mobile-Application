@@ -16,6 +16,7 @@ public class RoomRecyclerView extends RecyclerView {
 
     private List<View> mNonEmptyViews = Collections.emptyList();
     private List<View> mEmptyViews = Collections.emptyList();
+    private List<View> mShowIfGreaterThanSevenViews = Collections.emptyList();
 
     private AdapterDataObserver mObserver = new AdapterDataObserver() {
         @Override
@@ -71,9 +72,15 @@ public class RoomRecyclerView extends RecyclerView {
                 //show the recyclerView since there is data to be displayed
                 setVisibility(View.VISIBLE);
 
-                //will check if the rooms are greater than 7 and if so, it will show the SHOW MORE Button
-                if(getAdapter().getItemCount() > 7) {
-                    //todo: implement this
+                //will check if the rooms are greater than 6 and if so, it will show the SHOW ALL ROOMS Button
+                if(getAdapter().getItemCount() > 6) {
+                    for(View view : mShowIfGreaterThanSevenViews) {
+                        view.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    for(View view : mShowIfGreaterThanSevenViews) {
+                        view.setVisibility(View.GONE);
+                    }
                 }
             }
         }
@@ -102,5 +109,9 @@ public class RoomRecyclerView extends RecyclerView {
 
     public void showIfEmpty(View ...view) {
         mEmptyViews = Arrays.asList(view);
+    }
+
+    public void showIfRoomsAreGreaterThanSeven(View ...view) {
+        mShowIfGreaterThanSevenViews = Arrays.asList(view);
     }
 }

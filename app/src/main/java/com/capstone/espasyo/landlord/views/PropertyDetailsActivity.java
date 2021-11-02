@@ -27,8 +27,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.core.OrderBy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
 
     private Property property;
     private ImageButton imageButtonViewPropertyOnMap;
+    private View showAllRooms;
     private String propertyID;
 
     @Override
@@ -73,6 +76,13 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
                 Intent intent = new Intent(PropertyDetailsActivity.this, AddRoomActivity.class);
                 intent.putExtra("propertyID", propertyID);
                 startActivity(intent);
+            }
+        });
+
+        showAllRooms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
             }
         });
 
@@ -157,7 +167,9 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     public void initRoomRecyclerView() {
         roomRecyclerView = (RoomRecyclerView) findViewById(R.id.roomsRecyclerView);
         roomRecylerViewEmptyState = findViewById(R.id.empty_room_state_propertyDetailsActivity_PDA);
+        showAllRooms = findViewById(R.id.showAllRooms_propertyDetails);
         roomRecyclerView.showIfEmpty(roomRecylerViewEmptyState);
+        roomRecyclerView.showIfRoomsAreGreaterThanSeven(showAllRooms);
         roomRecyclerView.setHasFixedSize(true);
         LinearLayoutManager roomLayoutManager = new LinearLayoutManager(PropertyDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
         roomRecyclerView.setLayoutManager(roomLayoutManager);
@@ -166,13 +178,18 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
 
         //initialize views aside from recyclerview
         imageButtonViewPropertyOnMap = findViewById(R.id.imageButtonViewPropertyOnMap);
+
     }
 
     public void fetchPropertyRooms() {
         String ownerPropertyID = propertyID;
         CollectionReference roomsCollection = database.collection("properties").document(ownerPropertyID)
                                                       .collection("rooms");
-        roomsCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        roomsCollection
+                .orderBy("roomName", Query.Direction.ASCENDING)
+                .limit(7)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 propertyRooms.clear();

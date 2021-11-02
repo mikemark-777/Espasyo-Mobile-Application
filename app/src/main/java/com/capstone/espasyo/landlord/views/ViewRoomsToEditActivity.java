@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -84,7 +85,11 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
         String ownerPropertyID = propertyID;
         CollectionReference roomsCollection = database.collection("properties").document(ownerPropertyID)
                 .collection("rooms");
-        roomsCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+        roomsCollection
+                .orderBy("roomName", Query.Direction.ASCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 propertyRooms.clear();

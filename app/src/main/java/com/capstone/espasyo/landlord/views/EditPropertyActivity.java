@@ -134,7 +134,9 @@ public class EditPropertyActivity extends AppCompatActivity {
                             Toast.makeText(EditPropertyActivity.this, "Location Picked: Lat("  + latitude + ") , (" + longitude + ")", Toast.LENGTH_SHORT).show();
                             textEditCompleteAddress.setText(completeAddress);
                         } else if (result.getResultCode() == Activity.RESULT_CANCELED){
-                            Toast.makeText(EditPropertyActivity.this, "Location and address not changed", Toast.LENGTH_SHORT).show();
+                            //if the user don't change the location, the location saved retains
+                            latitude = property.getLatitude();
+                            longitude = property.getLongitude();
                         }
                     }
                 });
@@ -481,7 +483,6 @@ public class EditPropertyActivity extends AppCompatActivity {
                         }
                     }
                 });
-
 
         //next is to delete the verification request linked to this property (if issued)
         String verificationID = property.getVerificationID();
