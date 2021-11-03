@@ -8,9 +8,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 public class VerificationRequestDetailsActivity extends AppCompatActivity {
+
+    private FirebaseConnection firebaseConnection;
+    private FirebaseFirestore database;
+    private DocumentReference propertyDocRef;
 
     //verification Object
     private VerificationRequest verificationRequest;
@@ -32,17 +43,90 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     private ImageView barangayBPImageViewDisplay,
                       municipalBPImageViewDisplay;
 
+    //this is the ID of the property linked to this verification request
+    private String propertyID;
+    private Property property;
+
+    private final String VERIFIED = "Verified";
+    private final String UNVERIFIED = "Unverified";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_verification_request_details);
 
+        //initialize firebase connections
+        firebaseConnection = FirebaseConnection.getInstance();
+        database = firebaseConnection.getFirebaseFirestoreInstance();
+
+        initializeViews();
         Intent intent = getIntent();
         getDataFromIntent(intent);
 
+
+
+    }
+
+    public void initializeViews() {
+        propertyNameDisplay = findViewById(R.id.propertyName_display_VRDetails);
+        propertyAddressDisplay = findViewById(R.id.propertyAddress_display_VRDetails);
+        dateSubmittedDisplay = findViewById(R.id.dateSubmitted_display_VRDetails);
+        dateVerifiedDisplay = findViewById(R.id.dateVerified_display_VRDetails);
+        isVerifiedDisplay = findViewById(R.id.isVerified_display_VRDetails);
+        barangayBPImageViewDisplay = findViewById(R.id.barangayBP_display_VRDetails);
+        municipalBPImageViewDisplay = findViewById(R.id.municipalBP_display_VRDetails);
     }
 
     public void getDataFromIntent(Intent intent) {
         verificationRequest = intent.getParcelableExtra("chosenVerificationRequest");
+
+        //set propertyID linked to this verificaton request
+        propertyID = verificationRequest.getPropertyID();
+
+        String propertyName = verificationRequest.getPropertyName();
+        String address = verificationRequest.getPropertyAddress();
+        /* String landlord = verificationRequest.getLandlord();
+        String landlordPhoneNumber = verificationRequest.getLandlordPhoneNumber();*/
+        String dateSubmitted = verificationRequest.getDateSubmitted();
+        String dateVerified = verificationRequest.getDateVerified();
+        boolean isVerified = verificationRequest.isVerified();
+        String barangayBPUrl = verificationRequest.getBarangayBusinessPermitImageURL();
+        String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
+
+        propertyNameDisplay.setText(propertyName);
+        propertyAddressDisplay.setText(address);
+        /*landlordNameDisplay.setText(landlord);
+        landlordPhoneNumberDisplay.setText(landlordPhoneNumber);*/
+        dateSubmittedDisplay.setText(dateSubmitted);
+        dateVerifiedDisplay.setText(dateVerified);
+
+        if(!isVerified) {
+            isVerifiedDisplay.setText(UNVERIFIED);
+            isVerifiedDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_red_200));
+        } else {
+            isVerifiedDisplay.setText(VERIFIED);
+            isVerifiedDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_green_200));
+        }
+
+        //will display the images of barangay and municipal business permit
+        Picasso.get()
+                .load(barangayBPUrl)
+                .placeholder(R.drawable.img_upload_business_permit)
+                .into(barangayBPImageViewDisplay);
+        Picasso.get()
+                .load(municipalBPUrl)
+                .placeholder(R.drawable.img_upload_business_permit)
+                .into(municipalBPImageViewDisplay);
+    }
+
+    public void getProperty(String propertyID) {
+        propertyDocRef = database.collection("properties").document(propertyID);
+
+        propertyDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        property = documentSnapshot.toObject(Property.class);
+                    }
+                });
     }
 }

@@ -28,7 +28,6 @@ import java.util.ArrayList;
 public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRoomAdapter.OnRoomListener{
 
     private FirebaseConnection firebaseConnection;
-    private FirebaseAuth fAuth;
     private FirebaseFirestore database;
 
     private RoomRecyclerView editRoomRecyclerView;
@@ -37,7 +36,8 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
     private ArrayList<Room> propertyRooms;
 
     private String propertyID;
-    private ImageView btnBackToChooseEditActivity;
+    private ImageView btnBackToChooseEditActivity,
+                      btnAddRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,6 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
 
         //Initialize FirebaseConnection, FirebaseAuth and FirebaseFirestore
         firebaseConnection = FirebaseConnection.getInstance();
-        fAuth = firebaseConnection.getFirebaseAuthInstance();
         database = firebaseConnection.getFirebaseFirestoreInstance();
         propertyRooms = new ArrayList<>();
 
@@ -58,6 +57,15 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        btnAddRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewRoomsToEditActivity.this, AddRoomActivity.class);
+                intent.putExtra("propertyID", propertyID);
+                startActivity(intent);
             }
         });
 
@@ -78,7 +86,10 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
         editRoomRecyclerView.setLayoutManager(editRoomLayoutManager);
         editRoomAdapter = new EditRoomAdapter(ViewRoomsToEditActivity.this, propertyRooms, this);
         editRoomRecyclerView.setAdapter(editRoomAdapter);
+
+        //initialize other views aside from recyclerview
         btnBackToChooseEditActivity = findViewById(R.id.btn_back_to_ChooseEditActivity);
+        btnAddRoom = findViewById(R.id.imageButtonAddRoom_viewRoomToEdit);
     }
 
     public void fetchPropertyRooms() {

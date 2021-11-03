@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="275dp"
+    android:layout_height="220dp"
     android:layout_marginLeft="16dp"
     android:layout_marginTop="8dp"
     android:layout_marginRight="16dp"
@@ -78,51 +78,6 @@
                     android:textSize="14sp"
                     android:ellipsize="end"
                     android:maxLines="1"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginRight="15dp"
-                    app:srcCompat="@drawable/icon_person" />
-
-                <TextView
-                    android:id="@+id/landlordName_verification"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dina Licupa"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginRight="15dp"
-                    app:srcCompat="@drawable/icon_phone" />
-
-                <TextView
-                    android:id="@+id/landlordContactNumber_verification"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="09551074609"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
 
             </LinearLayout>
 

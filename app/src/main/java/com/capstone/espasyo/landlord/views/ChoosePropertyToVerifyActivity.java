@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.PropertyAdapter;
+import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.landlord.widgets.PropertyRecyclerView;
 import com.capstone.espasyo.models.Property;
@@ -29,7 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements PropertyAdapter.OnPropertyListener{
+public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements PropertyAdapter.OnPropertyListener {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth fAuth;
@@ -41,7 +42,7 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
     private ArrayList<Property> ownedPropertyList;
 
     private ExtendedFloatingActionButton addPropertyFAB;
-    private ProgressDialog progressDialog;
+    private CustomProgressDialog progressDialog;
 
     private Button cancelVerificationRequestCompose;
 
@@ -53,7 +54,7 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         //Initialize
         firebaseConnection = FirebaseConnection.getInstance();
         database = firebaseConnection.getFirebaseFirestoreInstance();
-        fAuth    = firebaseConnection.getFirebaseAuthInstance();
+        fAuth = firebaseConnection.getFirebaseAuthInstance();
         ownedPropertyList = new ArrayList<>();
 
         initPropertyRecyclerView();
@@ -82,6 +83,9 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         propertyRecyclerView.setLayoutManager(propertyLayoutManager);
         propertyAdapter = new PropertyAdapter(ChoosePropertyToVerifyActivity.this, ownedPropertyList, this);
         propertyRecyclerView.setAdapter(propertyAdapter);
+
+        //initialize data aside from recyclerView
+        progressDialog = new CustomProgressDialog(this);
     }
 
     public void fetchUserProperties() {
@@ -95,10 +99,10 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         ownedPropertyList.clear();
-                        for(QueryDocumentSnapshot property: queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot property : queryDocumentSnapshots) {
                             Property propertyObj = property.toObject(Property.class);
                             //will only get properties that are not verified and has verification request attached
-                            if(!propertyObj.getIsVerified()) {
+                            if (!propertyObj.getIsVerified()) {
                                 ownedPropertyList.add(propertyObj);
                             }
                         }
@@ -116,36 +120,32 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         String requesteeID = chosenProperty.getOwner();
         String propertyID = chosenProperty.getPropertyID();
         String propertyName = chosenProperty.getName();
-
+        String propertyAddress = chosenProperty.getAddress();
 
         String verificationRequestID = UUID.randomUUID().toString();
         boolean isVerified = false;
 
         // create a new verification request object and set initial data to it
         VerificationRequest newVerificationRequest = new VerificationRequest();
-
-            newVerificationRequest.setVerificationRequestID(verificationRequestID);
-            newVerificationRequest.setVerified(isVerified);
-            newVerificationRequest.setRequesteeID(requesteeID);
-            newVerificationRequest.setPropertyID(propertyID);
-            newVerificationRequest.setPropertyName(propertyName);
+        newVerificationRequest.setVerificationRequestID(verificationRequestID);
+        newVerificationRequest.setVerified(isVerified);
+        newVerificationRequest.setRequesteeID(requesteeID);
+        newVerificationRequest.setPropertyID(propertyID);
+        newVerificationRequest.setPropertyName(propertyName);
+        newVerificationRequest.setPropertyAddress(propertyAddress);
 
         Intent intent = new Intent(ChoosePropertyToVerifyActivity.this, UploadBarangayBusinessPermitActivity.class);
         intent.putExtra("initialVerificationRequest", newVerificationRequest);
         intent.putExtra("chosenProperty", chosenProperty);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading...");
-        progressDialog.show();
-
+        progressDialog.showProgressDialog("Loading...", false);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(progressDialog.isShowing()) {
+                if (progressDialog.isShowing()) {
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    progressDialog.dismiss();
+                    progressDialog.dismissProgressDialog();
                 }
             }
         }, 2000);

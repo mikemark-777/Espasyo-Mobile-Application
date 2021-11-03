@@ -78,10 +78,9 @@ public class VerificationFragment extends Fragment implements VerificationReques
                     progressDialog.dismissProgressDialog();
                 }
             }
-        }, 2000);
+        }, 500);
 
         //Toast.makeText(getActivity(), "Verification Fragment onViewCreated()", Toast.LENGTH_SHORT).show();
-        composeVerificationRequestFAB = view.findViewById(R.id.composeVerificationRequestFAB);
         composeVerificationRequestFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +119,7 @@ public class VerificationFragment extends Fragment implements VerificationReques
         verificationRequestRVSwipeRefresh = view.findViewById(R.id.verificationRequestSwipeRefresh);
 
         //initialize custom progress dialog
+        composeVerificationRequestFAB = view.findViewById(R.id.composeVerificationRequestFAB);
         progressDialog = new CustomProgressDialog(getActivity());
     }
 
@@ -148,7 +148,7 @@ public class VerificationFragment extends Fragment implements VerificationReques
     public void onVerificationRequestClick(int position) {
         // get the position of the clicked verification request
         Intent intent = new Intent(getActivity(), VerificationRequestDetailsActivity.class);
-       // intent.putExtra("chosenVerificationRequest", ownedPropertyVerifications.get(position));
+        intent.putExtra("chosenVerificationRequest", ownedPropertyVerifications.get(position));
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 

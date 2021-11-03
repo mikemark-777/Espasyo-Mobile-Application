@@ -79,7 +79,7 @@ public class ManagePropertyFragment extends Fragment implements PropertyAdapter.
                     progressDialog.dismissProgressDialog();
                 }
             }
-        }, 2000);
+        }, 500);
 
         managePropertyRVSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

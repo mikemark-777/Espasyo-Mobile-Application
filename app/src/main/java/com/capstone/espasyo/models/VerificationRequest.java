@@ -15,6 +15,7 @@ public class VerificationRequest implements Parcelable {
     private String requesteeID;
     private String propertyID;
     private String propertyName;
+    private String propertyAddress;
     private String barangayBusinessPermitImageURL;
     private String municipalBusinessPermitImageURL;
 
@@ -31,6 +32,7 @@ public class VerificationRequest implements Parcelable {
         requesteeID = in.readString();
         propertyID = in.readString();
         propertyName = in.readString();
+        propertyAddress = in.readString();
         barangayBusinessPermitImageURL = in.readString();
         municipalBusinessPermitImageURL = in.readString();
     }
@@ -79,6 +81,10 @@ public class VerificationRequest implements Parcelable {
         this.propertyName = propertyName;
     }
 
+    public void setPropertyAddress(String propertyAddress) {
+        this.propertyAddress = propertyAddress;
+    }
+
     public void setBarangayBusinessPermitImageURL(String barangayBusinessPermitImageURL) {
         this.barangayBusinessPermitImageURL = barangayBusinessPermitImageURL;
     }
@@ -120,6 +126,10 @@ public class VerificationRequest implements Parcelable {
         return propertyName;
     }
 
+    public String getPropertyAddress() {
+        return propertyAddress;
+    }
+
     public String getBarangayBusinessPermitImageURL() {
         return barangayBusinessPermitImageURL;
     }
@@ -143,6 +153,7 @@ public class VerificationRequest implements Parcelable {
         dest.writeString(requesteeID);
         dest.writeString(propertyID);
         dest.writeString(propertyName);
+        dest.writeString(propertyAddress);
         dest.writeString(barangayBusinessPermitImageURL);
         dest.writeString(municipalBusinessPermitImageURL);
     }

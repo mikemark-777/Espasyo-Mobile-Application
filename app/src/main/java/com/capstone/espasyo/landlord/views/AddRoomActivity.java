@@ -50,21 +50,20 @@ public class AddRoomActivity extends AppCompatActivity {
     private Button btnAddRoom,
             btnCancelAddRoom; //TODO: add cancel functionality
 
-    String propertyID;
+    private String propertyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_add_room);
 
-        Intent intent = getIntent();
-        propertyID = intent.getStringExtra("propertyID");
-
         //initialize firebaseConnection, firebaseAuth and firebaseFirestore
         firebaseConnection = FirebaseConnection.getInstance();
         fAuth = firebaseConnection.getFirebaseAuthInstance();
         database = firebaseConnection.getFirebaseFirestoreInstance();
 
+        Intent intent = getIntent();
+        getDatFromIntent(intent);
         initializeViews();
 
         // add room
@@ -131,6 +130,10 @@ public class AddRoomActivity extends AppCompatActivity {
     }
 
     /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
+
+    public void getDatFromIntent(Intent intent) {
+        propertyID = intent.getStringExtra("propertyID");
+    }
 
     /*----------- input validations ----------*/
     public final String TAG = "[ADD ROOM TESTING]";

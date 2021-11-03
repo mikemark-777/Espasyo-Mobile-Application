@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Property;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,7 +36,7 @@ public class ChooseEditActivity extends AppCompatActivity {
     private CardView editPropertyCardView;
     private CardView editRoomsCardView;
 
-    private ProgressDialog progressDialog;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,13 +93,11 @@ public class ChooseEditActivity extends AppCompatActivity {
         imageButtonBackToManageProperty = findViewById(R.id.imageButtonBackToManageProperty);
         editPropertyCardView = findViewById(R.id.editPropertyCardView);
         editRoomsCardView = findViewById(R.id.editRoomsCardView);
+        progressDialog = new CustomProgressDialog(this);
     }
 
     private void getSelectedProperty(String selectedPropertyID) {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Loading...");
-        progressDialog.show();
+        progressDialog.showProgressDialog("Loading...", false);
         DocumentReference selectedPropertyDocumentReference = database.collection("properties").document(selectedPropertyID);
         selectedPropertyDocumentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -112,10 +111,10 @@ public class ChooseEditActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if(progressDialog.isShowing()) {
-                    progressDialog.dismiss();
+                    progressDialog.dismissProgressDialog();
                 }
             }
-        }, 2000);
+        }, 1000);
     }
 
     // TODO: Handle Activity Life Cycle

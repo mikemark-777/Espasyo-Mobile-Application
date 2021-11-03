@@ -83,7 +83,7 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
                         progressDialog.dismissProgressDialog();
                     }
                 }
-            }, 2000);
+            }, 500);
 
         }
 

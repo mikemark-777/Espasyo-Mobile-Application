@@ -40,6 +40,7 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
         VerificationRequest verificationRequest = ownedPropertyVerifications.get(position);
         String propertyName = verificationRequest.getPropertyName();
         String dateSubmitted = verificationRequest.getDateSubmitted();
+        String dateVerified = verificationRequest.getDateVerified();
         boolean isVerified = verificationRequest.isVerified();
 
         if(isVerified == false) {
@@ -48,6 +49,7 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
             holder.verifiedIconDisplay.setImageResource(R.drawable.icon_verified);
         }
 
+        holder.dateVerified.setText(dateVerified);
         holder.propertyName.setText(propertyName);
         holder.dateSubmitted.setText(dateSubmitted);
     }
@@ -60,7 +62,7 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
 
     public static class  VerificationRequestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView propertyName, propertyAddress, propertyType, landlordName, landlordContactNumber, dateSubmitted;
+        TextView propertyName, propertyAddress, propertyType, dateSubmitted, dateVerified;
         ImageView verifiedIconDisplay;
         OnVerificationRequestListener onVerificationRequestListener;
 
@@ -69,9 +71,8 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
             propertyName = itemView.findViewById(R.id.propertyName_verification);
             propertyAddress = itemView.findViewById(R.id.propertyAddress_verification);
             propertyType = itemView.findViewById(R.id.propertyType_verification);
-            landlordName = itemView.findViewById(R.id.landlordName_verification);
-            landlordContactNumber = itemView.findViewById(R.id.landlordContactNumber_verification);
             dateSubmitted = itemView.findViewById(R.id.dateSubmitted_verification);
+            dateVerified = itemView.findViewById(R.id.dateVerified_verification);
             verifiedIconDisplay = itemView.findViewById(R.id.verifiedIconDisplay);
             this.onVerificationRequestListener = onVerificationRequestListener;
 
