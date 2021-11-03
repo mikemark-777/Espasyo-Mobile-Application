@@ -152,15 +152,4 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
 
     }
 
-    public ArrayList<Property> checkPropertiesThatHasVerificationRequest(ArrayList<Property> propertyList) {
-        ArrayList<Property> propertieswWithoutVR = new ArrayList<Property>();
-
-        for(Property property : propertyList) {
-            if(property.getVerificationID().equals("")) {
-                propertieswWithoutVR.add(property);
-            }
-        }
-
-        return propertieswWithoutVR;
-    }
 }

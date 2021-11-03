@@ -27,7 +27,7 @@ public class RoomDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.landlord_activity_room_detail);
+        setContentView(R.layout.landlord_activity_room_details);
 
         initializeViews();
         

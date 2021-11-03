@@ -74,6 +74,8 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
             dateSubmitted = itemView.findViewById(R.id.dateSubmitted_verification);
             verifiedIconDisplay = itemView.findViewById(R.id.verifiedIconDisplay);
             this.onVerificationRequestListener = onVerificationRequestListener;
+
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -85,6 +87,5 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
     public interface OnVerificationRequestListener {
         void onVerificationRequestClick(int position);
     }
-
 
 }

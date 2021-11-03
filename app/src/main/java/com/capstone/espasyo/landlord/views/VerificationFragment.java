@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -146,6 +147,10 @@ public class VerificationFragment extends Fragment implements VerificationReques
     @Override
     public void onVerificationRequestClick(int position) {
         // get the position of the clicked verification request
+        Intent intent = new Intent(getActivity(), VerificationRequestDetailsActivity.class);
+       // intent.putExtra("chosenVerificationRequest", ownedPropertyVerifications.get(position));
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
     }
 
