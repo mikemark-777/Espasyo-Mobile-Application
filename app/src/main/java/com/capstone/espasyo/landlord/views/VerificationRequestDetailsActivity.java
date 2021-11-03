@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
@@ -35,6 +38,10 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
                      dateVerifiedDisplay,
                      isVerifiedDisplay;
 
+    //textviews for previewing business permit images
+    TextView btnPreviewBarangayBP,
+             btnPreviewMunicipalBP;
+
     //imageView for buttons edit and delete verification request
     private ImageView btnEditVerificationRequest,
                       btnDeleteVerificationRequest;
@@ -42,6 +49,9 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     //imageView for displaying business permits
     private ImageView barangayBPImageViewDisplay,
                       municipalBPImageViewDisplay;
+
+    private String barangayBPUrl;
+    private String municipalBPUrl;
 
     //this is the ID of the property linked to this verification request
     private String propertyID;
@@ -63,8 +73,21 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         getDataFromIntent(intent);
 
+        btnPreviewBarangayBP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Intent intent = new Intent(VerificationRequestDetailsActivity.this, PreviewBusinessPermitImage.class);
+               intent.putExtra("businessPermit", barangayBPUrl);
+               startActivity(intent);
+            }
+        });
 
-
+        btnPreviewMunicipalBP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(VerificationRequestDetailsActivity.this, "MBP clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void initializeViews() {
@@ -75,6 +98,9 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         isVerifiedDisplay = findViewById(R.id.isVerified_display_VRDetails);
         barangayBPImageViewDisplay = findViewById(R.id.barangayBP_display_VRDetails);
         municipalBPImageViewDisplay = findViewById(R.id.municipalBP_display_VRDetails);
+
+        btnPreviewBarangayBP = findViewById(R.id.btnPreviewBarangayBP);
+        btnPreviewMunicipalBP = findViewById(R.id.btnPreviewMunicipalBP);
     }
 
     public void getDataFromIntent(Intent intent) {
@@ -90,8 +116,8 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         String dateSubmitted = verificationRequest.getDateSubmitted();
         String dateVerified = verificationRequest.getDateVerified();
         boolean isVerified = verificationRequest.isVerified();
-        String barangayBPUrl = verificationRequest.getBarangayBusinessPermitImageURL();
-        String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
+        barangayBPUrl = verificationRequest.getBarangayBusinessPermitImageURL();
+        municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
 
         propertyNameDisplay.setText(propertyName);
         propertyAddressDisplay.setText(address);
