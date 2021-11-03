@@ -55,8 +55,10 @@ dependencies {
     // LOCATION
     implementation 'com.google.android.gms:play-services-location:18.0.0'
 
-    /*--------------- Image Loading Dependencies (Picasso) -------------*/
+    /*-------------------- Image Dependencies -------------------*/
+    //for loading images (Picasso)
     implementation 'com.squareup.picasso:picasso:2.71828'
+    //for zooming in and zooming out images (TouchImageView)
 
     /* ---------------- Navigation Dependencies ----------------*/
     def nav_version = "2.3.5"
