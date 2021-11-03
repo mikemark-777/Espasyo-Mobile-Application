@@ -85,7 +85,9 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         btnPreviewMunicipalBP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(VerificationRequestDetailsActivity.this, "MBP clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(VerificationRequestDetailsActivity.this, PreviewBusinessPermitImage.class);
+                intent.putExtra("businessPermit", municipalBPUrl);
+                startActivity(intent);
             }
         });
     }

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -23,7 +25,6 @@ public class PreviewBusinessPermitImage extends AppCompatActivity {
         previewBusinessPermitImageView = findViewById(R.id.businessPermitPreview);
         displayBusinessPermit(intent);
 
-
     }
 
     public void displayBusinessPermit(Intent intent) {
@@ -38,4 +39,5 @@ public class PreviewBusinessPermitImage extends AppCompatActivity {
         previewBusinessPermitImageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         previewBusinessPermitImageView.setAdjustViewBounds(true);
     }
+
 }
