@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,6 +43,9 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     TextView btnPreviewBarangayBP,
              btnPreviewMunicipalBP;
 
+    //button for viewing property details
+    private Button btnVisitProperty;
+
     //imageView for buttons edit and delete verification request
     private ImageView btnEditVerificationRequest,
                       btnDeleteVerificationRequest;
@@ -72,7 +76,19 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         initializeViews();
         Intent intent = getIntent();
         getDataFromIntent(intent);
+        getProperty(propertyID);
 
+        //visit property that is linked to the verification request
+        btnVisitProperty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VerificationRequestDetailsActivity.this, PropertyDetailsActivity.class);
+                intent.putExtra("property", property);
+                startActivity(intent);
+            }
+        });
+
+        //preview barangay business permit (able to zoom in and out)
         btnPreviewBarangayBP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,13 +97,20 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
                startActivity(intent);
             }
         });
-
+        //preview municipal business permit (able to zoom in and out)
         btnPreviewMunicipalBP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(VerificationRequestDetailsActivity.this, PreviewBusinessPermitImage.class);
                 intent.putExtra("businessPermit", municipalBPUrl);
                 startActivity(intent);
+            }
+        });
+
+        btnDeleteVerificationRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnDeleteVerificationRequest();
             }
         });
     }
@@ -101,6 +124,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         barangayBPImageViewDisplay = findViewById(R.id.barangayBP_display_VRDetails);
         municipalBPImageViewDisplay = findViewById(R.id.municipalBP_display_VRDetails);
 
+        btnVisitProperty = findViewById(R.id.btnVisitProperty_VRDetails);
         btnPreviewBarangayBP = findViewById(R.id.btnPreviewBarangayBP);
         btnPreviewMunicipalBP = findViewById(R.id.btnPreviewMunicipalBP);
     }
@@ -156,5 +180,9 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
                         property = documentSnapshot.toObject(Property.class);
                     }
                 });
+    }
+
+    private void btnDeleteVerificationRequest() {
+
     }
 }
