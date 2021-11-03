@@ -226,4 +226,41 @@
         </LinearLayout>
     </LinearLayout>
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/espasyo_blue_700"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal|center_vertical">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/icon_leave_room"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Leave Room"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

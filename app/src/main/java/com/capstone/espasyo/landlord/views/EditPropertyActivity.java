@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +26,10 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.LandlordMainActivity;
+import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Property;
+import com.capstone.espasyo.models.VerificationRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,15 +38,21 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class EditPropertyActivity extends AppCompatActivity {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore database;
+    private FirebaseStorage storage;
+    private VerificationRequest verificationRequest;
+    private CustomProgressDialog progressDialog;
 
     private TextInputLayout textEditPropertyNameLayout,
             textEditPropertyTypeLayout,
@@ -104,6 +114,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         firebaseConnection = FirebaseConnection.getInstance();
         firebaseAuth = firebaseConnection.getFirebaseAuthInstance();
         database = firebaseConnection.getFirebaseFirestoreInstance();
+        storage = firebaseConnection.getFirebaseStorageInstance();
 
         //initialize all views
         initializeViews();
@@ -112,6 +123,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         and load the property data to the views that is initialized*/
         Intent intent = getIntent();
         loadPropertyData(intent);
+        preLoadVerificationRequest();
 
         //will handle all the data from the LocationPickerActivity
         EditLocationPickerActivityResultLauncher = registerForActivityResult(
@@ -368,6 +380,8 @@ public class EditPropertyActivity extends AppCompatActivity {
         btnCancelEditProperty = findViewById(R.id.btnCancelEditProperty);
         btnDeleteProperty = findViewById(R.id.imageViewDeleteProperty);
         imageButtonBackToChooseEdit = findViewById(R.id.imageButtonBackToChooseEdit);
+        //progressDialog
+        progressDialog = new CustomProgressDialog(this);
 
         propertyTypeAdapter = new ArrayAdapter<String>(this, R.layout.landlord_property_type_list_item, propertyType);
         textEditPropertyType.setAdapter(propertyTypeAdapter);
@@ -449,12 +463,20 @@ public class EditPropertyActivity extends AppCompatActivity {
         btnConfirmDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.showProgressDialog("Deleting Property...", false);
                 deleteProperty(property.getPropertyID());
-                confirmationDialog.cancel();
-                Intent intent = new Intent(EditPropertyActivity.this, LandlordMainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismissProgressDialog();
+                        confirmationDialog.cancel();
+                        Intent intent = new Intent(EditPropertyActivity.this, LandlordMainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+                }, 4000);
+
             }
         });
 
@@ -470,6 +492,10 @@ public class EditPropertyActivity extends AppCompatActivity {
 
     public void deleteProperty(String propertyID) {
 
+        String verificationID = property.getVerificationID();
+        String barangayBusinessPermitURL = "";
+         String municipalBusinessPermitURL = "";
+
         //first delete the rooms of this property
         database.collection("properties/" + propertyID + "/rooms")
                 .get()
@@ -484,9 +510,29 @@ public class EditPropertyActivity extends AppCompatActivity {
                     }
                 });
 
-        //next is to delete the verification request linked to this property (if issued)
-        String verificationID = property.getVerificationID();
+        //next is to delete the images of the barangay and municipal business permit from storage
+        barangayBusinessPermitURL = verificationRequest.getBarangayBusinessPermitImageURL();
+        municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
 
+        StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBusinessPermitURL);
+        StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBusinessPermitURL);
+
+        barangayBPRef.delete()
+                     .addOnSuccessListener(new OnSuccessListener<Void>() {
+                         @Override
+                         public void onSuccess(Void unused) {
+                             municipalBPRef.delete()
+                                           .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                               @Override
+                                               public void onSuccess(Void unused) {
+
+                                               }
+                                           });
+                         }
+                     });
+
+
+        //next is to delete the verification request linked to this property (if issued)
         if(!verificationID.equals("")) {
             database.collection("verificationRequests").document(verificationID)
                     .delete()
@@ -495,7 +541,7 @@ public class EditPropertyActivity extends AppCompatActivity {
                         public void onSuccess(Void unused) {
 
                         }
-            });
+                    });
         }
 
         //lastly is to delete the property itself
@@ -538,6 +584,19 @@ public class EditPropertyActivity extends AppCompatActivity {
         }
 
         return  formattedLocationString;
+    }
+
+    public void preLoadVerificationRequest() {
+        String verificationID = property.getVerificationID();
+        database.collection("verificationRequests").document(verificationID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        //save the verificationRequest data from the database to the verificationRequest object
+                        verificationRequest = documentSnapshot.toObject(VerificationRequest.class);
+                    }
+                });
     }
 
 

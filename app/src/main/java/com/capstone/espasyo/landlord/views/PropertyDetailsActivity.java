@@ -82,7 +82,10 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         showAllRooms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(PropertyDetailsActivity.this, ShowAllRoomsActivity.class);
+                intent.putExtra("propertyID", propertyID);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 

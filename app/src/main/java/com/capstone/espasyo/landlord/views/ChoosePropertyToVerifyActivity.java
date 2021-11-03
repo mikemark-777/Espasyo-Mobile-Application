@@ -97,7 +97,7 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
                         ownedPropertyList.clear();
                         for(QueryDocumentSnapshot property: queryDocumentSnapshots) {
                             Property propertyObj = property.toObject(Property.class);
-                            //will only get not verified properties
+                            //will only get properties that are not verified and has verification request attached
                             if(!propertyObj.getIsVerified()) {
                                 ownedPropertyList.add(propertyObj);
                             }
@@ -121,15 +121,14 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         String verificationRequestID = UUID.randomUUID().toString();
         boolean isVerified = false;
 
-
         // create a new verification request object and set initial data to it
         VerificationRequest newVerificationRequest = new VerificationRequest();
 
-        newVerificationRequest.setVerificationRequestID(verificationRequestID);
-        newVerificationRequest.setVerified(isVerified);
-        newVerificationRequest.setRequesteeID(requesteeID);
-        newVerificationRequest.setPropertyID(propertyID);
-        newVerificationRequest.setPropertyName(propertyName);
+            newVerificationRequest.setVerificationRequestID(verificationRequestID);
+            newVerificationRequest.setVerified(isVerified);
+            newVerificationRequest.setRequesteeID(requesteeID);
+            newVerificationRequest.setPropertyID(propertyID);
+            newVerificationRequest.setPropertyName(propertyName);
 
         Intent intent = new Intent(ChoosePropertyToVerifyActivity.this, UploadBarangayBusinessPermitActivity.class);
         intent.putExtra("initialVerificationRequest", newVerificationRequest);
@@ -151,5 +150,17 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
             }
         }, 2000);
 
+    }
+
+    public ArrayList<Property> checkPropertiesThatHasVerificationRequest(ArrayList<Property> propertyList) {
+        ArrayList<Property> propertieswWithoutVR = new ArrayList<Property>();
+
+        for(Property property : propertyList) {
+            if(property.getVerificationID().equals("")) {
+                propertieswWithoutVR.add(property);
+            }
+        }
+
+        return propertieswWithoutVR;
     }
 }
