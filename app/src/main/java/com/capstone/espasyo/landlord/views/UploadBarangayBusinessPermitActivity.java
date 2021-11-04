@@ -177,6 +177,18 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //will preview the image
+        barangayBusinessPermitImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String barangayBPUrl = barangayBusinessPermitImageURI.toString();
+                Intent intent = new Intent(UploadBarangayBusinessPermitActivity.this, PreviewBusinessPermitImage.class);
+                intent.putExtra("previewImage", barangayBPUrl);
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void initializeViews() {
@@ -416,6 +428,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                         intent.putExtra("initialVerificationRequest", verificationRequest);
                         intent.putExtra("chosenProperty", chosenProperty);
                         startActivity(intent);
+                        finish();
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         progressDialog.dismiss();
                     }
@@ -462,10 +475,4 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
             return true;
         }
     }
-
-    @Override
-    public void onBackPressed() {
-        Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Pressing the back button in uploadBPPActivity", Toast.LENGTH_SHORT).show();
-    }
-
 }

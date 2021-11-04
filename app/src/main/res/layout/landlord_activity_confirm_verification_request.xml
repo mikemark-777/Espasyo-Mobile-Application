@@ -250,19 +250,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center_vertical|center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent=".08"
         app:layout_constraintStart_toStartOf="parent">
 
+
+        <Button
+            android:id="@+id/btnDiscardVerificationRequest"
+            android:layout_width="100dp"
+            android:layout_height="55dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:text="Discard"
+            android:backgroundTint="@color/espasyo_red_200"
+            android:textAllCaps="false" />
+
+
         <Button
             android:id="@+id/btnConfirmVerificationRequest"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_width="100dp"
+            android:layout_height="55dp"
             android:layout_marginBottom="-6dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/espasyo_orange_200"
-            android:text="Send Verification Request"
+            android:layout_margin="4dp"
+            android:text="Confirm"
+            android:backgroundTint="@color/espasyo_blue_500"
             android:textAllCaps="false" />
 
     </LinearLayout>

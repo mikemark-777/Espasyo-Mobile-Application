@@ -159,6 +159,17 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //will preview the image
+        municipalBusinessPermitImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String municipalBPUrl = municipalBusinessPermitImageURI.toString();
+                Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, PreviewBusinessPermitImage.class);
+                intent.putExtra("previewImage", municipalBPUrl);
+                startActivity(intent);
+            }
+        });
     }
 
     public void initializeViews() {
@@ -392,6 +403,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                         intent.putExtra("initialVerificationRequest", verificationRequest);
                         intent.putExtra("chosenProperty", chosenProperty);
                         startActivity(intent);
+                        finish();
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         progressDialog.dismiss();
                     }

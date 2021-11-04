@@ -1,9 +1,11 @@
 package com.capstone.espasyo.landlord.views;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,6 +44,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseFirestore database;
+    private FirebaseStorage storage;
     private DocumentReference verificationRequestsDocumentReference;
 
     private TextView displayPropertyNameConfirmVerification,
@@ -53,7 +56,8 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
     private ImageView displayBarangayBusinessPermit,
                       displayMunicipalBusinessPermit;
 
-    private Button btnConfirmVerificationRequest;
+    private Button btnConfirmVerificationRequest,
+                   btnDiscardVerificationRequest;
 
     private ProgressDialog progressDialog;
 
@@ -69,6 +73,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         //initialize firebase connections
         firebaseConnection = FirebaseConnection.getInstance();
         database = firebaseConnection.getFirebaseFirestoreInstance();
+        storage = firebaseConnection.getFirebaseStorageInstance();
 
         initializeViews();
         Intent intent = getIntent();
@@ -80,6 +85,13 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
                 String dateSubmitted = getDateSubmitted();
                 verificationRequest.setDateSubmitted(dateSubmitted);
                 uploadVerificationRequest(verificationRequest);
+            }
+        });
+        
+        btnDiscardVerificationRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDiscardConfirmationDialog();
             }
         });
 
@@ -115,7 +127,10 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         displayBarangayBusinessPermit = findViewById(R.id.displayBarangayBusinessPermit_confirmVerification);
         displayMunicipalBusinessPermit = findViewById(R.id.displayMunicipalBusinessPermit_confirmVerification);
 
+        //initialize buttons
         btnConfirmVerificationRequest = findViewById(R.id.btnConfirmVerificationRequest);
+        btnDiscardVerificationRequest = findViewById(R.id.btnDiscardVerificationRequest);
+
         //initialize the progressDialog for the uploading of business permits
         progressDialog = new ProgressDialog(ConfirmVerificationRequestActivity.this);
     }
@@ -201,6 +216,59 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void showDiscardConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Discard Draft")
+                .setMessage("Do you want to discard your drafted verification request?")
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        discardVerificationRequest();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
+    }
+
+    //will clear all the data of the drafted verification request
+    public void discardVerificationRequest() {
+        progressDialog.setTitle("Cancelling Verification Request...");
+        progressDialog.show();
+        String barangayBPUrl = verificationRequest.getBarangayBusinessPermitImageURL();
+        String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
+
+        StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBPUrl);
+        StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBPUrl);
+
+        barangayBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+
+                    }
+                });
+            }
+        });
+
+        // finish this activity
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+                verificationRequest = null;
+                Toast.makeText(ConfirmVerificationRequestActivity.this, "Verification Request cancelled", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }, 3500);
+
+
     }
 
 }
