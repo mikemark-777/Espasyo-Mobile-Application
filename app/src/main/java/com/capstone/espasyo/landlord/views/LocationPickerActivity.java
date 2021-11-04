@@ -17,6 +17,7 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +27,9 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.customdialogs.ConfirmPickedPropertyLocationDialog;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -258,6 +261,8 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
                             } else {
                                 Toast.makeText(LocationPickerActivity.this, "Location is null", Toast.LENGTH_LONG).show();
+                                //location of device is disabled
+                                showEnableLocationInSettingsDialog();
                             }
                         } else {
                             Toast.makeText(LocationPickerActivity.this, "Task not successfull", Toast.LENGTH_LONG).show();
@@ -443,6 +448,28 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         });
 
         noInternetDialog.show();
+    }
+
+    public void enableLocationInSettings() {
+        Intent openLocationInSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(openLocationInSettingsIntent);
+    }
+
+    public void showEnableLocationInSettingsDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Use location?")
+                .setMessage("To continue, you need to turn on location in your device.")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        enableLocationInSettings();
+                    }
+                }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
     }
 
 }

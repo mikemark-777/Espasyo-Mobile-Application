@@ -217,7 +217,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Discard Draft")
                 .setMessage("Do you want to discard your drafted verification request?")
-                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         discardVerificationRequest();
@@ -246,7 +246,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
                 municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-
+                        //business permit images has been deleted
                     }
                 });
             }

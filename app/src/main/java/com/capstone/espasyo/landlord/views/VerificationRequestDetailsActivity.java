@@ -53,8 +53,8 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     private Button btnVisitProperty;
 
     //imageView for buttons edit and delete verification request
-    private ImageView btnEditVerificationRequest,
-            btnDeleteVerificationRequest;
+    private ImageView btnDeleteVerificationRequest,
+            btnBackToVerificationFragment;
 
     //imageView for displaying business permits
     private ImageView barangayBPImageViewDisplay,
@@ -121,6 +121,13 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
                 showConfirmationDeleteDialog();
             }
         });
+
+        btnBackToVerificationFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void initializeViews() {
@@ -135,6 +142,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         //buttons
         btnVisitProperty = findViewById(R.id.btnVisitProperty_VRDetails);
         btnDeleteVerificationRequest = findViewById(R.id.imageButtonDeleteVerificationRequest);
+        btnBackToVerificationFragment = findViewById(R.id.imageButtonBackToVerificationFragment);
         btnPreviewBarangayBP = findViewById(R.id.btnPreviewBarangayBP);
         btnPreviewMunicipalBP = findViewById(R.id.btnPreviewMunicipalBP);
 
@@ -200,17 +208,17 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBPUrl);
         StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBPUrl);
 
-                barangayBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        barangayBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
 
-                            }
-                        });
                     }
                 });
+            }
+        });
 
 
         //next is to clear the verificationID attached to the property

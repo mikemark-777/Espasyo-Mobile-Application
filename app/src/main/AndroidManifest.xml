@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.capstone.espasyo">
+
     <!-- For map functionalities -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- For uploading image functionalities -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- For uploading image functionalities -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -17,84 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
-        <activity
-            android:name=".landlord.views.UpdateVerificationRequestActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.PreviewImageActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.VerificationRequestDetailsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.ShowAllRoomsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.RoomDetailsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.ViewPropertyOnMapActivity"
-            android:exported="true">
-            <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="@string/map_key" />
-        </activity>
-        <activity
-            android:name=".landlord.views.ConfirmVerificationRequestActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.UploadBarangayBusinessPermitActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.UploadMunicipalBusinessPermitActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.ChoosePropertyToVerifyActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.EditLocationPickerActivity"
-            android:exported="true"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="@string/map_key" />
-        </activity>
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/map_key" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <activity
-            android:name=".landlord.views.LocationPickerActivity"
-            android:exported="true"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="@string/map_key" />
-        </activity>
-        <activity
-            android:name=".landlord.views.ViewRoomsToEditActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.EditRoomActivity"
-            android:exported="true"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".landlord.views.EditPropertyActivity"
-            android:exported="true"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".landlord.views.ChooseEditActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.AddRoomActivity"
-            android:exported="true" />
-        <activity
-            android:name=".landlord.views.PropertyDetailsActivity"
-            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -104,7 +30,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Landlord Activities -->
+        </activity>
+
+        <!-- Landlord Activities -->
         <activity
             android:name=".landlord.LandlordMainActivity"
             android:exported="true" />
@@ -112,12 +40,84 @@
             android:name=".landlord.views.AddPropertyActivity"
             android:exported="true" />
         <activity
-            android:name=".landlord.views.SettingsActivity"
-            android:exported="true" /> <!-- Student Activities -->
+            android:name=".landlord.views.AddRoomActivity"
+            android:exported="true" />
         <activity
-            android:name=".student.StudentMainActivity"
+            android:name=".landlord.views.ChooseEditActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.ChoosePropertyToVerifyActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.ConfirmVerificationRequestActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.EditLocationPickerActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/map_key" />
+        </activity>
+        <activity
+            android:name=".landlord.views.EditPropertyActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".landlord.views.EditRoomActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".landlord.views.LocationPickerActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/map_key" />
+        </activity>
+        <activity
+            android:name=".landlord.views.PreviewImageActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.PropertyDetailsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.RoomDetailsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.SettingsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.ShowAllRoomsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.UploadBarangayBusinessPermitActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.UploadMunicipalBusinessPermitActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.VerificationRequestDetailsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.ViewPropertyOnMapActivity"
+            android:exported="true">
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/map_key" />
+        </activity>
+        <activity
+            android:name=".landlord.views.ViewRoomsToEditActivity"
             android:exported="true" />
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <!-- for accessing files (gallery and camera)-->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.capstone.android.fileprovider"
@@ -127,6 +127,12 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-    </application>
 
+
+        <!-- Student Activities -->
+        <activity
+            android:name=".student.StudentMainActivity"
+            android:exported="true" />
+
+    </application>
 </manifest>

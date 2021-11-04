@@ -17,6 +17,7 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -270,6 +271,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
 
                             } else {
                                 Toast.makeText(EditLocationPickerActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
+                                showEnableLocationInSettingsDialog();
                             }
                         } else {
                             Toast.makeText(EditLocationPickerActivity.this, "Task not successful", Toast.LENGTH_SHORT).show();
@@ -459,6 +461,28 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         });
 
         noInternetDialog.show();
+    }
+
+    public void enableLocationInSettings() {
+        Intent openLocationInSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(openLocationInSettingsIntent);
+    }
+
+    public void showEnableLocationInSettingsDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Use location?")
+                .setMessage("To continue, you need to turn on location in your device.")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        enableLocationInSettings();
+                    }
+                }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
     }
 
 }
