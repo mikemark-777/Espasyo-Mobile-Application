@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,17 +25,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -48,16 +43,16 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
     private DocumentReference verificationRequestsDocumentReference;
 
     private TextView displayPropertyNameConfirmVerification,
-                     displayAddressConfirmVerification,
-                     displayProprietorNameConfirmVerification,
-                     displayLandlordNameConfirmVerification,
-                     displayLandlordPhoneNumberConfirmVerification;
+            displayAddressConfirmVerification,
+            displayProprietorNameConfirmVerification,
+            displayLandlordNameConfirmVerification,
+            displayLandlordPhoneNumberConfirmVerification;
 
     private ImageView displayBarangayBusinessPermit,
-                      displayMunicipalBusinessPermit;
+            displayMunicipalBusinessPermit;
 
     private Button btnConfirmVerificationRequest,
-                   btnDiscardVerificationRequest;
+            btnDiscardVerificationRequest;
 
     private ProgressDialog progressDialog;
 
@@ -87,7 +82,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
                 uploadVerificationRequest(verificationRequest);
             }
         });
-        
+
         btnDiscardVerificationRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +94,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String barangayBPUrl = verificationRequest.getBarangayBusinessPermitImageURL();
-                Intent intent = new Intent(ConfirmVerificationRequestActivity.this, PreviewBusinessPermitImage.class);
+                Intent intent = new Intent(ConfirmVerificationRequestActivity.this, PreviewImageActivity.class);
                 intent.putExtra("previewImage", barangayBPUrl);
                 startActivity(intent);
             }
@@ -109,7 +104,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
-                Intent intent = new Intent(ConfirmVerificationRequestActivity.this, PreviewBusinessPermitImage.class);
+                Intent intent = new Intent(ConfirmVerificationRequestActivity.this, PreviewImageActivity.class);
                 intent.putExtra("previewImage", municipalBPUrl);
                 startActivity(intent);
             }
@@ -267,8 +262,6 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
                 finish();
             }
         }, 3500);
-
-
     }
 
 }

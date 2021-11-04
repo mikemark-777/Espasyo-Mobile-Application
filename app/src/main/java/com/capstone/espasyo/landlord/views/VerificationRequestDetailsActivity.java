@@ -11,12 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
-import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Property;
@@ -28,8 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Document;
 
 public class VerificationRequestDetailsActivity extends AppCompatActivity {
 
@@ -104,7 +100,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         btnPreviewBarangayBP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(VerificationRequestDetailsActivity.this, PreviewBusinessPermitImage.class);
+                Intent intent = new Intent(VerificationRequestDetailsActivity.this, PreviewImageActivity.class);
                 intent.putExtra("previewImage", barangayBPUrl);
                 startActivity(intent);
             }
@@ -113,7 +109,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         btnPreviewMunicipalBP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(VerificationRequestDetailsActivity.this, PreviewBusinessPermitImage.class);
+                Intent intent = new Intent(VerificationRequestDetailsActivity.this, PreviewImageActivity.class);
                 intent.putExtra("previewImage", municipalBPUrl);
                 startActivity(intent);
             }

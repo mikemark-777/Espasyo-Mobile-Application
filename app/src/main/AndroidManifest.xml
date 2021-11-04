@@ -18,7 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
         <activity
-            android:name=".landlord.views.PreviewBusinessPermitImage"
+            android:name=".landlord.views.UpdateVerificationRequestActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.PreviewImageActivity"
             android:exported="true" />
         <activity
             android:name=".landlord.views.VerificationRequestDetailsActivity"

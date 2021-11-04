@@ -183,7 +183,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String barangayBPUrl = barangayBusinessPermitImageURI.toString();
-                Intent intent = new Intent(UploadBarangayBusinessPermitActivity.this, PreviewBusinessPermitImage.class);
+                Intent intent = new Intent(UploadBarangayBusinessPermitActivity.this, PreviewImageActivity.class);
                 intent.putExtra("previewImage", barangayBPUrl);
                 startActivity(intent);
             }
@@ -407,7 +407,8 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
 
         //TODO: must specify who is the landlord who uploaded and make directory in firebase storage
         String requesteeID = verificationRequest.getRequesteeID();
-        storageReference = storage.getReference("landlords/" + requesteeID + "/verificationRequest");
+        String propertyID = verificationRequest.getPropertyID();
+        storageReference = storage.getReference("landlords/" + requesteeID + "/" + propertyID + "/verificationRequest");
         final StorageReference businessPermitRef = storageReference.child(barangayBusinessPermitImageName);
         businessPermitRef.putFile(barangayBusinessPermitImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override

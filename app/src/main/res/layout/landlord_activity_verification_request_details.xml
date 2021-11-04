@@ -18,6 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <ImageView
             android:id="@+id/imageButtonBackToVerificationFragment"
             android:layout_width="30dp"
@@ -29,21 +30,21 @@
             app:layout_constraintHorizontal_bias="0.041"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.168" />
+            app:layout_constraintVertical_bias="0.162" />
 
-        <ImageView
-            android:id="@+id/btnEditVerificationRequest"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/icon_edit"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Verification"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageButtonDeleteVerificationRequest"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.168" />
+            app:layout_constraintVertical_bias="0.392" />
 
         <ImageView
             android:id="@+id/imageButtonDeleteVerificationRequest"
@@ -109,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:gravity="center_vertical|center_horizontal"
-                    android:text="Verification Request"
+                    android:text="Property Verification Request"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -264,21 +265,21 @@
     <LinearLayout
         android:id="@+id/linearLayout14"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".56"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:background="#DADADA"
-            android:gravity="center_vertical|center_horizontal"
             android:orientation="horizontal">
 
             <TextView
@@ -286,9 +287,14 @@
                 android:layout_height="wrap_content"
                 android:text="Business Permits: "
                 android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -306,7 +312,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     app:cardCornerRadius="8dp"
-                    app:cardElevation="8dp">
+                    app:cardElevation="4dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -320,12 +326,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:text="Barangay Business Permit"
-                            android:textAlignment="center" />
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
 
                         <ImageView
                             android:id="@+id/barangayBP_display_VRDetails"
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
+                            android:layout_width="160dp"
+                            android:layout_height="160dp"
                             android:layout_marginTop="16dp"
                             android:layout_marginBottom="16dp"
                             android:adjustViewBounds="true"
@@ -357,7 +365,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     app:cardCornerRadius="8dp"
-                    app:cardElevation="8dp">
+                    app:cardElevation="4dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -371,12 +379,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:text="Municipal Business Permit"
-                            android:textAlignment="center" />
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
 
                         <ImageView
                             android:id="@+id/municipalBP_display_VRDetails"
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
+                            android:layout_width="160dp"
+                            android:layout_height="160dp"
                             android:layout_marginTop="16dp"
                             android:layout_marginBottom="16dp"
                             android:src="@drawable/img_upload_business_permit" />

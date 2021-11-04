@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import com.capstone.espasyo.R;
 import com.squareup.picasso.Picasso;
 
-public class PreviewBusinessPermitImage extends AppCompatActivity {
+public class PreviewImageActivity extends AppCompatActivity {
 
     private ImageView previewImageView;
 
@@ -31,7 +31,7 @@ public class PreviewBusinessPermitImage extends AppCompatActivity {
 
         Picasso.get()
                 .load(previewImageURL)
-                .placeholder(R.drawable.img_upload_business_permit)
+                .placeholder(R.drawable.img_gallery)
                 .into(previewImageView);
 
         previewImageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
