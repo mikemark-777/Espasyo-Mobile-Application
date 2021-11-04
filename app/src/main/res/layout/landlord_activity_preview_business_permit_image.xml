@@ -8,7 +8,7 @@
     tools:context=".landlord.views.PreviewBusinessPermitImage">
 
     <com.ortiz.touchview.TouchImageView
-        android:id="@+id/businessPermitPreview"
+        android:id="@+id/previewImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/img_upload_business_permit"/>

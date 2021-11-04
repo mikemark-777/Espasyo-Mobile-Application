@@ -123,8 +123,11 @@ public class EditPropertyActivity extends AppCompatActivity {
         and load the property data to the views that is initialized*/
         Intent intent = getIntent();
         loadPropertyData(intent);
-        preLoadVerificationRequest();
 
+        if(!property.getVerificationID().equals("")) {
+            preLoadVerificationRequest();
+        }
+        
         //will handle all the data from the LocationPickerActivity
         EditLocationPickerActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -176,6 +179,7 @@ public class EditPropertyActivity extends AppCompatActivity {
 
                 if (areInputsValid(editedPropertyName, editedPropertyType, editedPropertyAddress, editedProprietorName, editedLandlordName, editedLandlordPhoneNumber, editedMinimumPrice, editedMaximumPrice)) {
 
+                    property.setIsVerified(false);
                     property.setName(editedPropertyName);
                     property.setPropertyType(editedPropertyType);
                     property.setAddress(editedPropertyAddress);
@@ -517,19 +521,17 @@ public class EditPropertyActivity extends AppCompatActivity {
         StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBusinessPermitURL);
         StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBusinessPermitURL);
 
-        barangayBPRef.delete()
-                     .addOnSuccessListener(new OnSuccessListener<Void>() {
-                         @Override
-                         public void onSuccess(Void unused) {
-                             municipalBPRef.delete()
-                                           .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                               @Override
-                                               public void onSuccess(Void unused) {
+        barangayBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
 
-                                               }
-                                           });
-                         }
-                     });
+                    }
+                });
+            }
+        });
 
 
         //next is to delete the verification request linked to this property (if issued)

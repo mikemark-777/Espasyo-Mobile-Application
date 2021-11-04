@@ -463,4 +463,9 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Pressing the back button in uploadBPPActivity", Toast.LENGTH_SHORT).show();
+    }
+
 }

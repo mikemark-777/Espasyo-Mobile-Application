@@ -68,7 +68,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
         //initialize firebase connections
         firebaseConnection = FirebaseConnection.getInstance();
-        database = FirebaseConnection.getInstance().getFirebaseFirestoreInstance();
+        database = firebaseConnection.getFirebaseFirestoreInstance();
 
         initializeViews();
         Intent intent = getIntent();
@@ -80,6 +80,26 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
                 String dateSubmitted = getDateSubmitted();
                 verificationRequest.setDateSubmitted(dateSubmitted);
                 uploadVerificationRequest(verificationRequest);
+            }
+        });
+
+        displayBarangayBusinessPermit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String barangayBPUrl = verificationRequest.getBarangayBusinessPermitImageURL();
+                Intent intent = new Intent(ConfirmVerificationRequestActivity.this, PreviewBusinessPermitImage.class);
+                intent.putExtra("previewImage", barangayBPUrl);
+                startActivity(intent);
+            }
+        });
+
+        displayMunicipalBusinessPermit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
+                Intent intent = new Intent(ConfirmVerificationRequestActivity.this, PreviewBusinessPermitImage.class);
+                intent.putExtra("previewImage", municipalBPUrl);
+                startActivity(intent);
             }
         });
     }

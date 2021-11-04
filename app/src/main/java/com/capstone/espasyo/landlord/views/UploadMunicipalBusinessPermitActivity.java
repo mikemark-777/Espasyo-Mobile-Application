@@ -63,7 +63,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
     private Uri municipalBusinessPermitImageURI;
 
     private Button btnNext;
-    private Button btnBack;
     private Button btnChooseImage;
     private TextView propertyNameDisplay;
 
@@ -149,17 +148,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
             }
         });
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
-                    showDiscardDialog();
-                } else {
-                    finish();
-                }
-            }
-        });
-
         //will open confirmation dialog to confirm that the image will be attached
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +164,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
     public void initializeViews() {
         municipalBusinessPermitImageView = findViewById(R.id.imageview_municipalBP);
         btnNext = findViewById(R.id.btn_next_municipalBP);
-        btnBack = findViewById(R.id.btn_back_municipalBP);
         btnChooseImage = findViewById(R.id.btnChooseImage_municipalBP);
 
         propertyNameDisplay = findViewById(R.id.propertyName_municipalBP);
@@ -425,22 +412,9 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         });
     }
 
-    public void showDiscardDialog() {
-
-        new AlertDialog.Builder(this)
-                .setTitle("Confirm discard uploaded image")
-                .setMessage("Are you sure you want to discard the uploaded image?")
-                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        finish();
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).create().show();
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Pressing the button in uploadMBPActivity", Toast.LENGTH_SHORT).show();
     }
+
 }

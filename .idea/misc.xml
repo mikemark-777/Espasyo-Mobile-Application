@@ -49,8 +49,8 @@
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_add_property.xml" value="0.3995749202975558" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_add_room.xml" value="0.25" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_choose_edit.xml" value="0.22" />
-        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_choose_property_to_verify.xml" value="0.25" />
-        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_confirm_verification_request.xml" value="0.5" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_choose_property_to_verify.xml" value="0.18" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_confirm_verification_request.xml" value="0.22" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_edit_location_picker.xml" value="0.33" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_edit_property.xml" value="0.33" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_edit_room.xml" value="0.33" />
@@ -58,14 +58,14 @@
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_location_picker.xml" value="0.33" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_main.xml" value="0.2171875" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_preview_business_permit_image.xml" value="0.13055555555555556" />
-        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_property_details.xml" value="0.5" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_property_details.xml" value="0.14" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_room_detail.xml" value="0.33" />
-        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_room_details.xml" value="0.22" />
-        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_settings.xml" value="0.2171875" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_room_details.xml" value="0.25" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_settings.xml" value="0.5" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_show_all_rooms.xml" value="0.38018200202224467" />
-        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_upload_barangay_business_permit.xml" value="0.33" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_upload_barangay_business_permit.xml" value="0.22" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_upload_business_permits.xml" value="0.33" />
-        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_upload_municipal_business_permit.xml" value="0.25" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_upload_municipal_business_permit.xml" value="0.22" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_verification_request_details.xml" value="0.25" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_view_property_on_map.xml" value="0.25" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_view_rooms_to_edit.xml" value="0.33" />
@@ -73,9 +73,11 @@
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_custom_confirm_address.xml" value="0.22" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_delete_property_confirmation_dialog.xml" value="0.33" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_delete_room_confirmation_dialog.xml" value="0.25" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_delete_verification_confirmation_dialog.xml" value="0.33" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_empty_property_recyclerview.xml" value="0.18" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_empty_room_recyclerview.xml" value="0.5" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_empty_room_recyclerview_large.xml" value="0.25" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_empty_room_recyclerview_small.xml" value="0.13055555555555556" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_empty_verification_request_recyclerview.xml" value="0.5" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_fragment_add_property.xml" value="0.22" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_fragment_dashboard.xml" value="0.2" />

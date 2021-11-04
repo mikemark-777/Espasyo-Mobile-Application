@@ -151,7 +151,6 @@ public class VerificationFragment extends Fragment implements VerificationReques
         intent.putExtra("chosenVerificationRequest", ownedPropertyVerifications.get(position));
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
     }
 
     // TODO: Handle Activity Life Cycle
@@ -159,7 +158,7 @@ public class VerificationFragment extends Fragment implements VerificationReques
     @Override
     public void onResume() {
         super.onResume();
-        //fetchSentVerificationRequest();
+        fetchSentVerificationRequest();
     }
 
 }
