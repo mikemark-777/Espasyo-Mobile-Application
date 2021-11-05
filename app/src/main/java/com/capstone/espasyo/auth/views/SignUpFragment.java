@@ -27,6 +27,8 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
+import com.capstone.espasyo.models.Landlord;
+import com.capstone.espasyo.models.Student;
 import com.capstone.espasyo.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -155,14 +157,14 @@ public class SignUpFragment extends Fragment {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String FName = textInputFirstName.getText().toString().trim();
-                String LName = textInputLastName.getText().toString().trim();
+                String firstName = textInputFirstName.getText().toString().trim();
+                String lastName = textInputLastName.getText().toString().trim();
                 String email = textInputEmail.getText().toString().trim();
-                String pass = textInputPassword.getText().toString().trim();
-                String confirmPass = textInputConfirmPassword.getText().toString().trim();
+                String password = textInputPassword.getText().toString().trim();
+                String confirmPassword = textInputConfirmPassword.getText().toString().trim();
                 String userRole = roleChosen.getText().toString().trim();
 
-                if(areInputsValid(FName, LName, email, pass, confirmPass, userRole)) {
+                if(areInputsValid(firstName, lastName, email, password, confirmPassword, userRole)) {
 
                     //check if email already exists
                     firebaseAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
@@ -173,24 +175,33 @@ public class SignUpFragment extends Fragment {
 
                                     /*Check if what role and change it into user-role-code
                                      * User-Role-Code:
-                                     * 1 - Admin
                                      * 2 - Landlord/Landlady
                                      * 3 - Student
                                      */
                                     int uRole = userRole.equals("Student") ? 3 : 2;
 
-                                    String UID = "";
+                                    if(uRole == 2) {
+                                        Landlord newLandlord = new Landlord("", firstName, lastName, email, password, uRole);
+                                        signUpProgressBar.setVisibility(View.VISIBLE);
+                                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                signUpProgressBar.setVisibility(View.INVISIBLE);
+                                                viewModel.registerLandlord(newLandlord);
+                                            }
+                                        }, 4000);
 
-                                    User newUser = new User(UID,FName,LName,email,pass,uRole);
-                                    signUpProgressBar.setVisibility(View.VISIBLE);
-                                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            signUpProgressBar.setVisibility(View.INVISIBLE);
-                                            viewModel.register(newUser);
-                                        }
-                                    }, 4000);
-
+                                    } else if(uRole == 3) {
+                                        Student newStudent = new Student("", firstName, lastName, email, password, uRole);
+                                        signUpProgressBar.setVisibility(View.VISIBLE);
+                                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                signUpProgressBar.setVisibility(View.INVISIBLE);
+                                                viewModel.registerStudent(newStudent);
+                                            }
+                                        }, 4000);
+                                    }
                                 } else {
                                     textInputEmailLayout.setError("Email already exists");
                                 }

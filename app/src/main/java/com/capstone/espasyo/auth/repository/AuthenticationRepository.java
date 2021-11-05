@@ -1,13 +1,13 @@
 package com.capstone.espasyo.auth.repository;
 
-import android.app.Activity;
 import android.app.Application;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.capstone.espasyo.models.Landlord;
+import com.capstone.espasyo.models.Student;
 import com.capstone.espasyo.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -18,12 +18,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class AuthenticationRepository {
 
@@ -43,7 +39,7 @@ public class AuthenticationRepository {
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
 
-        if(firebaseAuth.getCurrentUser() != null) {
+        if (firebaseAuth.getCurrentUser() != null) {
             firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
         }
     }
@@ -58,22 +54,49 @@ public class AuthenticationRepository {
         return userLoggedMutableLiveData;
     }
 
-
-    public void register(User newUser) {
-        /* extract user and password */
-        String email = newUser.getEmail();
-        String password = newUser.getPassword();
+    public void registerLandlord(Landlord newLandlord) {
+        /* extract email, password and userRole */
+        String email = newLandlord.getEmail();
+        String password = newLandlord.getPassword();
+        int userRole = newLandlord.getUserRole();
 
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
 
                     firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
                     String UID = firebaseAuth.getCurrentUser().getUid(); //get currentUser's UID
-                    saveUserData(newUser, UID); //save user data to users collection
-                    saveUserDataToTheirCollection(newUser); //save user data to their respective collection (landlord or student collection)
+                    User newUser = new User(UID, email, password, userRole);
+                    newLandlord.setLandlordID(UID);
+                    saveToUsersCollection(newUser); //save user data to users collection
+                    saveToLandlordsCollection(newLandlord); //save user data to landlord collection
+                    sendEmailVerification();
 
+                } else {
+                    Toast.makeText(application, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void registerStudent(Student newStudent) {
+        /* extract email, password and userRole */
+        String email = newStudent.getEmail();
+        String password = newStudent.getPassword();
+        int userRole = newStudent.getUserRole();
+
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+
+                    firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
+                    String UID = firebaseAuth.getCurrentUser().getUid(); //get currentUser's UID
+                    User newUser = new User(UID, email, password, userRole);
+                    newStudent.setStudentID(UID);
+                    saveToUsersCollection(newUser); //save user data to users collection
+                    saveToStudentsCollection(newStudent); //save user data to student collection
                     sendEmailVerification();
 
                 } else {
@@ -88,9 +111,9 @@ public class AuthenticationRepository {
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
-                }else {
+                } else {
                     Toast.makeText(application, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -103,7 +126,7 @@ public class AuthenticationRepository {
     }
 
     /*Re-authenticate email | Update email address*/
-    public void updateEmailAddress(FirebaseUser currentUser,String currentEmail, String newEmail, String password) {
+    public void updateEmailAddress(FirebaseUser currentUser, String currentEmail, String newEmail, String password) {
 
         AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, password);// Get current auth credentials from the user for re-authentication
         currentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -112,14 +135,14 @@ public class AuthenticationRepository {
                 currentUser.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
 
                             //Update email in database
                             DocumentReference currentUserDocumentRef = database.collection("users").document(currentUser.getUid());
                             currentUserDocumentRef.update("email", newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()) {
+                                    if (task.isSuccessful()) {
 
                                         sendEmailVerification();
                                         firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
@@ -142,7 +165,7 @@ public class AuthenticationRepository {
         firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     Toast.makeText(application, "Email Verification Successfully sent", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -177,7 +200,7 @@ public class AuthenticationRepository {
         String UID = newUser.getUID();
         int role = newUser.getUserRole();
 
-        if(role == 2) {
+        if (role == 2) {
             dbLandlords = database.collection("landlords").document(UID);
             dbLandlords.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -190,7 +213,7 @@ public class AuthenticationRepository {
                     Toast.makeText(application, "Failed to save landlord data to landlords collection", Toast.LENGTH_SHORT).show();
                 }
             });
-        } else if(role == 3) {
+        } else if (role == 3) {
             dbStudents = database.collection("students").document(UID);
             dbStudents.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -204,6 +227,61 @@ public class AuthenticationRepository {
                 }
             });
         }
+    }
+
+    public void saveToUsersCollection(User newUser) {
+
+        String UID = newUser.getUID();
+        //Set the path where the data will be saved, Set the UID of the data that will be saved
+        dbUsers = database.collection("users").document(UID);
+
+        dbUsers.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(application, "Account successfully created", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(application, "Failed to create account", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void saveToStudentsCollection(Student newStudent) {
+
+        String studentID = newStudent.getStudentID();
+
+        dbLandlords = database.collection("students").document(studentID);
+        dbLandlords.set(newStudent).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(application, "Failed to save landlord data to landlords collection", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void saveToLandlordsCollection(Landlord newLandlord) {
+
+        String landlordID = newLandlord.getLandlordID();
+
+        dbLandlords = database.collection("landlords").document(landlordID);
+        dbLandlords.set(newLandlord).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(application, "Failed to save landlord data to landlords collection", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void updateLandlordEmail() {

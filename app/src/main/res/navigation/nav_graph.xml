@@ -35,7 +35,7 @@
         android:id="@+id/emailVerificationFragment"
         android:name="com.capstone.espasyo.auth.views.EmailVerificationFragment"
         android:label="fragment_email_verification"
-        tools:layout="@layout/auth_fragment_emailVerification" >
+        tools:layout="@layout/auth_fragment_email_verification" >
         <action
             android:id="@+id/action_emailVerificationFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
