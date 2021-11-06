@@ -4,6 +4,7 @@ import android.app.Application;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.capstone.espasyo.models.Landlord;
@@ -19,7 +20,10 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class AuthenticationRepository {
 
@@ -137,8 +141,9 @@ public class AuthenticationRepository {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
 
+                            String userID = currentUser.getUid();
                             //Update email in database
-                            DocumentReference currentUserDocumentRef = database.collection("users").document(currentUser.getUid());
+                            DocumentReference currentUserDocumentRef = database.collection("users").document(userID);
                             currentUserDocumentRef.update("email", newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -147,6 +152,21 @@ public class AuthenticationRepository {
                                         sendEmailVerification();
                                         firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
                                         Toast.makeText(application, "Email Address successfully updated", Toast.LENGTH_SHORT).show();
+
+                                        currentUserDocumentRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                                DocumentSnapshot user = value;
+                                                int userRole = user.getLong("userRole").intValue();
+                                                if(userRole == 2) {
+                                                    updateLandlordEmail(userID, newEmail);
+                                                }
+                                                else if(userRole == 3) {
+                                                    updateStudentEmail(userID, newEmail);
+                                                }
+                                            }
+                                        });
+
                                         //TODO: Must update the email in the Firestore database as well
                                     }
                                 }
@@ -161,6 +181,7 @@ public class AuthenticationRepository {
         });
     }
 
+
     public void sendEmailVerification() {
         firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -174,60 +195,6 @@ public class AuthenticationRepository {
 
 
     /*----------------------- FIRESTORE DATABASE OPERATIONS --------------------------------*/
-
-    /* Save data to Firestore Database*/
-    public void saveUserData(User newUser, String UID) {
-
-        newUser.setUID(UID);
-        //Set the path where the data will be saved, Set the UID of the data that will be saved
-        dbUsers = database.collection("users").document(UID);
-
-        dbUsers.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(application, "Account successfully created", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(application, "Failed to create account", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void saveUserDataToTheirCollection(User newUser) {
-
-        String UID = newUser.getUID();
-        int role = newUser.getUserRole();
-
-        if (role == 2) {
-            dbLandlords = database.collection("landlords").document(UID);
-            dbLandlords.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(application, "Failed to save landlord data to landlords collection", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else if (role == 3) {
-            dbStudents = database.collection("students").document(UID);
-            dbStudents.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(application, "Failed to save student data to student collection", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
 
     public void saveToUsersCollection(User newUser) {
 
@@ -284,8 +251,26 @@ public class AuthenticationRepository {
         });
     }
 
-    public void updateLandlordEmail() {
-        //todo: update landlord table if the landlord changes email
+    public void updateStudentEmail(String studentID, String newEmail) {
+        //todo: update student's document if the student changes email
+        DocumentReference studentDocRef = database.collection("students").document(studentID);
+        studentDocRef.update("email", newEmail).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                //will not give notification because the updateEmailAddress function will do it
+            }
+        });
+    }
+
+    public void updateLandlordEmail(String landlordID, String newEmail) {
+        //todo: update student's document if the student changes email
+        DocumentReference landlordDocRef = database.collection("landlords").document(landlordID);
+        landlordDocRef.update("email", newEmail).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                //will not give notification because the updateEmailAddress function will do it
+            }
+        });
     }
 
 }
