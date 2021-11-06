@@ -124,7 +124,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         Intent intent = getIntent();
         loadPropertyData(intent);
 
-        if(!property.getVerificationID().equals("")) {
+        if(property.getVerificationID() != null) {
             preLoadVerificationRequest();
         }
         
@@ -514,36 +514,38 @@ public class EditPropertyActivity extends AppCompatActivity {
                     }
                 });
 
-        //next is to delete the images of the barangay and municipal business permit from storage
-        barangayBusinessPermitURL = verificationRequest.getBarangayBusinessPermitImageURL();
-        municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
+        if(verificationRequest != null) {
+            //next is to delete the images of the barangay and municipal business permit from storage
+            barangayBusinessPermitURL = verificationRequest.getBarangayBusinessPermitImageURL();
+            municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
 
-        StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBusinessPermitURL);
-        StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBusinessPermitURL);
+            StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBusinessPermitURL);
+            StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBusinessPermitURL);
 
-        barangayBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-
-                    }
-                });
-            }
-        });
-
-
-        //next is to delete the verification request linked to this property (if issued)
-        if(!verificationID.equals("")) {
-            database.collection("verificationRequests").document(verificationID)
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+            barangayBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
 
                         }
                     });
+                }
+            });
+
+
+            //next is to delete the verification request linked to this property (if issued)
+            if(!verificationID.equals("")) {
+                database.collection("verificationRequests").document(verificationID)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+
+                            }
+                        });
+            }
         }
 
         //lastly is to delete the property itself

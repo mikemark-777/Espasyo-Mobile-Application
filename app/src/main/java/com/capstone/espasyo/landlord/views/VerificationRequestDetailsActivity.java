@@ -225,7 +225,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         DocumentReference propertyDocRef = database.collection("properties").document(propertyID);
 
         //clear the verificationID and set the property state to unverified
-        property.setVerificationID("");
+        property.setVerificationID(null);
         property.setIsVerified(false);
         propertyDocRef.set(property).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
