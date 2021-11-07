@@ -14,6 +14,8 @@ import com.capstone.espasyo.R;
 import com.capstone.espasyo.models.Property;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.PropertyViewHolder> {
@@ -58,6 +60,17 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
     @Override
     public int getItemCount() {
         return ownedPropertyList.size();
+    }
+
+    public int getTotalApartments() {
+        int totalApartments = 0;
+       for(Property propertyObj : ownedPropertyList) {
+           if(propertyObj.getPropertyType().equals("Apartment")) {
+               totalApartments+=1;
+           }
+       }
+
+       return totalApartments;
     }
 
     public static class PropertyViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener {
