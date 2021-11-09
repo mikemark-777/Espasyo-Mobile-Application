@@ -50,6 +50,13 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     private ImageButton imageButtonViewPropertyOnMap;
     private View showAllRooms;
     private String propertyID;
+    
+    //for verification information
+    private ImageView verificationInfoIcon;
+    private TextView verificationInfoMessage;
+    private final String UNVERIFIED_MESSAGE = "This property is not verified";
+    private final String VERIFIED_MESSAGE = "VERIFIED";
+    private final String LOCKED_MESSAGE = "This property is locked by Admin";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +69,8 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         database = firebaseConnection.getFirebaseFirestoreInstance();
         propertyRooms = new ArrayList<>();
 
-        loadPropertyData();
         initRoomRecyclerView();
+        loadPropertyData();
         fetchPropertyRooms();
 
         Button btnAddRoom;
@@ -111,6 +118,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
 
         propertyID = property.getPropertyID();
         boolean isVerified = property.getIsVerified();
+        boolean isLocked = property.getIsLocked();
         String name = property.getName();
         String propertyType = property.getPropertyType();
         String address = property.getAddress();
@@ -161,9 +169,24 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         //set the visibility of the information about the verification of the property
         if(isVerified != true) {
             verificationWarning.setVisibility(View.VISIBLE);
+            verificationWarning.setBackgroundColor(getResources().getColor(R.color.espasyo_red_200));
+            verificationInfoIcon.setVisibility(View.VISIBLE);
+            verificationInfoMessage.setText(UNVERIFIED_MESSAGE);
         } else {
-            verificationWarning.setVisibility(View.GONE);
+            if(isLocked == true) {
+                verificationWarning.setVisibility(View.VISIBLE);
+                verificationWarning.setBackgroundColor(getResources().getColor(R.color.espasyo_red_200));
+                verificationInfoIcon.setVisibility(View.VISIBLE);
+                verificationInfoMessage.setText(LOCKED_MESSAGE);
+            } else {
+                verificationWarning.setVisibility(View.VISIBLE);
+                verificationWarning.setBackgroundColor(getResources().getColor(R.color.espasyo_green_200));
+                verificationInfoIcon.setVisibility(View.GONE);
+                verificationInfoMessage.setText(VERIFIED_MESSAGE);
+            }
         }
+
+
     }
 
     //initialize roomRecyclerView, layoutManager, and roomAdapter
@@ -181,7 +204,8 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
 
         //initialize views aside from recyclerview
         imageButtonViewPropertyOnMap = findViewById(R.id.imageButtonViewPropertyOnMap);
-
+        verificationInfoIcon = findViewById(R.id.verificationInfoIcon);
+        verificationInfoMessage = findViewById(R.id.verificationInfoMessage);
     }
 
     public void fetchPropertyRooms() {

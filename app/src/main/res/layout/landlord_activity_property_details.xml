@@ -20,12 +20,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/verificationInfoIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginRight="4dp"
             android:src="@drawable/icon_info" />
 
         <TextView
+            android:id="@+id/verificationInfoMessage"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"

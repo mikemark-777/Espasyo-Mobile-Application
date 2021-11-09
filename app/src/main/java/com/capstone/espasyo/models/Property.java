@@ -65,6 +65,8 @@ public class Property implements Parcelable{
         this.isGarbageCollectionIncluded = isGarbageCollectionIncluded;
     }*/
 
+    //setters
+
     protected Property(Parcel in) {
         propertyID = in.readString();
         owner = in.readString();
@@ -98,8 +100,6 @@ public class Property implements Parcelable{
             return new Property[size];
         }
     };
-
-    //setters
 
     public void setPropertyID(String propertyID) {
         this.propertyID = propertyID;
@@ -197,7 +197,7 @@ public class Property implements Parcelable{
         return isVerified;
     }
 
-    public boolean isLocked() {
+    public boolean getIsLocked() {
         return isLocked;
     }
 
