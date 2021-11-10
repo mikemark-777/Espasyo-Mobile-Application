@@ -153,7 +153,7 @@
             android:id="@+id/btnConfirmPickedPropertyLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Confirm Location"
+            android:text="Confirm"
             android:textAllCaps="false"
             android:backgroundTint="@color/espasyo_green_200"
             android:layout_marginRight="16dp"/>

@@ -53,7 +53,8 @@ public class ConfirmPickedPropertyLocationDialog extends DialogFragment {
         textInputLocation_landmark.setText(landmark);
 
         AlertDialog createdConfirmLocationDialog = builder.create();
-        createdConfirmLocationDialog.setView(view);Toast.makeText(getActivity(), "Location Picked: Lat("  + latitude + ") , (" + longitude + ")", Toast.LENGTH_SHORT).show();
+        createdConfirmLocationDialog.setView(view);
+        //Toast.makeText(getActivity(), "Location Picked: Lat("  + latitude + ") , (" + longitude + ")", Toast.LENGTH_SHORT).show();
 
         btnConfirmPickedPropertyLocation.setOnClickListener(new View.OnClickListener() {
             @Override

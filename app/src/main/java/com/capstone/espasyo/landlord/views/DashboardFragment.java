@@ -159,7 +159,6 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
                             Property propertyObj = property.toObject(Property.class);
                             ownedPropertyList.add(propertyObj);
                         }
-                        Toast.makeText(getActivity(), "Total Apartments: " + String.valueOf(propertyAdapter.getTotalApartments()), Toast.LENGTH_SHORT).show();
                         propertyAdapter.notifyDataSetChanged();
                     }
                 });

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -66,6 +67,7 @@ public class SignUpFragment extends Fragment {
 
     //navigate to Login using text
     private TextView gotoLogin;
+    private TextView btnTermsAndConditions;
     private ProgressBar signUpProgressBar;
     private Button btnSignUp;
 
@@ -128,6 +130,7 @@ public class SignUpFragment extends Fragment {
 
         btnSignUp = view.findViewById(R.id.btnSignUp);
         gotoLogin = view.findViewById(R.id.gotoLogin);
+        btnTermsAndConditions = view.findViewById(R.id.btnTermsAndConditions);
         navController = Navigation.findNavController(view);
 
         rolesAdapter = new ArrayAdapter<String>(getActivity(), R.layout.auth_role_list_item, roles);
@@ -151,6 +154,13 @@ public class SignUpFragment extends Fragment {
                 } else {
                     btnSignUp.setEnabled(true);
                 }
+            }
+        });
+
+        btnTermsAndConditions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTermsAndConditions();
             }
         });
 
@@ -365,6 +375,25 @@ public class SignUpFragment extends Fragment {
             Log.d(TAG, "CAN PROCEED: FALSE");
             return false;
         }
+    }
+
+    public void showTermsAndConditions() {
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View view = inflater.inflate(R.layout.terms_and_conditions, null);
+
+        Button btnContinue = view.findViewById(R.id.btnContinue_termsAndConditions);
+
+        AlertDialog termsAndConditionsDialog = new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .create();
+
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                termsAndConditionsDialog.dismiss();
+            }
+        });
+        termsAndConditionsDialog.show();
     }
 
 }
