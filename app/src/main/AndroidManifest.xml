@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.capstone.espasyo">
-
     <!-- For map functionalities -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <!-- For uploading image functionalities -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- For uploading image functionalities -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -20,7 +17,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
-
+        <activity
+            android:name=".student.views.ProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".student.views.FavoritesActivity"
+            android:exported="true" />
+        <activity
+            android:name=".student.views.MapActivity"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -30,9 +35,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Landlord Activities -->
+        </activity> <!-- Landlord Activities -->
         <activity
             android:name=".landlord.LandlordMainActivity"
             android:exported="true" />
@@ -115,9 +118,7 @@
             android:value="@string/map_key" />
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <!-- for accessing files (gallery and camera)-->
+            android:value="@integer/google_play_services_version" /> <!-- for accessing files (gallery and camera) -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.capstone.android.fileprovider"
@@ -126,13 +127,10 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-
-
-        <!-- Student Activities -->
+        </provider> <!-- Student Activities -->
         <activity
             android:name=".student.StudentMainActivity"
             android:exported="true" />
-
     </application>
+
 </manifest>
