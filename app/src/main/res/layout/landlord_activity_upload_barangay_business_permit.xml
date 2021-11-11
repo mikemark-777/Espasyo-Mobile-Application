@@ -47,7 +47,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Upload your Barangay Business Permit"
+                android:text="Upload your Barangay Business Clearance"
                 android:textColor="@color/white"
                 android:textSize="14dp" />
 
@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="Attach a photo of your Barangay Business Permit"
+            android:text="Attach a photo of your Barangay Business Clearance"
             android:textColor="@color/espasyo_gray_500"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -91,7 +91,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="We require a barangay-issued business permit that shows the validity of your property you want to be verified. This is one of the requirements for you to be verified to publish your property to the system."
+            android:text="We require a barangay-issued business clearance that shows your compliance of exisiting barangay ordinance, rules and regulations. This is one of the requirements for your property to be verified and publish to the system."
             android:textSize="12sp" />
 
 
@@ -142,7 +142,7 @@
                 app:srcCompat="@drawable/img_upload_business_permit" />
 
             <Button
-                android:id="@+id/btn_next_barangayBP"
+                android:id="@+id/btn_next_to_step2"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -156,7 +156,7 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <Button
-                android:id="@+id/btn_back_barangayBP"
+                android:id="@+id/btn_back_to_step1"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

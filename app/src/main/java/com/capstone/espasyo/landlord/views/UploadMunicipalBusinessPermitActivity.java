@@ -62,6 +62,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
     private String municipalBusinessPermitImageName = "";
     private Uri municipalBusinessPermitImageURI;
 
+    private Button btnBack;
     private Button btnNext;
     private Button btnChooseImage;
     private TextView propertyNameDisplay;
@@ -89,6 +90,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         requestCameraPermissions();
         Intent intent = getIntent();
         getDataFromIntent(intent);
+        Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Property Name From Step 2: " + chosenProperty.getName(), Toast.LENGTH_LONG).show();
 
         //will handle all the data from the gallery
         pickFromGalleryActivityResultLauncher = registerForActivityResult(
@@ -148,6 +150,17 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
             }
         });
 
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
+                    showDiscardDialog();
+                } else {
+                    finish();
+                }
+            }
+        });
+
         //will open confirmation dialog to confirm that the image will be attached
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +187,8 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
 
     public void initializeViews() {
         municipalBusinessPermitImageView = findViewById(R.id.imageview_municipalBP);
-        btnNext = findViewById(R.id.btn_next_municipalBP);
+        btnBack = findViewById(R.id.btn_back_to_step2);
+        btnNext = findViewById(R.id.btn_next_to_confirmation);
         btnChooseImage = findViewById(R.id.btnChooseImage_municipalBP);
 
         propertyNameDisplay = findViewById(R.id.propertyName_municipalBP);
@@ -404,7 +418,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                         intent.putExtra("initialVerificationRequest", verificationRequest);
                         intent.putExtra("chosenProperty", chosenProperty);
                         startActivity(intent);
-                        finish();
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         progressDialog.dismiss();
                     }
@@ -425,9 +438,29 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         });
     }
 
+    public void showDiscardDialog() {
+
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm discard uploaded image")
+                .setMessage("Are you sure you want to discard the uploaded image?")
+                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
+    }
+
     @Override
     public void onBackPressed() {
-        Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Pressing the button in uploadMBPActivity", Toast.LENGTH_SHORT).show();
+        super.onBackPressed();
+       // Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Pressing the button in uploadMBPActivity", Toast.LENGTH_SHORT).show();
     }
 
 }

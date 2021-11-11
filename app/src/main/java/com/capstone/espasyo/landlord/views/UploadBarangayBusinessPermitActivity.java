@@ -66,8 +66,8 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
     private String uploadedBBPImageName;
     private Uri uploadedBBPImageURI;
 
-    private Button btnNext;
     private Button btnBack;
+    private Button btnNext;
     private Button btnChooseImage;
     private TextView propertyNameDisplay;
 
@@ -168,10 +168,17 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!barangayBusinessPermitImageName.equals("") && !barangayBusinessPermitImageURI.equals(Uri.EMPTY)) {
-                    if(!checkIfImageIsChanged(barangayBusinessPermitImageName, barangayBusinessPermitImageURI, uploadedBBPImageName, uploadedBBPImageURI)) {
+                    if(!isImageIsChanged(barangayBusinessPermitImageName, barangayBusinessPermitImageURI, uploadedBBPImageName, uploadedBBPImageURI)) {
                         Intent intent = new Intent(UploadBarangayBusinessPermitActivity.this, UploadMunicipalBusinessPermitActivity.class);
+                        intent.putExtra("initialVerificationRequest", verificationRequest);
+                        intent.putExtra("chosenProperty", chosenProperty);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        //Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Image Not Changed", Toast.LENGTH_SHORT).show();
+                    } else {
+                        showConfirmationDialog();
+                        Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Image Changed", Toast.LENGTH_SHORT).show();
                     }
-                    showConfirmationDialog();
                 } else {
                     Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Please pick an image", Toast.LENGTH_SHORT).show();
                 }
@@ -182,19 +189,20 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
         barangayBusinessPermitImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String barangayBPUrl = barangayBusinessPermitImageURI.toString();
-                Intent intent = new Intent(UploadBarangayBusinessPermitActivity.this, PreviewImageActivity.class);
-                intent.putExtra("previewImage", barangayBPUrl);
-                startActivity(intent);
+              if(barangayBusinessPermitImageURI != null) {
+                  String barangayBPUrl = barangayBusinessPermitImageURI.toString();
+                  Intent intent = new Intent(UploadBarangayBusinessPermitActivity.this, PreviewImageActivity.class);
+                  intent.putExtra("previewImage", barangayBPUrl);
+                  startActivity(intent);
+              }
             }
         });
-
     }
 
     public void initializeViews() {
         barangayBusinessPermitImageView = findViewById(R.id.imageview_barangayBP);
-        btnNext = findViewById(R.id.btn_next_barangayBP);
-        btnBack = findViewById(R.id.btn_back_barangayBP);
+        btnBack = findViewById(R.id.btn_back_to_step1);
+        btnNext = findViewById(R.id.btn_next_to_step2);
         btnChooseImage = findViewById(R.id.btnChooseImage_barangayBP);
 
         propertyNameDisplay = findViewById(R.id.propertyName_barangayBP);
@@ -386,7 +394,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
     public void showConfirmationDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Confirm Attachment")
-                .setMessage("Make sure you have uploaded the updated and authentic Barangay Business Permit. This will be attached to this verification request.")
+                .setMessage("Make sure you have uploaded the updated and authentic Barangay Business Clearance. This will be attached to this verification request.")
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -429,7 +437,6 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                         intent.putExtra("initialVerificationRequest", verificationRequest);
                         intent.putExtra("chosenProperty", chosenProperty);
                         startActivity(intent);
-                        finish();
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         progressDialog.dismiss();
                     }
@@ -469,11 +476,49 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
         }).create().show();
     }
 
-    public boolean checkIfImageIsChanged(String newBBPImageName,Uri newBBPImageURI, String currentBBPImageName, Uri currentBBPIImageURI) {
+    public boolean isImageIsChanged(String newBBPImageName, Uri newBBPImageURI, String currentBBPImageName, Uri currentBBPIImageURI) {
         if(newBBPImageName.equals(currentBBPImageName) && newBBPImageURI.equals(currentBBPIImageURI)) {
             return false;
         } else {
             return true;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (!barangayBusinessPermitImageName.equals("") && !barangayBusinessPermitImageURI.equals(Uri.EMPTY)) {
+            showDiscardDialog();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void unattachBusinessPermits() {
+        String barangayBPUrl = verificationRequest.getBarangayBusinessPermitImageURL();
+        String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
+
+        StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBPUrl);
+        StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBPUrl);
+
+        //just delete the barangay business clearance image from storage
+        barangayBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+
+            }
+        });
+
+        //see if municipal business permit is present, if so, delete it also
+        if(municipalBPUrl != null) {
+
+        }
+    }
+/*
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Barangay Business Clearance URL:" + verificationRequest.getBarangayBusinessPermitImageURL() , Toast.LENGTH_LONG).show();
+        Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Chosen Property Name:" + chosenProperty.getName() , Toast.LENGTH_LONG).show();
+    }*/
 }

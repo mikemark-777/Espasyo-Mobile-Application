@@ -88,7 +88,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="We require a municipal-issued business permit that shows the validity of your property you want to be verified. This is one of the requirements for you to be verified to publish your property to the system."
+            android:text="We require a municipal-issued business permit that shows your compliance of exisiting municipal ordinance, rules and regulations. This is one of the requirements for your property to be verified and publish to the system."
             android:textColor="@color/espasyo_gray_100"
             android:textSize="12sp" />
 
@@ -153,7 +153,21 @@
                 app:layout_constraintTop_toBottomOf="@+id/imageview_municipalBP" />
 
             <Button
-                android:id="@+id/btn_next_municipalBP"
+                android:id="@+id/btn_back_to_step2"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginBottom="2dp"
+                android:backgroundTint="@color/espasyo_blue_200"
+                android:text="Back"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_next_to_confirmation"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

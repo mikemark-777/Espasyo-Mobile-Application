@@ -68,6 +68,7 @@ public class EditRoomAdapter extends RecyclerView.Adapter<EditRoomAdapter.EditRo
 
         holder.roomName.setText(room.getRoomName());
         holder.roomPrice.setText(String.valueOf(room.getPrice()));
+        holder.numberOfPersons.setText(String.valueOf(room.getNumberOfPersons()));
     }
 
     @Override
@@ -78,7 +79,7 @@ public class EditRoomAdapter extends RecyclerView.Adapter<EditRoomAdapter.EditRo
 
     public static class EditRoomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView roomName, roomPrice, availability;
+        TextView roomName, roomPrice, availability, numberOfPersons;
         ImageView hasBathroom, hasKitchen;
         OnRoomListener onRoomListener;
 
@@ -87,6 +88,7 @@ public class EditRoomAdapter extends RecyclerView.Adapter<EditRoomAdapter.EditRo
             roomName = itemView.findViewById(R.id.roomName);
             roomPrice = itemView.findViewById(R.id.roomPrice);
             availability = itemView.findViewById(R.id.availability);
+            numberOfPersons = itemView.findViewById(R.id.numberOfPersons);
             hasBathroom = itemView.findViewById(R.id.icon_hasBathroom_roomItem);
             hasKitchen = itemView.findViewById(R.id.icon_hasKitchen_roomItem);
             this.onRoomListener = onRoomListener;
