@@ -75,6 +75,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> pickFromGalleryActivityResultLauncher;
     private ActivityResultLauncher<Intent> pickFromCameraActivityResultLauncher;
+    private ActivityResultLauncher<Intent> gotoStepThreeResultLauncher;
 
     //this will hold the initial verification request from STEP-1
     private VerificationRequest verificationRequest;
@@ -145,6 +146,19 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                     }
                 });
 
+        //will handle verification request data back and forth
+        gotoStepThreeResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        String MBP_url = result.getData().getStringExtra("municipalBPRUrl");
+                        if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                            Toast.makeText(UploadBarangayBusinessPermitActivity.this, "CANCELLED: " + MBP_url, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
         //will open choice where to get the image
         btnChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,21 +181,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!barangayBusinessPermitImageName.equals("") && !barangayBusinessPermitImageURI.equals(Uri.EMPTY)) {
-                    if(!isImageIsChanged(barangayBusinessPermitImageName, barangayBusinessPermitImageURI, uploadedBBPImageName, uploadedBBPImageURI)) {
-                        Intent intent = new Intent(UploadBarangayBusinessPermitActivity.this, UploadMunicipalBusinessPermitActivity.class);
-                        intent.putExtra("initialVerificationRequest", verificationRequest);
-                        intent.putExtra("chosenProperty", chosenProperty);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                        //Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Image Not Changed", Toast.LENGTH_SHORT).show();
-                    } else {
-                        showConfirmationDialog();
-                        Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Image Changed", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Please pick an image", Toast.LENGTH_SHORT).show();
-                }
+                launchStepThree();
             }
         });
 
@@ -290,6 +290,24 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
             }
         } else {
             requestCameraPermissions();
+        }
+    }
+
+    public void launchStepThree() {
+        if (!barangayBusinessPermitImageName.equals("") && !barangayBusinessPermitImageURI.equals(Uri.EMPTY)) {
+            if(!isImageIsChanged(barangayBusinessPermitImageName, barangayBusinessPermitImageURI, uploadedBBPImageName, uploadedBBPImageURI)) {
+                Intent intent = new Intent(UploadBarangayBusinessPermitActivity.this, UploadMunicipalBusinessPermitActivity.class);
+                intent.putExtra("initialVerificationRequest", verificationRequest);
+                intent.putExtra("chosenProperty", chosenProperty);
+                gotoStepThreeResultLauncher.launch(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                //Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Image Not Changed", Toast.LENGTH_SHORT).show();
+            } else {
+                showConfirmationDialog();
+                Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Image Changed", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Please pick an image", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -436,7 +454,7 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
 
                         intent.putExtra("initialVerificationRequest", verificationRequest);
                         intent.putExtra("chosenProperty", chosenProperty);
-                        startActivity(intent);
+                        gotoStepThreeResultLauncher.launch(intent);
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         progressDialog.dismiss();
                     }
@@ -465,8 +483,9 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
                 .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        finish();
+                        unattachBusinessPermits();
+                       /* dialog.dismiss();
+                        finish();*/
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -497,7 +516,15 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
         String barangayBPUrl = verificationRequest.getBarangayBusinessPermitImageURL();
         String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
 
-        StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBPUrl);
+        int count = 0;
+        if(barangayBPUrl != null) {
+            count++;
+            if(municipalBPUrl != null) {
+                count++;
+            }
+        }
+        Toast.makeText(UploadBarangayBusinessPermitActivity.this, "attached business permit: " + String.valueOf(count), Toast.LENGTH_LONG).show();
+       /* StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBPUrl);
         StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBPUrl);
 
         //just delete the barangay business clearance image from storage
@@ -511,14 +538,6 @@ public class UploadBarangayBusinessPermitActivity extends AppCompatActivity {
         //see if municipal business permit is present, if so, delete it also
         if(municipalBPUrl != null) {
 
-        }
+        }*/
     }
-/*
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-
-        Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Barangay Business Clearance URL:" + verificationRequest.getBarangayBusinessPermitImageURL() , Toast.LENGTH_LONG).show();
-        Toast.makeText(UploadBarangayBusinessPermitActivity.this, "Chosen Property Name:" + chosenProperty.getName() , Toast.LENGTH_LONG).show();
-    }*/
 }

@@ -256,12 +256,19 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
+                Intent intent = new Intent(ConfirmVerificationRequestActivity.this, LandlordMainActivity.class);
                 progressDialog.dismiss();
                 verificationRequest = null;
                 Toast.makeText(ConfirmVerificationRequestActivity.this, "Verification Request cancelled", Toast.LENGTH_SHORT).show();
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         }, 3500);
     }
 
+    @Override
+    public void onBackPressed() {
+        //back button disabled
+    }
 }

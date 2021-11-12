@@ -156,6 +156,10 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                 if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
                     showDiscardDialog();
                 } else {
+                    String municipalBPRUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
+                    Intent intent = new Intent();
+                    intent.putExtra("municipalBPRUrl", municipalBPRUrl);
+                    setResult(RESULT_CANCELED, intent);
                     finish();
                 }
             }
@@ -177,10 +181,13 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         municipalBusinessPermitImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String municipalBPUrl = municipalBusinessPermitImageURI.toString();
-                Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, PreviewImageActivity.class);
-                intent.putExtra("previewImage", municipalBPUrl);
-                startActivity(intent);
+                if(municipalBusinessPermitImageURI != null) {
+                    String municipalBPUrl = municipalBusinessPermitImageURI.toString();
+                    Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, PreviewImageActivity.class);
+                    intent.putExtra("previewImage", municipalBPUrl);
+                    startActivity(intent);
+                }
+
             }
         });
     }
@@ -447,6 +454,10 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        String municipalBPRUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
+                        Intent intent = new Intent();
+                        intent.putExtra("municipalBPRUrl", municipalBPRUrl);
+                        setResult(RESULT_CANCELED);
                         finish();
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -459,8 +470,11 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-       // Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Pressing the button in uploadMBPActivity", Toast.LENGTH_SHORT).show();
+        if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
+            showDiscardDialog();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }
