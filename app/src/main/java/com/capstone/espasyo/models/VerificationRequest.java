@@ -16,7 +16,6 @@ public class VerificationRequest implements Parcelable {
     private String propertyID;
     private String propertyName;
     private String propertyAddress;
-    private String barangayBusinessPermitImageURL;
     private String municipalBusinessPermitImageURL;
 
     public VerificationRequest() {
@@ -33,7 +32,6 @@ public class VerificationRequest implements Parcelable {
         propertyID = in.readString();
         propertyName = in.readString();
         propertyAddress = in.readString();
-        barangayBusinessPermitImageURL = in.readString();
         municipalBusinessPermitImageURL = in.readString();
     }
 
@@ -85,10 +83,6 @@ public class VerificationRequest implements Parcelable {
         this.propertyAddress = propertyAddress;
     }
 
-    public void setBarangayBusinessPermitImageURL(String barangayBusinessPermitImageURL) {
-        this.barangayBusinessPermitImageURL = barangayBusinessPermitImageURL;
-    }
-
     public void setMunicipalBusinessPermitImageURL(String municipalBusinessPermitImageURL) {
         this.municipalBusinessPermitImageURL = municipalBusinessPermitImageURL;
     }
@@ -96,7 +90,6 @@ public class VerificationRequest implements Parcelable {
     public String getVerificationRequestID() {
         return verificationRequestID;
     }
-
 
     public boolean isVerified() {
         return isVerified;
@@ -130,10 +123,6 @@ public class VerificationRequest implements Parcelable {
         return propertyAddress;
     }
 
-    public String getBarangayBusinessPermitImageURL() {
-        return barangayBusinessPermitImageURL;
-    }
-
     public String getMunicipalBusinessPermitImageURL() {
         return municipalBusinessPermitImageURL;
     }
@@ -154,7 +143,6 @@ public class VerificationRequest implements Parcelable {
         dest.writeString(propertyID);
         dest.writeString(propertyName);
         dest.writeString(propertyAddress);
-        dest.writeString(barangayBusinessPermitImageURL);
         dest.writeString(municipalBusinessPermitImageURL);
     }
 }

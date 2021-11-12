@@ -72,7 +72,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> pickFromGalleryActivityResultLauncher;
     private ActivityResultLauncher<Intent> pickFromCameraActivityResultLauncher;
 
-    //this will hold the initial verification request from STEP-2
+    //this will hold the initial verification request from STEP-1
     private VerificationRequest verificationRequest;
     private Property chosenProperty;
 
@@ -90,7 +90,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         requestCameraPermissions();
         Intent intent = getIntent();
         getDataFromIntent(intent);
-        Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Property Name From Step 2: " + chosenProperty.getName(), Toast.LENGTH_LONG).show();
 
         //will handle all the data from the gallery
         pickFromGalleryActivityResultLauncher = registerForActivityResult(
@@ -457,7 +456,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                         String municipalBPRUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
                         Intent intent = new Intent();
                         intent.putExtra("municipalBPRUrl", municipalBPRUrl);
-                        setResult(RESULT_CANCELED);
+                        setResult(RESULT_CANCELED, intent);
                         finish();
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -475,6 +474,20 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    public boolean isImageIsChanged(String newBBPImageName, Uri newBBPImageURI, String currentBBPImageName, Uri currentBBPIImageURI) {
+        if(newBBPImageName.equals(currentBBPImageName) && newBBPImageURI.equals(currentBBPIImageURI)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void unattachBusinessPermits() {
+        String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
+
+        StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBPUrl);
     }
 
 }

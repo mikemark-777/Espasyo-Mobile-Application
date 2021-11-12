@@ -49,7 +49,8 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
             displayLandlordPhoneNumberConfirmVerification;
 
     private ImageView displayBarangayBusinessPermit,
-            displayMunicipalBusinessPermit;
+            displayMunicipalBusinessPermit,
+            btnBackToStep3;
 
     private Button btnConfirmVerificationRequest,
             btnDiscardVerificationRequest;
@@ -109,6 +110,13 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        btnBackToStep3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void initializeViews() {
@@ -121,6 +129,9 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         //business permit imageviews
         displayBarangayBusinessPermit = findViewById(R.id.displayBarangayBusinessPermit_confirmVerification);
         displayMunicipalBusinessPermit = findViewById(R.id.displayMunicipalBusinessPermit_confirmVerification);
+
+        //image view back button
+        btnBackToStep3 = findViewById(R.id.btn_back_to_step3);
 
         //initialize buttons
         btnConfirmVerificationRequest = findViewById(R.id.btnConfirmVerificationRequest);

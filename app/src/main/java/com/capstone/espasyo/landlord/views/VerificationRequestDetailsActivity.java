@@ -96,15 +96,6 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
             }
         });
 
-        //preview barangay business permit (able to zoom in and out)
-        btnPreviewBarangayBP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(VerificationRequestDetailsActivity.this, PreviewImageActivity.class);
-                intent.putExtra("previewImage", barangayBPUrl);
-                startActivity(intent);
-            }
-        });
         //preview municipal business permit (able to zoom in and out)
         btnPreviewMunicipalBP.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +154,6 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         String dateSubmitted = verificationRequest.getDateSubmitted();
         String dateVerified = verificationRequest.getDateVerified();
         boolean isVerified = verificationRequest.isVerified();
-        barangayBPUrl = verificationRequest.getBarangayBusinessPermitImageURL();
         municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
 
         propertyNameDisplay.setText(propertyName);
@@ -183,10 +173,6 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
 
         //will display the images of barangay and municipal business permit
         Picasso.get()
-                .load(barangayBPUrl)
-                .placeholder(R.drawable.img_upload_business_permit)
-                .into(barangayBPImageViewDisplay);
-        Picasso.get()
                 .load(municipalBPUrl)
                 .placeholder(R.drawable.img_upload_business_permit)
                 .into(municipalBPImageViewDisplay);
@@ -204,19 +190,13 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     }
 
     private void deleteVerificationRequest(String verificationRequestID) {
-        //first is to delete the images from the storage
-        StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBPUrl);
+        //first is to delete the image from the storage
         StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBPUrl);
 
-        barangayBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
 
-                    }
-                });
             }
         });
 

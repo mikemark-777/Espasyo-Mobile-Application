@@ -18,15 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
         <activity
-            android:name=".student.views.ProfileActivity"
-            android:exported="true" />
-        <activity
-            android:name=".student.views.FavoritesActivity"
-            android:exported="true" />
-        <activity
-            android:name=".student.views.MapActivity"
-            android:exported="true" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:noHistory="true">
@@ -94,9 +85,6 @@
             android:name=".landlord.views.ShowAllRoomsActivity"
             android:exported="true" />
         <activity
-            android:name=".landlord.views.UploadBarangayBusinessPermitActivity"
-            android:exported="true" />
-        <activity
             android:name=".landlord.views.UploadMunicipalBusinessPermitActivity"
             android:exported="true" />
         <activity
@@ -127,9 +115,20 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider> <!-- Student Activities -->
+        </provider>
+
+        <!-- Student Activities -->
         <activity
             android:name=".student.StudentMainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".student.views.ProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".student.views.FavoritesActivity"
+            android:exported="true" />
+        <activity
+            android:name=".student.views.MapActivity"
             android:exported="true" />
     </application>
 

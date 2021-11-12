@@ -134,7 +134,7 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         newVerificationRequest.setPropertyName(propertyName);
         newVerificationRequest.setPropertyAddress(propertyAddress);
 
-        Intent intent = new Intent(ChoosePropertyToVerifyActivity.this, UploadBarangayBusinessPermitActivity.class);
+        Intent intent = new Intent(ChoosePropertyToVerifyActivity.this, UploadMunicipalBusinessPermitActivity.class);
         intent.putExtra("initialVerificationRequest", newVerificationRequest);
         intent.putExtra("chosenProperty", chosenProperty);
 
