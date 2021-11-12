@@ -46,6 +46,15 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
 
     private Button cancelVerificationRequestCompose;
 
+    //verification request status
+    private final String VERIFIED = "verified";
+    private final String UNVERIFIED = "unverified";
+    private final String DECLINED = "declined";
+
+    //verification request classification
+    private final String NEW = "new";
+    private final String RENEW = "renew";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,12 +132,12 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         String propertyAddress = chosenProperty.getAddress();
 
         String verificationRequestID = UUID.randomUUID().toString();
-        boolean isVerified = false;
 
         // create a new verification request object and set initial data to it
         VerificationRequest newVerificationRequest = new VerificationRequest();
         newVerificationRequest.setVerificationRequestID(verificationRequestID);
-        newVerificationRequest.setVerified(isVerified);
+        newVerificationRequest.setStatus(UNVERIFIED);
+        newVerificationRequest.setClassification(NEW);
         newVerificationRequest.setRequesteeID(requesteeID);
         newVerificationRequest.setPropertyID(propertyID);
         newVerificationRequest.setPropertyName(propertyName);
@@ -151,5 +160,4 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         }, 2000);
 
     }
-
 }

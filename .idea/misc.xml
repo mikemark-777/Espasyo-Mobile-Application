@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable-v24/custom_thumb_availability.xml" value="0.1884259259259259" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable-v24/custom_track_availability.xml" value="0.1884259259259259" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable-v24/icon_new.xml" value="0.14131944444444444" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/custom_button.xml" value="0.23333333333333334" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/custom_input.xml" value="0.12135416666666667" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/custom_thumb.xml" value="0.11851851851851852" />
@@ -23,6 +24,7 @@
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_no_electricity.xml" value="0.17453703703703705" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_no_internet.xml" value="0.17453703703703705" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_no_water.xml" value="0.17453703703703705" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_renew.xml" value="0.14131944444444444" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_unverified.xml" value="0.1884259259259259" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_verified.xml" value="0.17393162393162392" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_visit_property.xml" value="0.14131944444444444" />
@@ -71,7 +73,8 @@
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_verification_request_details.xml" value="0.25" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_view_property_on_map.xml" value="0.25" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_activity_view_rooms_to_edit.xml" value="0.33" />
-        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_choose_image_source.xml" value="0.67" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_choose_image_source.xml" value="0.25" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_choose_verification_classification.xml" value="0.33" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_custom_confirm_address.xml" value="0.22" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_delete_property_confirmation_dialog.xml" value="0.33" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/landlord_delete_room_confirmation_dialog.xml" value="0.25" />

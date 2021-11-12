@@ -516,21 +516,14 @@ public class EditPropertyActivity extends AppCompatActivity {
 
         if(verificationRequest != null) {
             //next is to delete the images of the barangay and municipal business permit from storage
-            barangayBusinessPermitURL = verificationRequest.getBarangayBusinessPermitImageURL();
             municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
 
-            StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBusinessPermitURL);
             StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBusinessPermitURL);
 
-            barangayBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
-                    municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-
-                        }
-                    });
+                    //business permit has been deleted
                 }
             });
 

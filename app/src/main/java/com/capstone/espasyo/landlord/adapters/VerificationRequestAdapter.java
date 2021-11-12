@@ -41,9 +41,9 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
         String propertyName = verificationRequest.getPropertyName();
         String dateSubmitted = verificationRequest.getDateSubmitted();
         String dateVerified = verificationRequest.getDateVerified();
-        boolean isVerified = verificationRequest.isVerified();
+        String status = verificationRequest.getStatus();
 
-        if(isVerified == false) {
+        if(status.equals("unverified")) {
             holder.verifiedIconDisplay.setImageResource(R.drawable.icon_unverified);
         } else {
             holder.verifiedIconDisplay.setImageResource(R.drawable.icon_verified);

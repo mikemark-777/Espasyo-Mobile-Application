@@ -91,15 +91,6 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
             }
         });
 
-        displayBarangayBusinessPermit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String barangayBPUrl = verificationRequest.getBarangayBusinessPermitImageURL();
-                Intent intent = new Intent(ConfirmVerificationRequestActivity.this, PreviewImageActivity.class);
-                intent.putExtra("previewImage", barangayBPUrl);
-                startActivity(intent);
-            }
-        });
 
         displayMunicipalBusinessPermit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +118,6 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         displayLandlordPhoneNumberConfirmVerification = findViewById(R.id.landlordPhoneNumber_confirmVerification);
 
         //business permit imageviews
-        displayBarangayBusinessPermit = findViewById(R.id.displayBarangayBusinessPermit_confirmVerification);
         displayMunicipalBusinessPermit = findViewById(R.id.displayMunicipalBusinessPermit_confirmVerification);
 
         //image view back button
@@ -150,15 +140,9 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         String proprietorName = chosenProperty.getProprietorName();
         String landlordName = chosenProperty.getLandlordName();
         String landlordPhoneNumber = chosenProperty.getLandlordPhoneNumber();
-        String barangayBusinessPermitURL = verificationRequest.getBarangayBusinessPermitImageURL();
         String municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
 
-        //will display the images of barangay and municipal business permit based on their given URLs from firebase storage
-        Picasso.get()
-                .load(barangayBusinessPermitURL)
-                .placeholder(R.drawable.img_upload_business_permit)
-                .into(displayBarangayBusinessPermit);
-
+        //will display the image of municipal business permit based on its given URL from firebase storage
         Picasso.get()
                 .load(municipalBusinessPermitURL)
                 .placeholder(R.drawable.img_upload_business_permit)
@@ -245,21 +229,14 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
     public void discardVerificationRequest() {
         progressDialog.setTitle("Cancelling Verification Request...");
         progressDialog.show();
-        String barangayBPUrl = verificationRequest.getBarangayBusinessPermitImageURL();
         String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
 
-        StorageReference barangayBPRef = storage.getReferenceFromUrl(barangayBPUrl);
         StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBPUrl);
 
-        barangayBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        //business permit images has been deleted
-                    }
-                });
+                //business permit image has been deleted
             }
         });
 

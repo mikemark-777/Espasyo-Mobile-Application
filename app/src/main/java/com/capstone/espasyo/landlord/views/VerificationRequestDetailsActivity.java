@@ -127,14 +127,12 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         dateSubmittedDisplay = findViewById(R.id.dateSubmitted_display_VRDetails);
         dateVerifiedDisplay = findViewById(R.id.dateVerified_display_VRDetails);
         isVerifiedDisplay = findViewById(R.id.isVerified_display_VRDetails);
-        barangayBPImageViewDisplay = findViewById(R.id.barangayBP_display_VRDetails);
         municipalBPImageViewDisplay = findViewById(R.id.municipalBP_display_VRDetails);
 
         //buttons
         btnVisitProperty = findViewById(R.id.btnVisitProperty_VRDetails);
         btnDeleteVerificationRequest = findViewById(R.id.imageButtonDeleteVerificationRequest);
         btnBackToVerificationFragment = findViewById(R.id.imageButtonBackToVerificationFragment);
-        btnPreviewBarangayBP = findViewById(R.id.btnPreviewBarangayBP);
         btnPreviewMunicipalBP = findViewById(R.id.btnPreviewMunicipalBP);
 
         //progressDialog
@@ -153,7 +151,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         String landlordPhoneNumber = verificationRequest.getLandlordPhoneNumber();*/
         String dateSubmitted = verificationRequest.getDateSubmitted();
         String dateVerified = verificationRequest.getDateVerified();
-        boolean isVerified = verificationRequest.isVerified();
+        String status = verificationRequest.getStatus();
         municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
 
         propertyNameDisplay.setText(propertyName);
@@ -163,7 +161,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         dateSubmittedDisplay.setText(dateSubmitted);
         dateVerifiedDisplay.setText(dateVerified);
 
-        if (!isVerified) {
+        if (status.equals("unverified")) {
             isVerifiedDisplay.setText(UNVERIFIED);
             isVerifiedDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_red_200));
         } else {

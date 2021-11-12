@@ -8,7 +8,8 @@ import java.util.Date;
 public class VerificationRequest implements Parcelable {
 
     private String verificationRequestID;
-    private boolean isVerified;
+    private String status;
+    private String classification;
     private String dateSubmitted;
     private String dateVerified;
     private String declinedVerificationDescription;
@@ -24,7 +25,8 @@ public class VerificationRequest implements Parcelable {
 
     protected VerificationRequest(Parcel in) {
         verificationRequestID = in.readString();
-        isVerified = in.readByte() != 0;
+        status = in.readString();
+        classification = in.readString();
         dateSubmitted = in.readString();
         dateVerified = in.readString();
         declinedVerificationDescription = in.readString();
@@ -51,8 +53,12 @@ public class VerificationRequest implements Parcelable {
         this.verificationRequestID = verificationRequestID;
     }
 
-    public void setVerified(boolean verified) {
-        isVerified = verified;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setClassification(String classification) {
+        this.classification = classification;
     }
 
     public void setDateSubmitted(String dateSubmitted) {
@@ -91,8 +97,12 @@ public class VerificationRequest implements Parcelable {
         return verificationRequestID;
     }
 
-    public boolean isVerified() {
-        return isVerified;
+    public String getStatus() {
+        return status;
+    }
+
+    public String getClassification() {
+        return classification;
     }
 
     public String getDateSubmitted() {
@@ -135,7 +145,8 @@ public class VerificationRequest implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(verificationRequestID);
-        dest.writeByte((byte) (isVerified ? 1 : 0));
+        dest.writeString(status);
+        dest.writeString(classification);
         dest.writeString(dateSubmitted);
         dest.writeString(dateVerified);
         dest.writeString(declinedVerificationDescription);
