@@ -18,6 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
         <activity
+            android:name=".landlord.views.SeeDetailsDeclinedVerification"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.RenewVerificationRequestActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:noHistory="true">
@@ -115,9 +121,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-
-        <!-- Student Activities -->
+        </provider> <!-- Student Activities -->
         <activity
             android:name=".student.StudentMainActivity"
             android:exported="true" />

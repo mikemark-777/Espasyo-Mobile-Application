@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,35 +34,38 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     private FirebaseFirestore database;
     private FirebaseStorage storage;
 
-    //verification Object
+    //verificationRequest Object
     private VerificationRequest verificationRequest;
+
+    //linearlayout for warning expired verification request
+    private LinearLayout infoBoxExpiredVerificationDetails,
+                         infoBoxDeclinedVerificationDetails;
 
     //textViews for displaying propertyDetails and verificatioRequestDetails;
     private TextView propertyNameDisplay,
             propertyAddressDisplay,
+            properietorNameDisplay,
             landlordNameDisplay,
-            landlordPhoneNumberDisplay,
             dateSubmittedDisplay,
             dateVerifiedDisplay,
-            isVerifiedDisplay;
+            statusDisplay;
 
     //textviews for previewing business permit images
-    TextView btnPreviewBarangayBP,
-            btnPreviewMunicipalBP;
+    TextView btnPreviewMunicipalBP;
 
     //button for viewing property details
     private Button btnVisitProperty;
+    private Button btnRenewVerificationRequest,
+                   btnSeeDetailsDeclinedVerification;
 
     //imageView for buttons edit and delete verification request
     private ImageView btnDeleteVerificationRequest,
             btnBackToVerificationFragment;
 
     //imageView for displaying business permits
-    private ImageView barangayBPImageViewDisplay,
-            municipalBPImageViewDisplay;
+    private ImageView municipalBPImageViewDisplay;
     private CustomProgressDialog progressDialog;
 
-    private String barangayBPUrl;
     private String municipalBPUrl;
 
     //this is the ID of the property linked to this verification request
@@ -70,6 +74,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
 
     private final String VERIFIED = "Verified";
     private final String UNVERIFIED = "Unverified";
+    private final String DECLINED = "Declined";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,14 +124,32 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        btnRenewVerificationRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VerificationRequestDetailsActivity.this, RenewVerificationRequestActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnSeeDetailsDeclinedVerification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VerificationRequestDetailsActivity.this, SeeDetailsDeclinedVerification.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void initializeViews() {
         propertyNameDisplay = findViewById(R.id.propertyName_display_VRDetails);
         propertyAddressDisplay = findViewById(R.id.propertyAddress_display_VRDetails);
+        properietorNameDisplay = findViewById(R.id.proprietor_display_VRDetails);
+        landlordNameDisplay = findViewById(R.id.landlord_display_VRDetails);
         dateSubmittedDisplay = findViewById(R.id.dateSubmitted_display_VRDetails);
         dateVerifiedDisplay = findViewById(R.id.dateVerified_display_VRDetails);
-        isVerifiedDisplay = findViewById(R.id.isVerified_display_VRDetails);
+        statusDisplay = findViewById(R.id.status_display_VRDetails);
         municipalBPImageViewDisplay = findViewById(R.id.municipalBP_display_VRDetails);
 
         //buttons
@@ -134,9 +157,15 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         btnDeleteVerificationRequest = findViewById(R.id.imageButtonDeleteVerificationRequest);
         btnBackToVerificationFragment = findViewById(R.id.imageButtonBackToVerificationFragment);
         btnPreviewMunicipalBP = findViewById(R.id.btnPreviewMunicipalBP);
+        btnRenewVerificationRequest = findViewById(R.id.btnRenewVerificationRequest);
+        btnSeeDetailsDeclinedVerification = findViewById(R.id.btnSeeDetailsDeclinedVerification);
 
         //progressDialog
         progressDialog = new CustomProgressDialog(this);
+
+        //linearlayout
+        infoBoxExpiredVerificationDetails = findViewById(R.id.infoBoxExpired_verificationDetails);
+        infoBoxDeclinedVerificationDetails = findViewById(R.id.infoBoxDeclined_verificationDetails);
     }
 
     public void getDataFromIntent(Intent intent) {
@@ -145,28 +174,36 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         //set propertyID linked to this verificaton request
         propertyID = verificationRequest.getPropertyID();
 
-        String propertyName = verificationRequest.getPropertyName();
-        String address = verificationRequest.getPropertyAddress();
-        /* String landlord = verificationRequest.getLandlord();
-        String landlordPhoneNumber = verificationRequest.getLandlordPhoneNumber();*/
+
         String dateSubmitted = verificationRequest.getDateSubmitted();
         String dateVerified = verificationRequest.getDateVerified();
+        boolean isExpired = verificationRequest.isExpired();
         String status = verificationRequest.getStatus();
         municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
 
-        propertyNameDisplay.setText(propertyName);
-        propertyAddressDisplay.setText(address);
-        /*landlordNameDisplay.setText(landlord);
-        landlordPhoneNumberDisplay.setText(landlordPhoneNumber);*/
         dateSubmittedDisplay.setText(dateSubmitted);
         dateVerifiedDisplay.setText(dateVerified);
 
-        if (status.equals("unverified")) {
-            isVerifiedDisplay.setText(UNVERIFIED);
-            isVerifiedDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_red_200));
+        if (isExpired) {
+            infoBoxExpiredVerificationDetails.setVisibility(View.VISIBLE);
         } else {
-            isVerifiedDisplay.setText(VERIFIED);
-            isVerifiedDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_green_200));
+            infoBoxExpiredVerificationDetails.setVisibility(View.GONE);
+        }
+
+        if(status.equals("declined")) {
+            infoBoxDeclinedVerificationDetails.setVisibility(View.VISIBLE);
+            statusDisplay.setText(DECLINED);
+            statusDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_orange_200));
+        } else {
+            infoBoxDeclinedVerificationDetails.setVisibility(View.GONE);
+        }
+
+        if(status.equals("verified")){
+            statusDisplay.setText(VERIFIED);
+            statusDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_green_200));
+        } else if (status.equals("unverified")) {
+            statusDisplay.setText(UNVERIFIED);
+            statusDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_red_200));
         }
 
         //will display the images of barangay and municipal business permit
@@ -183,6 +220,15 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 property = documentSnapshot.toObject(Property.class);
+                String propertyName = property.getName();
+                String address = property.getAddress();
+                String proprietor = property.getProprietorName();
+                String landlord = property.getLandlordName();
+
+                propertyNameDisplay.setText(propertyName);
+                propertyAddressDisplay.setText(address);
+                properietorNameDisplay.setText(proprietor);
+                landlordNameDisplay.setText(landlord);
             }
         });
     }

@@ -8,6 +8,7 @@ import java.util.Date;
 public class VerificationRequest implements Parcelable {
 
     private String verificationRequestID;
+    private boolean isExpired;
     private String status;
     private String classification;
     private String dateSubmitted;
@@ -23,8 +24,12 @@ public class VerificationRequest implements Parcelable {
         //empty verification request constructor **required
     }
 
+    //setters
+
+
     protected VerificationRequest(Parcel in) {
         verificationRequestID = in.readString();
+        isExpired = in.readByte() != 0;
         status = in.readString();
         classification = in.readString();
         dateSubmitted = in.readString();
@@ -35,6 +40,27 @@ public class VerificationRequest implements Parcelable {
         propertyName = in.readString();
         propertyAddress = in.readString();
         municipalBusinessPermitImageURL = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(verificationRequestID);
+        dest.writeByte((byte) (isExpired ? 1 : 0));
+        dest.writeString(status);
+        dest.writeString(classification);
+        dest.writeString(dateSubmitted);
+        dest.writeString(dateVerified);
+        dest.writeString(declinedVerificationDescription);
+        dest.writeString(requesteeID);
+        dest.writeString(propertyID);
+        dest.writeString(propertyName);
+        dest.writeString(propertyAddress);
+        dest.writeString(municipalBusinessPermitImageURL);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<VerificationRequest> CREATOR = new Creator<VerificationRequest>() {
@@ -51,6 +77,10 @@ public class VerificationRequest implements Parcelable {
 
     public void setVerificationRequestID(String verificationRequestID) {
         this.verificationRequestID = verificationRequestID;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
     }
 
     public void setStatus(String status) {
@@ -93,8 +123,14 @@ public class VerificationRequest implements Parcelable {
         this.municipalBusinessPermitImageURL = municipalBusinessPermitImageURL;
     }
 
+    //getters
+
     public String getVerificationRequestID() {
         return verificationRequestID;
+    }
+
+    public boolean isExpired() {
+        return isExpired;
     }
 
     public String getStatus() {
@@ -135,25 +171,5 @@ public class VerificationRequest implements Parcelable {
 
     public String getMunicipalBusinessPermitImageURL() {
         return municipalBusinessPermitImageURL;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(verificationRequestID);
-        dest.writeString(status);
-        dest.writeString(classification);
-        dest.writeString(dateSubmitted);
-        dest.writeString(dateVerified);
-        dest.writeString(declinedVerificationDescription);
-        dest.writeString(requesteeID);
-        dest.writeString(propertyID);
-        dest.writeString(propertyName);
-        dest.writeString(propertyAddress);
-        dest.writeString(municipalBusinessPermitImageURL);
     }
 }

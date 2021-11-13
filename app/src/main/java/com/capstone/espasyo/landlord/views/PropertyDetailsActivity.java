@@ -185,8 +185,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
                 verificationInfoMessage.setText(VERIFIED_MESSAGE);
             }
         }
-
-
     }
 
     //initialize roomRecyclerView, layoutManager, and roomAdapter

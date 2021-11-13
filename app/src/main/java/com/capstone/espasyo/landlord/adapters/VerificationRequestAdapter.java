@@ -44,10 +44,12 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
         String status = verificationRequest.getStatus();
         String classification = verificationRequest.getClassification();
 
-        if(status.equals("unverified")) {
-            holder.verifiedIconDisplay.setImageResource(R.drawable.icon_unverified);
-        } else {
+        if(status.equals("verified")) {
             holder.verifiedIconDisplay.setImageResource(R.drawable.icon_verified);
+        } else if(status.equals("unverified")){
+            holder.verifiedIconDisplay.setImageResource(R.drawable.icon_unverified);
+        } else if(status.equals("declined")) {
+            holder.verifiedIconDisplay.setImageResource(R.drawable.icon_declined);
         }
 
         holder.dateVerified.setText(dateVerified);

@@ -86,7 +86,7 @@ public class VerificationFragment extends Fragment implements VerificationReques
         composeVerificationRequestFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseComposeVerification();
+                startActivity(new Intent(getActivity(), ChoosePropertyToVerifyActivity.class));
             }
         });
 
@@ -104,7 +104,6 @@ public class VerificationFragment extends Fragment implements VerificationReques
             }
         });
     }
-
     /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
 
     public void initVerificationRequestRecyclerView(View view) {
@@ -143,38 +142,6 @@ public class VerificationFragment extends Fragment implements VerificationReques
                         verificationRequestAdapter.notifyDataSetChanged();
                     }
                 });
-    }
-
-    //will let user choose whether to compose a new verification request or renew an existing one
-    public void chooseComposeVerification() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.landlord_choose_verification_classification, null);
-        builder.setView(dialogView);
-
-        CardView btnNewVerification = dialogView.findViewById(R.id.btnNewVerification);
-        CardView btnRenewVerification = dialogView.findViewById(R.id.btnRenewVerification);
-
-        AlertDialog chooseImageSourceDialog = builder.create();
-        chooseImageSourceDialog.show();
-
-        //cardview button to compose new verification request
-        btnNewVerification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ChoosePropertyToVerifyActivity.class));
-                chooseImageSourceDialog.dismiss();
-            }
-        });
-
-        //cardview button to renew an existing verification request
-        btnRenewVerification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Create renew verification process", Toast.LENGTH_LONG).show();
-                chooseImageSourceDialog.dismiss();
-            }
-        });
     }
 
     @Override

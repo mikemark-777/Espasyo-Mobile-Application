@@ -136,6 +136,7 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         // create a new verification request object and set initial data to it
         VerificationRequest newVerificationRequest = new VerificationRequest();
         newVerificationRequest.setVerificationRequestID(verificationRequestID);
+        newVerificationRequest.setExpired(false);
         newVerificationRequest.setStatus(UNVERIFIED);
         newVerificationRequest.setClassification(NEW);
         newVerificationRequest.setRequesteeID(requesteeID);
@@ -147,7 +148,7 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
         intent.putExtra("initialVerificationRequest", newVerificationRequest);
         intent.putExtra("chosenProperty", chosenProperty);
 
-        progressDialog.showProgressDialog("Loading...", false);
+        progressDialog.showProgressDialog("Initializing...", false);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
