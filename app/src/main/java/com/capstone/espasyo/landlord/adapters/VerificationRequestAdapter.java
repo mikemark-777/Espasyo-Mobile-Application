@@ -42,6 +42,7 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
         String dateSubmitted = verificationRequest.getDateSubmitted();
         String dateVerified = verificationRequest.getDateVerified();
         String status = verificationRequest.getStatus();
+        String classification = verificationRequest.getClassification();
 
         if(status.equals("unverified")) {
             holder.verifiedIconDisplay.setImageResource(R.drawable.icon_unverified);
@@ -52,6 +53,12 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
         holder.dateVerified.setText(dateVerified);
         holder.propertyName.setText(propertyName);
         holder.dateSubmitted.setText(dateSubmitted);
+
+        if(classification.equals("new")) {
+            holder.classification.setText("New");
+        } else if(classification.equals("renew")) {
+            holder.classification.setText("Renew");
+        }
     }
 
 
@@ -62,18 +69,17 @@ public class VerificationRequestAdapter extends RecyclerView.Adapter<Verificatio
 
     public static class  VerificationRequestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView propertyName, propertyAddress, propertyType, dateSubmitted, dateVerified;
+        TextView propertyName, dateSubmitted, dateVerified, classification;
         ImageView verifiedIconDisplay;
         OnVerificationRequestListener onVerificationRequestListener;
 
         public VerificationRequestViewHolder(@NonNull View itemView, OnVerificationRequestListener onVerificationRequestListener) {
             super(itemView);
             propertyName = itemView.findViewById(R.id.propertyName_verification);
-            propertyAddress = itemView.findViewById(R.id.propertyAddress_verification);
-            propertyType = itemView.findViewById(R.id.propertyType_verification);
             dateSubmitted = itemView.findViewById(R.id.dateSubmitted_verification);
             dateVerified = itemView.findViewById(R.id.dateVerified_verification);
             verifiedIconDisplay = itemView.findViewById(R.id.verifiedIconDisplay);
+            classification = itemView.findViewById(R.id.classification_verification);
             this.onVerificationRequestListener = onVerificationRequestListener;
 
             itemView.setOnClickListener(this);

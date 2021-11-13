@@ -76,6 +76,9 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
     private VerificationRequest verificationRequest;
     private Property chosenProperty;
 
+    private String currentMunicipalBPImageName;
+    private Uri currentMunicipalBPImageURI;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,7 +172,15 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
-                    showConfirmationDialog();
+                  if(!isImageIsChanged(municipalBusinessPermitImageName, municipalBusinessPermitImageURI, currentMunicipalBPImageName, currentMunicipalBPImageURI)) {
+                      Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, ConfirmVerificationRequestActivity.class);
+                      intent.putExtra("initialVerificationRequest", verificationRequest);
+                      intent.putExtra("chosenProperty", chosenProperty);
+                      startActivity(intent);
+                      overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                  } else {
+                      showConfirmationDialog();
+                  }
                 } else {
                     Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Please pick an image", Toast.LENGTH_SHORT).show();
                 }
@@ -390,7 +401,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        attachMunicipalBusinessPermit(municipalBusinessPermitImageName, municipalBusinessPermitImageURI);
+                        attachBusinessPermit(municipalBusinessPermitImageName, municipalBusinessPermitImageURI);
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -400,7 +411,10 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         }).create().show();
     }
 
-    public void attachMunicipalBusinessPermit(String municipalBusinessPermitImageName, Uri municipalBusinessPermitImageURI) {
+    public void attachBusinessPermit(String municipalBusinessPermitImageName, Uri municipalBusinessPermitImageURI) {
+        //set the current municipalBPImageName and municipalBPImageURI
+        currentMunicipalBPImageName = municipalBusinessPermitImageName;
+        currentMunicipalBPImageURI = municipalBusinessPermitImageURI;
         progressDialog.setTitle("Attaching Municipal Business Permit to Verification Request...");
         progressDialog.show();
 
@@ -417,6 +431,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         String municipalBusinessPermitImageURL = uri.toString();
                         Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, ConfirmVerificationRequestActivity.class);
+
 
                         //attach the image url to verification request
                         verificationRequest.setMunicipalBusinessPermitImageURL(municipalBusinessPermitImageURL);
@@ -444,6 +459,18 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         });
     }
 
+    public void unattachBusinessPermit() {
+        String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
+
+        StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBPUrl);
+        municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                //municipal business permis has been deleted
+            }
+        });
+    }
+
     public void showDiscardDialog() {
 
         new AlertDialog.Builder(this)
@@ -454,10 +481,14 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         String municipalBPRUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
-                        Intent intent = new Intent();
-                        intent.putExtra("municipalBPRUrl", municipalBPRUrl);
-                        setResult(RESULT_CANCELED, intent);
-                        finish();
+                        if(municipalBPRUrl != null) {
+                            Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "MBP is not null", Toast.LENGTH_LONG).show();
+                            unattachBusinessPermit();
+                            finish();
+                        } else {
+                            Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "MBP is null", Toast.LENGTH_LONG).show();
+                            finish();
+                        }
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -465,6 +496,14 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         }).create().show();
+    }
+
+    public boolean isImageIsChanged(String newMunicipalBPImageName, Uri newMunicipalBPImageURI, String currentMunicipalBPImageName, Uri currentMunicipalBPImageURI) {
+        if(newMunicipalBPImageName.equals(currentMunicipalBPImageName) && newMunicipalBPImageURI.equals(currentMunicipalBPImageURI)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
@@ -475,19 +514,4 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
-    public boolean isImageIsChanged(String newBBPImageName, Uri newBBPImageURI, String currentBBPImageName, Uri currentBBPIImageURI) {
-        if(newBBPImageName.equals(currentBBPImageName) && newBBPImageURI.equals(currentBBPIImageURI)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public void unattachBusinessPermits() {
-        String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
-
-        StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBPUrl);
-    }
-
 }

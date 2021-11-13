@@ -17,7 +17,7 @@ public class PreviewImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.landlord_activity_preview_business_permit_image);
+        setContentView(R.layout.landlord_activity_preview_image);
 
         Intent intent = getIntent();
         previewImageView = findViewById(R.id.previewImageView);
