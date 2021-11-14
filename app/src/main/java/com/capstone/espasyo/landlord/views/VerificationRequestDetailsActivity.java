@@ -34,6 +34,10 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     private FirebaseFirestore database;
     private FirebaseStorage storage;
 
+    //this is the ID of the property linked to this verification request
+    private String propertyID;
+    private Property property;
+
     //verificationRequest Object
     private VerificationRequest verificationRequest;
 
@@ -67,10 +71,6 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     private CustomProgressDialog progressDialog;
 
     private String municipalBPUrl;
-
-    //this is the ID of the property linked to this verification request
-    private String propertyID;
-    private Property property;
 
     private final String VERIFIED = "Verified";
     private final String UNVERIFIED = "Unverified";
@@ -129,6 +129,8 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(VerificationRequestDetailsActivity.this, RenewVerificationRequestActivity.class);
+                intent.putExtra("verificationRequest", verificationRequest);
+                intent.putExtra("property", property);
                 startActivity(intent);
             }
         });

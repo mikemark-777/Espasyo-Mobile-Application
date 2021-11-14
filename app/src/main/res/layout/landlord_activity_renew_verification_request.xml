@@ -23,7 +23,7 @@
             android:id="@+id/textView11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Renew Verification Request"
+            android:text="Renew Business Permit"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="24sp"
@@ -97,7 +97,7 @@
                 android:layout_marginTop="16dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/imageview_municipalBP"
+                app:layout_constraintBottom_toTopOf="@+id/renewedMunicipalBPImageView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +121,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageview_municipalBP"
+                android:id="@+id/renewedMunicipalBPImageView"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:layout_marginTop="75dp"
@@ -142,7 +142,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageview_municipalBP" />
+                app:layout_constraintTop_toBottomOf="@+id/renewedMunicipalBPImageView" />
 
             <Button
                 android:id="@+id/btn_back_to_step2"
