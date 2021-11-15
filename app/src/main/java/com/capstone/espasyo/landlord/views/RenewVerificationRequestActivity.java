@@ -73,7 +73,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> pickFromGalleryActivityResultLauncher;
     private ActivityResultLauncher<Intent> pickFromCameraActivityResultLauncher;
 
-    //this will hold the initial verification request from STEP-1
+    //this will hold the initial verification request and chosen property from STEP-1
     private VerificationRequest verificationRequest;
     private Property chosenProperty;
 
@@ -174,15 +174,13 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
-                    if(!isImageIsChanged(municipalBusinessPermitImageName, municipalBusinessPermitImageURI, currentMunicipalBPImageName, currentMunicipalBPImageURI)) {
-                        Intent intent = new Intent(RenewVerificationRequestActivity.this, ConfirmRenewVerificationRequest.class);
+                        Intent intent = new Intent(RenewVerificationRequestActivity.this, ConfirmRenewVerificationRequestActivity.class);
                         intent.putExtra("initialVerificationRequest", verificationRequest);
                         intent.putExtra("chosenProperty", chosenProperty);
+                        intent.putExtra("imageName", municipalBusinessPermitImageName);
+                        intent.putExtra("imageURL", municipalBusinessPermitImageURI.toString());
                         startActivity(intent);
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    } else {
-                        showConfirmationDialog();
-                    }
                 } else {
                     Toast.makeText(RenewVerificationRequestActivity.this, "Please upload renewed municipal business permit", Toast.LENGTH_SHORT).show();
                 }
@@ -202,7 +200,6 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     public void initializeViews() {
@@ -439,7 +436,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         String municipalBusinessPermitImageURL = uri.toString();
-                        Intent intent = new Intent(RenewVerificationRequestActivity.this, ConfirmRenewVerificationRequest.class);
+                        Intent intent = new Intent(RenewVerificationRequestActivity.this, ConfirmRenewVerificationRequestActivity.class);
 
                         //attach the image url to verification request
                         verificationRequest.setMunicipalBusinessPermitImageURL(municipalBusinessPermitImageURL);

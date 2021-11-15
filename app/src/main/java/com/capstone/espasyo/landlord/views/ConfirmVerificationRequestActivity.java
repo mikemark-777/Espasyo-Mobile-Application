@@ -48,8 +48,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
             displayLandlordNameConfirmVerification,
             displayLandlordPhoneNumberConfirmVerification;
 
-    private ImageView displayBarangayBusinessPermit,
-            displayMunicipalBusinessPermit,
+    private ImageView displayMunicipalBusinessPermit,
             btnBackToStep3;
 
     private Button btnConfirmVerificationRequest,
