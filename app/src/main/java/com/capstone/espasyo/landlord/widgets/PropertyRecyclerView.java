@@ -98,4 +98,5 @@ public class PropertyRecyclerView  extends RecyclerView {
     public void showIfEmpty(View ...view) {
         mEmptyViews = Arrays.asList(view);
     }
+
 }

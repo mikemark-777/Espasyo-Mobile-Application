@@ -5,9 +5,11 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -111,10 +113,13 @@ public class AddPropertyActivity extends AppCompatActivity {
                             longitude = data.getDoubleExtra("longitude", 0);
 
 
+                            //will enable the textBox since it has captured its location and get the latitude and longitude
+                            textInputCompleteAddress.setEnabled(true);
+                            textInputCompleteAddressLayout.setEnabled(true);
                             completeAddress = formatStringLocation(street, barangay, municipality, landmark);
-                            Toast.makeText(AddPropertyActivity.this, "Location Picked: "  + completeAddress, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddPropertyActivity.this, "Location Picked: " + completeAddress, Toast.LENGTH_SHORT).show();
                             textInputCompleteAddress.setText(completeAddress);
-                        } else if(result.getResultCode() == Activity.RESULT_CANCELED) {
+                        } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
                             Toast.makeText(AddPropertyActivity.this, "Location and address not set", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -154,29 +159,29 @@ public class AddPropertyActivity extends AppCompatActivity {
 
                     // CREATE SAMPLE PROPERTY OBJECT
                     Property newProperty = new Property();
-                        newProperty.setPropertyID(newPropertyID);
-                        newProperty.setOwner(propertyOwner);
-                        newProperty.setLatitude(latitude);
-                        newProperty.setLongitude(longitude);
-                        newProperty.setIsVerified(false);
-                        newProperty.setIsLocked(false);
-                        newProperty.setPropertyType(propertyType);
-                        newProperty.setName(propertyName);
-                        newProperty.setAddress(completeAddress);
-                        newProperty.setProprietorName(proprietorName);
-                        newProperty.setLandlordName(landlordName);
-                        newProperty.setLandlordPhoneNumber(landlordPhoneNumber);
-                        newProperty.setMinimumPrice(minimumPrice);
-                        newProperty.setMaximumPrice(maximumPrice);
-                        newProperty.setIsElectricityIncluded(isElectricityIncluded);
-                        newProperty.setIsWaterIncluded(isWaterIncluded);
-                        newProperty.setIsInternetIncluded(isInternetIncluded);
-                        newProperty.setIsGarbageCollectionIncluded(isGarbageCollectionIncluded);
+                    newProperty.setPropertyID(newPropertyID);
+                    newProperty.setOwner(propertyOwner);
+                    newProperty.setLatitude(latitude);
+                    newProperty.setLongitude(longitude);
+                    newProperty.setIsVerified(false);
+                    newProperty.setIsLocked(false);
+                    newProperty.setPropertyType(propertyType);
+                    newProperty.setName(propertyName);
+                    newProperty.setAddress(completeAddress);
+                    newProperty.setProprietorName(proprietorName);
+                    newProperty.setLandlordName(landlordName);
+                    newProperty.setLandlordPhoneNumber(landlordPhoneNumber);
+                    newProperty.setMinimumPrice(minimumPrice);
+                    newProperty.setMaximumPrice(maximumPrice);
+                    newProperty.setIsElectricityIncluded(isElectricityIncluded);
+                    newProperty.setIsWaterIncluded(isWaterIncluded);
+                    newProperty.setIsInternetIncluded(isInternetIncluded);
+                    newProperty.setIsGarbageCollectionIncluded(isGarbageCollectionIncluded);
 
                     addNewProperty(newPropertyID, newProperty);
 
                 } else {
-                    Toast.makeText(AddPropertyActivity.this, "SOMETHING IS EMPTY", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPropertyActivity.this, "Please fill out everything", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -184,10 +189,22 @@ public class AddPropertyActivity extends AppCompatActivity {
         btnCancelAddProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                String propertyName = textInputPropertyName.getText().toString().trim();
+                String propertyType = textInputPropertyType.getText().toString().trim();
+                String completeAddress = textInputCompleteAddress.getText().toString().trim();
+                String proprietorName = textInputProprietorName.getText().toString().trim();
+                String landlordName = textInputLandlordName.getText().toString().trim();
+                String landlordPhoneNumber = textInputLandlordPhoneNumber.getText().toString().trim();
+                String minPrice = textInputMinimumPrice.getText().toString().trim();
+                String maxPrice = textInputMaximumPrice.getText().toString().trim();
+
+                if (areInputsEmpty(propertyName, propertyType, completeAddress, proprietorName, landlordName, landlordPhoneNumber, minPrice, maxPrice)) {
+                    finish();
+                } else {
+                    showDiscardDialog();
+                }
             }
         });
-
     }
 
     /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
@@ -257,7 +274,7 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     private boolean isLandlordPhoneNumberValid(String landlordPhoneNumbers) {
         if (!landlordPhoneNumbers.isEmpty()) {
-            if(landlordPhoneNumbers.length() == 10) {
+            if (landlordPhoneNumbers.length() == 10) {
                 textInputLandlordPhoneNumberLayout.setError(null);
                 Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
                 return true;
@@ -298,7 +315,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     }
 
     private boolean isMinimumPriceLessThanMaximumPrice(int minimumPrice, int maximumPrice) {
-        if(minimumPrice <= maximumPrice) {
+        if (minimumPrice <= maximumPrice) {
             return true;
         } else {
             textInputMinimumPriceLayout.setError("Must be less than maximum price");
@@ -318,20 +335,23 @@ public class AddPropertyActivity extends AppCompatActivity {
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
 
-        int minPrice = Integer.parseInt(minimumPrice);
-        int maxPrice = Integer.parseInt(maximumPrice);
 
-        boolean checkMinimumMaximumResult = isMinimumPriceLessThanMaximumPrice(minPrice, maxPrice);
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
+            //will check if the minimum is greater than maximum
+            int minPrice = Integer.parseInt(minimumPrice);
+            int maxPrice = Integer.parseInt(maximumPrice);
+            boolean checkMinimumMaximumResult = isMinimumPriceLessThanMaximumPrice(minPrice, maxPrice);
 
-
-        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult && checkMinimumMaximumResult) {
-            Log.d(TAG, "CAN PROCEED: TRUE");
-            return true;
+            if (checkMinimumMaximumResult) {
+                Log.d(TAG, "CAN PROCEED: TRUE");
+                return true;
+            } else {
+                return false;
+            }
         } else {
             Log.d(TAG, "CAN PROCEED: FALSE");
             return false;
         }
-
     }
 
     /*----------- other functions ----------*/
@@ -379,29 +399,10 @@ public class AddPropertyActivity extends AppCompatActivity {
     }
 
     public void getRentInclusions() {
-        if (electricityCheckBox.isChecked()) {
-            isElectricityIncluded = true;
-        } else {
-            isElectricityIncluded = false;
-        }
-
-        if (waterCheckBox.isChecked()) {
-            isWaterIncluded = true;
-        } else {
-            isWaterIncluded = false;
-        }
-
-        if (internetCheckBox.isChecked()) {
-            isInternetIncluded = true;
-        } else {
-            isInternetIncluded = false;
-        }
-
-        if (garbageCheckBox.isChecked()) {
-            isGarbageCollectionIncluded = true;
-        } else {
-            isGarbageCollectionIncluded = false;
-        }
+        isElectricityIncluded = electricityCheckBox.isChecked();
+        isWaterIncluded = waterCheckBox.isChecked();
+        isInternetIncluded = internetCheckBox.isChecked();
+        isGarbageCollectionIncluded = garbageCheckBox.isChecked();
     }
 
     public void addNewProperty(String newPropertyID, Property newProperty) {
@@ -423,7 +424,6 @@ public class AddPropertyActivity extends AppCompatActivity {
         });
     }
 
-
     public void openLocationPickerActivityForResult() {
         Intent intent = new Intent(AddPropertyActivity.this, LocationPickerActivity.class);
         LocationPickerActivityResultLauncher.launch(intent);
@@ -432,13 +432,43 @@ public class AddPropertyActivity extends AppCompatActivity {
     //this will check if the landmark is blank, if so, format location string, if not return whole with landmark
     public String formatStringLocation(String street, String barangay, String municipality, String landmark) {
         String formattedLocationString = "";
-        if(landmark.equals("")) {
-            formattedLocationString = street + ", " + barangay + ", " +municipality;
+        if (landmark.equals("")) {
+            formattedLocationString = street + ", " + barangay + ", " + municipality;
         } else {
             formattedLocationString = street + ", " + barangay + ", " + municipality + ", " + landmark;
         }
 
-        return  formattedLocationString;
+        return formattedLocationString;
+    }
+
+    public void showDiscardDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Discard draft")
+                .setMessage("Are you sure you want to discard your inputs?")
+                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
+    }
+
+    public boolean areInputsEmpty(String propertyName, String propertyType, String completeAddress, String proprietorName, String landlordName, String landlordPhoneNumber, String minimumPrice, String maximumPrice) {
+        boolean propertyNameResult = propertyName.isEmpty();
+        boolean propertyTypeResult = propertyType.isEmpty();
+        boolean completeAddressResult = completeAddress.isEmpty();
+        boolean proprietorNameResult = proprietorName.isEmpty();
+        boolean landlordNameResult = landlordName.isEmpty();
+        boolean landlordPhoneNumberResult = landlordPhoneNumber.isEmpty();
+        boolean minimumPriceResult = minimumPrice.isEmpty();
+        boolean maximumPriceResult = maximumPrice.isEmpty();
+
+        return propertyNameResult & propertyTypeResult & completeAddressResult & proprietorNameResult & landlordNameResult & landlordPhoneNumberResult & minimumPriceResult & maximumPriceResult;
     }
 
 
