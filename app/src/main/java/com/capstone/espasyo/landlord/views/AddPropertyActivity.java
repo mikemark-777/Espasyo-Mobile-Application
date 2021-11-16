@@ -188,20 +188,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         btnCancelAddProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String propertyName = textInputPropertyName.getText().toString().trim();
-                String propertyType = textInputPropertyType.getText().toString().trim();
-                String completeAddress = textInputCompleteAddress.getText().toString().trim();
-                String proprietorName = textInputProprietorName.getText().toString().trim();
-                String landlordName = textInputLandlordName.getText().toString().trim();
-                String landlordPhoneNumber = textInputLandlordPhoneNumber.getText().toString().trim();
-                String minPrice = textInputMinimumPrice.getText().toString().trim();
-                String maxPrice = textInputMaximumPrice.getText().toString().trim();
-
-                if (areInputsEmpty(propertyName, propertyType, completeAddress, proprietorName, landlordName, landlordPhoneNumber, minPrice, maxPrice)) {
-                    finish();
-                } else {
-                    showDiscardDialog();
-                }
+                checkInputsIfCanDiscard();
             }
         });
     }
@@ -471,12 +458,29 @@ public class AddPropertyActivity extends AppCompatActivity {
         return propertyNameResult & propertyTypeResult & completeAddressResult & proprietorNameResult & landlordNameResult & landlordPhoneNumberResult & minimumPriceResult & maximumPriceResult;
     }
 
+    //will check inputs if empty
+    public void checkInputsIfCanDiscard() {
+        String propertyName = textInputPropertyName.getText().toString().trim();
+        String propertyType = textInputPropertyType.getText().toString().trim();
+        String completeAddress = textInputCompleteAddress.getText().toString().trim();
+        String proprietorName = textInputProprietorName.getText().toString().trim();
+        String landlordName = textInputLandlordName.getText().toString().trim();
+        String landlordPhoneNumber = textInputLandlordPhoneNumber.getText().toString().trim();
+        String minPrice = textInputMinimumPrice.getText().toString().trim();
+        String maxPrice = textInputMaximumPrice.getText().toString().trim();
+
+        if (areInputsEmpty(propertyName, propertyType, completeAddress, proprietorName, landlordName, landlordPhoneNumber, minPrice, maxPrice)) {
+            finish();
+        } else {
+            showDiscardDialog();
+        }
+    }
 
     // TODO: Handle Activity Life Cycle
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        Toast.makeText(this, "Pressing back button", Toast.LENGTH_SHORT).show();
+        checkInputsIfCanDiscard();
     }
 
     @Override

@@ -44,6 +44,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="88dp"
         android:contentDescription="get user location"
+        android:backgroundTint="@color/espasyo_blue_200"
         android:src="@drawable/icon_mylocation"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="@id/mapFragment_edit"
@@ -61,6 +62,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="get user location"
+        android:backgroundTint="@color/espasyo_blue_200"
         android:src="@drawable/icon_map_type"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/FABGetCurrentLocation_edit"
@@ -80,7 +82,7 @@
         app:layout_constraintHorizontal_bias="0.262"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_back_normal" />
+        app:srcCompat="@drawable/icon_back_map" />
 
 
     <Button
@@ -88,9 +90,9 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_marginBottom="-8dp"
-        android:backgroundTint="@color/espasyo_green_200"
+        android:backgroundTint="@color/espasyo_orange_200"
         android:enabled="false"
-        android:text="Set this as My Location"
+        android:text="Set this as property's location"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

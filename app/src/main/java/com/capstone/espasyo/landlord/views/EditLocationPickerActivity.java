@@ -81,7 +81,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_edit_location_picker);
 
-        if(!isConnectedToInternet()) {
+        if (!isConnectedToInternet()) {
             showNoInternetConnectionDialog();
         }
 
@@ -101,8 +101,8 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                if(ActivityCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if(isConnectedToInternet()) {
+                if (ActivityCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if (isConnectedToInternet()) {
                         String location = locationSearchView_edit.getQuery().toString();
                         listOfAddresses = null;
 
@@ -113,7 +113,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
                                 e.printStackTrace();
                             }
 
-                            if(!listOfAddresses.isEmpty()) {
+                            if (!listOfAddresses.isEmpty()) {
                                 Address addressResult = listOfAddresses.get(0);
                                 LatLng searchedLocation = new LatLng(addressResult.getLatitude(), addressResult.getLongitude());
                                 gMapEdit.addMarker(new MarkerOptions().position(searchedLocation).title(location));
@@ -163,7 +163,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         FABGetCurrentLocation_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isConnectedToInternet()) {
+                if (isConnectedToInternet()) {
                     getCurrentLocation();
                 } else {
                     showNoInternetConnectionDialog();
@@ -196,29 +196,27 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         gMapEdit.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
-             if(ActivityCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                 if (isConnectedToInternet()) {
-                     double latitude = latLng.latitude;
-                     double longitude = latLng.longitude;
+                if (ActivityCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if (isConnectedToInternet()) {
+                        double latitude = latLng.latitude;
+                        double longitude = latLng.longitude;
 
-                     //resets/clears everytime user pick a location
-                     gMapEdit.clear();
+                        //resets/clears everytime user pick a location
+                        gMapEdit.clear();
 
-                     //display the marker on the location where the user clicks
-                     LatLng usersLocation = new LatLng(latitude, longitude);
-                     MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("Is this your property's location?");
-                     gMapEdit.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMapEdit.getMaxZoomLevel()));
-                     gMapEdit.addMarker(markerOptions).showInfoWindow();
+                        //display the marker on the location where the user clicks
+                        LatLng usersLocation = new LatLng(latitude, longitude);
+                        MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("Is this your property's location?");
+                        gMapEdit.animateCamera(CameraUpdateFactory.newLatLngZoom(usersLocation, gMapEdit.getMaxZoomLevel()));
+                        gMapEdit.addMarker(markerOptions).showInfoWindow();
 
-                     getAddress(latitude, longitude);
-                 } else {
-                     showNoInternetConnectionDialog();
-                 }
-             } else {
-                 requestLocationPermission();
-             }
-
-
+                        getAddress(latitude, longitude);
+                    } else {
+                        showNoInternetConnectionDialog();
+                    }
+                } else {
+                    requestLocationPermission();
+                }
             }
         });
 
@@ -247,7 +245,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
     public void getCurrentLocation() {
 
         if (ActivityCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if(isConnectedToInternet()) {
+            if (isConnectedToInternet()) {
                 //will get the location of the user
                 Task<Location> task = client.getLastLocation();
 
@@ -369,6 +367,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         gMapEdit = null;
         finish();
     }
+
     //a callback from a interface in the ConfirmPickedPropertyLocationDialog that will clear the selected location for the user to pick another location
     @Override
     public void changeLocationData() {
@@ -386,7 +385,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
 
     // check for permissions for location access
     public void checkPermission() {
-        if(ContextCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             //do nothing because the permissions are granted
         } else {
             requestLocationPermission();
@@ -395,14 +394,14 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
 
     public void requestLocationPermission() {
 
-        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             new AlertDialog.Builder(this)
                     .setTitle("Permission Needed")
                     .setMessage("Location permission is needed to access your location.")
                     .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(EditLocationPickerActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+                            ActivityCompat.requestPermissions(EditLocationPickerActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -412,7 +411,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
             }).create().show();
 
         } else {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
         }
     }
 
@@ -436,7 +435,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         mobileConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         wifiConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        if(mobileConnection != null && mobileConnection.isConnected() || wifiConnection != null && wifiConnection.isConnected()) {
+        if (mobileConnection != null && mobileConnection.isConnected() || wifiConnection != null && wifiConnection.isConnected()) {
             return true;
         } else {
             return false;
@@ -485,4 +484,9 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         }).create().show();
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Toast.makeText(EditLocationPickerActivity.this, "Location Picked: Lat(" + selectedLat + ") , (" + selectedLong + ")", Toast.LENGTH_SHORT).show();
+    }
 }

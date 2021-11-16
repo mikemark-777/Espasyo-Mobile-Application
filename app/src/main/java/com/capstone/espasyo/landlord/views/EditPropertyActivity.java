@@ -83,7 +83,7 @@ public class EditPropertyActivity extends AppCompatActivity {
 
     private ImageButton btnEditMapLocation;
     private ImageView btnDeleteProperty,
-                      imageButtonBackToChooseEdit;
+            imageButtonBackToChooseEdit;
 
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
     String[] minimumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
@@ -124,10 +124,10 @@ public class EditPropertyActivity extends AppCompatActivity {
         Intent intent = getIntent();
         loadPropertyData(intent);
 
-        if(property.getVerificationID() != null) {
+        if (property.getVerificationID() != null) {
             preLoadVerificationRequest();
         }
-        
+
         //will handle all the data from the LocationPickerActivity
         EditLocationPickerActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -144,14 +144,13 @@ public class EditPropertyActivity extends AppCompatActivity {
                             latitude = data.getDoubleExtra("latitude", 0);
                             longitude = data.getDoubleExtra("longitude", 0);
 
-
                             completeAddress = formatStringLocation(street, barangay, municipality, landmark);
-                            Toast.makeText(EditPropertyActivity.this, "Location Picked: Lat("  + latitude + ") , (" + longitude + ")", Toast.LENGTH_SHORT).show();
                             textEditCompleteAddress.setText(completeAddress);
-                        } else if (result.getResultCode() == Activity.RESULT_CANCELED){
+                        } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
                             //if the user don't change the location, the location saved retains
                             latitude = property.getLatitude();
                             longitude = property.getLongitude();
+                            Toast.makeText(EditPropertyActivity.this, "Location Picked: Lat(" + latitude + ") , (" + longitude + ")", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -163,8 +162,6 @@ public class EditPropertyActivity extends AppCompatActivity {
                 String editedPropertyName = textEditPropertyName.getText().toString().trim();
                 String editedPropertyType = textEditPropertyType.getText().toString().trim();
                 String editedPropertyAddress = textEditCompleteAddress.getText().toString().trim();
-                double editedLatitude = latitude;
-                double editedLongitude = longitude;
                 String editedProprietorName = textEditProprietorName.getText().toString().trim();
                 String editedLandlordName = textEditLandlordName.getText().toString().trim();
                 String editedLandlordPhoneNumber = textEditLandlordPhoneNumber.getText().toString().trim();
@@ -174,6 +171,16 @@ public class EditPropertyActivity extends AppCompatActivity {
                 boolean editedIsWaterIncluded = waterEditCheckBox.isChecked();
                 boolean editedIsInternetIncluded = internetEditCheckBox.isChecked();
                 boolean editedIsGarbageCollectionIncluded = garbageEditCheckBox.isChecked();
+                double editedLatitude = 0;
+                double editedLongitude = 0;
+
+                if (latitude == 0 && longitude == 0) {
+                    editedLatitude = property.getLatitude();
+                    editedLongitude = property.getLongitude();
+                } else {
+                    editedLatitude = latitude;
+                    editedLongitude = longitude;
+                }
 
                 //TODO: Must include input validations
 
@@ -296,7 +303,7 @@ public class EditPropertyActivity extends AppCompatActivity {
 
     public boolean isLandlordPhoneNumberValid(String landlordPhoneNumber) {
         if (!landlordPhoneNumber.isEmpty()) {
-            if(landlordPhoneNumber.length() == 10) {
+            if (landlordPhoneNumber.length() == 10) {
                 textEditLandlordPhoneNumberLayout.setError(null);
                 Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
                 return true;
@@ -337,7 +344,7 @@ public class EditPropertyActivity extends AppCompatActivity {
     }
 
     private boolean isMinimumPriceLessThanMaximumPrice(int minimumPrice, int maximumPrice) {
-        if(minimumPrice <= maximumPrice) {
+        if (minimumPrice <= maximumPrice) {
             return true;
         } else {
             textEditMinimumPriceLayout.setError("Must be less than maximum price");
@@ -463,8 +470,8 @@ public class EditPropertyActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(EditPropertyActivity.this, "Property Successfully Edited!", Toast.LENGTH_SHORT).show();
                     finish();
+                    Toast.makeText(EditPropertyActivity.this, "Property Successfully Edited!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(EditPropertyActivity.this, "Error saving edited property: " + task.getException().toString(), Toast.LENGTH_SHORT).show();
                 }
@@ -518,7 +525,7 @@ public class EditPropertyActivity extends AppCompatActivity {
 
         String verificationID = property.getVerificationID();
         String barangayBusinessPermitURL = "";
-         String municipalBusinessPermitURL = "";
+        String municipalBusinessPermitURL = "";
 
         //first delete the rooms of this property
         database.collection("properties/" + propertyID + "/rooms")
@@ -534,7 +541,7 @@ public class EditPropertyActivity extends AppCompatActivity {
                     }
                 });
 
-        if(verificationRequest != null) {
+        if (verificationRequest != null) {
             //next is to delete the images of the barangay and municipal business permit from storage
             municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
 
@@ -549,7 +556,7 @@ public class EditPropertyActivity extends AppCompatActivity {
 
 
             //next is to delete the verification request linked to this property (if issued)
-            if(!verificationID.equals("")) {
+            if (!verificationID.equals("")) {
                 database.collection("verificationRequests").document(verificationID)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -594,13 +601,13 @@ public class EditPropertyActivity extends AppCompatActivity {
     //this will check if the landmark is blank, if so, format location string, if not return whole woth landmark
     public String formatStringLocation(String street, String barangay, String municipality, String landmark) {
         String formattedLocationString = "";
-        if(landmark.equals("")) {
-            formattedLocationString = street + ", " + barangay + ", " +municipality;
+        if (landmark.equals("")) {
+            formattedLocationString = street + ", " + barangay + ", " + municipality;
         } else {
             formattedLocationString = street + ", " + barangay + ", " + municipality + ", " + landmark;
         }
 
-        return  formattedLocationString;
+        return formattedLocationString;
     }
 
     public void preLoadVerificationRequest() {

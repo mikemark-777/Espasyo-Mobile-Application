@@ -13,6 +13,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import com.capstone.espasyo.MainActivity;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
+import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.views.DashboardFragment;
 import com.capstone.espasyo.landlord.views.ManagePropertyFragment;
 import com.capstone.espasyo.landlord.views.SettingsActivity;
@@ -43,6 +46,8 @@ public class LandlordMainActivity extends AppCompatActivity implements Navigatio
     private TextView landlordEmailTextView;
     private String landlordEmail;
 
+    private CustomProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +57,7 @@ public class LandlordMainActivity extends AppCompatActivity implements Navigatio
         drawer = findViewById(R.id.landlord_drawer_layout);
         navigationView = findViewById(R.id.landlordNavigationView);
         toolbar = findViewById(R.id.landlord_toolbar);
+        progressDialog = new CustomProgressDialog(LandlordMainActivity.this);
 
 
         setSupportActionBar(toolbar);
@@ -142,10 +148,19 @@ public class LandlordMainActivity extends AppCompatActivity implements Navigatio
             case R.id.nav_logout:
                 //go to landlord dashboard
                 Log.i("MENU_DRAWER_TAG", "LOGOUT, GOTO LOGIN");
-                viewModel.signOut();
-                removeUserRolePreference();
-                finish();
+                progressDialog.showProgressDialog("Logging out..." , false);
                 drawer.closeDrawer(GravityCompat.START);
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(progressDialog.isShowing()) {
+                            viewModel.signOut();
+                            removeUserRolePreference();
+                            finish();
+                            progressDialog.dismissProgressDialog();
+                        }
+                    }
+                }, 3000);
                 break;
         }
         //add here to close the drawer navigation
