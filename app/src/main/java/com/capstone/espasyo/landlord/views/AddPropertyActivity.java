@@ -112,7 +112,6 @@ public class AddPropertyActivity extends AppCompatActivity {
                             latitude = data.getDoubleExtra("latitude", 0);
                             longitude = data.getDoubleExtra("longitude", 0);
 
-
                             //will enable the textBox since it has captured its location and get the latitude and longitude
                             textInputCompleteAddress.setEnabled(true);
                             textInputCompleteAddressLayout.setEnabled(true);
@@ -151,7 +150,6 @@ public class AddPropertyActivity extends AppCompatActivity {
                     int minimumPrice = Integer.parseInt(minPrice);
                     int maximumPrice = Integer.parseInt(maxPrice);
 
-
                     String newPropertyID = UUID.randomUUID().toString();
                     String propertyOwner = fAuth.getCurrentUser().getUid().toString();
 
@@ -179,6 +177,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                     newProperty.setIsGarbageCollectionIncluded(isGarbageCollectionIncluded);
 
                     addNewProperty(newPropertyID, newProperty);
+                    btnAddProperty.setEnabled(false);
 
                 } else {
                     Toast.makeText(AddPropertyActivity.this, "Please fill out everything", Toast.LENGTH_SHORT).show();
@@ -413,6 +412,7 @@ public class AddPropertyActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(AddPropertyActivity.this, "Property Successfully Added", Toast.LENGTH_SHORT).show();
+                btnAddProperty.setEnabled(true);
                 startActivity(new Intent(AddPropertyActivity.this, LandlordMainActivity.class));
                 finish();
             }
