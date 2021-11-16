@@ -257,9 +257,15 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     private boolean isLandlordPhoneNumberValid(String landlordPhoneNumbers) {
         if (!landlordPhoneNumbers.isEmpty()) {
-            textInputLandlordPhoneNumberLayout.setError(null);
-            Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
-            return true;
+            if(landlordPhoneNumbers.length() == 10) {
+                textInputLandlordPhoneNumberLayout.setError(null);
+                Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
+                return true;
+            } else {
+                textInputLandlordPhoneNumberLayout.setError("Phone number must be 12 digit");
+                Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
+                return false;
+            }
         } else {
             textInputLandlordPhoneNumberLayout.setError("Landlord Phone Number Required");
             Log.d(TAG, "LANDLORD PHONE NUMBER: EMPTY");
@@ -291,6 +297,16 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isMinimumPriceLessThanMaximumPrice(int minimumPrice, int maximumPrice) {
+        if(minimumPrice <= maximumPrice) {
+            return true;
+        } else {
+            textInputMinimumPriceLayout.setError("Must be less than maximum price");
+            Log.d(TAG, "MINIMUM PRICE: GREATER THAN MAXIMUM");
+            return false;
+        }
+    }
+
     public boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String proprietorName, String landlordName, String landlordPhoneNumber, String minimumPrice, String maximumPrice) {
 
         boolean propertyNameResult = isPropertyNameValid(propertyName);
@@ -302,7 +318,13 @@ public class AddPropertyActivity extends AppCompatActivity {
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
 
-        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
+        int minPrice = Integer.parseInt(minimumPrice);
+        int maxPrice = Integer.parseInt(maximumPrice);
+
+        boolean checkMinimumMaximumResult = isMinimumPriceLessThanMaximumPrice(minPrice, maxPrice);
+
+
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult && checkMinimumMaximumResult) {
             Log.d(TAG, "CAN PROCEED: TRUE");
             return true;
         } else {
