@@ -43,9 +43,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:layout_marginBottom="16dp"
             android:text="This verification request is declined due to the following reason(s):"
-            android:textColor="@color/espasyo_orange_200"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"/>
 

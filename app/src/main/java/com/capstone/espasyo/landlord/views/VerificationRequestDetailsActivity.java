@@ -139,6 +139,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(VerificationRequestDetailsActivity.this, SeeDetailsDeclinedVerification.class);
+                intent.putExtra("verificationRequest",verificationRequest);
                 startActivity(intent);
             }
         });

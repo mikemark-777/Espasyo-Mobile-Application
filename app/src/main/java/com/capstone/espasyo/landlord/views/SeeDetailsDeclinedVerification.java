@@ -15,12 +15,17 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
 
     private TextView declinedVerificationDescription;
 
-    private String declinedVerificationReason;
+    private String reason;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_see_details_declined_verification);
+
+        initializeViews();
+        Intent intent = getIntent();
+        getDataFromIntent(intent);
+        displayDeclinedVerificationReason();
     }
 
     public void initializeViews() {
@@ -29,5 +34,10 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
 
     public void getDataFromIntent(Intent intent) {
         verificationRequest = intent.getParcelableExtra("verificationRequest");
+    }
+
+    public void displayDeclinedVerificationReason() {
+        String reason = verificationRequest.getDeclinedVerificationDescription();
+        declinedVerificationDescription.setText(reason);
     }
 }
