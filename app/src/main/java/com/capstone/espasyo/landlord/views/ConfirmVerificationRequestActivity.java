@@ -198,6 +198,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(ConfirmVerificationRequestActivity.this, "Verification Request has been sent to the admin", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(ConfirmVerificationRequestActivity.this, LandlordMainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
                 } else {

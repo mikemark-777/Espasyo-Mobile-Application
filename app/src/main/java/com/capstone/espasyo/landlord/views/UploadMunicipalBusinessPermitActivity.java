@@ -172,15 +172,15 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
-                  if(!isImageIsChanged(municipalBusinessPermitImageName, municipalBusinessPermitImageURI, currentMunicipalBPImageName, currentMunicipalBPImageURI)) {
-                      Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, ConfirmVerificationRequestActivity.class);
-                      intent.putExtra("initialVerificationRequest", verificationRequest);
-                      intent.putExtra("chosenProperty", chosenProperty);
-                      startActivity(intent);
-                      overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                  } else {
-                      showConfirmationDialog();
-                  }
+                    if (!isImageIsChanged(municipalBusinessPermitImageName, municipalBusinessPermitImageURI, currentMunicipalBPImageName, currentMunicipalBPImageURI)) {
+                        Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, ConfirmVerificationRequestActivity.class);
+                        intent.putExtra("initialVerificationRequest", verificationRequest);
+                        intent.putExtra("chosenProperty", chosenProperty);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    } else {
+                        showConfirmationDialog();
+                    }
                 } else {
                     Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Please pick an image", Toast.LENGTH_SHORT).show();
                 }
@@ -191,7 +191,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         municipalBusinessPermitImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(municipalBusinessPermitImageURI != null) {
+                if (municipalBusinessPermitImageURI != null) {
                     String municipalBPUrl = municipalBusinessPermitImageURI.toString();
                     Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, PreviewImageActivity.class);
                     intent.putExtra("previewImage", municipalBPUrl);
@@ -481,7 +481,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         String municipalBPRUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
-                        if(municipalBPRUrl != null) {
+                        if (municipalBPRUrl != null) {
                             Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "MBP is not null", Toast.LENGTH_LONG).show();
                             unattachBusinessPermit();
                             finish();
@@ -499,7 +499,7 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
     }
 
     public boolean isImageIsChanged(String newMunicipalBPImageName, Uri newMunicipalBPImageURI, String currentMunicipalBPImageName, Uri currentMunicipalBPImageURI) {
-        if(newMunicipalBPImageName.equals(currentMunicipalBPImageName) && newMunicipalBPImageURI.equals(currentMunicipalBPImageURI)) {
+        if (newMunicipalBPImageName.equals(currentMunicipalBPImageName) && newMunicipalBPImageURI.equals(currentMunicipalBPImageURI)) {
             return false;
         } else {
             return true;
