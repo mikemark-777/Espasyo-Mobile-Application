@@ -5,12 +5,15 @@
       <map>
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable-v24/custom_thumb_availability.xml" value="0.1884259259259259" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable-v24/custom_track_availability.xml" value="0.1884259259259259" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.17393162393162392" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable-v24/icon_back_map.xml" value="0.14131944444444444" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable-v24/icon_new.xml" value="0.14131944444444444" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/bottom_navigation_selector.xml" value="0.17393162393162392" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/custom_button.xml" value="0.23333333333333334" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/custom_input.xml" value="0.12135416666666667" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/custom_thumb.xml" value="0.11851851851851852" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/custom_track.xml" value="0.18584474885844748" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/ic_launcher_background.xml" value="0.17393162393162392" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_add.xml" value="0.1884259259259259" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_address.xml" value="0.18584474885844748" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_bathroom.xml" value="0.1884259259259259" />
@@ -18,6 +21,7 @@
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_delete.xml" value="0.14131944444444444" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_delete_verification.xml" value="0.14131944444444444" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_electricity.xml" value="0.18584474885844748" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_filter.xml" value="0.17393162393162392" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_garbage.xml" value="0.18584474885844748" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_house.xml" value="0.17037037037037037" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/drawable/icon_internet.xml" value="0.18584474885844748" />
@@ -108,10 +112,12 @@
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/login_progress_dialog.xml" value="0.5" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/role_list_item.xml" value="0.2171875" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/student_activity_favorites.xml" value="0.13055555555555556" />
-        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/student_activity_main.xml" value="0.21" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/student_activity_main.xml" value="0.33" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/student_activity_map.xml" value="0.13055555555555556" />
-        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/student_activity_profile.xml" value="0.13055555555555556" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/student_activity_profile.xml" value="0.33" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/student_empty_property_recyclerview.xml" value="0.25" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/layout/terms_and_conditions.xml" value="0.33" />
+        <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/menu/bottom_menu_navigation.xml" value="0.18" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/menu/landlord_main_menu.xml" value="0.5" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/menu/menu_navigation.xml" value="0.13055555555555556" />
         <entry key="..\:/Users/DESKTOP/AndroidStudioProjects/NativeAndroid/Espasyo/app/src/main/res/xml/file_paths.xml" value="0.17407407407407408" />

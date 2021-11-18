@@ -6,17 +6,10 @@
         android:title="List"
         android:icon="@drawable/icon_bottom_nav_list"/>
 
-
     <item
         android:id="@+id/Map"
         android:title="Map"
         android:icon="@drawable/icon_bottom_nav_map"/>
-
-    <item
-        android:id="@+id/Favorites"
-        android:title="Favorites"
-        android:icon="@drawable/icon_bottom_nav_favorites"/>
-
     <item
         android:id="@+id/Profile"
         android:title="Profile"

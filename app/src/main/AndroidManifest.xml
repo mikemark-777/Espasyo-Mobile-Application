@@ -132,9 +132,6 @@
             android:name=".student.views.ProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".student.views.FavoritesActivity"
-            android:exported="true" />
-        <activity
             android:name=".student.views.MapActivity"
             android:exported="true" />
     </application>

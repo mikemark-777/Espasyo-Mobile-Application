@@ -4,107 +4,142 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.capstone.espasyo.MainActivity;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
-import com.capstone.espasyo.student.views.FavoritesActivity;
+import com.capstone.espasyo.student.adapters.PropertyAdapter;
+import com.capstone.espasyo.student.customdialogs.CustomProgressDialog;
+import com.capstone.espasyo.student.widgets.PropertyRecyclerView;
+import com.capstone.espasyo.models.Property;
+import com.capstone.espasyo.student.repository.FirebaseConnection;
 import com.capstone.espasyo.student.views.MapActivity;
 import com.capstone.espasyo.student.views.ProfileActivity;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class StudentMainActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
-    /* Just a sample student dashboard for testing if the user logged in is student*/
+public class StudentMainActivity extends AppCompatActivity implements PropertyAdapter.OnPropertyListener {
 
-    //private Button btnLogout;
     private AuthViewModel viewModel;
+    private FirebaseConnection firebaseConnection;
+    private FirebaseFirestore database;
 
-    public final String SHARED_PREFS = "sharedPrefs";
-    public final String USER_ROLE = "userRole";
+    private PropertyRecyclerView propertyRecyclerView;
+    private View mEmptyView;
+    private PropertyAdapter propertyAdapter;
+    private ArrayList<Property> propertyList;
+
+    private CustomProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_activity_main);
 
-        //btnLogout = findViewById(R.id.btnLogoutFromStudent);
-
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-
         viewModel.getLoggedStatus().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isUserLoggedIn) {
-                if(!isUserLoggedIn) {
+                if (!isUserLoggedIn) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
 
-        //Initialize And Assign Variable
+        //Initialize
+        firebaseConnection = FirebaseConnection.getInstance();
+        database = firebaseConnection.getFirebaseFirestoreInstance();
+        propertyList = new ArrayList<>();
+
+        initPropertyRecyclerView();
+        fetchProperties();
+
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-        //Set List Selected
         bottomNavigationView.setSelectedItemId(R.id.List);
-        //Perform ItemSelectedListener
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.List:
-                        finish();
-                        startActivity(new Intent(getApplicationContext()
-                                ,StudentMainActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.Map:
-                        startActivity(new Intent(getApplicationContext()
-                                , MapActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.Favorites:
-                        startActivity(new Intent(getApplicationContext()
-                                , FavoritesActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.Profile:
-                        startActivity(new Intent(getApplicationContext()
-                                , ProfileActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
+        bottomNavigationView.setOnItemSelectedListener(navListener);
+
+    }
+
+    public void initPropertyRecyclerView() {
+        // initialize propertyRecyclerView, layoutManager and propertyAdapter
+        mEmptyView = findViewById(R.id.empty_property_state_listview);
+        propertyRecyclerView = (PropertyRecyclerView) findViewById(R.id.propertyListRecyclerView);
+        propertyRecyclerView.showIfEmpty(mEmptyView);
+        propertyRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager propertyLayoutManager = new LinearLayoutManager(StudentMainActivity.this, LinearLayoutManager.VERTICAL, false);
+        propertyRecyclerView.setLayoutManager(propertyLayoutManager);
+        propertyAdapter = new PropertyAdapter(StudentMainActivity.this, propertyList, this);
+        propertyRecyclerView.setAdapter(propertyAdapter);
+
+        //initialize data aside from recyclerView
+        progressDialog = new CustomProgressDialog(this);
+    }
+
+    public void fetchProperties() {
+        //will be used to retrieve all verified properties in the Properties Collection
+        CollectionReference propertiesCollection = database.collection("properties");
+
+        propertiesCollection.whereEqualTo("isVerified", true)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        propertyList.clear();
+                        for (QueryDocumentSnapshot property : queryDocumentSnapshots) {
+                            Property propertyObj = property.toObject(Property.class);
+                            propertyList.add(propertyObj);
+                        }
+                        propertyAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    //interface for on item selected because setOnNavigationItemSelectedListener is depracated
+    private BottomNavigationView.OnItemSelectedListener navListener =
+            new NavigationBarView.OnItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                    switch (menuItem.getItemId()) {
+                        case R.id.List:
+                            startActivity(new Intent(getApplicationContext(), StudentMainActivity.class));
+                            overridePendingTransition(0, 0);
+                            finish();
+                            return true;
+                        case R.id.Map:
+                            startActivity(new Intent(getApplicationContext(), MapActivity.class));
+                            overridePendingTransition(0, 0);
+                            finish();
+                            return true;
+                        case R.id.Profile:
+                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                            overridePendingTransition(0, 0);
+                            finish();
+                            return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            };
 
-       /* btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeUserRolePreference();
-                viewModel.signOut();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });*/
+
+    @Override
+    public void onPropertyClick(int position) {
+
     }
-
-    //remove USER_ROLE in sharedPreferences
-    public void removeUserRolePreference() {
-        SharedPreferences sharedPreferences = getApplication().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.remove(USER_ROLE);
-        editor.apply();
-    }
-
 }
