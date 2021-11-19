@@ -18,6 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
         <activity
+            android:name=".landlord.views.ConfirmReuploadBusinessPermitImageActivity"
+            android:exported="true" />
+        <activity
+            android:name=".landlord.views.ReuploadBusinessPermitActivity"
+            android:exported="true" />
+        <activity
             android:name=".landlord.views.ConfirmRenewVerificationRequestActivity"
             android:exported="true" />
         <activity

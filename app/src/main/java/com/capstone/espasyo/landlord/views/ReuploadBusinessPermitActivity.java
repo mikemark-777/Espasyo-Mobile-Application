@@ -47,7 +47,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class RenewVerificationRequestActivity extends AppCompatActivity {
+public class ReuploadBusinessPermitActivity extends AppCompatActivity {
 
     //for the firebase connections
     private FirebaseConnection firebaseConnection;
@@ -72,10 +72,10 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> pickFromGalleryActivityResultLauncher;
     private ActivityResultLauncher<Intent> pickFromCameraActivityResultLauncher;
+    private ActivityResultLauncher<Intent> ConfirmReuploadActivityResultLauncher;
 
     //this will hold the initial verification request and chosen property from STEP-1
     private VerificationRequest verificationRequest;
-    private Property chosenProperty;
 
     private String currentMunicipalBPImageName;
     private Uri currentMunicipalBPImageURI;
@@ -83,7 +83,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.landlord_activity_renew_verification_request);
+        setContentView(R.layout.landlord_activity_reupload_business_permit);
 
         //initialize firebase connections
         firebaseConnection = FirebaseConnection.getInstance();
@@ -114,7 +114,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                             municipalBusinessPermitImageView.setImageURI(municipalBusinessPermitImageURI);
 
                         } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-                            Toast.makeText(RenewVerificationRequestActivity.this, "Photo not picked", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ReuploadBusinessPermitActivity.this, "Picture not picked", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -140,7 +140,19 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                             municipalBusinessPermitImageView.setImageURI(municipalBusinessPermitImageURI);
 
                         } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-                            Toast.makeText(RenewVerificationRequestActivity.this, "Photo not picked", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ReuploadBusinessPermitActivity.this, "FROM CAMERA: Picture not picked", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        //will handle the result from confirmReupload if discarded or verified
+        ConfirmReuploadActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                            finish();
                         }
                     }
                 });
@@ -173,15 +185,14 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
-                        Intent intent = new Intent(RenewVerificationRequestActivity.this, ConfirmRenewVerificationRequestActivity.class);
-                        intent.putExtra("initialVerificationRequest", verificationRequest);
-                        intent.putExtra("chosenProperty", chosenProperty);
-                        intent.putExtra("imageName", municipalBusinessPermitImageName);
-                        intent.putExtra("imageURL", municipalBusinessPermitImageURI.toString());
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    Intent intent = new Intent(ReuploadBusinessPermitActivity.this, ConfirmReuploadBusinessPermitImageActivity.class);
+                    intent.putExtra("initialVerificationRequest", verificationRequest);
+                    intent.putExtra("imageName", municipalBusinessPermitImageName);
+                    intent.putExtra("imageURL", municipalBusinessPermitImageURI.toString());
+                    ConfirmReuploadActivityResultLauncher.launch(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 } else {
-                    Toast.makeText(RenewVerificationRequestActivity.this, "Please upload renewed municipal business permit", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ReuploadBusinessPermitActivity.this, "Please pick a new municipal business permit image", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -193,29 +204,29 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                 String municipalBusinessPermit = verificationRequest.getMunicipalBusinessPermitImageURL();
                 if(municipalBusinessPermitImageURI != null) {
                     String municipalBPUrl = municipalBusinessPermitImageURI.toString();
-                   previewImage(municipalBPUrl);
+                    previewImage(municipalBPUrl);
                 } else if(municipalBusinessPermit != null) {
                     previewImage(municipalBusinessPermit);
                 }
             }
         });
+
     }
 
     public void initializeViews() {
-        municipalBusinessPermitImageView = findViewById(R.id.renewedMunicipalBPImageView);
-        btnBack = findViewById(R.id.btn_back_to_step2);
-        btnNext = findViewById(R.id.btn_next_to_confirmation);
-        btnChooseImage = findViewById(R.id.btnChooseImage_municipalBP);
+        municipalBusinessPermitImageView = findViewById(R.id.reuploadMunicipalBPImageView);
+        btnBack = findViewById(R.id.btn_back_to_seeDetails);
+        btnNext = findViewById(R.id.btn_next_to_confirmation_reupload);
+        btnChooseImage = findViewById(R.id.btnChooseImage_municipalBP_reupload);
 
-        propertyNameDisplay = findViewById(R.id.propertyName_municipalBP);
+        propertyNameDisplay = findViewById(R.id.propertyName_municipalBP_reupload);
 
         //initialize the progressDialog for the uploading of business permits
-        progressDialog = new ProgressDialog(RenewVerificationRequestActivity.this);
+        progressDialog = new ProgressDialog(ReuploadBusinessPermitActivity.this);
     }
 
     public void getDataFromIntent(Intent intent) {
         verificationRequest = intent.getParcelableExtra("verificationRequest");
-        chosenProperty = intent.getParcelableExtra("property");
         String propertyName = verificationRequest.getPropertyName();
         String oldMunicipalBusinessPermit = verificationRequest.getMunicipalBusinessPermitImageURL();
 
@@ -229,7 +240,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
 
     //will let user choose where to get the image
     public void chooseImageSource() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(RenewVerificationRequestActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ReuploadBusinessPermitActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.landlord_choose_image_source, null);
         builder.setView(dialogView);
@@ -263,7 +274,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
 
     public void openGallery() {
         // will check if the storage access is granted by the user
-        if (ContextCompat.checkSelfPermission(RenewVerificationRequestActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(ReuploadBusinessPermitActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             pickFromGalleryActivityResultLauncher.launch(openGalleryIntent);
         } else {
@@ -273,7 +284,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
 
     private void openCamera() {
         // will check if the camera access is granted by the user
-        if (ContextCompat.checkSelfPermission(RenewVerificationRequestActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(ReuploadBusinessPermitActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 
             Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             //makes sure that there's a camera activity to handle the intent
@@ -295,7 +306,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                     pickFromCameraActivityResultLauncher.launch(openCameraIntent);
                 }
             } else {
-                Toast.makeText(RenewVerificationRequestActivity.this, "There is no program to handle this process.", Toast.LENGTH_LONG).show();
+                Toast.makeText(ReuploadBusinessPermitActivity.this, "There is no program to handle this process.", Toast.LENGTH_LONG).show();
             }
         } else {
             requestCameraPermissions();
@@ -333,7 +344,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                     .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(RenewVerificationRequestActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                            ActivityCompat.requestPermissions(ReuploadBusinessPermitActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                     STORAGE_PERMISSION_CODE);
                         }
@@ -359,7 +370,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                     .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(RenewVerificationRequestActivity.this, new String[]{Manifest.permission.CAMERA,
+                            ActivityCompat.requestPermissions(ReuploadBusinessPermitActivity.this, new String[]{Manifest.permission.CAMERA,
                                             Manifest.permission.READ_EXTERNAL_STORAGE,
                                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                     CAMERA_PERMISSION_CODE);
@@ -386,7 +397,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //will do nothing since camera and other permissions are granted
             } else {
-                Toast.makeText(RenewVerificationRequestActivity.this, "Camera Permission is required to Use Camera", Toast.LENGTH_LONG).show();
+                Toast.makeText(ReuploadBusinessPermitActivity.this, "Camera Permission is required to Use Camera", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -394,73 +405,9 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //will do nothing since storage permission is granted
             } else {
-                Toast.makeText(RenewVerificationRequestActivity.this, "Storage Permission is required to Access Storage", Toast.LENGTH_LONG).show();
+                Toast.makeText(ReuploadBusinessPermitActivity.this, "Storage Permission is required to Access Storage", Toast.LENGTH_LONG).show();
             }
         }
-    }
-
-    public void showConfirmationDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Confirm Attachment")
-                .setMessage("Make sure you have uploaded the updated and authentic Municipal Business Permit. This will be attached to this verification request.")
-                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        attachBusinessPermit(municipalBusinessPermitImageName, municipalBusinessPermitImageURI);
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).create().show();
-    }
-
-    public void attachBusinessPermit(String municipalBusinessPermitImageName, Uri municipalBusinessPermitImageURI) {
-        //set the current municipalBPImageName and municipalBPImageURI
-        currentMunicipalBPImageName = municipalBusinessPermitImageName;
-        currentMunicipalBPImageURI = municipalBusinessPermitImageURI;
-        progressDialog.setTitle("Attaching Municipal Business Permit to Verification Request...");
-        progressDialog.show();
-
-        //TODO: must specify who is the landlord who uploaded and make directory in firebase storage
-        String requesteeID = verificationRequest.getRequesteeID();
-        String propertyID = verificationRequest.getPropertyID();
-        storageReference = storage.getReference("landlords/" + requesteeID + "/" + propertyID + "/verificationRequest");
-        final StorageReference businessPermitRef = storageReference.child(municipalBusinessPermitImageName);
-        businessPermitRef.putFile(municipalBusinessPermitImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                businessPermitRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        String municipalBusinessPermitImageURL = uri.toString();
-                        Intent intent = new Intent(RenewVerificationRequestActivity.this, ConfirmRenewVerificationRequestActivity.class);
-
-                        //attach the image url to verification request
-                        verificationRequest.setMunicipalBusinessPermitImageURL(municipalBusinessPermitImageURL);
-
-                        intent.putExtra("initialVerificationRequest", verificationRequest);
-                        intent.putExtra("chosenProperty", chosenProperty);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                        progressDialog.dismiss();
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(RenewVerificationRequestActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                progressDialog.setMessage("Percentage: " + (int) progressPercent + "%");
-            }
-        });
     }
 
     public void showDiscardDialog() {
@@ -472,8 +419,8 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                            //will discard chosen image and close the activity
-                            finish();
+                        //will discard chosen image and close the activity
+                        finish();
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -483,20 +430,11 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
         }).create().show();
     }
 
-    public boolean isImageIsChanged(String newMunicipalBPImageName, Uri newMunicipalBPImageURI, String currentMunicipalBPImageName, Uri currentMunicipalBPImageURI) {
-        if(newMunicipalBPImageName.equals(currentMunicipalBPImageName) && newMunicipalBPImageURI.equals(currentMunicipalBPImageURI)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     public void previewImage(String imageURL) {
-        Intent intent = new Intent(RenewVerificationRequestActivity.this, PreviewImageActivity.class);
+        Intent intent = new Intent(ReuploadBusinessPermitActivity.this, PreviewImageActivity.class);
         intent.putExtra("previewImage", imageURL);
         startActivity(intent);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -506,4 +444,5 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
 }

@@ -6,8 +6,10 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.models.VerificationRequest;
@@ -21,6 +23,9 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
     //for tips
     private CardView reason1Cardview, reason2Cardview, reason3Cardview, reason4Cardview, otherReasonCardview;
     private LinearLayout reason1Description, reason2Description, reason3Description, reason4Description, otherReasonDescription;
+
+    private Button btnReuploadBusinessPermitImage1,
+            btnReuploadBusinessPermitImage2;
 
     private String reason;
 
@@ -37,7 +42,7 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
         reason1Cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(reason1Description.getVisibility() == View.VISIBLE) {
+                if (reason1Description.getVisibility() == View.VISIBLE) {
                     reason1Description.setVisibility(View.GONE);
                 } else {
                     reason1Description.setVisibility(View.VISIBLE);
@@ -48,7 +53,7 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
         reason2Cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(reason2Description.getVisibility() == View.VISIBLE) {
+                if (reason2Description.getVisibility() == View.VISIBLE) {
                     reason2Description.setVisibility(View.GONE);
                 } else {
                     reason2Description.setVisibility(View.VISIBLE);
@@ -59,7 +64,7 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
         reason3Cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(reason3Description.getVisibility() == View.VISIBLE) {
+                if (reason3Description.getVisibility() == View.VISIBLE) {
                     reason3Description.setVisibility(View.GONE);
                 } else {
                     reason3Description.setVisibility(View.VISIBLE);
@@ -70,7 +75,7 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
         reason4Cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(reason4Description.getVisibility() == View.VISIBLE) {
+                if (reason4Description.getVisibility() == View.VISIBLE) {
                     reason4Description.setVisibility(View.GONE);
                 } else {
                     reason4Description.setVisibility(View.VISIBLE);
@@ -81,11 +86,29 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
         otherReasonCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(otherReasonDescription.getVisibility() == View.VISIBLE) {
+                if (otherReasonDescription.getVisibility() == View.VISIBLE) {
                     otherReasonDescription.setVisibility(View.GONE);
                 } else {
                     otherReasonDescription.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        btnReuploadBusinessPermitImage1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SeeDetailsDeclinedVerification.this, ReuploadBusinessPermitActivity.class);
+                intent.putExtra("verificationRequest", verificationRequest);
+                startActivity(intent);
+            }
+        });
+
+        btnReuploadBusinessPermitImage2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SeeDetailsDeclinedVerification.this, ReuploadBusinessPermitActivity.class);
+                intent.putExtra("verificationRequest", verificationRequest);
+                startActivity(intent);
             }
         });
 
@@ -107,6 +130,10 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
         reason3Description = findViewById(R.id.reason3Description);
         reason4Description = findViewById(R.id.reason4Description);
         otherReasonDescription = findViewById(R.id.otherReasonDescription);
+
+        //buttons
+        btnReuploadBusinessPermitImage1 = findViewById(R.id.btnReuploadBusinessPermitImage1);
+        btnReuploadBusinessPermitImage2 = findViewById(R.id.btnReuploadBusinessPermitImage2);
     }
 
     public void getDataFromIntent(Intent intent) {

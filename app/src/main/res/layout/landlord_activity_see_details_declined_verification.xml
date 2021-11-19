@@ -116,6 +116,7 @@
                             android:textSize="14sp" />
 
                         <Button
+                            android:id="@+id/btnReuploadBusinessPermitImage1"
                             style="@style/Widget.AppCompat.Button.Borderless.Colored"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -292,6 +293,7 @@
                             android:textSize="14sp" />
 
                         <Button
+                            android:id="@+id/btnReuploadBusinessPermitImage2"
                             style="@style/Widget.AppCompat.Button.Borderless.Colored"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

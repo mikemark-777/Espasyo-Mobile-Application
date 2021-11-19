@@ -156,7 +156,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         municipalBPImageViewDisplay = findViewById(R.id.municipalBP_display_VRDetails);
 
         //buttons
-        btnVisitProperty = findViewById(R.id.btnVisitProperty_VRDetails);
+        btnVisitProperty = findViewById(R.id.btnViewProperty_VRDetails);
         btnDeleteVerificationRequest = findViewById(R.id.imageButtonDeleteVerificationRequest);
         btnBackToVerificationFragment = findViewById(R.id.imageButtonBackToVerificationFragment);
         btnPreviewMunicipalBP = findViewById(R.id.btnPreviewMunicipalBP);
