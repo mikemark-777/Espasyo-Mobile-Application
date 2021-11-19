@@ -54,6 +54,16 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="What to do?"
+                android:textAlignment="center"
+                android:textColor="@color/espasyo_orange_200"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/reason1Cardview"
                 android:layout_width="match_parent"
