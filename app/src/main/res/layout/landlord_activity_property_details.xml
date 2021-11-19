@@ -75,54 +75,13 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Php "
-                        android:textColor="@color/espasyo_gray_200"
-                        android:textSize="24dp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:id="@+id/propertyMinimumPriceDisplay"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="1000"
-                        android:textColor="@color/espasyo_gray_500"
-                        android:textSize="24dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=" - Php "
-                        android:textColor="@color/espasyo_gray_500"
-                        android:textSize="24dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/propertyMaximumPriceDisplay"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="1500"
-                        android:textColor="@color/espasyo_gray_500"
-                        android:textSize="24dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-
                 <TextView
                     android:id="@+id/propertyNameDisplay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ferdan's Apartment"
                     android:textColor="@color/black"
-                    android:textSize="18dp"
+                    android:textSize="24dp"
                     android:textStyle="bold"
                     android:ellipsize="end"
                     android:maxLines="1"/>
@@ -132,6 +91,39 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Php "
+                        android:textColor="@color/espasyo_gray_500"
+                        android:textSize="18dp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/propertyMinimumPriceDisplay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1000"
+                        android:textColor="@color/espasyo_gray_500"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=" - Php "
+                        android:textColor="@color/espasyo_gray_500"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/propertyMaximumPriceDisplay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1500"
+                        android:textColor="@color/espasyo_gray_500"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -142,7 +134,8 @@
                         android:id="@+id/imageView"
                         android:layout_width="20dp"
                         android:layout_height="match_parent"
-                        app:srcCompat="@drawable/icon_house" />
+                        app:srcCompat="@drawable/icon_house"
+                        android:layout_marginEnd="4dp"/>
 
                     <TextView
                         android:id="@+id/propertyTypeDisplay"
@@ -150,15 +143,20 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="Apartment"
-                        android:textSize="14sp" />
-
-
+                        android:textSize="14sp"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/icon_address"
+                        android:layout_marginEnd="4dp"/>
 
                     <TextView
                         android:id="@+id/propertyAddressDisplay"
@@ -174,9 +172,10 @@
                     <ImageButton
                         android:id="@+id/imageButtonViewPropertyOnMap"
                         android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_height="20dp"
                         android:layout_weight="1"
-                        android:src="@drawable/icon_map"
+                        android:background="@color/white"
+                        android:src="@drawable/icon_arrow_right"
                         android:clickable="true"/>
 
                 </LinearLayout>

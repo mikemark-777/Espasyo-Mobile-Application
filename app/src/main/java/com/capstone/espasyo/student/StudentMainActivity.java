@@ -43,8 +43,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
     private ArrayList<Property> propertyList;
 
     private CustomProgressDialog progressDialog;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,11 +69,9 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         initPropertyRecyclerView();
         fetchProperties();
 
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.List);
         bottomNavigationView.setOnItemSelectedListener(navListener);
-
     }
 
     public void initPropertyRecyclerView() {

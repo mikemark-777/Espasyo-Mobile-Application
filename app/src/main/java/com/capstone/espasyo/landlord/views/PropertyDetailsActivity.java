@@ -50,12 +50,12 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     private ImageButton imageButtonViewPropertyOnMap;
     private View showAllRooms;
     private String propertyID;
-    
+
     //for verification information
     private ImageView verificationInfoIcon;
     private TextView verificationInfoMessage;
     private final String UNVERIFIED_MESSAGE = "This property is not verified";
-    private final String VERIFIED_MESSAGE = "VERIFIED";
+    private final String VERIFIED_MESSAGE = "Verified Property";
     private final String LOCKED_MESSAGE = "This property is locked by Admin";
 
     @Override
@@ -105,7 +105,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
-
     }
 
     // Functions -----
@@ -145,16 +144,16 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         ImageView garbageCollectionImageView = findViewById(R.id.icon_garbage);
         LinearLayout verificationWarning = findViewById(R.id.verificationWarning);
 
-        if(!isElectricityIncluded) {
+        if (!isElectricityIncluded) {
             electricityImageView.setImageResource(R.drawable.icon_no_electricity);
         }
-        if(!isWaterIncluded) {
+        if (!isWaterIncluded) {
             waterImageView.setImageResource(R.drawable.icon_no_water);
         }
-        if(!isInternetIncluded) {
+        if (!isInternetIncluded) {
             internetImageView.setImageResource(R.drawable.icon_no_internet);
         }
-        if(!isGarbageCollectionIncluded) {
+        if (!isGarbageCollectionIncluded) {
             garbageCollectionImageView.setImageResource(R.drawable.icon_no_garbage);
         }
 
@@ -167,13 +166,13 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         propMaximumPrice.setText(Integer.toString(maximumPrice));
 
         //set the visibility of the information about the verification of the property
-        if(isVerified != true) {
+        if (isVerified != true) {
             verificationWarning.setVisibility(View.VISIBLE);
             verificationWarning.setBackgroundColor(getResources().getColor(R.color.espasyo_red_200));
             verificationInfoIcon.setVisibility(View.VISIBLE);
             verificationInfoMessage.setText(UNVERIFIED_MESSAGE);
         } else {
-            if(isLocked == true) {
+            if (isLocked == true) {
                 verificationWarning.setVisibility(View.VISIBLE);
                 verificationWarning.setBackgroundColor(getResources().getColor(R.color.espasyo_red_200));
                 verificationInfoIcon.setVisibility(View.VISIBLE);
@@ -209,22 +208,22 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     public void fetchPropertyRooms() {
         String ownerPropertyID = propertyID;
         CollectionReference roomsCollection = database.collection("properties").document(ownerPropertyID)
-                                                      .collection("rooms");
+                .collection("rooms");
         roomsCollection
                 .orderBy("roomName", Query.Direction.ASCENDING)
                 .limit(7)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                propertyRooms.clear();
-                for(QueryDocumentSnapshot room : queryDocumentSnapshots) {
-                    Room roomObj = room.toObject(Room.class);
-                    propertyRooms.add(roomObj);
-                }
-                roomAdapter.notifyDataSetChanged();
-            }
-        });
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        propertyRooms.clear();
+                        for (QueryDocumentSnapshot room : queryDocumentSnapshots) {
+                            Room roomObj = room.toObject(Room.class);
+                            propertyRooms.add(roomObj);
+                        }
+                        roomAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     // TODO: Handle Activity Life Cycle
