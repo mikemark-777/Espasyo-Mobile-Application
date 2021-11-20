@@ -31,12 +31,13 @@ public class ShowAllRoomsActivity extends AppCompatActivity implements RoomAdapt
     private FirebaseAuth fAuth;
     private FirebaseFirestore database;
 
+    private String propertyID;
+
     private RoomRecyclerView showAllRoomRecyclerView;
     private View roomRecylerViewEmptyState;
     private RoomAdapter roomAdapter;
     private ArrayList<Room> allRooms;
 
-    private String propertyID;
     private ImageView btnBackToPropertyDetailsActivity;
 
     @Override

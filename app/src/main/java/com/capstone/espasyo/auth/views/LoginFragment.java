@@ -40,6 +40,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class LoginFragment extends Fragment {
 
+    private FirebaseFirestore database;
+    private DocumentReference userReference;
+
+    private AuthViewModel viewModel;
+    private NavController navController;
+
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String USER_ROLE = "userRole";
     private int userRole;
@@ -54,11 +60,6 @@ public class LoginFragment extends Fragment {
     private TextView gotoSignUp;
     private ProgressBar loginProgressBar;
 
-    private AuthViewModel viewModel;
-    private NavController navController;
-
-    private FirebaseFirestore database;
-    private DocumentReference userReference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,15 +80,12 @@ public class LoginFragment extends Fragment {
 
                         //Get currentUser's UID
                         String UID = firebaseUser.getUid();
-
                         userReference = database.collection("users").document(UID);
 
                         if (getUserRole() != 0) {
                             int uRole = getUserRole();
                             //Navigate to different modules depending on the user's role
-                            if (uRole == ADMIN_CODE) {
-
-                            } else if (uRole == LANDLORD_CODE) {
+                            if (uRole == LANDLORD_CODE) {
                                 Intent intent = new Intent(getActivity(), LandlordMainActivity.class);
                                 startActivity(intent);
                                 getActivity().finish();
@@ -107,9 +105,7 @@ public class LoginFragment extends Fragment {
                                     saveUserRole(userRole);
 
                                     //Navigate to different modules depending on the user's role
-                                    if (userRole == ADMIN_CODE) {
-
-                                    } else if (userRole == LANDLORD_CODE) {
+                                    if (userRole == LANDLORD_CODE) {
                                         Intent intent = new Intent(getActivity(), LandlordMainActivity.class);
                                         startActivity(intent);
                                         getActivity().finish();

@@ -42,29 +42,20 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     private VerificationRequest verificationRequest;
 
     //linearlayout for warning expired verification request
-    private LinearLayout infoBoxExpiredVerificationDetails,
-                         infoBoxDeclinedVerificationDetails;
+    private LinearLayout infoBoxExpiredVerificationDetails, infoBoxDeclinedVerificationDetails;
 
     //textViews for displaying propertyDetails and verificatioRequestDetails;
-    private TextView propertyNameDisplay,
-            propertyAddressDisplay,
-            properietorNameDisplay,
-            landlordNameDisplay,
-            dateSubmittedDisplay,
-            dateVerifiedDisplay,
-            statusDisplay;
+    private TextView propertyNameDisplay, propertyAddressDisplay, properietorNameDisplay, landlordNameDisplay, dateSubmittedDisplay, dateVerifiedDisplay, statusDisplay;
 
     //textviews for previewing business permit images
     TextView btnPreviewMunicipalBP;
 
     //button for viewing property details
     private Button btnVisitProperty;
-    private Button btnRenewVerificationRequest,
-                   btnSeeDetailsDeclinedVerification;
+    private Button btnRenewVerificationRequest, btnSeeDetailsDeclinedVerification;
 
     //imageView for buttons edit and delete verification request
-    private ImageView btnDeleteVerificationRequest,
-            btnBackToVerificationFragment;
+    private ImageView btnDeleteVerificationRequest, btnBackToVerificationFragment;
 
     //imageView for displaying business permits
     private ImageView municipalBPImageViewDisplay;
@@ -139,7 +130,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(VerificationRequestDetailsActivity.this, SeeDetailsDeclinedVerification.class);
-                intent.putExtra("verificationRequest",verificationRequest);
+                intent.putExtra("verificationRequest", verificationRequest);
                 startActivity(intent);
             }
         });
@@ -193,7 +184,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
             infoBoxExpiredVerificationDetails.setVisibility(View.GONE);
         }
 
-        if(status.equals("declined")) {
+        if (status.equals("declined")) {
             infoBoxDeclinedVerificationDetails.setVisibility(View.VISIBLE);
             statusDisplay.setText(DECLINED);
             statusDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_orange_200));
@@ -201,7 +192,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
             infoBoxDeclinedVerificationDetails.setVisibility(View.GONE);
         }
 
-        if(status.equals("verified")){
+        if (status.equals("verified")) {
             statusDisplay.setText(VERIFIED);
             statusDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_green_200));
         } else if (status.equals("unverified")) {

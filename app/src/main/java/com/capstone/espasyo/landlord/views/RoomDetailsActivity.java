@@ -15,17 +15,12 @@ import com.capstone.espasyo.models.Room;
 
 public class RoomDetailsActivity extends AppCompatActivity {
 
-    private TextView roomName,
-                     roomPrice,
-                     roomNumberOfPerson,
-                     roomIsAvailable;
-    
-    private ImageView hasBathroomImageView,
-                      hasKitchenImageView;
-
-    private CardView btnLeaveRoom;
-
+    //room object
     private Room chosenRoom;
+    private TextView roomName, roomPrice, roomNumberOfPerson, roomIsAvailable;
+
+    private ImageView hasBathroomImageView, hasKitchenImageView;
+    private CardView btnLeaveRoom;
     final String AVAILABLE = "Available";
     final String UNAVAILABLE = "Unavailable";
 
@@ -35,7 +30,6 @@ public class RoomDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.landlord_activity_room_details);
 
         initializeViews();
-        
         Intent intent = getIntent();
         getDataFromIntent(intent);
 
@@ -75,7 +69,7 @@ public class RoomDetailsActivity extends AppCompatActivity {
         roomPrice.setText(String.valueOf(price));
         roomNumberOfPerson.setText(String.valueOf(numberOfPerson));
 
-        if(!isAvailable) {
+        if (!isAvailable) {
             roomIsAvailable.setText(UNAVAILABLE);
             roomIsAvailable.setTextColor(this.getResources().getColor(R.color.espasyo_red_200));
         } else {
@@ -83,11 +77,11 @@ public class RoomDetailsActivity extends AppCompatActivity {
             roomIsAvailable.setTextColor(this.getResources().getColor(R.color.espasyo_green_200));
         }
 
-        if(!hasBathroom) {
+        if (!hasBathroom) {
             hasBathroomImageView.setImageResource(R.drawable.icon_no_bathroom);
         }
 
-        if(!hasKitchen) {
+        if (!hasKitchen) {
             hasKitchenImageView.setImageResource(R.drawable.icon_no_kitchen);
         }
 

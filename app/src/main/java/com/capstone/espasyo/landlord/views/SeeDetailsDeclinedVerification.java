@@ -16,17 +16,14 @@ import com.capstone.espasyo.models.VerificationRequest;
 
 public class SeeDetailsDeclinedVerification extends AppCompatActivity {
 
+    //verification request object
     private VerificationRequest verificationRequest;
-
     private TextView declinedVerificationDescription;
 
     //for tips
     private CardView reason1Cardview, reason2Cardview, reason3Cardview, reason4Cardview, otherReasonCardview;
     private LinearLayout reason1Description, reason2Description, reason3Description, reason4Description, otherReasonDescription;
-
-    private Button btnReuploadBusinessPermitImage1,
-            btnReuploadBusinessPermitImage2;
-
+    private Button btnReuploadBusinessPermitImage1, btnReuploadBusinessPermitImage2;
     private String reason;
 
     @Override

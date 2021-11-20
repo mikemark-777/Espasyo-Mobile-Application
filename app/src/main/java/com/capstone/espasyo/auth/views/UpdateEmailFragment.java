@@ -36,25 +36,17 @@ public class UpdateEmailFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
 
-    private TextInputLayout textInputCurrentEmailLayout,
-                            textInputNewEmailLayout,
-                            textInputPasswordLayout;
-
-    private TextInputEditText textInputCurrentEmailAddress,
-                              textInputNewEmailAddress,
-                              textInputPassword;
-
-    private Button btnChangeEmail,
-                   btnCancelChangeEmail;
+    private TextInputLayout textInputCurrentEmailLayout, textInputNewEmailLayout, textInputPasswordLayout;
+    private TextInputEditText textInputCurrentEmailAddress, textInputNewEmailAddress, textInputPassword;
+    private Button btnChangeEmail, btnCancelChangeEmail;
     private ProgressBar updateEmailProgressBar;
     private AuthViewModel viewModel;
     private NavController navController;
-    private Boolean isEmailChanged = false;
 
+    private Boolean isEmailChanged = false;
     private boolean currentEmailExists = false;
     private boolean newEmailExists = false;
-
-
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,15 +59,15 @@ public class UpdateEmailFragment extends Fragment {
         viewModel.getUserData().observe(this, new Observer<FirebaseUser>() {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
-                if(firebaseUser != null) {
+                if (firebaseUser != null) {
 
-                   currentUser = firebaseUser;
+                    currentUser = firebaseUser;
 
-                    if(isEmailChanged) {
+                    if (isEmailChanged) {
                         isEmailChanged = false;
                         navController.navigate(R.id.action_updateEmailFragment_to_emailVerificationFragment);
                     }
-                } else  {
+                } else {
                     // by default will navigate to login fragment if firebaseUser is null
                     navController.navigate(R.id.action_updateEmailFragment_to_loginFragment);
                 }
@@ -118,7 +110,7 @@ public class UpdateEmailFragment extends Fragment {
                 String newEmailAddress = textInputNewEmailAddress.getText().toString();
                 String password = textInputPassword.getText().toString();
 
-                if (confirmInput(currentEmailAddress, newEmailAddress, password)) {
+                if (areInputsValid(currentEmailAddress, newEmailAddress, password)) {
                     btnChangeEmail.setEnabled(false);
                     updateEmailProgressBar.setVisibility(View.VISIBLE);
                     checkIfCurrentEmailExist(currentEmailAddress);
@@ -170,7 +162,7 @@ public class UpdateEmailFragment extends Fragment {
     public final String TAG = "TESTING";
 
     private boolean isCurrentEmailAddressEmpty(String email) {
-        if(email.isEmpty()) {
+        if (email.isEmpty()) {
             textInputCurrentEmailLayout.setError("Current Email Address field cannot be empty");
             Log.d(TAG, "CURRENT EMAIL: EMPTY");
             return false;
@@ -183,7 +175,7 @@ public class UpdateEmailFragment extends Fragment {
 
     private boolean isNewEmailAddressEmpty(String email) {
         //TODO: Must include validations if email exist in firebase auth and database
-        if(email.isEmpty()) {
+        if (email.isEmpty()) {
             textInputNewEmailLayout.setError("New Email Address field cannot be empty");
             Log.d(TAG, "NEW EMAIL: EMPTY");
             return false;
@@ -196,7 +188,7 @@ public class UpdateEmailFragment extends Fragment {
 
     private boolean validatePassword(String password) {
         //TODO: Must include validations if password is the password of the real account being updated
-        if(password.isEmpty()) {
+        if (password.isEmpty()) {
             textInputPasswordLayout.setError("Password field cannot be empty");
             Log.d(TAG, "PASSWORD: EMPTY");
             return false;
@@ -207,12 +199,12 @@ public class UpdateEmailFragment extends Fragment {
         }
     }
 
-    private boolean confirmInput(String currentEmailAddress, String newEmailAddress, String password) {
+    private boolean areInputsValid(String currentEmailAddress, String newEmailAddress, String password) {
         boolean currentEmailAddressResult = isCurrentEmailAddressEmpty(currentEmailAddress);
         boolean newEmailAddressResult = isNewEmailAddressEmpty(newEmailAddress);
         boolean passwordResult = validatePassword(password);
 
-        if(currentEmailAddressResult == true && newEmailAddressResult == true && passwordResult == true) {
+        if (currentEmailAddressResult == true && newEmailAddressResult == true && passwordResult == true) {
             Log.d(TAG, "CAN PROCEED: TRUE");
             return true;
         } else {

@@ -77,7 +77,7 @@ public class VerificationFragment extends Fragment implements VerificationReques
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(progressDialog.isShowing()) {
+                if (progressDialog.isShowing()) {
                     progressDialog.dismissProgressDialog();
                 }
             }
@@ -135,7 +135,7 @@ public class VerificationFragment extends Fragment implements VerificationReques
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         ownedPropertyVerifications.clear();
-                        for(QueryDocumentSnapshot verification : queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot verification : queryDocumentSnapshots) {
                             VerificationRequest verificationRequestObject = verification.toObject(VerificationRequest.class);
                             ownedPropertyVerifications.add(verificationRequestObject);
                         }

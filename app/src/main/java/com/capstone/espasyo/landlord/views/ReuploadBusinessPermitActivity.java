@@ -54,6 +54,9 @@ public class ReuploadBusinessPermitActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
+    //this will hold the initial verification request and chosen property from STEP-1
+    private VerificationRequest verificationRequest;
+
     private ProgressDialog progressDialog;
 
     private final int CAMERA_PERMISSION_CODE = 101;
@@ -73,9 +76,6 @@ public class ReuploadBusinessPermitActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> pickFromGalleryActivityResultLauncher;
     private ActivityResultLauncher<Intent> pickFromCameraActivityResultLauncher;
     private ActivityResultLauncher<Intent> ConfirmReuploadActivityResultLauncher;
-
-    //this will hold the initial verification request and chosen property from STEP-1
-    private VerificationRequest verificationRequest;
 
     private String currentMunicipalBPImageName;
     private Uri currentMunicipalBPImageURI;
@@ -202,10 +202,10 @@ public class ReuploadBusinessPermitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String municipalBusinessPermit = verificationRequest.getMunicipalBusinessPermitImageURL();
-                if(municipalBusinessPermitImageURI != null) {
+                if (municipalBusinessPermitImageURI != null) {
                     String municipalBPUrl = municipalBusinessPermitImageURI.toString();
                     previewImage(municipalBPUrl);
-                } else if(municipalBusinessPermit != null) {
+                } else if (municipalBusinessPermit != null) {
                     previewImage(municipalBusinessPermit);
                 }
             }

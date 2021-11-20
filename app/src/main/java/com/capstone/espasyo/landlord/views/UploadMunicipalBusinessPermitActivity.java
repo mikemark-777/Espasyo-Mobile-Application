@@ -53,6 +53,10 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
+    //this will hold the initial verification request from STEP-1
+    private VerificationRequest verificationRequest;
+    private Property chosenProperty;
+
     private ProgressDialog progressDialog;
 
     private final int CAMERA_PERMISSION_CODE = 101;
@@ -71,10 +75,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> pickFromGalleryActivityResultLauncher;
     private ActivityResultLauncher<Intent> pickFromCameraActivityResultLauncher;
-
-    //this will hold the initial verification request from STEP-1
-    private VerificationRequest verificationRequest;
-    private Property chosenProperty;
 
     private String currentMunicipalBPImageName;
     private Uri currentMunicipalBPImageURI;

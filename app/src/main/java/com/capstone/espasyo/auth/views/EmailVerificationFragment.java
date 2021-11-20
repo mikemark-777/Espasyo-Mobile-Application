@@ -24,7 +24,6 @@ import com.google.firebase.auth.FirebaseUser;
 public class EmailVerificationFragment extends Fragment {
 
     private AuthViewModel viewModel;
-
     private Button btnLoginToYourAccount;
     private NavController navController;
     private TextView gotoUpdateEmailFragment;
@@ -40,14 +39,14 @@ public class EmailVerificationFragment extends Fragment {
         viewModel.getUserData().observe(this, new Observer<FirebaseUser>() {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
-                if(firebaseUser != null) {
+                if (firebaseUser != null) {
                     String email = firebaseUser.getEmail();
                     txtEmail.setText(email);
-                    if(firebaseUser.isEmailVerified()) {
+                    if (firebaseUser.isEmailVerified()) {
                         viewModel.signOut();
                         navController.navigate(R.id.action_emailVerificationFragment_to_loginFragment);
                     }
-                } else  {
+                } else {
                     // by default will navigate to login fragment if firebaseUser is null
                     navController.navigate(R.id.action_emailVerificationFragment_to_loginFragment);
                 }
@@ -70,7 +69,6 @@ public class EmailVerificationFragment extends Fragment {
         btnLoginToYourAccount = view.findViewById(R.id.btnLoginToYourAccount);
         gotoUpdateEmailFragment = view.findViewById(R.id.gotoUpdateEmailFragment);
         txtEmail = view.findViewById(R.id.txtEmail);
-
 
         btnLoginToYourAccount.setOnClickListener(new View.OnClickListener() {
             @Override

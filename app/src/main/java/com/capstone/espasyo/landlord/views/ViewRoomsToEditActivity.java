@@ -25,19 +25,19 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRoomAdapter.OnRoomListener{
+public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRoomAdapter.OnRoomListener {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseFirestore database;
+
+    private String propertyID;
 
     private RoomRecyclerView editRoomRecyclerView;
     private View roomRecylerViewEmptyState;
     private EditRoomAdapter editRoomAdapter;
     private ArrayList<Room> propertyRooms;
 
-    private String propertyID;
-    private ImageView btnBackToChooseEditActivity,
-                      btnAddRoom;
+    private ImageView btnBackToChooseEditActivity, btnAddRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
         propertyID = intent.getStringExtra("propertyID");
     }
 
-    public void initEditRoomRecyclerView()  {
+    public void initEditRoomRecyclerView() {
         roomRecylerViewEmptyState = findViewById(R.id.empty_room_state_viewRoomsToEdit);
         editRoomRecyclerView = (RoomRecyclerView) findViewById(R.id.editRoomRecyclerView);
         editRoomRecyclerView.showIfEmpty(roomRecylerViewEmptyState);
@@ -101,21 +101,21 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
                 .orderBy("roomName", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                propertyRooms.clear();
-                for(QueryDocumentSnapshot room : queryDocumentSnapshots) {
-                    Room roomObj = room.toObject(Room.class);
-                    propertyRooms.add(roomObj);
-                }
-                editRoomAdapter.notifyDataSetChanged();
-            }
-        });
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        propertyRooms.clear();
+                        for (QueryDocumentSnapshot room : queryDocumentSnapshots) {
+                            Room roomObj = room.toObject(Room.class);
+                            propertyRooms.add(roomObj);
+                        }
+                        editRoomAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     @Override
     public void onRoomClick(int position) {
-        Intent intent = new Intent(ViewRoomsToEditActivity.this, EditRoomActivity.class );
+        Intent intent = new Intent(ViewRoomsToEditActivity.this, EditRoomActivity.class);
         intent.putExtra("room", propertyRooms.get(position));
         startActivity(intent);
     }
