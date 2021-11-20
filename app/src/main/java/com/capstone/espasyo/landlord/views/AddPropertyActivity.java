@@ -46,16 +46,12 @@ public class AddPropertyActivity extends AppCompatActivity {
             textInputPropertyTypeLayout,
             textInputCompleteAddressLayout,
             textInputProprietorNameLayout,
-            textInputLandlordNameLayout,
-            textInputLandlordPhoneNumberLayout,
             textInputMinimumPriceLayout,
             textInputMaximumPriceLayout;
 
     private TextInputEditText textInputPropertyName,
             textInputCompleteAddress,
-            textInputProprietorName,
-            textInputLandlordName,
-            textInputLandlordPhoneNumber;
+            textInputProprietorName;
 
     private AutoCompleteTextView textInputPropertyType,
             textInputMinimumPrice,
@@ -139,13 +135,11 @@ public class AddPropertyActivity extends AppCompatActivity {
                 String propertyType = textInputPropertyType.getText().toString().trim();
                 String completeAddress = textInputCompleteAddress.getText().toString().trim();
                 String proprietorName = textInputProprietorName.getText().toString().trim();
-                String landlordName = textInputLandlordName.getText().toString().trim();
-                String landlordPhoneNumber = textInputLandlordPhoneNumber.getText().toString().trim();
                 String minPrice = textInputMinimumPrice.getText().toString().trim();
                 String maxPrice = textInputMaximumPrice.getText().toString().trim();
 
 
-                if (areInputsValid(propertyName, propertyType, completeAddress, proprietorName, landlordName, landlordPhoneNumber, minPrice, maxPrice)) {
+                if (areInputsValid(propertyName, propertyType, completeAddress, proprietorName, minPrice, maxPrice)) {
 
                     int minimumPrice = Integer.parseInt(minPrice);
                     int maximumPrice = Integer.parseInt(maxPrice);
@@ -167,8 +161,6 @@ public class AddPropertyActivity extends AppCompatActivity {
                     newProperty.setName(propertyName);
                     newProperty.setAddress(completeAddress);
                     newProperty.setProprietorName(proprietorName);
-                    newProperty.setLandlordName(landlordName);
-                    newProperty.setLandlordPhoneNumber(landlordPhoneNumber);
                     newProperty.setMinimumPrice(minimumPrice);
                     newProperty.setMaximumPrice(maximumPrice);
                     newProperty.setIsElectricityIncluded(isElectricityIncluded);
@@ -246,36 +238,6 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isLandlordNameValid(String landlordName) {
-        if (!landlordName.isEmpty()) {
-            textInputLandlordNameLayout.setError(null);
-            Log.d(TAG, "LANDLORD NAME: NOT EMPTY");
-            return true;
-        } else {
-            textInputLandlordNameLayout.setError("Landlord Name Required");
-            Log.d(TAG, "LANDLORD NAME: EMPTY");
-            return false;
-        }
-    }
-
-    private boolean isLandlordPhoneNumberValid(String landlordPhoneNumbers) {
-        if (!landlordPhoneNumbers.isEmpty()) {
-            if (landlordPhoneNumbers.length() == 10) {
-                textInputLandlordPhoneNumberLayout.setError(null);
-                Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
-                return true;
-            } else {
-                textInputLandlordPhoneNumberLayout.setError("Phone number must be 12 digit");
-                Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
-                return false;
-            }
-        } else {
-            textInputLandlordPhoneNumberLayout.setError("Landlord Phone Number Required");
-            Log.d(TAG, "LANDLORD PHONE NUMBER: EMPTY");
-            return false;
-        }
-    }
-
     private boolean isMinimumPriceValid(String minimumPrice) {
         if (!minimumPrice.isEmpty()) {
             textInputMinimumPriceLayout.setError(null);
@@ -310,19 +272,17 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    public boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String proprietorName, String landlordName, String landlordPhoneNumber, String minimumPrice, String maximumPrice) {
+    public boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String proprietorName, String minimumPrice, String maximumPrice) {
 
         boolean propertyNameResult = isPropertyNameValid(propertyName);
         boolean propertyTypeResult = isPropertyTypeValid(propertyType);
         boolean completeAddressResult = isCompleteAddressValid(completeAddress);
         boolean proprietorNameResult = isProprietorNameValid(proprietorName);
-        boolean landlordNameResult = isLandlordNameValid(landlordName);
-        boolean landlordPhoneNumberResult = isLandlordPhoneNumberValid(landlordPhoneNumber);
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
 
 
-        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult) {
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && minimumPriceResult && maximumPriceResult) {
             //will check if the minimum is greater than maximum
             int minPrice = Integer.parseInt(minimumPrice);
             int maxPrice = Integer.parseInt(maximumPrice);
@@ -348,8 +308,6 @@ public class AddPropertyActivity extends AppCompatActivity {
         textInputPropertyTypeLayout = findViewById(R.id.text_input_propertyType_layout);
         textInputCompleteAddressLayout = findViewById(R.id.text_input_completeAddress_layout);
         textInputProprietorNameLayout = findViewById(R.id.text_input_proprietorName_layout);
-        textInputLandlordNameLayout = findViewById(R.id.text_input_landlordName_layout);
-        textInputLandlordPhoneNumberLayout = findViewById(R.id.text_input_landlord_phoneNumber_layout);
         textInputMinimumPriceLayout = findViewById(R.id.text_input_minimumPrice_layout);
         textInputMaximumPriceLayout = findViewById(R.id.text_input_maximumPrice_layout);
 
@@ -357,8 +315,6 @@ public class AddPropertyActivity extends AppCompatActivity {
         textInputPropertyType = findViewById(R.id.text_input_propertyType);
         textInputCompleteAddress = findViewById(R.id.text_input_completeAddress);
         textInputProprietorName = findViewById(R.id.text_input_proprietorName);
-        textInputLandlordName = findViewById(R.id.text_input_landlordName);
-        textInputLandlordPhoneNumber = findViewById(R.id.text_input_landlord_phoneNumber);
         textInputMinimumPrice = findViewById(R.id.text_input_minimumPrice);
         textInputMaximumPrice = findViewById(R.id.text_input_maximumPrice);
 
@@ -445,17 +401,15 @@ public class AddPropertyActivity extends AppCompatActivity {
         }).create().show();
     }
 
-    public boolean areInputsEmpty(String propertyName, String propertyType, String completeAddress, String proprietorName, String landlordName, String landlordPhoneNumber, String minimumPrice, String maximumPrice) {
+    public boolean areInputsEmpty(String propertyName, String propertyType, String completeAddress, String proprietorName, String minimumPrice, String maximumPrice) {
         boolean propertyNameResult = propertyName.isEmpty();
         boolean propertyTypeResult = propertyType.isEmpty();
         boolean completeAddressResult = completeAddress.isEmpty();
         boolean proprietorNameResult = proprietorName.isEmpty();
-        boolean landlordNameResult = landlordName.isEmpty();
-        boolean landlordPhoneNumberResult = landlordPhoneNumber.isEmpty();
         boolean minimumPriceResult = minimumPrice.isEmpty();
         boolean maximumPriceResult = maximumPrice.isEmpty();
 
-        return propertyNameResult & propertyTypeResult & completeAddressResult & proprietorNameResult & landlordNameResult & landlordPhoneNumberResult & minimumPriceResult & maximumPriceResult;
+        return propertyNameResult & propertyTypeResult & completeAddressResult & proprietorNameResult & minimumPriceResult & maximumPriceResult;
     }
 
     //will check inputs if empty
@@ -464,12 +418,10 @@ public class AddPropertyActivity extends AppCompatActivity {
         String propertyType = textInputPropertyType.getText().toString().trim();
         String completeAddress = textInputCompleteAddress.getText().toString().trim();
         String proprietorName = textInputProprietorName.getText().toString().trim();
-        String landlordName = textInputLandlordName.getText().toString().trim();
-        String landlordPhoneNumber = textInputLandlordPhoneNumber.getText().toString().trim();
         String minPrice = textInputMinimumPrice.getText().toString().trim();
         String maxPrice = textInputMaximumPrice.getText().toString().trim();
 
-        if (areInputsEmpty(propertyName, propertyType, completeAddress, proprietorName, landlordName, landlordPhoneNumber, minPrice, maxPrice)) {
+        if (areInputsEmpty(propertyName, propertyType, completeAddress, proprietorName, minPrice, maxPrice)) {
             finish();
         } else {
             showDiscardDialog();

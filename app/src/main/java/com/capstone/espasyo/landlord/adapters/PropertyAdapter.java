@@ -43,8 +43,6 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         holder.propertyName.setText(property.getName());
         holder.propertyAddress.setText(property.getAddress());
         holder.propertyType.setText(property.getPropertyType());
-        holder.landlordName.setText(property.getLandlordName());
-        holder.landlordContactNumber.setText(property.getLandlordPhoneNumber());
         holder.minimumPrice.setText(String.valueOf(property.getMinimumPrice()));
         holder.maximumPrice.setText(String.valueOf(property.getMaximumPrice()));
 
@@ -75,7 +73,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
 
     public static class PropertyViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView propertyName, propertyAddress, propertyType, landlordName, landlordContactNumber, minimumPrice, maximumPrice;
+        TextView propertyName, propertyAddress, propertyType, minimumPrice, maximumPrice;
         ImageView verifiedIcon;
         OnPropertyListener onPropertyListener;
 
@@ -84,8 +82,6 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             propertyName = itemView.findViewById(R.id.propertyName);
             propertyAddress = itemView.findViewById(R.id.propertyAddress);
             propertyType = itemView.findViewById(R.id.propertyType);
-            landlordName = itemView.findViewById(R.id.landlordName);
-            landlordContactNumber = itemView.findViewById(R.id.landlordContactNumber);
             minimumPrice = itemView.findViewById(R.id.minimumPrice_propertyItem);
             maximumPrice = itemView.findViewById(R.id.maximumPrice_propertyItem);
             verifiedIcon = itemView.findViewById(R.id.propertyItem_iconVerified);

@@ -58,16 +58,12 @@ public class EditPropertyActivity extends AppCompatActivity {
             textEditPropertyTypeLayout,
             textEditCompleteAddressLayout,
             textEditProprietorNameLayout,
-            textEditLandlordNameLayout,
-            textEditLandlordPhoneNumberLayout,
             textEditMinimumPriceLayout,
             textEditMaximumPriceLayout;
 
     private TextInputEditText textEditPropertyName,
             textEditCompleteAddress,
-            textEditProprietorName,
-            textEditLandlordName,
-            textEditLandlordPhoneNumber;
+            textEditProprietorName;
 
     private AutoCompleteTextView textEditPropertyType,
             textEditMinimumPrice,
@@ -163,8 +159,6 @@ public class EditPropertyActivity extends AppCompatActivity {
                 String editedPropertyType = textEditPropertyType.getText().toString().trim();
                 String editedPropertyAddress = textEditCompleteAddress.getText().toString().trim();
                 String editedProprietorName = textEditProprietorName.getText().toString().trim();
-                String editedLandlordName = textEditLandlordName.getText().toString().trim();
-                String editedLandlordPhoneNumber = textEditLandlordPhoneNumber.getText().toString().trim();
                 String editedMinimumPrice = textEditMinimumPrice.getText().toString().trim();
                 String editedMaximumPrice = textEditMaximumPrice.getText().toString().trim();
                 boolean editedIsElectricityIncluded = electrictiyEditCheckBox.isChecked();
@@ -184,7 +178,7 @@ public class EditPropertyActivity extends AppCompatActivity {
 
                 //TODO: Must include input validations
 
-                if (areInputsValid(editedPropertyName, editedPropertyType, editedPropertyAddress, editedProprietorName, editedLandlordName, editedLandlordPhoneNumber, editedMinimumPrice, editedMaximumPrice)) {
+                if (areInputsValid(editedPropertyName, editedPropertyType, editedPropertyAddress, editedProprietorName, editedMinimumPrice, editedMaximumPrice)) {
 
                     property.setIsVerified(false);
                     property.setName(editedPropertyName);
@@ -193,8 +187,6 @@ public class EditPropertyActivity extends AppCompatActivity {
                     property.setLatitude(editedLatitude);
                     property.setLongitude(editedLongitude);
                     property.setProprietorName(editedProprietorName);
-                    property.setLandlordName(editedLandlordName);
-                    property.setLandlordPhoneNumber(editedLandlordPhoneNumber);
                     property.setMinimumPrice(Integer.parseInt(editedMinimumPrice));
                     property.setMaximumPrice(Integer.parseInt(editedMaximumPrice));
                     property.setIsElectricityIncluded(editedIsElectricityIncluded);
@@ -289,36 +281,6 @@ public class EditPropertyActivity extends AppCompatActivity {
         }
     }
 
-    public boolean isLandlordNameValid(String landlordName) {
-        if (!landlordName.isEmpty()) {
-            textEditLandlordNameLayout.setError(null);
-            Log.d(TAG, "LANDLORD NAME: NOT EMPTY");
-            return true;
-        } else {
-            textEditLandlordNameLayout.setError("Landlord Name Required");
-            Log.d(TAG, "LANDLORD NAME: EMPTY");
-            return false;
-        }
-    }
-
-    public boolean isLandlordPhoneNumberValid(String landlordPhoneNumber) {
-        if (!landlordPhoneNumber.isEmpty()) {
-            if (landlordPhoneNumber.length() == 10) {
-                textEditLandlordPhoneNumberLayout.setError(null);
-                Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
-                return true;
-            } else {
-                textEditLandlordPhoneNumberLayout.setError("Phone number must be 12 digit");
-                Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
-                return false;
-            }
-        } else {
-            textEditLandlordPhoneNumberLayout.setError("Landlord Number Required");
-            Log.d(TAG, "LANDLORD NUMBER: EMPTY");
-            return false;
-        }
-    }
-
     public boolean isMinimumPriceValid(String minimumPrice) {
         if (!minimumPrice.isEmpty()) {
             textEditMinimumPriceLayout.setError(null);
@@ -353,14 +315,12 @@ public class EditPropertyActivity extends AppCompatActivity {
         }
     }
 
-    private boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String proprietorName, String landlordName, String landlordPhoneNumber, String minimumPrice, String maximumPrice) {
+    private boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String proprietorName, String minimumPrice, String maximumPrice) {
 
         boolean propertyNameResult = isPropertyNameValid(propertyName);
         boolean propertyTypeResult = isPropertyTypeValid(propertyType);
         boolean completeAddressResult = isCompleteAddressValid(completeAddress);
         boolean proprietorNameResult = isProprietorNameValid(proprietorName);
-        boolean landlordNameResult = isLandlordNameValid(landlordName);
-        boolean landlordPhoneNumberResult = isLandlordPhoneNumberValid(landlordPhoneNumber);
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
 
@@ -369,7 +329,7 @@ public class EditPropertyActivity extends AppCompatActivity {
 
         boolean checkMinimumMaximumResult = isMinimumPriceLessThanMaximumPrice(minPrice, maxPrice);
 
-        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && landlordNameResult && landlordPhoneNumberResult && minimumPriceResult && maximumPriceResult && checkMinimumMaximumResult) {
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && minimumPriceResult && maximumPriceResult && checkMinimumMaximumResult) {
             Log.d(TAG, "CAN PROCEED: TRUE");
             return true;
         } else {
@@ -387,8 +347,6 @@ public class EditPropertyActivity extends AppCompatActivity {
         textEditPropertyTypeLayout = findViewById(R.id.text_edit_propertyType_layout);
         textEditCompleteAddressLayout = findViewById(R.id.text_edit_completeAddress_layout);
         textEditProprietorNameLayout = findViewById(R.id.text_edit_proprietorName_layout);
-        textEditLandlordNameLayout = findViewById(R.id.text_edit_landlordName_layout);
-        textEditLandlordPhoneNumberLayout = findViewById(R.id.text_edit_landlord_phoneNumber_layout);
         textEditMinimumPriceLayout = findViewById(R.id.text_edit_minimumPrice_layout);
         textEditMaximumPriceLayout = findViewById(R.id.text_edit_maximumPrice_layout);
         //textInputEditTexts
@@ -396,8 +354,6 @@ public class EditPropertyActivity extends AppCompatActivity {
         textEditPropertyType = findViewById(R.id.text_edit_propertyType);
         textEditCompleteAddress = findViewById(R.id.text_edit_completeAddress);
         textEditProprietorName = findViewById(R.id.text_edit_proprietorName);
-        textEditLandlordName = findViewById(R.id.text_edit_landlordName);
-        textEditLandlordPhoneNumber = findViewById(R.id.text_edit_landlord_phoneNumber);
         textEditMinimumPrice = findViewById(R.id.text_edit_minimumPrice);
         textEditMaximumPrice = findViewById(R.id.text_edit_maximumPrice);
         //checkBoxes
@@ -433,8 +389,6 @@ public class EditPropertyActivity extends AppCompatActivity {
         String propertyType = property.getPropertyType();
         String address = property.getAddress();
         String proprietorName = property.getProprietorName();
-        String landlordName = property.getLandlordName();
-        String landlordPhoneNumber = property.getLandlordPhoneNumber();
         int minimumPrice = property.getMinimumPrice();
         int maximumPrice = property.getMaximumPrice();
         boolean isElectricityIncluded = property.getIsElectricityIncluded();
@@ -452,8 +406,6 @@ public class EditPropertyActivity extends AppCompatActivity {
         textEditPropertyType.setText(textEditPropertyType.getAdapter().getItem(propertyTypePosition).toString(), false);
         textEditCompleteAddress.setText(address);
         textEditProprietorName.setText(proprietorName);
-        textEditLandlordName.setText(landlordName);
-        textEditLandlordPhoneNumber.setText(landlordPhoneNumber);
         textEditMinimumPrice.setText(textEditMinimumPrice.getAdapter().getItem(minimumPricePosition).toString(), false);
         textEditMaximumPrice.setText(textEditMaximumPrice.getAdapter().getItem(maximumPricePosition).toString(), false);
         electrictiyEditCheckBox.setChecked(isElectricityIncluded);

@@ -217,12 +217,12 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
                 String propertyName = property.getName();
                 String address = property.getAddress();
                 String proprietor = property.getProprietorName();
-                String landlord = property.getLandlordName();
+              //  String landlord = property.getLandlordName();
 
                 propertyNameDisplay.setText(propertyName);
                 propertyAddressDisplay.setText(address);
                 properietorNameDisplay.setText(proprietor);
-                landlordNameDisplay.setText(landlord);
+                //landlordNameDisplay.setText(landlord);
             }
         });
     }

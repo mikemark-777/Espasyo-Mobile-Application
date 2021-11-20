@@ -7,19 +7,20 @@ public class Landlord {
     private String email;
     private String password;
     private int userRole;
-    //TODO: Must include image url
+    private String phoneNumber;
 
     public Landlord() {
         //empty landlord constructor **
     }
 
-    public Landlord(String landlordID, String firstName, String lastName, String email, String password, int userRole) {
+    public Landlord(String landlordID, String firstName, String lastName, String email, String password, int userRole, String phoneNumber) {
         this.landlordID = landlordID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.userRole = userRole;
+        this.phoneNumber = phoneNumber;
     }
 
     public void setLandlordID(String landlordID) {
@@ -46,6 +47,10 @@ public class Landlord {
         this.userRole = userRole;
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getLandlordID() {
         return landlordID;
     }
@@ -68,5 +73,9 @@ public class Landlord {
 
     public int getUserRole() {
         return userRole;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 }

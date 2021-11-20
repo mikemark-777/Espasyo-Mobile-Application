@@ -113,8 +113,8 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         String propertyName = chosenProperty.getName();
         String address = chosenProperty.getAddress();
         String proprietorName = chosenProperty.getProprietorName();
-        String landlordName = chosenProperty.getLandlordName();
-        String landlordPhoneNumber = chosenProperty.getLandlordPhoneNumber();
+        //String landlordName = chosenProperty.getLandlordName();
+        //String landlordPhoneNumber = chosenProperty.getLandlordPhoneNumber();
 
         //will display the image of municipal business permit based on the newly picked municipal business permit image
         Picasso.get()
@@ -125,8 +125,8 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         displayPropertyNameConfirmRenewVerification.setText(propertyName);
         displayAddressConfirmRenewVerification.setText(address);
         displayProprietorNameConfirmRenewVerification.setText(proprietorName);
-        displayLandlordNameConfirmRenewVerification.setText(landlordName);
-        displayLandlordPhoneNumberConfirmRenewVerification.setText(landlordPhoneNumber);
+        //displayLandlordNameConfirmRenewVerification.setText(landlordName);
+        //displayLandlordPhoneNumberConfirmRenewVerification.setText(landlordPhoneNumber);
     }
 
     public void attachBusinessPermit(String municipalBusinessPermitImageName, Uri municipalBusinessPermitImageURI) {

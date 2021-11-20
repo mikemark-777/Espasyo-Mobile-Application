@@ -21,11 +21,15 @@ import com.capstone.espasyo.landlord.adapters.EditRoomAdapter;
 import com.capstone.espasyo.landlord.adapters.RoomAdapter;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.landlord.widgets.RoomRecyclerView;
+import com.capstone.espasyo.models.Landlord;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.Room;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -46,7 +50,11 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     private RoomAdapter roomAdapter;
     private ArrayList<Room> propertyRooms;
 
+    //property object
     private Property property;
+    //landlord object
+    private Landlord landlord;
+
     private ImageButton imageButtonViewPropertyOnMap;
     private View showAllRooms;
     private String propertyID;
@@ -54,6 +62,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     //for verification information
     private ImageView verificationInfoIcon;
     private TextView verificationInfoMessage;
+    private Button btnAddRoom;
     private final String UNVERIFIED_MESSAGE = "This property is not verified";
     private final String VERIFIED_MESSAGE = "Verified Property";
     private final String LOCKED_MESSAGE = "This property is locked by Admin";
@@ -72,9 +81,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         initRoomRecyclerView();
         loadPropertyData();
         fetchPropertyRooms();
-
-        Button btnAddRoom;
-        btnAddRoom = findViewById(R.id.addRoomButton);
 
         btnAddRoom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,13 +122,17 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         property = intent.getParcelableExtra("property");
 
         propertyID = property.getPropertyID();
+        String landlordID = property.getOwner();
         boolean isVerified = property.getIsVerified();
         boolean isLocked = property.getIsLocked();
+
+        //get landlord data
+        getLandlord(landlordID);
+
+
         String name = property.getName();
         String propertyType = property.getPropertyType();
         String address = property.getAddress();
-        String landlordName = property.getLandlordName();
-        String landlordPhoneNumber = property.getLandlordPhoneNumber();
         int minimumPrice = property.getMinimumPrice();
         int maximumPrice = property.getMaximumPrice();
         boolean isElectricityIncluded = property.getIsElectricityIncluded();
@@ -133,8 +143,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         TextView propName = findViewById(R.id.propertyNameDisplay);
         TextView propType = findViewById(R.id.propertyTypeDisplay);
         TextView propAddress = findViewById(R.id.propertyAddressDisplay);
-        TextView propLandlordName = findViewById(R.id.propertyLandlordNameDisplay);
-        TextView propLandlordPhoneNumber = findViewById(R.id.propertyLandlordPhoneNumberDisplay);
         TextView propMinimumPrice = findViewById(R.id.propertyMinimumPriceDisplay);
         TextView propMaximumPrice = findViewById(R.id.propertyMaximumPriceDisplay);
 
@@ -160,8 +168,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         propName.setText(name);
         propType.setText(propertyType);
         propAddress.setText(address);
-        propLandlordName.setText(landlordName);
-        propLandlordPhoneNumber.setText("+63" + landlordPhoneNumber);
         propMinimumPrice.setText(Integer.toString(minimumPrice));
         propMaximumPrice.setText(Integer.toString(maximumPrice));
 
@@ -203,6 +209,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         imageButtonViewPropertyOnMap = findViewById(R.id.imageButtonViewPropertyOnMap);
         verificationInfoIcon = findViewById(R.id.verificationInfoIcon);
         verificationInfoMessage = findViewById(R.id.verificationInfoMessage);
+        btnAddRoom = findViewById(R.id.addRoomButton);
     }
 
     public void fetchPropertyRooms() {
@@ -224,6 +231,27 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
                         roomAdapter.notifyDataSetChanged();
                     }
                 });
+    }
+
+    public void getLandlord(String landlordID) {
+        DocumentReference landlordDocRef = database.collection("landlords").document(landlordID);
+        landlordDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                landlord = documentSnapshot.toObject(Landlord.class);
+                TextView propLandlordName = findViewById(R.id.propertyLandlordNameDisplay);
+                TextView propLandlordPhoneNumber = findViewById(R.id.propertyLandlordPhoneNumberDisplay);
+                String landlordName = landlord.getFirstName() + " " + landlord.getLastName();
+                String landlordPhoneNumber = landlord.getPhoneNumber();
+                propLandlordName.setText(landlordName);
+                propLandlordPhoneNumber.setText("+63" + landlordPhoneNumber);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(PropertyDetailsActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // TODO: Handle Activity Life Cycle

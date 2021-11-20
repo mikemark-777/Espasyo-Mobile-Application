@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -30,7 +31,6 @@ import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.capstone.espasyo.models.Landlord;
 import com.capstone.espasyo.models.Student;
-import com.capstone.espasyo.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -46,8 +46,8 @@ public class SignUpFragment extends Fragment {
     private NavController navController;
 
     //UI Elements
-    private TextInputLayout textInputEmailLayout, textInputFirstNameLayout, textInputLastNameLayout, textInputPasswordLayout, textInputConfirmPasswordLayout, textInputRoleLayout;
-    private TextInputEditText textInputEmail, textInputFirstName, textInputLastName, textInputPassword, textInputConfirmPassword;
+    private TextInputLayout textInputEmailLayout, textInputFirstNameLayout, textInputLastNameLayout, textInputPasswordLayout, textInputConfirmPasswordLayout, textInputRoleLayout, textInputLandlordPhoneNumberlayout;
+    private TextInputEditText textInputEmail, textInputFirstName, textInputLastName, textInputPassword, textInputConfirmPassword, textInputLandlordPhoneNumber;
     private AutoCompleteTextView roleChosen;
 
     String[] roles = {"Student", "Landlord or Landlady"};
@@ -96,37 +96,23 @@ public class SignUpFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //TextInputLayouts
-        textInputEmailLayout = view.findViewById(R.id.text_input_email_layout_signup);
-        textInputFirstNameLayout = view.findViewById(R.id.text_input_firstname_layout_signup);
-        textInputLastNameLayout = view.findViewById(R.id.text_input_lastname_layout_signup);
-        textInputPasswordLayout = view.findViewById(R.id.text_input_password_layout_signup);
-        textInputConfirmPasswordLayout = view.findViewById(R.id.text_input_confirmpassword_layout_signup);
-        textInputRoleLayout = view.findViewById(R.id.text_input_role_layout_signup);
-
-        //TextInputEditText
-        textInputFirstName = view.findViewById(R.id.text_input_firstname_signup);
-        textInputLastName = view.findViewById(R.id.text_input_lastname_signup);
-        textInputEmail = view.findViewById(R.id.text_input_email_signup);
-        textInputPassword = view.findViewById(R.id.text_input_password_signup);
-        textInputConfirmPassword = view.findViewById(R.id.text_input_confirmpassword_signup);
-        roleChosen = view.findViewById(R.id.text_input_role_signup);
-
-        //Checkbox
-        agreeToTermsAndConditions = view.findViewById(R.id.agreeToTermsAndConditions);
-
-        //progress bar
-        signUpProgressBar = view.findViewById(R.id.signUpProgressBar);
-
-        btnSignUp = view.findViewById(R.id.btnSignUp);
-        gotoLogin = view.findViewById(R.id.gotoLogin);
-        btnTermsAndConditions = view.findViewById(R.id.btnTermsAndConditions);
-        navController = Navigation.findNavController(view);
+        initializeViews(view);
 
         rolesAdapter = new ArrayAdapter<String>(getActivity(), R.layout.auth_role_list_item, roles);
         roleChosen.setAdapter(rolesAdapter);
 
         btnSignUp.setEnabled(false);
+
+        roleChosen.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 0) {
+                    textInputLandlordPhoneNumberlayout.setVisibility(View.GONE);
+                } else if(position == 1) {
+                    textInputLandlordPhoneNumberlayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         //Navigate to Login Fragment
         gotoLogin.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +149,7 @@ public class SignUpFragment extends Fragment {
                 String password = textInputPassword.getText().toString().trim();
                 String confirmPassword = textInputConfirmPassword.getText().toString().trim();
                 String userRole = roleChosen.getText().toString().trim();
+                String landlordPhoneNumber = textInputLandlordPhoneNumber.getText().toString().trim();
 
                 if (areInputsValid(firstName, lastName, email, password, confirmPassword, userRole)) {
 
@@ -181,16 +168,17 @@ public class SignUpFragment extends Fragment {
                                     int uRole = userRole.equals("Student") ? 3 : 2;
 
                                     if (uRole == 2) {
-                                        Landlord newLandlord = new Landlord("", firstName, lastName, email, password, uRole);
-                                        signUpProgressBar.setVisibility(View.VISIBLE);
-                                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                signUpProgressBar.setVisibility(View.INVISIBLE);
-                                                viewModel.registerLandlord(newLandlord);
-                                            }
-                                        }, 4000);
-
+                                        if(isLandlordPhoneNumberValid(landlordPhoneNumber)) {
+                                            Landlord newLandlord = new Landlord("", firstName, lastName, email, password, uRole, landlordPhoneNumber);
+                                            signUpProgressBar.setVisibility(View.VISIBLE);
+                                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    signUpProgressBar.setVisibility(View.INVISIBLE);
+                                                    viewModel.registerLandlord(newLandlord);
+                                                }
+                                            }, 4000);
+                                        }
                                     } else if (uRole == 3) {
                                         Student newStudent = new Student("", firstName, lastName, email, password, uRole);
                                         signUpProgressBar.setVisibility(View.VISIBLE);
@@ -219,6 +207,40 @@ public class SignUpFragment extends Fragment {
     }
 
     // Functions
+
+    public void initializeViews(View view) {
+
+        //TextInputLayouts
+        textInputEmailLayout = view.findViewById(R.id.text_input_email_layout_signup);
+        textInputFirstNameLayout = view.findViewById(R.id.text_input_firstname_layout_signup);
+        textInputLastNameLayout = view.findViewById(R.id.text_input_lastname_layout_signup);
+        textInputPasswordLayout = view.findViewById(R.id.text_input_password_layout_signup);
+        textInputConfirmPasswordLayout = view.findViewById(R.id.text_input_confirmpassword_layout_signup);
+        textInputRoleLayout = view.findViewById(R.id.text_input_role_layout_signup);
+        textInputLandlordPhoneNumberlayout = view.findViewById(R.id.text_input_landlord_phone_number_layout_signup);
+
+        //TextInputEditText
+        textInputFirstName = view.findViewById(R.id.text_input_firstname_signup);
+        textInputLastName = view.findViewById(R.id.text_input_lastname_signup);
+        textInputEmail = view.findViewById(R.id.text_input_email_signup);
+        textInputPassword = view.findViewById(R.id.text_input_password_signup);
+        textInputConfirmPassword = view.findViewById(R.id.text_input_confirmpassword_signup);
+        roleChosen = view.findViewById(R.id.text_input_role_signup);
+        textInputLandlordPhoneNumber = view.findViewById(R.id.text_input_landlord_phone_number_signup);
+
+        //Checkbox
+        agreeToTermsAndConditions = view.findViewById(R.id.agreeToTermsAndConditions);
+
+        //progress bar
+        signUpProgressBar = view.findViewById(R.id.signUpProgressBar);
+
+        //buttons and others
+        btnSignUp = view.findViewById(R.id.btnSignUp);
+        gotoLogin = view.findViewById(R.id.gotoLogin);
+        btnTermsAndConditions = view.findViewById(R.id.btnTermsAndConditions);
+        navController = Navigation.findNavController(view);
+    }
+
     // ------ input validations -------------------------------
     public final String TAG = "TESTING";
 
@@ -350,6 +372,25 @@ public class SignUpFragment extends Fragment {
         }
     }
 
+    //Check if the phone number is valid
+    private boolean isLandlordPhoneNumberValid(String landlordPhoneNumbers) {
+        if (!landlordPhoneNumbers.isEmpty()) {
+            if (landlordPhoneNumbers.length() == 10) {
+                textInputLandlordPhoneNumberlayout.setError(null);
+                Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
+                return true;
+            } else {
+                textInputLandlordPhoneNumberlayout.setError("Phone number must be 12 digit");
+                Log.d(TAG, "LANDLORD PHONE NUMBER: NOT EMPTY");
+                return false;
+            }
+        } else {
+            textInputLandlordPhoneNumberlayout.setError("Landlord Phone Number Required");
+            Log.d(TAG, "PHONE NUMBER: EMPTY");
+            return false;
+        }
+    }
+
     private Boolean areInputsValid(String firstName, String lastName, String email, String password, String confirmPassword, String userRole) {
 
         boolean firstNameResult = isFirstNameValid(firstName);
@@ -357,6 +398,7 @@ public class SignUpFragment extends Fragment {
         boolean emailResult = isEmailValid(email);
         boolean passwordResult = arePasswordsValid(password, confirmPassword);
         boolean userRoleResult = isUserRoleValid(userRole);
+        //boolean phoneNumberResult = isPhoneNumberValid(phoneNumber);
 
         if (firstNameResult && lastNameResult && emailResult && passwordResult && userRoleResult) {
             Log.d(TAG, "CAN PROCEED: TRUE");

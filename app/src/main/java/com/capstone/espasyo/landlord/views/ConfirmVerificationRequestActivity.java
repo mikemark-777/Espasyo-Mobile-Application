@@ -137,8 +137,8 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         String propertyName = chosenProperty.getName();
         String address = chosenProperty.getAddress();
         String proprietorName = chosenProperty.getProprietorName();
-        String landlordName = chosenProperty.getLandlordName();
-        String landlordPhoneNumber = chosenProperty.getLandlordPhoneNumber();
+        //String landlordName = chosenProperty.getLandlordName();
+       // String landlordPhoneNumber = chosenProperty.getLandlordPhoneNumber();
         String municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
 
         //will display the image of municipal business permit based on its given URL from firebase storage
@@ -150,8 +150,8 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         displayPropertyNameConfirmVerification.setText(propertyName);
         displayAddressConfirmVerification.setText(address);
         displayProprietorNameConfirmVerification.setText(proprietorName);
-        displayLandlordNameConfirmVerification.setText(landlordName);
-        displayLandlordPhoneNumberConfirmVerification.setText(landlordPhoneNumber);
+      //  displayLandlordNameConfirmVerification.setText(landlordName);
+       // displayLandlordPhoneNumberConfirmVerification.setText(landlordPhoneNumber);
     }
 
     public void uploadVerificationRequest(VerificationRequest newVerificationRequest) {
