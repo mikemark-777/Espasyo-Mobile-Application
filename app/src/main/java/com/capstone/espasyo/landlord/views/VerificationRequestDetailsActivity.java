@@ -222,7 +222,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
                 propertyNameDisplay.setText(propertyName);
                 propertyAddressDisplay.setText(address);
                 properietorNameDisplay.setText(proprietor);
-                //landlordNameDisplay.setText(landlord);
+                //landlordNameDisplay.setText(landlord);//TODO: EDIT HERE LANDLORD DETAILS
             }
         });
     }

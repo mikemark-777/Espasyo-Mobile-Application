@@ -238,13 +238,8 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         landlordDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                landlord = documentSnapshot.toObject(Landlord.class);
-                TextView propLandlordName = findViewById(R.id.propertyLandlordNameDisplay);
-                TextView propLandlordPhoneNumber = findViewById(R.id.propertyLandlordPhoneNumberDisplay);
-                String landlordName = landlord.getFirstName() + " " + landlord.getLastName();
-                String landlordPhoneNumber = landlord.getPhoneNumber();
-                propLandlordName.setText(landlordName);
-                propLandlordPhoneNumber.setText("+63" + landlordPhoneNumber);
+                Landlord landlord = documentSnapshot.toObject(Landlord.class);
+                displayLandlordDetails(landlord);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -252,6 +247,17 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
                 Toast.makeText(PropertyDetailsActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void displayLandlordDetails(Landlord landlord) {
+        TextView propLandlordName = findViewById(R.id.propertyLandlordNameDisplay);
+        TextView propLandlordPhoneNumber = findViewById(R.id.propertyLandlordPhoneNumberDisplay);
+
+        String landlordName = landlord.getFirstName() + " " + landlord.getLastName();
+        String landlordPhoneNumber = landlord.getPhoneNumber();
+
+        propLandlordName.setText(landlordName);
+        propLandlordPhoneNumber.setText("+63" + landlordPhoneNumber);
     }
 
     // TODO: Handle Activity Life Cycle

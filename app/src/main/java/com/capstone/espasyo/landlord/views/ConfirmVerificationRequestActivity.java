@@ -150,7 +150,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         displayPropertyNameConfirmVerification.setText(propertyName);
         displayAddressConfirmVerification.setText(address);
         displayProprietorNameConfirmVerification.setText(proprietorName);
-      //  displayLandlordNameConfirmVerification.setText(landlordName);
+      //  displayLandlordNameConfirmVerification.setText(landlordName);//TODO: EDIT HERE LANDLORD DETAILS
        // displayLandlordPhoneNumberConfirmVerification.setText(landlordPhoneNumber);
     }
 

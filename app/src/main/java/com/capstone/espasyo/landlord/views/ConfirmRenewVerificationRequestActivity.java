@@ -125,7 +125,7 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         displayPropertyNameConfirmRenewVerification.setText(propertyName);
         displayAddressConfirmRenewVerification.setText(address);
         displayProprietorNameConfirmRenewVerification.setText(proprietorName);
-        //displayLandlordNameConfirmRenewVerification.setText(landlordName);
+        //displayLandlordNameConfirmRenewVerification.setText(landlordName);//TODO: EDIT HERE LANDLORD DETAILS
         //displayLandlordPhoneNumberConfirmRenewVerification.setText(landlordPhoneNumber);
     }
 
