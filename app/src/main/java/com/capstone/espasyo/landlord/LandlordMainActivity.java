@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.capstone.espasyo.MainActivity;
 import com.capstone.espasyo.R;
@@ -92,7 +93,13 @@ public class LandlordMainActivity extends AppCompatActivity implements Navigatio
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                   /* Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();*/
+
+                    removeUserRolePreference();
+                    Intent intent = new Intent(LandlordMainActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 }
@@ -155,8 +162,6 @@ public class LandlordMainActivity extends AppCompatActivity implements Navigatio
                     public void run() {
                         if(progressDialog.isShowing()) {
                             viewModel.signOut();
-                            removeUserRolePreference();
-                            finish();
                             progressDialog.dismissProgressDialog();
                         }
                     }
