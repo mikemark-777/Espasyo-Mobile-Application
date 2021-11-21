@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.models.Property;
+import com.capstone.espasyo.student.repository.FirebaseConnection;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -37,35 +38,16 @@ import java.util.UUID;
 
 public class AddPropertyActivity extends AppCompatActivity {
 
-    //TODO: get fAuth and database instance in FirebaseConnection
-    private final FirebaseAuth fAuth = FirebaseAuth.getInstance();
-    private final FirebaseFirestore database = FirebaseFirestore.getInstance();
+    private FirebaseConnection firebaseConnection;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore database;
     private DocumentReference propertiesDocumentReference;
 
-    private TextInputLayout textInputPropertyNameLayout,
-            textInputPropertyTypeLayout,
-            textInputCompleteAddressLayout,
-            textInputProprietorNameLayout,
-            textInputMinimumPriceLayout,
-            textInputMaximumPriceLayout;
-
-    private TextInputEditText textInputPropertyName,
-            textInputCompleteAddress,
-            textInputProprietorName;
-
-    private AutoCompleteTextView textInputPropertyType,
-            textInputMinimumPrice,
-            textInputMaximumPrice;
-
-    private CheckBox electricityCheckBox,
-            waterCheckBox,
-            internetCheckBox,
-            garbageCheckBox;
-
-    private boolean isElectricityIncluded,
-            isWaterIncluded,
-            isInternetIncluded,
-            isGarbageCollectionIncluded;
+    private TextInputLayout textInputPropertyNameLayout, textInputPropertyTypeLayout, textInputCompleteAddressLayout, textInputProprietorNameLayout, textInputMinimumPriceLayout, textInputMaximumPriceLayout;
+    private TextInputEditText textInputPropertyName, textInputCompleteAddress, textInputProprietorName;
+    private AutoCompleteTextView textInputPropertyType, textInputMinimumPrice, textInputMaximumPrice;
+    private CheckBox electricityCheckBox, waterCheckBox, internetCheckBox, garbageCheckBox;
+    private boolean isElectricityIncluded, isWaterIncluded, isInternetIncluded, isGarbageCollectionIncluded;
 
     private String completeAddress;
     private double latitude, longitude;
@@ -81,14 +63,17 @@ public class AddPropertyActivity extends AppCompatActivity {
     ArrayAdapter<String> minimumPriceAdapter;
     ArrayAdapter<String> maximumPriceAdapter;
 
-    private Button btnGetMapLocation,
-            btnAddProperty,
-            btnCancelAddProperty;//TODO: add cancel functionality
+    private Button btnGetMapLocation, btnAddProperty, btnCancelAddProperty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_add_property);
+
+        //initialize firebase
+        firebaseConnection = FirebaseConnection.getInstance();
+        fAuth = firebaseConnection.getFirebaseAuthInstance();
+        database = firebaseConnection.getFirebaseFirestoreInstance();
 
         initializeViews();
 

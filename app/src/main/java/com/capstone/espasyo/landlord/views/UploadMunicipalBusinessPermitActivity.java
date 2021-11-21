@@ -239,7 +239,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         btnImageSelectFromGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: check if user has granted the permission for accessing gallery
                 openGallery();
                 chooseImageSourceDialog.dismiss();
             }
@@ -249,7 +248,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         btnImageSelectFromCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: check if user has granted the permission for accessing camera
                 openCamera();
                 chooseImageSourceDialog.dismiss();
             }
@@ -418,7 +416,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         progressDialog.setTitle("Attaching Municipal Business Permit to Verification Request...");
         progressDialog.show();
 
-        //TODO: must specify who is the landlord who uploaded and make directory in firebase storage
         String requesteeID = verificationRequest.getRequesteeID();
         String propertyID = verificationRequest.getPropertyID();
         storageReference = storage.getReference("landlords/" + requesteeID + "/" + propertyID + "/verificationRequest");

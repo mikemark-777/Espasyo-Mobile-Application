@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.models.Landlord;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,6 +26,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -87,8 +89,6 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         displayPropertyNameConfirmRenewVerification = findViewById(R.id.propertyName_confirmRenewVerification);
         displayAddressConfirmRenewVerification = findViewById(R.id.propertyAddress_confirmRenewVerification);
         displayProprietorNameConfirmRenewVerification = findViewById(R.id.proprietorName_confirmRenewVerification);
-        displayLandlordNameConfirmRenewVerification = findViewById(R.id.landlordName_confirmRenewVerification);
-        displayLandlordPhoneNumberConfirmRenewVerification = findViewById(R.id.landlordPhoneNumber_confirmRenewVerification);
 
         //business permit imageviews
         displayMunicipalBusinessPermit_Renew = findViewById(R.id.displayMunicipalBusinessPermit_confirmRenewVerification);
@@ -110,11 +110,12 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         municipalBusinessPermitImageName = intent.getStringExtra("imageName");
         municipalBusinessPermitImageURI = intent.getStringExtra("imageURL");
 
+        //display property data including landlord data
         String propertyName = chosenProperty.getName();
         String address = chosenProperty.getAddress();
         String proprietorName = chosenProperty.getProprietorName();
-        //String landlordName = chosenProperty.getLandlordName();
-        //String landlordPhoneNumber = chosenProperty.getLandlordPhoneNumber();
+        String landlordID = chosenProperty.getOwner();
+        getLandlord(landlordID);
 
         //will display the image of municipal business permit based on the newly picked municipal business permit image
         Picasso.get()
@@ -125,8 +126,7 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         displayPropertyNameConfirmRenewVerification.setText(propertyName);
         displayAddressConfirmRenewVerification.setText(address);
         displayProprietorNameConfirmRenewVerification.setText(proprietorName);
-        //displayLandlordNameConfirmRenewVerification.setText(landlordName);//TODO: EDIT HERE LANDLORD DETAILS
-        //displayLandlordPhoneNumberConfirmRenewVerification.setText(landlordPhoneNumber);
+
     }
 
     public void attachBusinessPermit(String municipalBusinessPermitImageName, Uri municipalBusinessPermitImageURI) {
@@ -197,5 +197,33 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
                 progressDialog.dismiss();
             }
         }, 3500);
+    }
+
+    public void getLandlord(String landlordID) {
+        DocumentReference landlordDocRef = database.collection("landlords").document(landlordID);
+        landlordDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Landlord landlord = documentSnapshot.toObject(Landlord.class);
+                displayLandlordDetails(landlord);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ConfirmRenewVerificationRequestActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void displayLandlordDetails(Landlord landlord) {
+
+        displayLandlordNameConfirmRenewVerification = findViewById(R.id.landlordName_confirmRenewVerification);
+        displayLandlordPhoneNumberConfirmRenewVerification = findViewById(R.id.landlordPhoneNumber_confirmRenewVerification);
+
+        String landlordName = landlord.getFirstName() + " " + landlord.getLastName();
+        String landlordPhoneNumber = landlord.getPhoneNumber();
+
+        displayLandlordNameConfirmRenewVerification.setText(landlordName);
+        displayLandlordPhoneNumberConfirmRenewVerification.setText("+63" + landlordPhoneNumber);
     }
 }

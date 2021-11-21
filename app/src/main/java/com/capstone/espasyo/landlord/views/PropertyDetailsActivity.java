@@ -85,7 +85,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         btnAddRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Must pass propertyID to addRoomActivity
                 Intent intent = new Intent(PropertyDetailsActivity.this, AddRoomActivity.class);
                 intent.putExtra("propertyID", propertyID);
                 startActivity(intent);
@@ -128,7 +127,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
 
         //get landlord data
         getLandlord(landlordID);
-
 
         String name = property.getName();
         String propertyType = property.getPropertyType();

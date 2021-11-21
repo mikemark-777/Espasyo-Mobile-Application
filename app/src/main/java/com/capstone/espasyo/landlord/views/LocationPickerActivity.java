@@ -118,7 +118,6 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                                 gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(searchedLocation, gMap.getMaxZoomLevel()));
                                 btnGetPickedPropertyLocation.setEnabled(false);
                             } else {
-                                //TODO: Must create a dialog saying no address found
                                 Toast.makeText(LocationPickerActivity.this, "No Location Found. Please be more specific", Toast.LENGTH_LONG).show();
                             }
                         } else {

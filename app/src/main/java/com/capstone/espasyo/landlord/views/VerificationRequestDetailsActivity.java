@@ -1,5 +1,6 @@
 package com.capstone.espasyo.landlord.views;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,8 +19,10 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.models.Landlord;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -168,12 +171,16 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         //set propertyID linked to this verificaton request
         propertyID = verificationRequest.getPropertyID();
 
-
         String dateSubmitted = verificationRequest.getDateSubmitted();
         String dateVerified = verificationRequest.getDateVerified();
         boolean isExpired = verificationRequest.isExpired();
         String status = verificationRequest.getStatus();
+        String landlordID = verificationRequest.getRequesteeID();
         municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
+
+        //display all data
+
+        getLandlord(landlordID);
 
         dateSubmittedDisplay.setText(dateSubmitted);
         dateVerifiedDisplay.setText(dateVerified);
@@ -217,12 +224,10 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
                 String propertyName = property.getName();
                 String address = property.getAddress();
                 String proprietor = property.getProprietorName();
-              //  String landlord = property.getLandlordName();
 
                 propertyNameDisplay.setText(propertyName);
                 propertyAddressDisplay.setText(address);
                 properietorNameDisplay.setText(proprietor);
-                //landlordNameDisplay.setText(landlord);//TODO: EDIT HERE LANDLORD DETAILS
             }
         });
     }
@@ -299,6 +304,28 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         });
 
         confirmationDialog.show();
+    }
+
+
+    public void getLandlord(String landlordID) {
+        DocumentReference landlordDocRef = database.collection("landlords").document(landlordID);
+        landlordDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Landlord landlord = documentSnapshot.toObject(Landlord.class);
+                displayLandlordDetails(landlord);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(VerificationRequestDetailsActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void displayLandlordDetails(Landlord landlord) {
+        String landlordName = landlord.getFirstName() + " " + landlord.getLastName();
+        landlordNameDisplay.setText(landlordName);
     }
 
 }

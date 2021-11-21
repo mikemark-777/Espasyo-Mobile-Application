@@ -119,7 +119,6 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
                                 gMapEdit.addMarker(new MarkerOptions().position(searchedLocation).title(location));
                                 gMapEdit.animateCamera(CameraUpdateFactory.newLatLngZoom(searchedLocation, gMapEdit.getMaxZoomLevel()));
                             } else {
-                                //TODO: Must create a dialog saying no address found
                                 Toast.makeText(EditLocationPickerActivity.this, "No Location Found. Please be more specific", Toast.LENGTH_LONG).show();
                             }
                         }

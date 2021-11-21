@@ -193,7 +193,7 @@ public class EditRoomActivity extends AppCompatActivity {
         //get data from room object
         String roomName = room.getRoomName();
         int roomPrice = room.getPrice();
-        numberOfPersons = room.getNumberOfPersons(); //TODO: see this and refactor
+        numberOfPersons = room.getNumberOfPersons();
         boolean isRoomAvailable = room.getIsAvailable();
         boolean hasBathroom = room.getHasBathRoom();
         boolean hasKitchen = room.getHasKitchen();

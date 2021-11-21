@@ -255,7 +255,6 @@ public class ReuploadBusinessPermitActivity extends AppCompatActivity {
         btnImageSelectFromGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: check if user has granted the permission for accessing gallery
                 openGallery();
                 chooseImageSourceDialog.dismiss();
             }
@@ -265,7 +264,6 @@ public class ReuploadBusinessPermitActivity extends AppCompatActivity {
         btnImageSelectFromCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: check if user has granted the permission for accessing camera
                 openCamera();
                 chooseImageSourceDialog.dismiss();
             }

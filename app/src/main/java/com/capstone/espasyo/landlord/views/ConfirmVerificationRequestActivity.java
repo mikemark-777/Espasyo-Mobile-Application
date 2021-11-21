@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.models.Landlord;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +27,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -113,8 +115,6 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         displayPropertyNameConfirmVerification = findViewById(R.id.propertyName_confirmVerification);
         displayAddressConfirmVerification = findViewById(R.id.propertyAddress_confirmVerification);
         displayProprietorNameConfirmVerification = findViewById(R.id.proprietorName_confirmVerification);
-        displayLandlordNameConfirmVerification = findViewById(R.id.landlordName_confirmVerification);
-        displayLandlordPhoneNumberConfirmVerification = findViewById(R.id.landlordPhoneNumber_confirmVerification);
 
         //business permit imageviews
         displayMunicipalBusinessPermit = findViewById(R.id.displayMunicipalBusinessPermit_confirmVerification);
@@ -137,9 +137,12 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         String propertyName = chosenProperty.getName();
         String address = chosenProperty.getAddress();
         String proprietorName = chosenProperty.getProprietorName();
-        //String landlordName = chosenProperty.getLandlordName();
-       // String landlordPhoneNumber = chosenProperty.getLandlordPhoneNumber();
+        String landlordID = chosenProperty.getOwner();
         String municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
+
+        //display all data
+
+        getLandlord(landlordID);
 
         //will display the image of municipal business permit based on its given URL from firebase storage
         Picasso.get()
@@ -150,8 +153,6 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         displayPropertyNameConfirmVerification.setText(propertyName);
         displayAddressConfirmVerification.setText(address);
         displayProprietorNameConfirmVerification.setText(proprietorName);
-      //  displayLandlordNameConfirmVerification.setText(landlordName);//TODO: EDIT HERE LANDLORD DETAILS
-       // displayLandlordPhoneNumberConfirmVerification.setText(landlordPhoneNumber);
     }
 
     public void uploadVerificationRequest(VerificationRequest newVerificationRequest) {
@@ -253,6 +254,34 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
                 finish();
             }
         }, 3500);
+    }
+
+    public void getLandlord(String landlordID) {
+        DocumentReference landlordDocRef = database.collection("landlords").document(landlordID);
+        landlordDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Landlord landlord = documentSnapshot.toObject(Landlord.class);
+                displayLandlordDetails(landlord);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ConfirmVerificationRequestActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void displayLandlordDetails(Landlord landlord) {
+
+        displayLandlordNameConfirmVerification = findViewById(R.id.landlordName_confirmVerification);
+        displayLandlordPhoneNumberConfirmVerification = findViewById(R.id.landlordPhoneNumber_confirmVerification);
+
+        String landlordName = landlord.getFirstName() + " " + landlord.getLastName();
+        String landlordPhoneNumber = landlord.getPhoneNumber();
+
+        displayLandlordNameConfirmVerification.setText(landlordName);
+        displayLandlordPhoneNumberConfirmVerification.setText("+63" + landlordPhoneNumber);
     }
 
     @Override

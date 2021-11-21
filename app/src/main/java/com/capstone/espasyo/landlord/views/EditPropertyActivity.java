@@ -176,8 +176,6 @@ public class EditPropertyActivity extends AppCompatActivity {
                     editedLongitude = longitude;
                 }
 
-                //TODO: Must include input validations
-
                 if (areInputsValid(editedPropertyName, editedPropertyType, editedPropertyAddress, editedProprietorName, editedMinimumPrice, editedMaximumPrice)) {
 
                     property.setIsVerified(false);

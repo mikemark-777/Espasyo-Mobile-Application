@@ -47,9 +47,7 @@ public class AddRoomActivity extends AppCompatActivity {
     private Button increment, decrement;
     private int numberOfPersons = 1;
 
-    private Button btnAddRoom,
-            btnCancelAddRoom; //TODO: add cancel functionality
-
+    private Button btnAddRoom, btnCancelAddRoom;
     private String propertyID;
 
     @Override
@@ -78,24 +76,12 @@ public class AddRoomActivity extends AppCompatActivity {
                 boolean hasKitchen = kitchenSwitch.isChecked();
 
                 if (areInputsValid(roomName, roomPriceInString)) {
-                    //TODO: Must add input validations here
                     int roomPrice = Integer.parseInt(roomPriceInString);
                     //New Room Object
                     String newRoomID = UUID.randomUUID().toString();
                     //Get Property ID where this room belongs (get through Intent)
-                    Room newRoom = new Room(
-                            propertyID,
-                            newRoomID,
-                            roomName,
-                            roomPrice,
-                            numberOfPersonInRoom,
-                            isRoomAvailable,
-                            hasBathroom,
-                            hasKitchen
-                    );
-
+                    Room newRoom = new Room(propertyID, newRoomID, roomName, roomPrice, numberOfPersonInRoom, isRoomAvailable, hasBathroom, hasKitchen);
                     addNewRoom(propertyID, newRoomID, newRoom);
-
                 }
             }
         });
