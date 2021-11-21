@@ -249,7 +249,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
 
         //clear the verificationID and set the property state to unverified
         property.setVerificationID(null);
-        property.setIsVerified(false);
+        property.setVerified(false);
         propertyDocRef.set(property).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {

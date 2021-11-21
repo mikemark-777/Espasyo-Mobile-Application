@@ -140,18 +140,18 @@ public class AddPropertyActivity extends AppCompatActivity {
                     newProperty.setOwner(propertyOwner);
                     newProperty.setLatitude(latitude);
                     newProperty.setLongitude(longitude);
-                    newProperty.setIsVerified(false);
-                    newProperty.setIsLocked(false);
+                    newProperty.setVerified(false);
+                    newProperty.setLocked(false);
                     newProperty.setPropertyType(propertyType);
                     newProperty.setName(propertyName);
                     newProperty.setAddress(completeAddress);
                     newProperty.setProprietorName(proprietorName);
                     newProperty.setMinimumPrice(minimumPrice);
                     newProperty.setMaximumPrice(maximumPrice);
-                    newProperty.setIsElectricityIncluded(isElectricityIncluded);
-                    newProperty.setIsWaterIncluded(isWaterIncluded);
-                    newProperty.setIsInternetIncluded(isInternetIncluded);
-                    newProperty.setIsGarbageCollectionIncluded(isGarbageCollectionIncluded);
+                    newProperty.setElectricityIncluded(isElectricityIncluded);
+                    newProperty.setWaterIncluded(isWaterIncluded);
+                    newProperty.setInternetIncluded(isInternetIncluded);
+                    newProperty.setGarbageCollectionIncluded(isGarbageCollectionIncluded);
 
                     addNewProperty(newPropertyID, newProperty);
                     btnAddProperty.setEnabled(false);

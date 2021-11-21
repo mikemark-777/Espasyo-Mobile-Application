@@ -172,15 +172,13 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
-                    if (!isImageIsChanged(municipalBusinessPermitImageName, municipalBusinessPermitImageURI, currentMunicipalBPImageName, currentMunicipalBPImageURI)) {
-                        Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, ConfirmVerificationRequestActivity.class);
-                        intent.putExtra("initialVerificationRequest", verificationRequest);
-                        intent.putExtra("chosenProperty", chosenProperty);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    } else {
-                        showConfirmationDialog();
-                    }
+                    Intent intent = new Intent(UploadMunicipalBusinessPermitActivity.this, ConfirmVerificationRequestActivity.class);
+                    intent.putExtra("initialVerificationRequest", verificationRequest);
+                    intent.putExtra("chosenProperty", chosenProperty);
+                    intent.putExtra("imageName", municipalBusinessPermitImageName);
+                    intent.putExtra("imageURL", municipalBusinessPermitImageURI.toString());
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 } else {
                     Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "Please pick an image", Toast.LENGTH_SHORT).show();
                 }
@@ -456,18 +454,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
         });
     }
 
-    public void unattachBusinessPermit() {
-        String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
-
-        StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBPUrl);
-        municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                //municipal business permis has been deleted
-            }
-        });
-    }
-
     public void showDiscardDialog() {
 
         new AlertDialog.Builder(this)
@@ -480,7 +466,6 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
                         String municipalBPRUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
                         if (municipalBPRUrl != null) {
                             Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "MBP is not null", Toast.LENGTH_LONG).show();
-                            unattachBusinessPermit();
                             finish();
                         } else {
                             Toast.makeText(UploadMunicipalBusinessPermitActivity.this, "MBP is null", Toast.LENGTH_LONG).show();

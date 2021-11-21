@@ -48,18 +48,9 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
     private String municipalBusinessPermitImageName;
     private String municipalBusinessPermitImageURI;
 
-    private TextView displayPropertyNameConfirmRenewVerification,
-            displayAddressConfirmRenewVerification,
-            displayProprietorNameConfirmRenewVerification,
-            displayLandlordNameConfirmRenewVerification,
-            displayLandlordPhoneNumberConfirmRenewVerification;
-
-    private ImageView displayMunicipalBusinessPermit_Renew,
-            btnBackToUploadImage;
-
-    private Button btnConfirmRenewVerificationRequest,
-            btnDiscardRenewVerificationRequest;
-
+    private TextView displayPropertyNameConfirmRenewVerification, displayAddressConfirmRenewVerification, displayProprietorNameConfirmRenewVerification, displayLandlordNameConfirmRenewVerification, displayLandlordPhoneNumberConfirmRenewVerification;
+    private ImageView displayMunicipalBusinessPermit_Renew, btnBackToUploadImage;
+    private Button btnConfirmRenewVerificationRequest, btnDiscardRenewVerificationRequest;
     private ProgressDialog progressDialog;
 
 
@@ -224,6 +215,6 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         String landlordPhoneNumber = landlord.getPhoneNumber();
 
         displayLandlordNameConfirmRenewVerification.setText(landlordName);
-        displayLandlordPhoneNumberConfirmRenewVerification.setText("+63" + landlordPhoneNumber);
+        displayLandlordPhoneNumberConfirmRenewVerification.setText(landlordPhoneNumber);
     }
 }

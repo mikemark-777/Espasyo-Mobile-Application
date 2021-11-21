@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,7 +31,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -42,20 +45,14 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
     private FirebaseConnection firebaseConnection;
     private FirebaseFirestore database;
     private FirebaseStorage storage;
+    private StorageReference storageReference;
     private DocumentReference verificationRequestsDocumentReference;
 
-    private TextView displayPropertyNameConfirmVerification,
-            displayAddressConfirmVerification,
-            displayProprietorNameConfirmVerification,
-            displayLandlordNameConfirmVerification,
-            displayLandlordPhoneNumberConfirmVerification;
-
-    private ImageView displayMunicipalBusinessPermit,
-            btnBackToStep3;
-
-    private Button btnConfirmVerificationRequest,
-            btnDiscardVerificationRequest;
-
+    private TextView displayPropertyNameConfirmVerification, displayAddressConfirmVerification, displayProprietorNameConfirmVerification, displayLandlordNameConfirmVerification, displayLandlordPhoneNumberConfirmVerification;
+    private ImageView displayMunicipalBusinessPermit, btnBackToStep3;
+    private String municipalBusinessPermitImageName = "";
+    private String municipalBusinessPermitImageURI;
+    private Button btnConfirmVerificationRequest, btnDiscardVerificationRequest;
     private ProgressDialog progressDialog;
 
     // this is the verification request that has the data from the steps 1-3 of the compose verification process
@@ -79,9 +76,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         btnConfirmVerificationRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String dateSubmitted = getDateSubmitted();
-                verificationRequest.setDateSubmitted(dateSubmitted);
-                uploadVerificationRequest(verificationRequest);
+                attachBusinessPermit(municipalBusinessPermitImageName, Uri.parse(municipalBusinessPermitImageURI));
             }
         });
 
@@ -132,13 +127,14 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
     public void getDataFromIntent(Intent intent) {
         verificationRequest = intent.getParcelableExtra("initialVerificationRequest");
-        chosenProperty = intent.getParcelableExtra("chosenProperty"); //for displaying purposes
+        chosenProperty = intent.getParcelableExtra("chosenProperty");
+        municipalBusinessPermitImageName = intent.getStringExtra("imageName");
+        municipalBusinessPermitImageURI = intent.getStringExtra("imageURL");
 
         String propertyName = chosenProperty.getName();
         String address = chosenProperty.getAddress();
         String proprietorName = chosenProperty.getProprietorName();
         String landlordID = chosenProperty.getOwner();
-        String municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
 
         //display all data
 
@@ -146,13 +142,58 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
         //will display the image of municipal business permit based on its given URL from firebase storage
         Picasso.get()
-                .load(municipalBusinessPermitURL)
+                .load(municipalBusinessPermitImageURI)
                 .placeholder(R.drawable.img_upload_business_permit)
                 .into(displayMunicipalBusinessPermit);
 
         displayPropertyNameConfirmVerification.setText(propertyName);
         displayAddressConfirmVerification.setText(address);
         displayProprietorNameConfirmVerification.setText(proprietorName);
+    }
+
+    public String getDateSubmitted() {
+        Date currentDate = Calendar.getInstance().getTime();
+        return DateFormat.getDateInstance(DateFormat.FULL).format(currentDate);
+    }
+
+    public void attachBusinessPermit(String municipalBusinessPermitImageName, Uri municipalBusinessPermitImageURI) {
+
+        progressDialog.setTitle("Attaching Municipal Business Permit to Verification Request...");
+        progressDialog.show();
+
+        String requesteeID = verificationRequest.getRequesteeID();
+        String propertyID = verificationRequest.getPropertyID();
+        storageReference = storage.getReference("landlords/" + requesteeID + "/" + propertyID + "/verificationRequest");
+        final StorageReference businessPermitRef = storageReference.child(municipalBusinessPermitImageName);
+        businessPermitRef.putFile(municipalBusinessPermitImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                businessPermitRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String municipalBusinessPermitImageURL = uri.toString();
+                        //attach the image url to verification request
+                        verificationRequest.setMunicipalBusinessPermitImageURL(municipalBusinessPermitImageURL);
+                        verificationRequest.setClassification("new");
+                        verificationRequest.setStatus("unverified");
+                        verificationRequest.setDateSubmitted(getDateSubmitted());
+                        uploadVerificationRequest(verificationRequest);
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ConfirmVerificationRequestActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                progressDialog.setMessage("Percentage: " + (int) progressPercent + "%");
+            }
+        });
     }
 
     public void uploadVerificationRequest(VerificationRequest newVerificationRequest) {
@@ -165,7 +206,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         verificationRequestsDocumentReference.set(newVerificationRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                attachVerificationRequestIDToProperty(newVerificationRequestID);
+                attachVerificationRequestToProperty(newVerificationRequest);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -182,12 +223,9 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         }, 3500);
     }
 
-    public String getDateSubmitted() {
-        Date currentDate = Calendar.getInstance().getTime();
-        return DateFormat.getDateInstance(DateFormat.FULL).format(currentDate);
-    }
+    public void attachVerificationRequestToProperty(VerificationRequest verificationRequest) {
 
-    public void attachVerificationRequestIDToProperty(String verificationID) {
+        String verificationID = verificationRequest.getVerificationRequestID();
 
         String propertyID = chosenProperty.getPropertyID();
         chosenProperty.setVerificationID(verificationID);
@@ -281,7 +319,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         String landlordPhoneNumber = landlord.getPhoneNumber();
 
         displayLandlordNameConfirmVerification.setText(landlordName);
-        displayLandlordPhoneNumberConfirmVerification.setText("+63" + landlordPhoneNumber);
+        displayLandlordPhoneNumberConfirmVerification.setText(landlordPhoneNumber);
     }
 
     @Override

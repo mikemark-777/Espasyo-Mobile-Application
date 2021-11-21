@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.capstone.espasyo.MainActivity;
 import com.capstone.espasyo.R;
@@ -101,7 +102,11 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                         propertyList.clear();
                         for (QueryDocumentSnapshot property : queryDocumentSnapshots) {
                             Property propertyObj = property.toObject(Property.class);
-                            propertyList.add(propertyObj);
+                            if(propertyObj.isLocked()) {
+                                propertyList.add(propertyObj);
+                            } else {
+                                Toast.makeText(StudentMainActivity.this, propertyObj.getName() + " is " + propertyObj.isLocked(), Toast.LENGTH_SHORT).show();
+                            }
                         }
                         propertyAdapter.notifyDataSetChanged();
                     }

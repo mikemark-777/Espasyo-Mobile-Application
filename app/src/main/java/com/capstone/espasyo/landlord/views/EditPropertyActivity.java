@@ -178,7 +178,7 @@ public class EditPropertyActivity extends AppCompatActivity {
 
                 if (areInputsValid(editedPropertyName, editedPropertyType, editedPropertyAddress, editedProprietorName, editedMinimumPrice, editedMaximumPrice)) {
 
-                    property.setIsVerified(false);
+                    property.setVerified(false);
                     property.setName(editedPropertyName);
                     property.setPropertyType(editedPropertyType);
                     property.setAddress(editedPropertyAddress);
@@ -187,10 +187,10 @@ public class EditPropertyActivity extends AppCompatActivity {
                     property.setProprietorName(editedProprietorName);
                     property.setMinimumPrice(Integer.parseInt(editedMinimumPrice));
                     property.setMaximumPrice(Integer.parseInt(editedMaximumPrice));
-                    property.setIsElectricityIncluded(editedIsElectricityIncluded);
-                    property.setIsWaterIncluded(editedIsWaterIncluded);
-                    property.setIsInternetIncluded(editedIsInternetIncluded);
-                    property.setIsGarbageCollectionIncluded(editedIsGarbageCollectionIncluded);
+                    property.setElectricityIncluded(editedIsElectricityIncluded);
+                    property.setWaterIncluded(editedIsWaterIncluded);
+                    property.setInternetIncluded(editedIsInternetIncluded);
+                    property.setGarbageCollectionIncluded(editedIsGarbageCollectionIncluded);
 
                     saveChangesToProperty(property);
                 }
@@ -389,10 +389,10 @@ public class EditPropertyActivity extends AppCompatActivity {
         String proprietorName = property.getProprietorName();
         int minimumPrice = property.getMinimumPrice();
         int maximumPrice = property.getMaximumPrice();
-        boolean isElectricityIncluded = property.getIsElectricityIncluded();
-        boolean isWaterIncluded = property.getIsWaterIncluded();
-        boolean isInternetIncluded = property.getIsInternetIncluded();
-        boolean isGarbageCollectionIncluded = property.getIsGarbageCollectionIncluded();
+        boolean isElectricityIncluded = property.isElectricityIncluded();
+        boolean isWaterIncluded = property.isWaterIncluded();
+        boolean isInternetIncluded = property.isInternetIncluded();
+        boolean isGarbageCollectionIncluded = property.isGarbageCollectionIncluded();
 
         //get propertyTypePosition, minimumPricePosition and maximumPricePosition in adapter
         int propertyTypePosition = propertyTypeAdapter.getPosition(propertyType);
