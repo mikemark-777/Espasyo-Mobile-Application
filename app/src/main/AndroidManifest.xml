@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
         <activity
+            android:name=".landlord.views.ChangeNameActivity"
+            android:exported="true" />
+        <activity
             android:name=".landlord.views.ConfirmReuploadBusinessPermitImageActivity"
             android:exported="true" />
         <activity
@@ -94,7 +97,7 @@
             android:name=".landlord.views.RoomDetailsActivity"
             android:exported="true" />
         <activity
-            android:name=".landlord.views.SettingsActivity"
+            android:name=".landlord.views.AccountActivity"
             android:exported="true" />
         <activity
             android:name=".landlord.views.ShowAllRoomsActivity"
