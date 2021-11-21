@@ -1,5 +1,6 @@
 package com.capstone.espasyo.landlord.views;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Landlord;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -163,27 +165,26 @@ public class ChangeNameActivity extends AppCompatActivity {
     public void updateName(Landlord updatedLandlord) {
         landlordChangeNameProgressBar.setVisibility(View.VISIBLE);
         String landlordID = landlord.getLandlordID();
-        DocumentReference userDocRef = database.collection("users").document(landlordID);
         DocumentReference adminDocRef = database.collection("landlords").document(landlordID);
 
         //update name in  users collection
-        userDocRef.set(updatedLandlord).addOnSuccessListener(new OnSuccessListener<Void>() {
+        adminDocRef.set(updatedLandlord).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                //update name in admin collection
-                adminDocRef.set(updatedLandlord).addOnSuccessListener(new OnSuccessListener<Void>() {
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
-                    public void onSuccess(Void unused) {
-                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                landlordChangeNameProgressBar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(ChangeNameActivity.this, "Name Successfully Updated", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                        }, 3000);
+                    public void run() {
+                        landlordChangeNameProgressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(ChangeNameActivity.this, "Name Successfully Updated", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
-                });
+                }, 3000);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                landlordChangeNameProgressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(ChangeNameActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
