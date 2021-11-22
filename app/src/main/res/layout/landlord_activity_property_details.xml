@@ -414,6 +414,12 @@
 
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/gotoUploadImages"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upload Property Image" />
+
             </LinearLayout>
 
         </LinearLayout>

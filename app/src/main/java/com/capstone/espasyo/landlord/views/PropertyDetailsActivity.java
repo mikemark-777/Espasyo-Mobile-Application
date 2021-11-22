@@ -67,6 +67,8 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     private final String VERIFIED_MESSAGE = "Verified Property";
     private final String LOCKED_MESSAGE = "This property is locked by Admin";
 
+    private Button btnUploadImages;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +110,14 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
                 intent.putExtra("chosenProperty", property);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
+
+        btnUploadImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PropertyDetailsActivity.this, UploadPropertyImageActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -208,6 +218,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         verificationInfoIcon = findViewById(R.id.verificationInfoIcon);
         verificationInfoMessage = findViewById(R.id.verificationInfoMessage);
         btnAddRoom = findViewById(R.id.addRoomButton);
+        btnUploadImages = findViewById(R.id.gotoUploadImages);
     }
 
     public void fetchPropertyRooms() {
