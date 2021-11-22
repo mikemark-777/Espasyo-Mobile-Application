@@ -414,6 +414,13 @@
 
                 </LinearLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:orientation="vertical">
+
                 <Button
                     android:id="@+id/gotoUploadImages"
                     android:layout_width="wrap_content"
