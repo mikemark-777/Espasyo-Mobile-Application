@@ -47,7 +47,7 @@ import com.google.firebase.storage.StorageReference;
 
 public class AccountActivity extends AppCompatActivity {
 
-    //GUMAGANA NGA
+    //TINANGGAL KO NA
 
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth firebaseAuth;
