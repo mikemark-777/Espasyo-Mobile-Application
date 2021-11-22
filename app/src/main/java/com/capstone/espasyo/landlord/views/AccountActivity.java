@@ -47,6 +47,8 @@ import com.google.firebase.storage.StorageReference;
 
 public class AccountActivity extends AppCompatActivity {
 
+    //GUMAGANA NGA
+
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore database;
