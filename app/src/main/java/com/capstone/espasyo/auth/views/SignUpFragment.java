@@ -143,6 +143,7 @@ public class SignUpFragment extends Fragment {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnSignUp.setEnabled(false);
                 String firstName = textInputFirstName.getText().toString().trim();
                 String lastName = textInputLastName.getText().toString().trim();
                 String email = textInputEmail.getText().toString().trim();
@@ -174,6 +175,7 @@ public class SignUpFragment extends Fragment {
                                             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
+                                                    btnSignUp.setEnabled(true);
                                                     signUpProgressBar.setVisibility(View.INVISIBLE);
                                                     viewModel.registerLandlord(newLandlord);
                                                 }
@@ -185,6 +187,7 @@ public class SignUpFragment extends Fragment {
                                         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
+                                                btnSignUp.setEnabled(true);
                                                 signUpProgressBar.setVisibility(View.INVISIBLE);
                                                 viewModel.registerStudent(newStudent);
                                             }
@@ -192,6 +195,7 @@ public class SignUpFragment extends Fragment {
                                     }
                                 } else {
                                     textInputEmailLayout.setError("Email already exists");
+                                    btnSignUp.setEnabled(true);
                                 }
                             } else {
                                 Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -199,11 +203,9 @@ public class SignUpFragment extends Fragment {
 
                         }
                     });
-
                 }
             }
         });
-
     }
 
     // Functions

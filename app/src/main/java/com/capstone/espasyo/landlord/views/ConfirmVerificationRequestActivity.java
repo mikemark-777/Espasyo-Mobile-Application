@@ -268,17 +268,6 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
     public void discardVerificationRequest() {
         progressDialog.setTitle("Cancelling Verification Request...");
         progressDialog.show();
-        String municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
-
-        StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBPUrl);
-
-        municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                //business permit image has been deleted
-            }
-        });
-
         // finish this activity
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
@@ -324,6 +313,6 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //back button disabled
+        super.onBackPressed();
     }
 }
