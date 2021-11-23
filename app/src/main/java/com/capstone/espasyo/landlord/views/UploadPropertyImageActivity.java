@@ -58,8 +58,8 @@ public class UploadPropertyImageActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
+    private TextView textImageUploading;
     private ProgressBar uploadImageProgressBar;
-    private ProgressDialog progressDialog;
 
     private final int CAMERA_PERMISSION_CODE = 101;
     private final int STORAGE_PERMISSION_CODE = 201;
@@ -188,10 +188,9 @@ public class UploadPropertyImageActivity extends AppCompatActivity {
         btnUpload = findViewById(R.id.btnUploadImage_uploadPropertyImage);
         btnCancel = findViewById(R.id.btnCancelUploadImage_uploadPropertyImage);
 
-        //initialize the progressDialog for the uploading of business permits
-        progressDialog = new ProgressDialog(UploadPropertyImageActivity.this);
 
-        //initialize progressbar for uploading image
+        //initialize textview and progressbar for uploading image
+        textImageUploading = findViewById(R.id.textImageUploading);
         uploadImageProgressBar = findViewById(R.id.uploadImageProgressBar);
     }
 
@@ -392,6 +391,8 @@ public class UploadPropertyImageActivity extends AppCompatActivity {
     }
 
     public void uploadImage(String propertyImageName, Uri propertyImageURI) {
+        textImageUploading.setVisibility(View.VISIBLE);
+        uploadImageProgressBar.setVisibility(View.VISIBLE);
         //get landlordID and propertyID for the path of images in firebase storage
         String landlordID = property.getOwner();
         String propertyID = property.getPropertyID();
@@ -417,12 +418,6 @@ public class UploadPropertyImageActivity extends AppCompatActivity {
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(UploadPropertyImageActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
             }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                uploadImageProgressBar.setProgress((int) progressPercent);
-            }
         });
     }
 
@@ -432,12 +427,16 @@ public class UploadPropertyImageActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void unused) {
                 //see what must be included, an intent or what
+                textImageUploading.setVisibility(View.GONE);
+                uploadImageProgressBar.setVisibility(View.GONE);
                 setResult(RESULT_OK);
                 finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                textImageUploading.setVisibility(View.GONE);
+                uploadImageProgressBar.setVisibility(View.GONE);
                 Toast.makeText(UploadPropertyImageActivity.this, e.toString(), Toast.LENGTH_LONG).show();
             }
         });

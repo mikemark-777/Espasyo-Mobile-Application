@@ -7,10 +7,12 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -44,9 +46,8 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
     private FirebaseFirestore database;
     private FirebaseStorage storage;
 
-    private ImageView btnDeleteImage, btnGotoUploadImage;
+    private ImageView btnDeleteImage, btnGotoUploadImage, btnFullScreen;
     private ImageView emptyImagesDisplay;
-    private Button btnUploadImages, btnDisplayURLs;
 
     //storing data
     private ArrayList<String> imageList = new ArrayList<>();
@@ -85,51 +86,18 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK) {
-                            // There are no request codes
+                            // refresh the property images
                             getImageFolderOf(property);
-                            Toast.makeText(ManagePropertyImageActivity.this, "Result Okay", Toast.LENGTH_SHORT).show();
                         } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-                            Toast.makeText(ManagePropertyImageActivity.this, "Result Cancelled", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ManagePropertyImageActivity.this, "Upload Image Cancelled", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
-        btnUploadImages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String folderID = "0682928b-8363-4bd0-b716-f196b60f214f";
-                imageList.add("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png");
-                imageList.add("https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg");
-                imageList.add("https://mediadesknm.com/wp-content/uploads/2018/09/photographer-698908_960_720.jpg");
-                propertyImageFolder.setImages(imageList);
-
-                DocumentReference imageFolderDocRef = database.collection("imageFolders").document(folderID);
-                imageFolderDocRef.set(propertyImageFolder).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(ManagePropertyImageActivity.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(ManagePropertyImageActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-        });
-
-        btnDisplayURLs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
         imageSlider.setItemChangeListener(new ItemChangeListener() {
             @Override
             public void onItemChanged(int i) {
-                //for deleting the image in its index
+                //for deleting the image in its index and sending it to preview image activity
                 imageIndex = i;
             }
         });
@@ -148,25 +116,20 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
         btnDeleteImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!downloadedURLs.isEmpty()) {
+                    showConfirmDeleteImageDialog();
+                } else {
+                    Toast.makeText(ManagePropertyImageActivity.this, "No image to delete", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
-                //first is to get the imageURL from the selected image in the arraylist
-                String imageToDelete = downloadedURLs.get(imageIndex);
-                //second is to delete the image in firebase storage
-                StorageReference imageToDeleteRef = storage.getReferenceFromUrl(imageToDelete);
-                imageToDeleteRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        //delete it in the list of images in the imageFolder object
-                        downloadedURLs.remove(imageToDelete);
-                        propertyImageFolder.setImages(downloadedURLs);
-                        updateImageFolder(propertyImageFolder);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(ManagePropertyImageActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        btnFullScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ManagePropertyImageActivity.this, PreviewImageActivity.class);
+                intent.putExtra("previewImage", downloadedURLs.get(imageIndex));
+                startActivity(intent);
             }
         });
     }
@@ -174,8 +137,7 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
     public void initializeViews() {
         btnGotoUploadImage = findViewById(R.id.btnGotoUploadImage);
         btnDeleteImage = findViewById(R.id.btnDeleteImage);
-        btnUploadImages = findViewById(R.id.btnUploadImages);
-        btnDisplayURLs = findViewById(R.id.btnDisplayURLs);
+        btnFullScreen = findViewById(R.id.btnFullScreen);
         imageSlider = findViewById(R.id.image_slider);
 
         emptyImagesDisplay = findViewById(R.id.emptyImagesDisplay);
@@ -234,6 +196,28 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
         }
     }
 
+    public void deleteImage() {
+        //first is to get the imageURL from the selected image in the arraylist
+        String imageToDelete = downloadedURLs.get(imageIndex);
+        //second is to delete the image in firebase storage
+        StorageReference imageToDeleteRef = storage.getReferenceFromUrl(imageToDelete);
+        imageToDeleteRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                //delete it in the list of images in the imageFolder object
+                downloadedURLs.remove(imageToDelete);
+                propertyImageFolder.setImages(downloadedURLs);
+                updateImageFolder(propertyImageFolder);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ManagePropertyImageActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     public void updateImageFolder(ImageFolder imageFolder) {
         DocumentReference imageFolderDocRef = database.collection("imageFolders").document(imageFolder.getFolderID());
         imageFolderDocRef.set(imageFolder).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -250,5 +234,20 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
         });
     }
 
-
+    public void showConfirmDeleteImageDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Image")
+                .setMessage("Are you sure you want to delete this image?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteImage();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
+    }
 }

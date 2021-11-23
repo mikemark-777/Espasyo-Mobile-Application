@@ -2,11 +2,11 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_selected="false">
         <shape android:shape="oval">
-            <solid android:color="#ffffff"/>
+            <solid android:color="@color/espasyo_orange_200"/>
             <size android:width="15dp"
                 android:height="15dp"/>
             <stroke android:width="1dp"
-                android:color="#8c8c8c"/>
+                android:color="@color/espasyo_orange_200"/>
         </shape>
     </item>
     <item android:state_selected="true">
