@@ -28,6 +28,7 @@ import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.models.ImageFolder;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,6 +45,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
 
 public class EditPropertyActivity extends AppCompatActivity {
 
@@ -480,30 +483,32 @@ public class EditPropertyActivity extends AppCompatActivity {
                     }
                 });
 
+        //next is to delete the images of the property and imageFolder itself
+        String folderID = property.getImageFolder();
+        DocumentReference imageFolderDocRef = database.collection("imageFolders").document(folderID);
+        imageFolderDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ImageFolder imageFolder = documentSnapshot.toObject(ImageFolder.class);
+                ArrayList<String> imageURLs = imageFolder.getImages();
+                for(String url: imageURLs) {
+                    StorageReference imageStorageRef = storage.getReferenceFromUrl(url);
+                    imageStorageRef.delete();
+                }
+                imageFolderDocRef.delete();
+            }
+        });
+
         if (verificationRequest != null) {
             //next is to delete the images of the barangay and municipal business permit from storage
             municipalBusinessPermitURL = verificationRequest.getMunicipalBusinessPermitImageURL();
 
             StorageReference municipalBPRef = storage.getReferenceFromUrl(municipalBusinessPermitURL);
-
-            municipalBPRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    //business permit has been deleted
-                }
-            });
-
+            municipalBPRef.delete();
 
             //next is to delete the verification request linked to this property (if issued)
             if (!verificationID.equals("")) {
-                database.collection("verificationRequests").document(verificationID)
-                        .delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-
-                            }
-                        });
+                database.collection("verificationRequests").document(verificationID).delete();
             }
         }
 
