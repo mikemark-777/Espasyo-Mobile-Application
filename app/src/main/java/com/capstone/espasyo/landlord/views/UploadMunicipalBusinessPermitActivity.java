@@ -455,10 +455,9 @@ public class UploadMunicipalBusinessPermitActivity extends AppCompatActivity {
     }
 
     public void showDiscardDialog() {
-
         new AlertDialog.Builder(this)
-                .setTitle("Confirm discard uploaded image")
-                .setMessage("Are you sure you want to discard the uploaded image?")
+                .setTitle("Confirm Discard Image")
+                .setMessage("Are you sure you want to discard the chosen image?")
                 .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

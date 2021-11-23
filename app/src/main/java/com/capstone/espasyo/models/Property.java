@@ -35,33 +35,12 @@ public class Property implements Parcelable{
     private boolean isWaterIncluded;
     private boolean isInternetIncluded;
     private boolean isGarbageCollectionIncluded;
+    private String imageFolder;
+
 
     public Property(){
         //empty property constructor **required`
     }
-
-/*    public Property(String propertyID, String owner, double latitude, double longitude, boolean isVerified, boolean isLocked, String verificationID, String propertyType, String name, String address,
-                    String proprietorName, String landlordName, String landlordPhoneNumber, int minimumPrice, int maximumPrice, boolean isElectricityIncluded, boolean isWaterIncluded, boolean isInternetIncluded, boolean isGarbageCollectionIncluded) {
-        this.propertyID = propertyID;
-        this.owner = owner;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.isVerified = isVerified;
-        this.isLocked = isLocked;
-        this.verificationID = verificationID;
-        this.propertyType = propertyType;
-        this.name = name;
-        this.address = address;
-        this.proprietorName = proprietorName;
-        this.landlordName = landlordName;
-        this.landlordPhoneNumber = landlordPhoneNumber;
-        this.minimumPrice = minimumPrice;
-        this.maximumPrice = maximumPrice;
-        this.isElectricityIncluded = isElectricityIncluded;
-        this.isWaterIncluded = isWaterIncluded;
-        this.isInternetIncluded = isInternetIncluded;
-        this.isGarbageCollectionIncluded = isGarbageCollectionIncluded;
-    }*/
 
     protected Property(Parcel in) {
         propertyID = in.readString();
@@ -81,6 +60,7 @@ public class Property implements Parcelable{
         isWaterIncluded = in.readByte() != 0;
         isInternetIncluded = in.readByte() != 0;
         isGarbageCollectionIncluded = in.readByte() != 0;
+        imageFolder = in.readString();
     }
 
     public static final Creator<Property> CREATOR = new Creator<Property>() {
@@ -95,7 +75,6 @@ public class Property implements Parcelable{
         }
     };
 
-    //setters
     public void setPropertyID(String propertyID) {
         this.propertyID = propertyID;
     }
@@ -164,8 +143,9 @@ public class Property implements Parcelable{
         isGarbageCollectionIncluded = garbageCollectionIncluded;
     }
 
-    //getters
-
+    public void setImageFolder(String imageFolder) {
+        this.imageFolder = imageFolder;
+    }
 
     public String getPropertyID() {
         return propertyID;
@@ -235,6 +215,10 @@ public class Property implements Parcelable{
         return isGarbageCollectionIncluded;
     }
 
+    public String getImageFolder() {
+        return imageFolder;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -259,5 +243,6 @@ public class Property implements Parcelable{
         dest.writeByte((byte) (isWaterIncluded ? 1 : 0));
         dest.writeByte((byte) (isInternetIncluded ? 1 : 0));
         dest.writeByte((byte) (isGarbageCollectionIncluded ? 1 : 0));
+        dest.writeString(imageFolder);
     }
 }

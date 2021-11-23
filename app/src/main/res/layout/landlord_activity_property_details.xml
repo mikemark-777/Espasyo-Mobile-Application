@@ -425,7 +425,8 @@
                     android:id="@+id/gotoUploadImages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upload Property Image" />
+                    android:text="Upload Property Image"
+                    android:layout_gravity="end"/>
 
             </LinearLayout>
 

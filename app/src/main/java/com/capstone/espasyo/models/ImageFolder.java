@@ -1,9 +1,12 @@
 package com.capstone.espasyo.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Map;
 
-public class ImageFolder {
+public class ImageFolder implements Parcelable {
 
     private String folderID;
     private ArrayList<String> images;
@@ -11,6 +14,23 @@ public class ImageFolder {
     public ImageFolder() {
         //empty constructor
     }
+
+    protected ImageFolder(Parcel in) {
+        folderID = in.readString();
+        images = in.createStringArrayList();
+    }
+
+    public static final Creator<ImageFolder> CREATOR = new Creator<ImageFolder>() {
+        @Override
+        public ImageFolder createFromParcel(Parcel in) {
+            return new ImageFolder(in);
+        }
+
+        @Override
+        public ImageFolder[] newArray(int size) {
+            return new ImageFolder[size];
+        }
+    };
 
     public void setFolderID(String folderID) {
         this.folderID = folderID;
@@ -27,5 +47,16 @@ public class ImageFolder {
 
     public ArrayList<String> getImages() {
         return images;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(folderID);
+        dest.writeStringList(images);
     }
 }

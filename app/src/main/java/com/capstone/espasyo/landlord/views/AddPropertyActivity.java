@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.LandlordMainActivity;
+import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
+import com.capstone.espasyo.models.ImageFolder;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.student.repository.FirebaseConnection;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -64,6 +66,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     ArrayAdapter<String> maximumPriceAdapter;
 
     private Button btnGetMapLocation, btnAddProperty, btnCancelAddProperty;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +156,8 @@ public class AddPropertyActivity extends AppCompatActivity {
                     newProperty.setInternetIncluded(isInternetIncluded);
                     newProperty.setGarbageCollectionIncluded(isGarbageCollectionIncluded);
 
-                    addNewProperty(newPropertyID, newProperty);
+                    progressDialog.showProgressDialog("Creating Property...", false);
+                    createImageFolderFor(newProperty);
                     btnAddProperty.setEnabled(false);
 
                 } else {
@@ -323,6 +327,9 @@ public class AddPropertyActivity extends AppCompatActivity {
         maximumPriceAdapter = new ArrayAdapter<String>(this, R.layout.landlord_maximum_price_list_item, maximumPrices);
         textInputMaximumPrice.setAdapter(maximumPriceAdapter);
         maximumPriceAdapter.notifyDataSetChanged();
+
+        //progressDialog
+        progressDialog = new CustomProgressDialog(this);
     }
 
     public void getRentInclusions() {
@@ -332,6 +339,32 @@ public class AddPropertyActivity extends AppCompatActivity {
         isGarbageCollectionIncluded = garbageCheckBox.isChecked();
     }
 
+    public void createImageFolderFor(Property newProperty) {
+        //create a new ImageFolder Object
+        ImageFolder newImageFolder = new ImageFolder();
+        String newImageFolderID = UUID.randomUUID().toString();
+        ArrayList<String> images= new ArrayList<>();
+        //initialize new ImageFolder Object
+        newImageFolder.setFolderID(newImageFolderID);
+        newImageFolder.setImages(images);
+
+        DocumentReference imageFolderDocRef = database.collection("imageFolders").document(newImageFolderID);
+
+        imageFolderDocRef.set(newImageFolder).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                String newPropertyID = newProperty.getPropertyID();
+                newProperty.setImageFolder(newImageFolderID);
+                addNewProperty(newPropertyID, newProperty);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AddPropertyActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public void addNewProperty(String newPropertyID, Property newProperty) {
         // TESTING PURPOSES - Refactor  soon and put in Repository or Viewmodel
         propertiesDocumentReference = database.collection("properties").document(newPropertyID);
@@ -339,6 +372,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         propertiesDocumentReference.set(newProperty).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
+                progressDialog.dismissProgressDialog();
                 Toast.makeText(AddPropertyActivity.this, "Property Successfully Added", Toast.LENGTH_SHORT).show();
                 btnAddProperty.setEnabled(true);
                 startActivity(new Intent(AddPropertyActivity.this, LandlordMainActivity.class));

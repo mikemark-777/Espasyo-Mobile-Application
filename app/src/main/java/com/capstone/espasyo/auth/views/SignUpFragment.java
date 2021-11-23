@@ -180,6 +180,8 @@ public class SignUpFragment extends Fragment {
                                                     viewModel.registerLandlord(newLandlord);
                                                 }
                                             }, 4000);
+                                        } else {
+                                            btnSignUp.setEnabled(true);
                                         }
                                     } else if (uRole == 3) {
                                         Student newStudent = new Student("", firstName, lastName, email, password, uRole);
@@ -203,6 +205,8 @@ public class SignUpFragment extends Fragment {
 
                         }
                     });
+                } else {
+                    btnSignUp.setEnabled(true);
                 }
             }
         });

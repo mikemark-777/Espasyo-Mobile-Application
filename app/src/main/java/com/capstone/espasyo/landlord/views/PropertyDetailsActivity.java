@@ -3,7 +3,6 @@ package com.capstone.espasyo.landlord.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.annotation.NonNull;
 
 import android.content.Intent;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
-import com.capstone.espasyo.landlord.adapters.EditRoomAdapter;
 import com.capstone.espasyo.landlord.adapters.RoomAdapter;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.landlord.widgets.RoomRecyclerView;
@@ -34,10 +32,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.core.OrderBy;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PropertyDetailsActivity extends AppCompatActivity implements RoomAdapter.OnRoomListener {
 
@@ -116,7 +112,8 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         btnUploadImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PropertyDetailsActivity.this, UploadPropertyImageActivity.class);
+                Intent intent = new Intent(PropertyDetailsActivity.this, ManagePropertyImageActivity.class);
+                intent.putExtra("property", property);
                 startActivity(intent);
             }
         });

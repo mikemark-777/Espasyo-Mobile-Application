@@ -445,19 +445,8 @@ public class EditPropertyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressDialog.showProgressDialog("Deleting Property...", false);
+                confirmationDialog.cancel();
                 deleteProperty(property.getPropertyID());
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressDialog.dismissProgressDialog();
-                        confirmationDialog.cancel();
-                        Intent intent = new Intent(EditPropertyActivity.this, LandlordMainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();
-                    }
-                }, 4000);
-
             }
         });
 
@@ -525,7 +514,18 @@ public class EditPropertyActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(EditPropertyActivity.this, "Property Successfully Deleted", Toast.LENGTH_SHORT).show();
+                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressDialog.dismissProgressDialog();
+                                    Toast.makeText(EditPropertyActivity.this, "Property Successfully Deleted", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(EditPropertyActivity.this, LandlordMainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }, 4000);
+
                         }
                     }
                 });
