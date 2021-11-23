@@ -79,12 +79,12 @@
                     android:id="@+id/propertyNameDisplay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="Ferdan's Apartment"
                     android:textColor="@color/black"
                     android:textSize="24dp"
-                    android:textStyle="bold"
-                    android:ellipsize="end"
-                    android:maxLines="1"/>
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                         android:text="Php "
                         android:textColor="@color/espasyo_gray_500"
                         android:textSize="18dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/propertyMinimumPriceDisplay"
@@ -134,8 +134,8 @@
                         android:id="@+id/imageView"
                         android:layout_width="20dp"
                         android:layout_height="match_parent"
-                        app:srcCompat="@drawable/icon_house"
-                        android:layout_marginEnd="4dp"/>
+                        android:layout_marginEnd="4dp"
+                        app:srcCompat="@drawable/icon_house" />
 
                     <TextView
                         android:id="@+id/propertyTypeDisplay"
@@ -143,7 +143,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="Apartment"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -155,19 +155,19 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/icon_address"
-                        android:layout_marginEnd="4dp"/>
+                        android:layout_marginEnd="4dp"
+                        android:src="@drawable/icon_address" />
 
                     <TextView
                         android:id="@+id/propertyAddressDisplay"
                         android:layout_width="230dp"
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:text="Don Mariano Marcos, Bayombong, NV"
-                        android:textSize="14sp"
+                        android:layout_weight="1"
                         android:ellipsize="end"
+                        android:gravity="center_vertical"
                         android:maxLines="1"
-                        android:layout_weight="1"/>
+                        android:text="Don Mariano Marcos, Bayombong, NV"
+                        android:textSize="14sp" />
 
                     <ImageButton
                         android:id="@+id/imageButtonViewPropertyOnMap"
@@ -175,8 +175,8 @@
                         android:layout_height="20dp"
                         android:layout_weight="1"
                         android:background="@color/white"
-                        android:src="@drawable/icon_arrow_right"
-                        android:clickable="true"/>
+                        android:clickable="true"
+                        android:src="@drawable/icon_arrow_right" />
 
                 </LinearLayout>
 
@@ -356,9 +356,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:background="#EDEDED"
                 android:orientation="vertical"
-                android:layout_marginTop="12dp"
                 android:padding="16dp">
 
                 <LinearLayout
@@ -370,17 +370,18 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Rooms"
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_weight="1"/>
+                        android:textStyle="bold" />
 
                     <Button
                         android:id="@+id/addRoomButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Add room" />
+                        android:text="Add Room"
+                        android:textAllCaps="false" />
 
                 </LinearLayout>
 
@@ -400,9 +401,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:paddingTop="8dp"
+                    android:gravity="center_vertical|center_horizontal"
                     android:orientation="vertical"
-                    android:gravity="center_vertical|center_horizontal">
+                    android:paddingTop="8dp">
 
                     <TextView
                         android:id="@+id/showAllRooms_propertyDetails"
@@ -410,7 +411,7 @@
                         android:layout_height="wrap_content"
                         android:text="Show all rooms"
                         android:textColor="@color/espasyo_blue_700"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -418,23 +419,45 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:orientation="vertical">
+                android:layout_height="450dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <Button
-                    android:id="@+id/gotoUploadImages"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Upload Property Image"
-                    android:layout_gravity="end"/>
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Images"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/gotoManageImages"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="Manage"
+                        android:textAllCaps="false" />
+
+                </LinearLayout>
+
+                <com.denzcoskun.imageslider.ImageSlider
+                    android:id="@+id/image_slider_propertyDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:layout_marginTop="16dp"
+                    app:iss_selected_dot="@drawable/selected_dot_selector"/>
 
             </LinearLayout>
 
         </LinearLayout>
-
-        <!--  Rooms below -->
-
-
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

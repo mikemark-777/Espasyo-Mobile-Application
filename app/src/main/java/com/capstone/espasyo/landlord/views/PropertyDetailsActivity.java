@@ -17,11 +17,16 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.RoomAdapter;
+import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.landlord.widgets.RoomRecyclerView;
+import com.capstone.espasyo.models.ImageFolder;
 import com.capstone.espasyo.models.Landlord;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.Room;
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,7 +68,13 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     private final String VERIFIED_MESSAGE = "Verified Property";
     private final String LOCKED_MESSAGE = "This property is locked by Admin";
 
-    private Button btnUploadImages;
+    //for property image
+    private ImageFolder propertyImageFolder;
+    private Button btnManageImages;
+    private ImageSlider propertyImageSlider;
+    private CustomProgressDialog progressDialog;
+    private ArrayList<String> downloadedURLs = new ArrayList<>();
+    private ImageView emptyImagesDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +120,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
             }
         });
 
-        btnUploadImages.setOnClickListener(new View.OnClickListener() {
+        btnManageImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PropertyDetailsActivity.this, ManagePropertyImageActivity.class);
@@ -126,6 +137,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         //get data from intent
         Intent intent = getIntent();
         property = intent.getParcelableExtra("property");
+        getImageFolderOf(property);
 
         propertyID = property.getPropertyID();
         String landlordID = property.getOwner();
@@ -215,7 +227,12 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         verificationInfoIcon = findViewById(R.id.verificationInfoIcon);
         verificationInfoMessage = findViewById(R.id.verificationInfoMessage);
         btnAddRoom = findViewById(R.id.addRoomButton);
-        btnUploadImages = findViewById(R.id.gotoUploadImages);
+
+        //for property images
+        btnManageImages = findViewById(R.id.gotoManageImages);
+        propertyImageSlider = findViewById(R.id.image_slider_propertyDetails);
+        progressDialog = new CustomProgressDialog(this);
+        emptyImagesDisplay = findViewById(R.id.emptyImagesDisplay);
     }
 
     public void fetchPropertyRooms() {
@@ -266,24 +283,72 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         propLandlordPhoneNumber.setText("+63" + landlordPhoneNumber);
     }
 
-    // TODO: Handle Activity Life Cycle
-    //propertyDetailActivity Lifecycle -------------------------------------------------------------
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        fetchPropertyRooms();
+    //fetch the imageFolder from the property
+    public void getImageFolderOf(Property property) {
+        String imageFolderID = property.getImageFolder();
+        //will check if the property has imageFolder, if not create an imageFolder
+        if (imageFolderID != null) {
+            DocumentReference imageFolderDocRef = database.collection("imageFolders").document(imageFolderID);
+            progressDialog.showProgressDialog("Loading images...", false);
+            imageFolderDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    propertyImageFolder = documentSnapshot.toObject(ImageFolder.class);
+                    displayImagesFrom(propertyImageFolder);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(PropertyDetailsActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(PropertyDetailsActivity.this, "imageFolder of property is null", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+    //will display images from imageFolder of the property
+    public void displayImagesFrom(ImageFolder imageFolder) {
+        if (imageFolder != null) {
+            downloadedURLs = imageFolder.getImages();
+            ArrayList<SlideModel> imageSlides = new ArrayList<>();
+
+            if (!downloadedURLs.isEmpty()) {
+                //emptyImagesDisplay.setVisibility(View.GONE);
+                for (String url : downloadedURLs) {
+                    imageSlides.add(new SlideModel(url, ScaleTypes.CENTER_INSIDE));
+                }
+                propertyImageSlider.setImageList(imageSlides);
+                progressDialog.dismissProgressDialog();
+            } else {
+                //emptyImagesDisplay.setVisibility(View.VISIBLE);
+                progressDialog.dismissProgressDialog();
+            }
+        } else {
+            Toast.makeText(PropertyDetailsActivity.this, "NULL", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     @Override
     public void onRoomClick(int position) {
         Intent intent = new Intent(PropertyDetailsActivity.this, RoomDetailsActivity.class);
         intent.putExtra("chosenRoom", propertyRooms.get(position));
         startActivity(intent);
+    }
+
+    // TODO: Handle Activity Life Cycle
+    //propertyDetailActivity Lifecycle -------------------------------------------------------------
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        fetchPropertyRooms();
+        getImageFolderOf(property);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
