@@ -118,7 +118,6 @@ public class LoginFragment extends Fragment {
                             });
                         }
 
-
                     } else {
                         navController.navigate(R.id.action_loginFragment_to_emailVerificationFragment);
                     }
