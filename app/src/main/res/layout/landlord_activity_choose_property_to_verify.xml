@@ -6,37 +6,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="0dp"
         android:background="@color/espasyo_blue_200"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".15"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:text="Step 1: "
+            android:text="Verification Request"
+            android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Choose Property you want to be verified"
-            android:textColor="@color/white"
-            android:textSize="14dp" />
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Step 1: "
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose Property you want to be verified"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
+
+        </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/espasyo_blue_100"
+        app:layout_constraintBottom_toTopOf="@+id/propertyRecyclerView_verify"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".02"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.capstone.espasyo.landlord.widgets.PropertyRecyclerView
         android:id="@+id/propertyRecyclerView_verify"
@@ -52,7 +79,7 @@
 
     <include
         android:id="@+id/empty_property_state_dashboardFragment"
-        layout="@layout/landlord_empty_property_recyclerview"
+        layout="@layout/landlord_no_property_to_verifiy_recyclerview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -35,6 +35,7 @@ public class ChangePhoneNumberActivity extends AppCompatActivity {
 
     //landlord object
     private Landlord landlord;
+    private String landlordPhoneNumber;
 
     private TextInputLayout textInputPhoneNumberLayout;
     private TextInputEditText textInputPhoneNumber;
@@ -58,11 +59,21 @@ public class ChangePhoneNumberActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String phoneNumber = textInputPhoneNumber.getText().toString();
-
                 if (isLandlordPhoneNumberValid(phoneNumber)) {
-                    updateLandlordPhoneNumber(landlord, phoneNumber);
-                    Toast.makeText(ChangePhoneNumberActivity.this, "Goods", Toast.LENGTH_SHORT).show();
+                    if(isPasswordChanged(phoneNumber)) {
+                        updateLandlordPhoneNumber(landlord, phoneNumber);
+                    } else {
+                        Toast.makeText(ChangePhoneNumberActivity.this, "Phone number not changed", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 }
+            }
+        });
+
+        btnCancelChangePhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -85,7 +96,7 @@ public class ChangePhoneNumberActivity extends AppCompatActivity {
 
     public void getDataFromIntent(Intent intent) {
         landlord = intent.getParcelableExtra("landlord");
-        String landlordPhoneNumber = landlord.getPhoneNumber();
+        landlordPhoneNumber = landlord.getPhoneNumber();
         textInputPhoneNumber.setText(landlordPhoneNumber);
     }
 
@@ -105,6 +116,15 @@ public class ChangePhoneNumberActivity extends AppCompatActivity {
             return false;
         }
     }
+
+    public boolean isPasswordChanged(String phoneNumber) {
+        if(!phoneNumber.equals(landlordPhoneNumber)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public void updateLandlordPhoneNumber(Landlord landlord, String updatedPhoneNumber) {
         changePhoneNumberProgressBar.setVisibility(View.VISIBLE);

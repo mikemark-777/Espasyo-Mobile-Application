@@ -94,7 +94,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         //will be used to retrieve all verified properties in the Properties Collection
         CollectionReference propertiesCollection = database.collection("properties");
 
-        propertiesCollection.whereEqualTo("isVerified", true)
+        propertiesCollection.whereEqualTo("verified", true)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -102,7 +102,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                         propertyList.clear();
                         for (QueryDocumentSnapshot property : queryDocumentSnapshots) {
                             Property propertyObj = property.toObject(Property.class);
-                            if(propertyObj.isLocked()) {
+                            if(!propertyObj.isLocked()) {
                                 propertyList.add(propertyObj);
                             } else {
                                 Toast.makeText(StudentMainActivity.this, propertyObj.getName() + " is " + propertyObj.isLocked(), Toast.LENGTH_SHORT).show();

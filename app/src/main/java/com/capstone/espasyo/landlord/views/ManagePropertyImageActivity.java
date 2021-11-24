@@ -127,9 +127,11 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
         btnFullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ManagePropertyImageActivity.this, PreviewImageActivity.class);
-                intent.putExtra("previewImage", downloadedURLs.get(imageIndex));
-                startActivity(intent);
+                if (!downloadedURLs.isEmpty()) {
+                    Intent intent = new Intent(ManagePropertyImageActivity.this, PreviewImageActivity.class);
+                    intent.putExtra("previewImage", downloadedURLs.get(imageIndex));
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -188,6 +190,7 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
                 imageSlider.setImageList(imageSlides);
                 progressDialog.dismissProgressDialog();
             } else {
+                imageSlider.setImageList(imageSlides);
                 emptyImagesDisplay.setVisibility(View.VISIBLE);
                 progressDialog.dismissProgressDialog();
             }

@@ -110,7 +110,7 @@ public class ChoosePropertyToVerifyActivity extends AppCompatActivity implements
                         ownedPropertyList.clear();
                         for (QueryDocumentSnapshot property : queryDocumentSnapshots) {
                             Property propertyObj = property.toObject(Property.class);
-                            //will only get properties that are not verified and has verification request attached
+                            //will only get properties that are not verified and has no verification request attached
                             if (!propertyObj.isVerified() && propertyObj.getVerificationID() == null ) {
                                 ownedPropertyList.add(propertyObj);
                             }
