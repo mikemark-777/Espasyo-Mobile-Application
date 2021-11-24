@@ -79,9 +79,9 @@
 
     <ImageView
         android:id="@+id/emptyImagesDisplay"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:src="@drawable/img_property_empty_state"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/img_no_images"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/image_slider"
         app:layout_constraintEnd_toEndOf="parent"

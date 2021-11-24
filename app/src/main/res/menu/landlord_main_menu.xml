@@ -14,7 +14,7 @@
 
         <item
             android:id="@+id/nav_verification"
-            android:icon="@drawable/icon_verification"
+            android:icon="@drawable/icon_verification_badge"
             android:title="Verification" />
     </group>
 

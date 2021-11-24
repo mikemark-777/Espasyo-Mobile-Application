@@ -190,7 +190,7 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
                 imageSlider.setImageList(imageSlides);
                 progressDialog.dismissProgressDialog();
             } else {
-                imageSlider.setImageList(imageSlides);
+                //imageSlider.setImageList(imageSlides);
                 emptyImagesDisplay.setVisibility(View.VISIBLE);
                 progressDialog.dismissProgressDialog();
             }
