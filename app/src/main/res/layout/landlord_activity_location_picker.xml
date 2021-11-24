@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".landlord.views.LocationPickerActivity">
 
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/locationSearchView"
         android:layout_width="250dp"
@@ -27,7 +26,8 @@
         android:id="@+id/mapFragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent=".935"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -35,16 +35,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/FABGetCurrentLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="88dp"
-        android:contentDescription="get user location"
+        android:layout_marginBottom="100dp"
         android:backgroundTint="@color/espasyo_blue_200"
+        android:contentDescription="get user location"
         android:src="@drawable/icon_mylocation"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"

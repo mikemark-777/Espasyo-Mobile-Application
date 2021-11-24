@@ -27,9 +27,11 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.capstone.espasyo.landlord.LandlordMainActivity;
+import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.student.StudentMainActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,6 +42,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class LoginFragment extends Fragment {
 
+    private FirebaseConnection firebaseConnection;
+    private FirebaseAuth firebaseAuth;
     private FirebaseFirestore database;
     private DocumentReference userReference;
 
@@ -48,6 +52,7 @@ public class LoginFragment extends Fragment {
 
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String USER_ROLE = "userRole";
+    public static final String RESET_PASSWORD = "resetPassword";
     private int userRole;
 
     private final int ADMIN_CODE = 1;
@@ -57,7 +62,7 @@ public class LoginFragment extends Fragment {
     private TextInputLayout textInputEmailLayout, textInputPasswordLayout;
     private TextInputEditText textInputEmail, textInputPassword;
     private Button btnLogin;
-    private TextView gotoSignUp;
+    private TextView gotoSignUp, btnForgotPassword;
     private ProgressBar loginProgressBar;
 
 
@@ -66,7 +71,9 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-        database = FirebaseFirestore.getInstance();
+        firebaseConnection = FirebaseConnection.getInstance();
+        firebaseAuth = firebaseConnection.getFirebaseAuthInstance();
+        database = firebaseConnection.getFirebaseFirestoreInstance();
 
         viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
                 .getInstance(getActivity().getApplication())).get(AuthViewModel.class);
@@ -117,14 +124,12 @@ public class LoginFragment extends Fragment {
                                 }
                             });
                         }
-
                     } else {
                         navController.navigate(R.id.action_loginFragment_to_emailVerificationFragment);
                     }
                 }
             }
         });
-
     }
 
     @Override
@@ -138,24 +143,21 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // TextInputLayouts
-        textInputEmailLayout = view.findViewById(R.id.text_input_email_layout_login);
-        textInputPasswordLayout = view.findViewById(R.id.text_input_password_layout_login);
-
-        //TextInputEditTexts
-        textInputEmail = view.findViewById(R.id.text_input_email_login);
-        textInputPassword = view.findViewById(R.id.text_input_password_login);
-
-        gotoSignUp = view.findViewById(R.id.gotoSignUp);
-        btnLogin = view.findViewById(R.id.btnLogin);
-        navController = Navigation.findNavController(view);
-        loginProgressBar = view.findViewById(R.id.loginProgressBar);
+        //initialize views
+        initializeViews(view);
 
         //Navigate to Signup Fragment
         gotoSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navController.navigate(R.id.action_loginFragment_to_signUpFragment);
+            }
+        });
+
+        btnForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment);
             }
         });
 
@@ -167,16 +169,27 @@ public class LoginFragment extends Fragment {
                 String txtPassword = textInputPassword.getText().toString().trim();
 
                 if (areInputsValid(txtEmail, txtPassword)) {
-
-                    loginProgressBar.setVisibility(View.VISIBLE);
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            loginProgressBar.setVisibility(View.INVISIBLE);
-                            viewModel.signIn(txtEmail, txtPassword);
-                            btnLogin.setEnabled(true);
-                        }
-                    }, 4000);
+                    if(getDidUserResetsPassword()) {
+                        loginProgressBar.setVisibility(View.VISIBLE);
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                loginProgressBar.setVisibility(View.INVISIBLE);
+                                viewModel.loginNewlySetPassword(txtEmail, txtPassword);
+                                btnLogin.setEnabled(true);
+                            }
+                        }, 4000);
+                    } else {
+                        loginProgressBar.setVisibility(View.VISIBLE);
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                loginProgressBar.setVisibility(View.INVISIBLE);
+                                viewModel.signIn(txtEmail, txtPassword);
+                                btnLogin.setEnabled(true);
+                            }
+                        }, 4000);
+                    }
 
                 } else {
                     Toast.makeText(getActivity(), "Please fill out everything", Toast.LENGTH_SHORT).show();
@@ -215,6 +228,23 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    public void initializeViews(View view) {
+        // TextInputLayouts
+        textInputEmailLayout = view.findViewById(R.id.text_input_email_layout_login);
+        textInputPasswordLayout = view.findViewById(R.id.text_input_password_layout_login);
+
+        //TextInputEditTexts
+        textInputEmail = view.findViewById(R.id.text_input_email_login);
+        textInputPassword = view.findViewById(R.id.text_input_password_login);
+
+        gotoSignUp = view.findViewById(R.id.gotoSignUp);
+        btnForgotPassword = view.findViewById(R.id.btnForgotPassword);
+        btnLogin = view.findViewById(R.id.btnLogin);
+        navController = Navigation.findNavController(view);
+        loginProgressBar = view.findViewById(R.id.loginProgressBar);
+
+    }
+
     public boolean areInputsValid(String email, String password) {
 
         boolean emailResult = isEmailValid(email);
@@ -244,5 +274,11 @@ public class LoginFragment extends Fragment {
         return userRole;
     }
 
+    public boolean getDidUserResetsPassword() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        boolean didReset = sharedPreferences.getBoolean(RESET_PASSWORD, false);
+
+        return didReset;
+    }
 
 }

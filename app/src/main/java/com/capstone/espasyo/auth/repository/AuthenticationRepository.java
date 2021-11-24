@@ -1,6 +1,8 @@
 package com.capstone.espasyo.auth.repository;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,11 +21,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 public class AuthenticationRepository {
 
@@ -35,6 +41,10 @@ public class AuthenticationRepository {
     private DocumentReference dbUsers;
     private DocumentReference dbStudents;
     private DocumentReference dbLandlords;
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String USER_ROLE = "userRole";
+    public static final String RESET_PASSWORD = "resetPassword";
 
     public AuthenticationRepository(Application application) {
         this.application = application;
@@ -124,6 +134,21 @@ public class AuthenticationRepository {
         });
     }
 
+    public void loginNewlySetPassword(String email, String password) {
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    updateNewlySetPassword(email, password);
+                    firebaseUserMutableLiveData.postValue(firebaseAuth.getCurrentUser());
+                } else {
+                    Toast.makeText(application, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
     public void logout() {
         firebaseAuth.signOut();
         userLoggedMutableLiveData.postValue(true);
@@ -181,6 +206,20 @@ public class AuthenticationRepository {
         });
     }
 
+    public void sendResetPasswordLink(String email) {
+        firebaseAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(application, "Link has been sent to your email", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(application, e.toString() , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     public void sendEmailVerification() {
         firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -271,6 +310,96 @@ public class AuthenticationRepository {
                 //will not give notification because the updateEmailAddress function will do it
             }
         });
+    }
+
+    public void updateNewlySetPassword(String email, String newPassword) {
+        CollectionReference usersCollectionRef = database.collection("users");
+
+        usersCollectionRef.whereEqualTo("email", email)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                ArrayList<User> users = new ArrayList<>();
+                for(DocumentSnapshot userSnapshot : queryDocumentSnapshots) {
+                    User user = userSnapshot.toObject(User.class);
+                    users.add(user);
+                }
+                User user = users.get(0);
+                user.setPassword(newPassword);
+                updateUserPasswordInUsersCollection(user);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(application, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void updateUserPasswordInUsersCollection(User updatedUser) {
+        String userID = updatedUser.getUID();
+        int userRole = updatedUser.getUserRole();
+
+        DocumentReference userDocRef = database.collection("users").document(userID);
+        userDocRef.set(updatedUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                if(userRole == 2) {
+                    updateUserPasswordInLandlordCollection(updatedUser);
+                } else if(userRole == 3) {
+                    updateUserPasswordInStudentCollection(updatedUser);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(application, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void updateUserPasswordInLandlordCollection(User updatedUser) {
+        String landlordID = updatedUser.getUID();
+        String newPassword = updatedUser.getPassword();
+        DocumentReference landlordDocRef = database.collection("landlords").document(landlordID);
+        landlordDocRef.update("password", newPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                removeResetPasswordPreference();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(application, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    public void updateUserPasswordInStudentCollection(User updatedUser) {
+        String studentID = updatedUser.getUID();
+        String newPassword = updatedUser.getPassword();
+        DocumentReference studentDocRef = database.collection("student").document(studentID);
+        studentDocRef.update("password", newPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                removeResetPasswordPreference();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(application, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //remove USER_ROLE in sharedPreferences
+    public void removeResetPasswordPreference() {
+        SharedPreferences sharedPreferences = application.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.remove(RESET_PASSWORD);
+        editor.apply();
     }
 
 }
