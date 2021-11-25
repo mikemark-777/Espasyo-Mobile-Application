@@ -30,7 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class ChangePasswordActivity extends AppCompatActivity {
+public class LandlordChangePasswordActivity extends AppCompatActivity {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth firebaseAuth;
@@ -253,7 +253,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 changePasswordProgressBar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(ChangePasswordActivity.this, "Password Successfully Updated", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LandlordChangePasswordActivity.this, "Password Successfully Updated", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
                         }, 3000);
@@ -264,7 +264,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 changePasswordProgressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(ChangePasswordActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LandlordChangePasswordActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }

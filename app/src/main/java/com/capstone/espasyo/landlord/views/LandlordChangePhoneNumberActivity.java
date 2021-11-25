@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -16,17 +15,15 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Landlord;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class ChangePhoneNumberActivity extends AppCompatActivity {
+public class LandlordChangePhoneNumberActivity extends AppCompatActivity {
 
 
     private FirebaseConnection firebaseConnection;
@@ -63,7 +60,7 @@ public class ChangePhoneNumberActivity extends AppCompatActivity {
                     if(isPasswordChanged(phoneNumber)) {
                         updateLandlordPhoneNumber(landlord, phoneNumber);
                     } else {
-                        Toast.makeText(ChangePhoneNumberActivity.this, "Phone number not changed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LandlordChangePhoneNumberActivity.this, "Phone number not changed", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }
@@ -139,7 +136,7 @@ public class ChangePhoneNumberActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         changePhoneNumberProgressBar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(ChangePhoneNumberActivity.this, "Phone Number Successfully Updated", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LandlordChangePhoneNumberActivity.this, "Phone Number Successfully Updated", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }, 3000);
@@ -147,7 +144,7 @@ public class ChangePhoneNumberActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ChangePhoneNumberActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LandlordChangePhoneNumberActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }

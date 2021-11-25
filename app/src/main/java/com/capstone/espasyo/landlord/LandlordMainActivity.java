@@ -26,7 +26,7 @@ import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.views.DashboardFragment;
 import com.capstone.espasyo.landlord.views.ManagePropertyFragment;
-import com.capstone.espasyo.landlord.views.AccountActivity;
+import com.capstone.espasyo.landlord.views.LandlordAccountActivity;
 import com.capstone.espasyo.landlord.views.VerificationFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -147,7 +147,7 @@ public class LandlordMainActivity extends AppCompatActivity implements Navigatio
                 //go to landlord dashboard
                 Log.i("MENU_DRAWER_TAG", "GOTO SETTINGS");
                 //Toast.makeText(this, "Go to Settings", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(LandlordMainActivity.this, AccountActivity.class));
+                startActivity(new Intent(LandlordMainActivity.this, LandlordAccountActivity.class));
                 drawer.closeDrawer(GravityCompat.START);
                 break;
 

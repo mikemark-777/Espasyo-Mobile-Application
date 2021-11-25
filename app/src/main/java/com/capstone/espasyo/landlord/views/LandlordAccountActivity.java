@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.MainActivity;
 import com.capstone.espasyo.R;
-import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Landlord;
@@ -45,15 +44,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class AccountActivity extends AppCompatActivity {
-
-    //TINANGGAL KO NA
+public class LandlordAccountActivity extends AppCompatActivity {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore database;
     private FirebaseStorage storage;
 
+    //landlord object
     private Landlord landlord;
 
     private ImageView exitLandlordAccountPage;
@@ -68,6 +66,7 @@ public class AccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.landlord_activity_account);
+
         //initialize firebase
         firebaseConnection = FirebaseConnection.getInstance();
         firebaseAuth = firebaseConnection.getFirebaseAuthInstance();
@@ -80,7 +79,7 @@ public class AccountActivity extends AppCompatActivity {
         btnChangeName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountActivity.this, ChangeNameActivity.class);
+                Intent intent = new Intent(LandlordAccountActivity.this, LandlordChangeNameActivity.class);
                 intent.putExtra("landlord", landlord);
                 startActivity(intent);
             }
@@ -89,7 +88,7 @@ public class AccountActivity extends AppCompatActivity {
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountActivity.this, ChangePasswordActivity.class);
+                Intent intent = new Intent(LandlordAccountActivity.this, LandlordChangePasswordActivity.class);
                 intent.putExtra("landlord", landlord);
                 startActivity(intent);
             }
@@ -98,7 +97,7 @@ public class AccountActivity extends AppCompatActivity {
         btnChangePhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountActivity.this, ChangePhoneNumberActivity.class);
+                Intent intent = new Intent(LandlordAccountActivity.this, LandlordChangePhoneNumberActivity.class);
                 intent.putExtra("landlord", landlord);
                 startActivity(intent);
             }
@@ -134,7 +133,7 @@ public class AccountActivity extends AppCompatActivity {
         btnDeleteAccount = findViewById(R.id.btnDeleteAccount_landlordAccount);
 
         //progress bars
-        progressDialog = new CustomProgressDialog(AccountActivity.this);
+        progressDialog = new CustomProgressDialog(LandlordAccountActivity.this);
     }
 
 
@@ -152,7 +151,7 @@ public class AccountActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LandlordAccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -200,7 +199,7 @@ public class AccountActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LandlordAccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -225,7 +224,7 @@ public class AccountActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LandlordAccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -248,7 +247,7 @@ public class AccountActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LandlordAccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -271,7 +270,7 @@ public class AccountActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LandlordAccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -306,8 +305,8 @@ public class AccountActivity extends AppCompatActivity {
                                                 public void run() {
                                                     progressDialog.dismissProgressDialog();
                                                     removeUserRolePreference();
-                                                    Toast.makeText(AccountActivity.this, "Account Successfully Deleted", Toast.LENGTH_SHORT).show();
-                                                    Intent intent = new Intent(AccountActivity.this, MainActivity.class);
+                                                    Toast.makeText(LandlordAccountActivity.this, "Account Successfully Deleted", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(LandlordAccountActivity.this, MainActivity.class);
                                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                     startActivity(intent);
                                                     finish();
@@ -318,7 +317,7 @@ public class AccountActivity extends AppCompatActivity {
                                 }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(AccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LandlordAccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -326,11 +325,11 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     public void enterPasswordToConfirmDeletAccount() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(AccountActivity.this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LandlordAccountActivity.this);
         alertDialog.setTitle("Enter Password to Confirm");
         alertDialog.setMessage("Enter Password");
 
-        final EditText paswordInput = new EditText(AccountActivity.this);
+        final EditText paswordInput = new EditText(LandlordAccountActivity.this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(20,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         paswordInput.setLayoutParams(lp);
@@ -342,7 +341,7 @@ public class AccountActivity extends AppCompatActivity {
                         if (paswordInput.getText().toString().equals(landlord.getPassword())) {
                             deleteAccount();
                         } else {
-                            Toast.makeText(AccountActivity.this, "INCORRECT", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LandlordAccountActivity.this, "INCORRECT", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

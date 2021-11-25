@@ -18,19 +18,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
         <activity
+            android:name=".student.views.StudentChangePasswordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".student.views.StudentChangeNameActivity"
+            android:exported="true" />
+        <activity
             android:name=".landlord.views.UploadPropertyImageActivity"
             android:exported="true" />
         <activity
             android:name=".landlord.views.ManagePropertyImageActivity"
             android:exported="true" />
         <activity
-            android:name=".landlord.views.ChangePhoneNumberActivity"
+            android:name=".landlord.views.LandlordChangePhoneNumberActivity"
             android:exported="true" />
         <activity
-            android:name=".landlord.views.ChangePasswordActivity"
+            android:name=".landlord.views.LandlordChangePasswordActivity"
             android:exported="true" />
         <activity
-            android:name=".landlord.views.ChangeNameActivity"
+            android:name=".landlord.views.LandlordChangeNameActivity"
             android:exported="true" />
         <activity
             android:name=".landlord.views.ConfirmReuploadBusinessPermitImageActivity"
@@ -109,7 +115,7 @@
             android:name=".landlord.views.RoomDetailsActivity"
             android:exported="true" />
         <activity
-            android:name=".landlord.views.AccountActivity"
+            android:name=".landlord.views.LandlordAccountActivity"
             android:exported="true" />
         <activity
             android:name=".landlord.views.ShowAllRoomsActivity"
@@ -150,7 +156,7 @@
             android:name=".student.StudentMainActivity"
             android:exported="true" />
         <activity
-            android:name=".student.views.ProfileActivity"
+            android:name=".student.views.StudentAccountActivity"
             android:exported="true" />
         <activity
             android:name=".student.views.MapActivity"

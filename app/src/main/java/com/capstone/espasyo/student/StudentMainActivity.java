@@ -21,7 +21,7 @@ import com.capstone.espasyo.student.widgets.PropertyRecyclerView;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.student.repository.FirebaseConnection;
 import com.capstone.espasyo.student.views.MapActivity;
-import com.capstone.espasyo.student.views.ProfileActivity;
+import com.capstone.espasyo.student.views.StudentAccountActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -130,7 +130,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                             finish();
                             return true;
                         case R.id.Profile:
-                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                            startActivity(new Intent(getApplicationContext(), StudentAccountActivity.class));
                             overridePendingTransition(0, 0);
                             finish();
                             return true;

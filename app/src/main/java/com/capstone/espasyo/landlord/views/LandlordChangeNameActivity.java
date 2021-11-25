@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class ChangeNameActivity extends AppCompatActivity {
+public class LandlordChangeNameActivity extends AppCompatActivity {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth firebaseAuth;
@@ -68,11 +68,11 @@ public class ChangeNameActivity extends AppCompatActivity {
                         landlord.setLastName(lName);
                         updateName(landlord);
                     } else {
-                        Toast.makeText(ChangeNameActivity.this, "Nothing to change", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LandlordChangeNameActivity.this, "Nothing to change", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 } else {
-                    Toast.makeText(ChangeNameActivity.this, "Inputs Invalid", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LandlordChangeNameActivity.this, "Inputs Invalid", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -175,7 +175,7 @@ public class ChangeNameActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         landlordChangeNameProgressBar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(ChangeNameActivity.this, "Name Successfully Updated", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LandlordChangeNameActivity.this, "Name Successfully Updated", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }, 3000);
@@ -184,7 +184,7 @@ public class ChangeNameActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 landlordChangeNameProgressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(ChangeNameActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LandlordChangeNameActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
