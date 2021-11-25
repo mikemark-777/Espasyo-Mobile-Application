@@ -148,7 +148,6 @@ public class AuthenticationRepository {
         });
     }
 
-
     public void logout() {
         firebaseAuth.signOut();
         userLoggedMutableLiveData.postValue(true);
@@ -191,8 +190,6 @@ public class AuthenticationRepository {
                                                 }
                                             }
                                         });
-
-                                        //TODO: Must update the email in the Firestore database as well
                                     }
                                 }
                             });
@@ -375,7 +372,6 @@ public class AuthenticationRepository {
         });
     }
 
-
     public void updateUserPasswordInStudentCollection(User updatedUser) {
         String studentID = updatedUser.getUID();
         String newPassword = updatedUser.getPassword();
@@ -393,7 +389,7 @@ public class AuthenticationRepository {
         });
     }
 
-    //remove USER_ROLE in sharedPreferences
+    //remove RESET_PASSWORD in sharedPreferences
     public void removeResetPasswordPreference() {
         SharedPreferences sharedPreferences = application.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

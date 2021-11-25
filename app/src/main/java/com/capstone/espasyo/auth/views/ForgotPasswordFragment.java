@@ -80,10 +80,11 @@ public class ForgotPasswordFragment extends Fragment {
                 String email = textInputEmail.getText().toString();
                 if(isEmailValid(email)) {
                     btnSendLink.setEnabled(false);
+                    resetPasswordProgressBar.setVisibility(View.VISIBLE);
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            resetPasswordProgressBar.setVisibility(View.VISIBLE);
+                            resetPasswordProgressBar.setVisibility(View.INVISIBLE);
                             viewModel.sendResetPasswordLink(email);
                             saveDidResetPassword(true);
                             navController.navigate(R.id.action_forgotPasswordFragment_to_loginFragment);
@@ -105,7 +106,7 @@ public class ForgotPasswordFragment extends Fragment {
     }
 
     // --------------------------------------------  FUNCTIONS  -------------------------------------------------------//
-    // ------ input validations -------------------------------
+
 
     public void initializeViews(View view) {
         textInputEmailLayout = view.findViewById(R.id.text_input_email_layout_resetPassword);
@@ -115,8 +116,9 @@ public class ForgotPasswordFragment extends Fragment {
         btnCancelResetPassword = view.findViewById(R.id.btnCancelResetPassword);
         resetPasswordProgressBar = view.findViewById(R.id.resetPasswordProgressBar);
         navController = Navigation.findNavController(view);
-
     }
+
+    // ------ input validations -------------------------------
 
     private boolean isEmailValid(String email) {
         if (!email.isEmpty()) {

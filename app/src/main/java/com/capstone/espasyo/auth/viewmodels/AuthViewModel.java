@@ -45,7 +45,7 @@ public class AuthViewModel extends AndroidViewModel {
         repository.registerStudent(newStudent);
     }
 
-    public void signIn(String email, String password) {
+    public void login(String email, String password) {
         repository.login(email, password);
     }
 
@@ -64,6 +64,5 @@ public class AuthViewModel extends AndroidViewModel {
     public void sendResetPasswordLink(String email) {
         repository.sendResetPasswordLink(email);
     }
-
 
 }

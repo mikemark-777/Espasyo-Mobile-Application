@@ -185,7 +185,7 @@ public class LoginFragment extends Fragment {
                             @Override
                             public void run() {
                                 loginProgressBar.setVisibility(View.INVISIBLE);
-                                viewModel.signIn(txtEmail, txtPassword);
+                                viewModel.login(txtEmail, txtPassword);
                                 btnLogin.setEnabled(true);
                             }
                         }, 4000);
