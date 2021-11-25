@@ -63,10 +63,10 @@ public class LandlordChangeNameActivity extends AppCompatActivity {
                 if (areInputsValid(fName, lName)) {
                     //check if has the same input as before
                     if (isNameChanged(firstName, lastName, fName, lName)) {
-                        //updated name in admin object
+                        //updated name in landlord object
                         landlord.setFirstName(fName);
                         landlord.setLastName(lName);
-                        updateName(landlord);
+                        updateLandlordName(landlord);
                     } else {
                         Toast.makeText(LandlordChangeNameActivity.this, "Nothing to change", Toast.LENGTH_SHORT).show();
                         finish();
@@ -162,13 +162,13 @@ public class LandlordChangeNameActivity extends AppCompatActivity {
         return !currentFirstName.equals(newFirstName) || !currentLastName.equals(newLastName);
     }
 
-    public void updateName(Landlord updatedLandlord) {
+    public void updateLandlordName(Landlord updatedLandlord) {
         landlordChangeNameProgressBar.setVisibility(View.VISIBLE);
-        String landlordID = landlord.getLandlordID();
-        DocumentReference adminDocRef = database.collection("landlords").document(landlordID);
+        String landlordID = updatedLandlord.getLandlordID();
+        DocumentReference landlordDocRef = database.collection("landlords").document(landlordID);
 
-        //update name in  users collection
-        adminDocRef.set(updatedLandlord).addOnSuccessListener(new OnSuccessListener<Void>() {
+        //update name in  landlords collection
+        landlordDocRef.set(updatedLandlord).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -188,4 +188,5 @@ public class LandlordChangeNameActivity extends AppCompatActivity {
             }
         });
     }
+
 }

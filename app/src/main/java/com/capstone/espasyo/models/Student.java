@@ -1,6 +1,9 @@
 package com.capstone.espasyo.models;
 
-public class Student {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Student implements Parcelable {
 
     private String studentID;
     private String firstName;
@@ -21,6 +24,27 @@ public class Student {
         this.password = password;
         this.userRole = userRole;
     }
+
+    protected Student(Parcel in) {
+        studentID = in.readString();
+        firstName = in.readString();
+        lastName = in.readString();
+        email = in.readString();
+        password = in.readString();
+        userRole = in.readInt();
+    }
+
+    public static final Creator<Student> CREATOR = new Creator<Student>() {
+        @Override
+        public Student createFromParcel(Parcel in) {
+            return new Student(in);
+        }
+
+        @Override
+        public Student[] newArray(int size) {
+            return new Student[size];
+        }
+    };
 
     public String getStudentID() {
         return studentID;
@@ -68,5 +92,20 @@ public class Student {
 
     public void setUserRole(int userRole) {
         this.userRole = userRole;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(studentID);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(email);
+        dest.writeString(password);
+        dest.writeInt(userRole);
     }
 }

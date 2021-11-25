@@ -69,13 +69,13 @@ public class StudentAccountActivity extends AppCompatActivity {
 
         bottomNavigationView.setSelectedItemId(R.id.Profile);
         bottomNavigationView.setOnItemSelectedListener(navListener);
+
         btnChangeName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(StudentAccountActivity.this, "Change Name", Toast.LENGTH_SHORT).show();
-               /* Intent intent = new Intent(StudentAccountActivity.this, ChangeNameActivity.class);
+                Intent intent = new Intent(StudentAccountActivity.this, StudentChangeNameActivity.class);
                 intent.putExtra("student", student);
-                startActivity(intent);*/
+                startActivity(intent);
             }
         });
 
@@ -195,5 +195,11 @@ public class StudentAccountActivity extends AppCompatActivity {
 
         editor.remove(USER_ROLE);
         editor.apply();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        getStudentAccountData(); //must implement result launcher
     }
 }
