@@ -61,6 +61,7 @@ public class LandlordChangePhoneNumberActivity extends AppCompatActivity {
                         updateLandlordPhoneNumber(landlord, phoneNumber);
                     } else {
                         Toast.makeText(LandlordChangePhoneNumberActivity.this, "Phone number not changed", Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_CANCELED);
                         finish();
                     }
                 }
@@ -70,6 +71,7 @@ public class LandlordChangePhoneNumberActivity extends AppCompatActivity {
         btnCancelChangePhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_CANCELED);
                 finish();
             }
         });
@@ -137,6 +139,7 @@ public class LandlordChangePhoneNumberActivity extends AppCompatActivity {
                     public void run() {
                         changePhoneNumberProgressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(LandlordChangePhoneNumberActivity.this, "Phone Number Successfully Updated", Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
                         finish();
                     }
                 }, 3000);

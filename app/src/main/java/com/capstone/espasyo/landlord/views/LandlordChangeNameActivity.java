@@ -69,6 +69,7 @@ public class LandlordChangeNameActivity extends AppCompatActivity {
                         updateLandlordName(landlord);
                     } else {
                         Toast.makeText(LandlordChangeNameActivity.this, "Nothing to change", Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_CANCELED);
                         finish();
                     }
                 } else {
@@ -80,6 +81,7 @@ public class LandlordChangeNameActivity extends AppCompatActivity {
         btnCancelChangeName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_CANCELED);
                 finish();
             }
         });
@@ -176,6 +178,7 @@ public class LandlordChangeNameActivity extends AppCompatActivity {
                     public void run() {
                         landlordChangeNameProgressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(LandlordChangeNameActivity.this, "Name Successfully Updated", Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
                         finish();
                     }
                 }, 3000);

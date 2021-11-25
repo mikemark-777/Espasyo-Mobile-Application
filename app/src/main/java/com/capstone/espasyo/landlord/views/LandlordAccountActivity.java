@@ -1,10 +1,15 @@
 package com.capstone.espasyo.landlord.views;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -66,6 +71,10 @@ public class LandlordAccountActivity extends AppCompatActivity {
     public final String SHARED_PREFS = "sharedPrefs";
     public final String USER_ROLE = "userRole";
 
+    private ActivityResultLauncher<Intent> ChangeNameActivityResultLauncher;
+    private ActivityResultLauncher<Intent> ChangePasswordActivityResultLauncher;
+    private ActivityResultLauncher<Intent> ChangePhoneNumberActivityResultLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +94,7 @@ public class LandlordAccountActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LandlordAccountActivity.this, LandlordChangeNameActivity.class);
                 intent.putExtra("landlord", landlord);
-                startActivity(intent);
+                ChangeNameActivityResultLauncher.launch(intent);
             }
         });
 
@@ -94,7 +103,7 @@ public class LandlordAccountActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LandlordAccountActivity.this, LandlordChangePasswordActivity.class);
                 intent.putExtra("landlord", landlord);
-                startActivity(intent);
+                ChangePasswordActivityResultLauncher.launch(intent);
             }
         });
 
@@ -103,7 +112,7 @@ public class LandlordAccountActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LandlordAccountActivity.this, LandlordChangePhoneNumberActivity.class);
                 intent.putExtra("landlord", landlord);
-                startActivity(intent);
+                ChangePhoneNumberActivityResultLauncher.launch(intent);
             }
         });
 
@@ -120,6 +129,42 @@ public class LandlordAccountActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //will handle the result if the admin has reset his name or not
+        ChangeNameActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            getLandlordAccountData();
+                        }
+                    }
+                });
+
+        //will handle the result if the admin has reset his password or not
+        ChangePasswordActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            getLandlordAccountData();
+                        }
+                    }
+                });
+
+        //will handle the result if the admin has reset his password or not
+        ChangePhoneNumberActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            getLandlordAccountData();
+                        }
+                    }
+                });
 
     }
 
@@ -139,7 +184,6 @@ public class LandlordAccountActivity extends AppCompatActivity {
         //progress bars
         progressDialog = new CustomProgressDialog(LandlordAccountActivity.this);
     }
-
 
     public void getLandlordAccountData() {
 
