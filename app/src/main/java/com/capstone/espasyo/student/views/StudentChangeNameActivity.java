@@ -83,6 +83,7 @@ public class StudentChangeNameActivity extends AppCompatActivity {
         btnCancelChangeName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_CANCELED);
                 finish();
             }
         });
@@ -179,6 +180,7 @@ public class StudentChangeNameActivity extends AppCompatActivity {
                     public void run() {
                         studentChangeNameProgressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(StudentChangeNameActivity.this, "Name Successfully Updated", Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
                         finish();
                     }
                 }, 3000);

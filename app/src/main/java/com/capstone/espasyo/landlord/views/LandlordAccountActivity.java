@@ -25,7 +25,9 @@ import com.capstone.espasyo.MainActivity;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.models.ImageFolder;
 import com.capstone.espasyo.models.Landlord;
+import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,6 +45,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
 
 public class LandlordAccountActivity extends AppCompatActivity {
 
@@ -165,6 +169,67 @@ public class LandlordAccountActivity extends AppCompatActivity {
     }
 
     //=============== DELETE ACCOUNT ========================
+
+    public void showConfirmationDeleteDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.landlord_delete_account_confirmation_dialog, null);
+
+        Button btnConfirmDelete = view.findViewById(R.id.btnConfirmDeleteProperty);
+        Button btnCancelDelete = view.findViewById(R.id.btnCancelDeleteProperty);
+
+        AlertDialog confirmationDialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        btnConfirmDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmationDialog.cancel();
+                enterPasswordToConfirmDeleteAccount();
+            }
+        });
+
+        btnCancelDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmationDialog.cancel();
+            }
+        });
+
+        confirmationDialog.show();
+    }
+
+    public void enterPasswordToConfirmDeleteAccount() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LandlordAccountActivity.this);
+        alertDialog.setTitle("Delete Account");
+        alertDialog.setMessage("Enter Password to delete");
+
+        final EditText paswordInput = new EditText(LandlordAccountActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(20, LinearLayout.LayoutParams.MATCH_PARENT);
+        paswordInput.setLayoutParams(lp);
+        alertDialog.setView(paswordInput);
+
+        alertDialog.setPositiveButton("Delete",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (paswordInput.getText().toString().equals(landlord.getPassword())) {
+                            deleteAccount();
+                        } else {
+                            Toast.makeText(LandlordAccountActivity.this, "INCORRECT", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
+    }
+
     public void deleteAccount() {
 
         String landlordID = landlord.getLandlordID();
@@ -241,7 +306,7 @@ public class LandlordAccountActivity extends AppCompatActivity {
                                         .document(verificationObj.getId())
                                         .delete();
                             }
-                            deleteProperties(landlordID);
+                            deleteImageFolder(landlordID);
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -250,6 +315,51 @@ public class LandlordAccountActivity extends AppCompatActivity {
                 Toast.makeText(LandlordAccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void deleteImageFolder(String landlordID) {
+
+        //first is to get the property and get the imageFolder
+        CollectionReference propertyCollectionRef = database.collection("properties");
+        propertyCollectionRef.whereEqualTo("owner", landlordID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot propertySnapshot : queryDocumentSnapshots) {
+                            Property propertyObj = propertySnapshot.toObject(Property.class);
+                            String imageFolderID = propertyObj.getImageFolder();
+                            DocumentReference imageFolderDocRef = database.collection("imageFolders").document(imageFolderID);
+                            imageFolderDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    ImageFolder imageFolder = documentSnapshot.toObject(ImageFolder.class);
+                                    ArrayList<String> imageURLs = imageFolder.getImages();
+                                    for(String url : imageURLs) {
+                                        StorageReference imageStorageRef = storage.getReferenceFromUrl(url);
+                                        imageStorageRef.delete();
+                                    }
+                                    imageFolderDocRef.delete();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(LandlordAccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(LandlordAccountActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //next is to delete the imageFolder itself
+        //delete the properties
+        deleteProperties(landlordID);
     }
 
     public void deleteProperties(String landlordID) {
@@ -322,67 +432,6 @@ public class LandlordAccountActivity extends AppCompatActivity {
                         });
                     }
                 });
-    }
-
-    public void enterPasswordToConfirmDeletAccount() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LandlordAccountActivity.this);
-        alertDialog.setTitle("Enter Password to Confirm");
-        alertDialog.setMessage("Enter Password");
-
-        final EditText paswordInput = new EditText(LandlordAccountActivity.this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(20,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        paswordInput.setLayoutParams(lp);
-        alertDialog.setView(paswordInput);
-
-        alertDialog.setPositiveButton("Delete",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (paswordInput.getText().toString().equals(landlord.getPassword())) {
-                            deleteAccount();
-                        } else {
-                            Toast.makeText(LandlordAccountActivity.this, "INCORRECT", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-        alertDialog.setNegativeButton("NO",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-        alertDialog.show();
-    }
-
-    public void showConfirmationDeleteDialog() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.landlord_delete_account_confirmation_dialog, null);
-
-        Button btnConfirmDelete = view.findViewById(R.id.btnConfirmDeleteProperty);
-        Button btnCancelDelete = view.findViewById(R.id.btnCancelDeleteProperty);
-
-        AlertDialog confirmationDialog = new AlertDialog.Builder(this)
-                .setView(view)
-                .create();
-
-        btnConfirmDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmationDialog.cancel();
-                enterPasswordToConfirmDeletAccount();
-            }
-        });
-
-        btnCancelDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmationDialog.cancel();
-            }
-        });
-
-        confirmationDialog.show();
     }
     //================================================================================================================
 

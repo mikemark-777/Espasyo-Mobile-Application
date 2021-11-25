@@ -12,7 +12,7 @@ import com.capstone.espasyo.student.StudentMainActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class MapActivity extends AppCompatActivity {
+public class StudentMapActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +41,11 @@ public class MapActivity extends AppCompatActivity {
                             finish();
                             return true;
                         case R.id.Map:
-                            startActivity(new Intent(getApplicationContext(), MapActivity.class));
+                            startActivity(new Intent(getApplicationContext(), StudentMapActivity.class));
                             overridePendingTransition(0,0);
                             finish();
                             return true;
-                        case R.id.Profile:
+                        case R.id.Account:
                             startActivity(new Intent(getApplicationContext(), StudentAccountActivity.class));
                             overridePendingTransition(0,0);
                             finish();
