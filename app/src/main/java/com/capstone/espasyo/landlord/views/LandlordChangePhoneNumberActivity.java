@@ -58,6 +58,7 @@ public class LandlordChangePhoneNumberActivity extends AppCompatActivity {
                 String phoneNumber = textInputPhoneNumber.getText().toString();
                 if (isLandlordPhoneNumberValid(phoneNumber)) {
                     if(isPasswordChanged(phoneNumber)) {
+                        btnChangePhoneNumber.setEnabled(false);
                         updateLandlordPhoneNumber(landlord, phoneNumber);
                     } else {
                         Toast.makeText(LandlordChangePhoneNumberActivity.this, "Phone number not changed", Toast.LENGTH_SHORT).show();
@@ -137,6 +138,7 @@ public class LandlordChangePhoneNumberActivity extends AppCompatActivity {
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        btnChangePhoneNumber.setEnabled(true);
                         changePhoneNumberProgressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(LandlordChangePhoneNumberActivity.this, "Phone Number Successfully Updated", Toast.LENGTH_SHORT).show();
                         setResult(RESULT_OK);
@@ -147,6 +149,7 @@ public class LandlordChangePhoneNumberActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                btnChangePhoneNumber.setEnabled(true);
                 Toast.makeText(LandlordChangePhoneNumberActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });

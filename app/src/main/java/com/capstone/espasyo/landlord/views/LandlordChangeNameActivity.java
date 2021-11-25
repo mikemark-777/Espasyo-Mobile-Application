@@ -63,6 +63,7 @@ public class LandlordChangeNameActivity extends AppCompatActivity {
                 if (areInputsValid(fName, lName)) {
                     //check if has the same input as before
                     if (isNameChanged(firstName, lastName, fName, lName)) {
+                        btnChangeName.setEnabled(false);
                         //updated name in landlord object
                         landlord.setFirstName(fName);
                         landlord.setLastName(lName);
@@ -176,6 +177,7 @@ public class LandlordChangeNameActivity extends AppCompatActivity {
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        btnChangeName.setEnabled(true);
                         landlordChangeNameProgressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(LandlordChangeNameActivity.this, "Name Successfully Updated", Toast.LENGTH_SHORT).show();
                         setResult(RESULT_OK);
@@ -186,6 +188,7 @@ public class LandlordChangeNameActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                btnChangeName.setEnabled(true);
                 landlordChangeNameProgressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(LandlordChangeNameActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }

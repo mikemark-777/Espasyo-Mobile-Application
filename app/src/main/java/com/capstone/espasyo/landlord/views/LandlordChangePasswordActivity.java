@@ -201,6 +201,7 @@ public class LandlordChangePasswordActivity extends AppCompatActivity {
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        btnChangePassword.setEnabled(false);
                         updatePassword(email, currentPassword, newPassword);
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -252,6 +253,7 @@ public class LandlordChangePasswordActivity extends AppCompatActivity {
                         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                btnChangePassword.setEnabled(true);
                                 changePasswordProgressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(LandlordChangePasswordActivity.this, "Password Successfully Updated", Toast.LENGTH_SHORT).show();
                                 setResult(RESULT_OK);
@@ -264,6 +266,7 @@ public class LandlordChangePasswordActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                btnChangePassword.setEnabled(true);
                 changePasswordProgressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(LandlordChangePasswordActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
