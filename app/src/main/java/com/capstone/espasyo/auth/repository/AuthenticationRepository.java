@@ -375,7 +375,7 @@ public class AuthenticationRepository {
     public void updateUserPasswordInStudentCollection(User updatedUser) {
         String studentID = updatedUser.getUID();
         String newPassword = updatedUser.getPassword();
-        DocumentReference studentDocRef = database.collection("student").document(studentID);
+        DocumentReference studentDocRef = database.collection("students").document(studentID);
         studentDocRef.update("password", newPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
