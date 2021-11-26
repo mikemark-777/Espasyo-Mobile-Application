@@ -1,9 +1,5 @@
-package com.capstone.espasyo.landlord.views;
+package com.capstone.espasyo.student.views;
 
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.annotation.NonNull;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +11,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.RoomAdapter;
 import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
+import com.capstone.espasyo.landlord.views.AddRoomActivity;
+import com.capstone.espasyo.landlord.views.ManagePropertyImageActivity;
+import com.capstone.espasyo.landlord.views.RoomDetailsActivity;
+import com.capstone.espasyo.landlord.views.ShowAllRoomsActivity;
+import com.capstone.espasyo.landlord.views.ViewPropertyOnMapActivity;
 import com.capstone.espasyo.landlord.widgets.RoomRecyclerView;
 import com.capstone.espasyo.models.ImageFolder;
 import com.capstone.espasyo.models.Landlord;
@@ -26,6 +31,8 @@ import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.Room;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.interfaces.ItemChangeListener;
+import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,7 +47,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class PropertyDetailsActivity extends AppCompatActivity implements RoomAdapter.OnRoomListener {
+public class StudentViewPropertyDetailsActivity extends AppCompatActivity implements RoomAdapter.OnRoomListener {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth fAuth;
@@ -60,26 +67,20 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     private View showAllRooms;
     private String propertyID;
 
-    //for verification information
-    private ImageView verificationInfoIcon;
-    private TextView verificationInfoMessage;
-    private Button btnAddRoom;
-    private final String UNVERIFIED_MESSAGE = "This property is not verified";
-    private final String VERIFIED_MESSAGE = "Verified Property";
-    private final String LOCKED_MESSAGE = "This property is locked by Admin";
 
     //for property image
     private ImageFolder propertyImageFolder;
-    private Button btnManageImages;
     private ImageSlider propertyImageSlider;
     private CustomProgressDialog progressDialog;
     private ArrayList<String> downloadedURLs = new ArrayList<>();
+    private ImageView btnZoomImage;
+    private int imageIndex = 0;
     private ImageView emptyImagesDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.landlord_activity_property_details);
+        setContentView(R.layout.student_activity_view_property_details);
 
         //Initialize FirebaseConnection, FirebaseAuth and FirebaseFirestore
         firebaseConnection = FirebaseConnection.getInstance();
@@ -91,19 +92,10 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         loadPropertyData();
         fetchPropertyRooms();
 
-        btnAddRoom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PropertyDetailsActivity.this, AddRoomActivity.class);
-                intent.putExtra("propertyID", propertyID);
-                startActivity(intent);
-            }
-        });
-
         showAllRooms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PropertyDetailsActivity.this, ShowAllRoomsActivity.class);
+                Intent intent = new Intent(StudentViewPropertyDetailsActivity.this, StudentShowAllRoomsActivity.class);
                 intent.putExtra("propertyID", propertyID);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -113,19 +105,28 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         imageButtonViewPropertyOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PropertyDetailsActivity.this, ViewPropertyOnMapActivity.class);
+                Intent intent = new Intent(StudentViewPropertyDetailsActivity.this, ViewPropertyOnMapActivity.class);
                 intent.putExtra("chosenProperty", property);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
-        btnManageImages.setOnClickListener(new View.OnClickListener() {
+        propertyImageSlider.setItemChangeListener(new ItemChangeListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PropertyDetailsActivity.this, ManagePropertyImageActivity.class);
-                intent.putExtra("property", property);
-                startActivity(intent);
+            public void onItemChanged(int i) {
+                imageIndex = i;
+            }
+        });
+
+        btnZoomImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(downloadedURLs.size() > 0) {
+                    Intent intent = new Intent(StudentViewPropertyDetailsActivity.this, StudentPreviewImageActivity.class);
+                    intent.putExtra("previewImage", downloadedURLs.get(imageIndex));
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -141,8 +142,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
 
         propertyID = property.getPropertyID();
         String landlordID = property.getOwner();
-        boolean isVerified = property.isVerified();
-        boolean isLocked = property.isLocked();
 
         //get landlord data
         getLandlord(landlordID);
@@ -167,7 +166,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         ImageView waterImageView = findViewById(R.id.icon_water);
         ImageView internetImageView = findViewById(R.id.icon_internet);
         ImageView garbageCollectionImageView = findViewById(R.id.icon_garbage);
-        LinearLayout verificationWarning = findViewById(R.id.verificationWarning);
 
         if (!isElectricityIncluded) {
             electricityImageView.setImageResource(R.drawable.icon_no_electricity);
@@ -188,25 +186,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         propMinimumPrice.setText(Integer.toString(minimumPrice));
         propMaximumPrice.setText(Integer.toString(maximumPrice));
 
-        //set the visibility of the information about the verification of the property
-        if (isVerified != true) {
-            verificationWarning.setVisibility(View.VISIBLE);
-            verificationWarning.setBackgroundColor(getResources().getColor(R.color.espasyo_red_200));
-            verificationInfoIcon.setVisibility(View.VISIBLE);
-            verificationInfoMessage.setText(UNVERIFIED_MESSAGE);
-        } else {
-            if (isLocked == true) {
-                verificationWarning.setVisibility(View.VISIBLE);
-                verificationWarning.setBackgroundColor(getResources().getColor(R.color.espasyo_red_200));
-                verificationInfoIcon.setVisibility(View.VISIBLE);
-                verificationInfoMessage.setText(LOCKED_MESSAGE);
-            } else {
-                verificationWarning.setVisibility(View.VISIBLE);
-                verificationWarning.setBackgroundColor(getResources().getColor(R.color.espasyo_green_200));
-                verificationInfoIcon.setVisibility(View.GONE);
-                verificationInfoMessage.setText(VERIFIED_MESSAGE);
-            }
-        }
     }
 
     //initialize roomRecyclerView, layoutManager, and roomAdapter
@@ -217,19 +196,16 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         roomRecyclerView.showIfEmpty(roomRecylerViewEmptyState);
         roomRecyclerView.showIfRoomsAreGreaterThanSeven(showAllRooms);
         roomRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager roomLayoutManager = new LinearLayoutManager(PropertyDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager roomLayoutManager = new LinearLayoutManager(StudentViewPropertyDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
         roomRecyclerView.setLayoutManager(roomLayoutManager);
-        roomAdapter = new RoomAdapter(PropertyDetailsActivity.this, propertyRooms, this);
+        roomAdapter = new RoomAdapter(StudentViewPropertyDetailsActivity.this, propertyRooms, this);
         roomRecyclerView.setAdapter(roomAdapter);
 
         //initialize views aside from recyclerview
         imageButtonViewPropertyOnMap = findViewById(R.id.imageButtonViewPropertyOnMap);
-        verificationInfoIcon = findViewById(R.id.verificationInfoIcon);
-        verificationInfoMessage = findViewById(R.id.verificationInfoMessage);
-        btnAddRoom = findViewById(R.id.addRoomButton);
+        btnZoomImage = findViewById(R.id.btnZoomImage_student);
 
         //for property images
-        btnManageImages = findViewById(R.id.gotoManageImages);
         propertyImageSlider = findViewById(R.id.image_slider_propertyDetails);
         progressDialog = new CustomProgressDialog(this);
         emptyImagesDisplay = findViewById(R.id.emptyImagesDisplay);
@@ -267,7 +243,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(PropertyDetailsActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(StudentViewPropertyDetailsActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -299,11 +275,11 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(PropertyDetailsActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StudentViewPropertyDetailsActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
-            Toast.makeText(PropertyDetailsActivity.this, "imageFolder of property is null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(StudentViewPropertyDetailsActivity.this, "imageFolder of property is null", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -326,14 +302,14 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
                 progressDialog.dismissProgressDialog();
             }
         } else {
-            Toast.makeText(PropertyDetailsActivity.this, "NULL", Toast.LENGTH_SHORT).show();
+            Toast.makeText(StudentViewPropertyDetailsActivity.this, "NULL", Toast.LENGTH_SHORT).show();
         }
     }
 
 
     @Override
     public void onRoomClick(int position) {
-        Intent intent = new Intent(PropertyDetailsActivity.this, RoomDetailsActivity.class);
+        Intent intent = new Intent(StudentViewPropertyDetailsActivity.this, RoomDetailsActivity.class);
         intent.putExtra("chosenRoom", propertyRooms.get(position));
         startActivity(intent);
     }

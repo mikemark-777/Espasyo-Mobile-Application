@@ -105,10 +105,14 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
         btnGotoUploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ManagePropertyImageActivity.this, UploadPropertyImageActivity.class);
-                intent.putExtra("property", property);
-                intent.putExtra("imageFolder", propertyImageFolder);
-                uploadImageActivityLauncher.launch(intent);
+                if(downloadedURLs.size() <= 6) {
+                    Intent intent = new Intent(ManagePropertyImageActivity.this, UploadPropertyImageActivity.class);
+                    intent.putExtra("property", property);
+                    intent.putExtra("imageFolder", propertyImageFolder);
+                    uploadImageActivityLauncher.launch(intent);
+                } else {
+                    Toast.makeText(ManagePropertyImageActivity.this, "Maximum number of image reached", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -178,9 +182,10 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
 
     //will display images from imageFolder of the property
     public void displayImagesFrom(ImageFolder imageFolder) {
+        ArrayList<SlideModel> imageSlides = new ArrayList<>();
+        imageSlider.setImageList(imageSlides);
         if (imageFolder != null) {
             downloadedURLs = imageFolder.getImages();
-            ArrayList<SlideModel> imageSlides = new ArrayList<>();
 
             if (!downloadedURLs.isEmpty()) {
                 emptyImagesDisplay.setVisibility(View.GONE);
@@ -208,7 +213,7 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void unused) {
                 //delete it in the list of images in the imageFolder object
-                downloadedURLs.remove(imageToDelete);
+                downloadedURLs.remove(imageIndex);
                 propertyImageFolder.setImages(downloadedURLs);
                 updateImageFolder(propertyImageFolder);
             }

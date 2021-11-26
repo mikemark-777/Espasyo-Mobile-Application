@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_selected="false">
         <shape android:shape="oval">
-            <solid android:color="@color/espasyo_orange_200"/>
+            <solid android:color="@color/white"/>
             <size android:width="15dp"
                 android:height="15dp"/>
             <stroke android:width="2dp"

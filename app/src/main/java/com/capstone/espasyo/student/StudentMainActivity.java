@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -17,11 +20,13 @@ import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.capstone.espasyo.student.adapters.PropertyAdapter;
 import com.capstone.espasyo.student.customdialogs.CustomProgressDialog;
+import com.capstone.espasyo.student.views.StudentViewPropertyDetailsActivity;
 import com.capstone.espasyo.student.widgets.PropertyRecyclerView;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.student.repository.FirebaseConnection;
 import com.capstone.espasyo.student.views.StudentMapActivity;
 import com.capstone.espasyo.student.views.StudentAccountActivity;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -38,6 +43,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
     private FirebaseConnection firebaseConnection;
     private FirebaseFirestore database;
 
+    private SwipeRefreshLayout listViewSwipeRefresh;
     private PropertyRecyclerView propertyRecyclerView;
     private View mEmptyView;
     private PropertyAdapter propertyAdapter;
@@ -68,11 +74,33 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         propertyList = new ArrayList<>();
 
         initPropertyRecyclerView();
+        progressDialog.showProgressDialog("Loading properties...", false);
         fetchProperties();
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismissProgressDialog();
+                }
+            }
+        }, 1500);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.List);
         bottomNavigationView.setOnItemSelectedListener(navListener);
+
+        listViewSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchProperties();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        listViewSwipeRefresh.setRefreshing(false);
+                    }
+                }, 2000);
+            }
+        });
     }
 
     public void initPropertyRecyclerView() {
@@ -88,12 +116,12 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
 
         //initialize data aside from recyclerView
         progressDialog = new CustomProgressDialog(this);
+        listViewSwipeRefresh = findViewById(R.id.listViewSwipeRefresh_student);
     }
 
     public void fetchProperties() {
         //will be used to retrieve all verified properties in the Properties Collection
         CollectionReference propertiesCollection = database.collection("properties");
-
         propertiesCollection.whereEqualTo("verified", true)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -104,18 +132,21 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                             Property propertyObj = property.toObject(Property.class);
                             if(!propertyObj.isLocked()) {
                                 propertyList.add(propertyObj);
-                            } else {
-                                Toast.makeText(StudentMainActivity.this, propertyObj.getName() + " is " + propertyObj.isLocked(), Toast.LENGTH_SHORT).show();
                             }
                         }
                         propertyAdapter.notifyDataSetChanged();
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(StudentMainActivity.this, e.toString() , Toast.LENGTH_SHORT).show();
+                progressDialog.dismissProgressDialog();
+            }
+        });
     }
 
-    //interface for on item selected because setOnNavigationItemSelectedListener is depracated
-    private BottomNavigationView.OnItemSelectedListener navListener =
-            new NavigationBarView.OnItemSelectedListener() {
+    //interface for on item selected because setOnNavigationItemSelectedListener is deprecated
+    private BottomNavigationView.OnItemSelectedListener navListener = new NavigationBarView.OnItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     switch (menuItem.getItemId()) {
@@ -139,9 +170,10 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                 }
             };
 
-
     @Override
     public void onPropertyClick(int position) {
-
+        Intent intent = new Intent(StudentMainActivity.this, StudentViewPropertyDetailsActivity.class);
+        intent.putExtra("property", propertyList.get(position));
+        startActivity(intent);
     }
 }

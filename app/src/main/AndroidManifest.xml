@@ -157,6 +157,15 @@
             android:name=".student.StudentMainActivity"
             android:exported="true" />
         <activity
+            android:name=".student.views.StudentViewPropertyDetailsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".student.views.StudentShowAllRoomsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".student.views.StudentPreviewImageActivity"
+            android:exported="true" />
+        <activity
             android:name=".student.views.StudentAccountActivity"
             android:exported="true" />
         <activity

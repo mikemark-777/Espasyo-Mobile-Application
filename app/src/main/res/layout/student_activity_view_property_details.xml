@@ -6,41 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".landlord.views.PropertyDetailsActivity">
 
-    <LinearLayout
-        android:id="@+id/verificationWarning"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginBottom="35dp"
-        android:background="@color/espasyo_red_200"
-        android:gravity="center_vertical|center_horizontal"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/verificationInfoIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/icon_info" />
-
-        <TextView
-            android:id="@+id/verificationInfoMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="This property is not verified"
-            android:textAlignment="center"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="35dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -375,14 +343,6 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <Button
-                        android:id="@+id/addRoomButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Add Room"
-                        android:textAllCaps="false" />
-
                 </LinearLayout>
 
                 <com.capstone.espasyo.landlord.widgets.RoomRecyclerView
@@ -417,7 +377,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
                 android:background="@color/white"
@@ -425,10 +385,14 @@
                 android:padding="16dp">
 
                 <LinearLayout
+                    android:id="@+id/linearLayout17"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -438,25 +402,35 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <Button
-                        android:id="@+id/gotoManageImages"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:text="Manage"
-                        android:textAllCaps="false" />
-
                 </LinearLayout>
 
                 <com.denzcoskun.imageslider.ImageSlider
                     android:id="@+id/image_slider_propertyDetails"
                     android:layout_width="match_parent"
                     android:layout_height="350dp"
-                    android:layout_marginTop="16dp"
                     app:iss_selected_dot="@drawable/selected_dot_selector"
-                    app:iss_unselected_dot="@drawable/unselected_dot_selector"/>
+                    app:iss_unselected_dot="@drawable/unselected_dot_selector"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.95" >
 
-            </LinearLayout>
+                </com.denzcoskun.imageslider.ImageSlider>
+
+                <ImageView
+                    android:id="@+id/btnZoomImage_student"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/icon_zoom"
+                    app:layout_constraintBottom_toTopOf="@+id/image_slider_propertyDetails"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout17" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>
