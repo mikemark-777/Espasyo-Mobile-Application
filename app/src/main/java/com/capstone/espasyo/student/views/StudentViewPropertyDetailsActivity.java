@@ -2,6 +2,7 @@ package com.capstone.espasyo.student.views;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.capstone.espasyo.R;
@@ -62,10 +64,13 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
     private Property property;
     //landlord object
     private Landlord landlord;
+    private LinearLayout layoutContactLandlord;
+    private ImageView btnMessageLandlord, btnCallLandlord;
 
     private ImageButton imageButtonViewPropertyOnMap;
     private View showAllRooms;
     private String propertyID;
+    private CardView landlordDetailsCardview;
 
 
     //for property image
@@ -109,6 +114,37 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
                 intent.putExtra("chosenProperty", property);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
+
+        landlordDetailsCardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(layoutContactLandlord.getVisibility() == View.GONE) {
+                    layoutContactLandlord.setVisibility(View.VISIBLE);
+                } else if(layoutContactLandlord.getVisibility() == View.VISIBLE) {
+                    layoutContactLandlord.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        btnMessageLandlord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+                smsIntent.setType("vnd.android-dir/mms-sms");
+                smsIntent.putExtra("address", "9368530752");
+                smsIntent.putExtra("sms_body","Body of Message");
+                startActivity(smsIntent);
+            }
+        });
+
+        btnCallLandlord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:"+landlord.getPhoneNumber()));
+                startActivity(callIntent);
             }
         });
 
@@ -204,6 +240,10 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         //initialize views aside from recyclerview
         imageButtonViewPropertyOnMap = findViewById(R.id.imageButtonViewPropertyOnMap);
         btnZoomImage = findViewById(R.id.btnZoomImage_student);
+        landlordDetailsCardview = findViewById(R.id.landlordDetailsCardview);
+        layoutContactLandlord = findViewById(R.id.layoutContactLandlord);
+        btnMessageLandlord = findViewById(R.id.btnMessageLandlord);
+        btnCallLandlord = findViewById(R.id.btnCallLandlord);
 
         //for property images
         propertyImageSlider = findViewById(R.id.image_slider_propertyDetails);
@@ -237,7 +277,7 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         landlordDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Landlord landlord = documentSnapshot.toObject(Landlord.class);
+                landlord = documentSnapshot.toObject(Landlord.class);
                 displayLandlordDetails(landlord);
             }
         }).addOnFailureListener(new OnFailureListener() {

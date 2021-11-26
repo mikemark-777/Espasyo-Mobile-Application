@@ -265,59 +265,119 @@
                 </LinearLayout>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/landlordDetailsCardview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:background="@color/espasyo_gray_200"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="4dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingLeft="8dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp">
-
-                        <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:layout_marginEnd="12dp"
-                            android:padding="4dp"
-                            android:src="@drawable/avatar_landlord" />
-
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="horizontal"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp">
 
-                            <TextView
-                                android:id="@+id/propertyLandlordNameDisplay"
-                                android:layout_width="match_parent"
+                            <ImageView
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginEnd="12dp"
+                                android:padding="4dp"
+                                android:src="@drawable/avatar_landlord" />
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/propertyLandlordNameDisplay"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:text="Juana Dela Cruz"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/propertyLandlordPhoneNumberDisplay"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="+639368540758"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Landlord"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:text="Juana Dela Cruz"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:layout_gravity="end"
+                                android:layout_marginStart="90dp"
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/propertyLandlordPhoneNumberDisplay"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="+639368540758"
-                                android:textColor="@color/black"
-                                android:textSize="14sp" />
+                                <ImageView
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:src="@drawable/icon_tip_arrow_down" />
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Landlord"
-                                android:textSize="14sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layoutContactLandlord"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:id="@+id/btnMessageLandlord"
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:background="@color/espasyo_orange_200"
+                                android:padding="18dp"
+                                android:src="@drawable/icon_message_landlord" />
+
+                            <ImageView
+                                android:id="@+id/btnCallLandlord"
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:background="@color/espasyo_blue_200"
+                                android:padding="18dp"
+                                android:src="@drawable/icon_call_landlord" />
 
                         </LinearLayout>
+
                     </LinearLayout>
+
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
@@ -414,7 +474,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.95" >
+                    app:layout_constraintVertical_bias="0.95">
 
                 </com.denzcoskun.imageslider.ImageSlider>
 

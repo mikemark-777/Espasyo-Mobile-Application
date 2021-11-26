@@ -30,7 +30,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
     @NonNull
     @Override
     public PropertyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.landlord_property_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.student_property_item, parent, false);
         return new PropertyViewHolder(view, onPropertyListener);
     }
 
