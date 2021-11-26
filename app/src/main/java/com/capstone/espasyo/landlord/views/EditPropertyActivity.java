@@ -181,7 +181,6 @@ public class EditPropertyActivity extends AppCompatActivity {
 
                 if (areInputsValid(editedPropertyName, editedPropertyType, editedPropertyAddress, editedProprietorName, editedMinimumPrice, editedMaximumPrice)) {
 
-                    property.setVerified(false);
                     property.setName(editedPropertyName);
                     property.setPropertyType(editedPropertyType);
                     property.setAddress(editedPropertyAddress);

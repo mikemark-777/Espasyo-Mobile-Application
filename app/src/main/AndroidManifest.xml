@@ -18,11 +18,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Espasyo">
         <activity
-            android:name=".student.views.StudentChangePasswordActivity"
-            android:exported="true" />
-        <activity
-            android:name=".student.views.StudentChangeNameActivity"
-            android:exported="true" />
+            android:name=".MainActivity"
+            android:exported="true"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Landlord Activities -->
         <activity
             android:name=".landlord.views.UploadPropertyImageActivity"
             android:exported="true" />
@@ -53,16 +59,6 @@
         <activity
             android:name=".landlord.views.RenewVerificationRequestActivity"
             android:exported="true" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity> <!-- Landlord Activities -->
         <activity
             android:name=".landlord.LandlordMainActivity"
             android:exported="true" />
@@ -142,7 +138,9 @@
             android:value="@string/map_key" />
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" /> <!-- for accessing files (gallery and camera) -->
+            android:value="@integer/google_play_services_version" />
+
+        <!-- for accessing files (gallery and camera) -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.capstone.android.fileprovider"
@@ -151,7 +149,10 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider> <!-- Student Activities -->
+        </provider>
+
+        <!-- Student Activities -->
+
         <activity
             android:name=".student.StudentMainActivity"
             android:exported="true" />
@@ -160,6 +161,16 @@
             android:exported="true" />
         <activity
             android:name=".student.views.StudentMapActivity"
+            android:exported="true">
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/map_key" />
+        </activity>
+        <activity
+            android:name=".student.views.StudentChangePasswordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".student.views.StudentChangeNameActivity"
             android:exported="true" />
     </application>
 

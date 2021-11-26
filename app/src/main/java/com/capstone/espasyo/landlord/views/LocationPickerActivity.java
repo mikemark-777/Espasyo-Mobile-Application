@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -83,7 +85,6 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         if(!isConnectedToInternet()) {
             showNoInternetConnectionDialog();
         }
-
 
         initializeViews();
         checkPermission();
@@ -152,6 +153,8 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                 if (gMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
                     gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                 } else if (gMap.getMapType() == GoogleMap.MAP_TYPE_SATELLITE) {
+                    gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                } else if (gMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID) {
                     gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 }
             }
@@ -193,10 +196,11 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
         gMap = googleMap;
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        setPolyLineOfMap(gMap);
 
-        LatLng BayombongDefault = new LatLng(16.4845001, 121.1563895);
-        gMap.addMarker(new MarkerOptions().position(BayombongDefault).title("Bayombong")).showInfoWindow();
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(BayombongDefault, 16.0f));
+        LatLng SaintMarysUniversity = new LatLng(16.483022, 121.155538);
+        gMap.addMarker(new MarkerOptions().position(SaintMarysUniversity).title("Saint Mary's University")).showInfoWindow();
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SaintMarysUniversity, 16.0f));
 
         //get location via click
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -223,13 +227,27 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
               } else {
                   requestLocationPermission();
               }
-
-
             }
         });
 
     }
 
+    public void setPolyLineOfMap(GoogleMap gMap) {
+        //to specify the area of main location
+        gMap.addPolyline(new PolylineOptions().clickable(true).color(Color.LTGRAY).add(
+                new LatLng(16.4814312, 121.1542103),
+                new LatLng(16.4826409, 121.1572306),
+                new LatLng(16.4834756, 121.1572032),
+                new LatLng(16.4843089, 121.15693),
+                new LatLng(16.4845001, 121.1563895),
+                new LatLng(16.4848, 121.1561731),
+                new LatLng(16.4845163, 121.155666),
+                new LatLng(16.4847609, 121.1552218),
+                new LatLng(16.4838617, 121.1541471),
+                new LatLng(16.4826408, 121.1531345),
+                new LatLng(16.4814312, 121.1542103)
+        ));
+    }
 
     public void getCurrentLocation() {
 
@@ -379,7 +397,6 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     }
 
     public void requestLocationPermission() {
-
         if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             new AlertDialog.Builder(this)
                     .setTitle("Permission Needed")
