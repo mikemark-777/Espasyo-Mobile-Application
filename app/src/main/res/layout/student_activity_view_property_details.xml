@@ -331,7 +331,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="end"
-                                android:layout_marginStart="90dp"
+                                android:layout_marginStart="85dp"
                                 android:orientation="vertical">
 
                                 <ImageView
@@ -345,10 +345,10 @@
                         <LinearLayout
                             android:id="@+id/layoutContactLandlord"
                             android:layout_width="match_parent"
-                            android:layout_height="60dp"
+                            android:layout_height="45dp"
                             android:layout_marginTop="8dp"
                             android:orientation="horizontal"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <ImageView
                                 android:id="@+id/btnMessageLandlord"
@@ -359,7 +359,7 @@
                                 android:focusable="true"
                                 android:foreground="?android:attr/selectableItemBackground"
                                 android:background="@color/espasyo_orange_200"
-                                android:padding="18dp"
+                                android:padding="12dp"
                                 android:src="@drawable/icon_message_landlord" />
 
                             <ImageView
@@ -371,7 +371,7 @@
                                 android:focusable="true"
                                 android:foreground="?android:attr/selectableItemBackground"
                                 android:background="@color/espasyo_blue_200"
-                                android:padding="18dp"
+                                android:padding="12dp"
                                 android:src="@drawable/icon_call_landlord" />
 
                         </LinearLayout>

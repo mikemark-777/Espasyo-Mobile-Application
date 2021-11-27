@@ -1,11 +1,12 @@
 package com.capstone.espasyo.student.views;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,16 +16,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.RoomAdapter;
 import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
-import com.capstone.espasyo.landlord.views.AddRoomActivity;
-import com.capstone.espasyo.landlord.views.ManagePropertyImageActivity;
+import com.capstone.espasyo.landlord.views.LocationPickerActivity;
 import com.capstone.espasyo.landlord.views.RoomDetailsActivity;
-import com.capstone.espasyo.landlord.views.ShowAllRoomsActivity;
 import com.capstone.espasyo.landlord.views.ViewPropertyOnMapActivity;
 import com.capstone.espasyo.landlord.widgets.RoomRecyclerView;
 import com.capstone.espasyo.models.ImageFolder;
@@ -34,7 +35,6 @@ import com.capstone.espasyo.models.Room;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.interfaces.ItemChangeListener;
-import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,6 +54,10 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth fAuth;
     private FirebaseFirestore database;
+
+    //for requesting phone and call permissions
+    private final int PHONE_CALL_PERMISSION_CODE = 101;
+    private final int PHONE_SMS_PERMISSION_CODE = 201;
 
     private RoomRecyclerView roomRecyclerView;
     private View roomRecylerViewEmptyState;
@@ -120,9 +124,9 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         landlordDetailsCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(layoutContactLandlord.getVisibility() == View.GONE) {
+                if (layoutContactLandlord.getVisibility() == View.GONE) {
                     layoutContactLandlord.setVisibility(View.VISIBLE);
-                } else if(layoutContactLandlord.getVisibility() == View.VISIBLE) {
+                } else if (layoutContactLandlord.getVisibility() == View.VISIBLE) {
                     layoutContactLandlord.setVisibility(View.GONE);
                 }
             }
@@ -131,20 +135,16 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         btnMessageLandlord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                smsIntent.setType("vnd.android-dir/mms-sms");
-                smsIntent.putExtra("address", "9368530752");
-                smsIntent.putExtra("sms_body","Body of Message");
-                startActivity(smsIntent);
+                String landlordPhoneNumber = landlord.getPhoneNumber();
+                launchSMS(landlordPhoneNumber);
             }
         });
 
         btnCallLandlord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:"+landlord.getPhoneNumber()));
-                startActivity(callIntent);
+                String landlordPhoneNumber = landlord.getPhoneNumber();
+                launchPhoneCall(landlordPhoneNumber);
             }
         });
 
@@ -158,7 +158,7 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         btnZoomImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(downloadedURLs.size() > 0) {
+                if (downloadedURLs.size() > 0) {
                     Intent intent = new Intent(StudentViewPropertyDetailsActivity.this, StudentPreviewImageActivity.class);
                     intent.putExtra("previewImage", downloadedURLs.get(imageIndex));
                     startActivity(intent);
@@ -346,6 +346,43 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         }
     }
 
+    public void launchSMS(String landlordPhoneNumber) {
+        //check if the permissions is granted for sms
+        if (ContextCompat.checkSelfPermission(StudentViewPropertyDetailsActivity.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(StudentViewPropertyDetailsActivity.this, new String[]{Manifest.permission.SEND_SMS}, PHONE_SMS_PERMISSION_CODE);
+        } else {
+            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+            smsIntent.setType("vnd.android-dir/mms-sms");
+            smsIntent.putExtra("address", landlordPhoneNumber);
+            startActivity(smsIntent);
+        }
+    }
+
+    public void launchPhoneCall(String landlordPhoneNumber) {
+
+        //check if the permissions is granted for call
+        if (ContextCompat.checkSelfPermission(StudentViewPropertyDetailsActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(StudentViewPropertyDetailsActivity.this, new String[]{Manifest.permission.CALL_PHONE}, PHONE_CALL_PERMISSION_CODE);
+        } else {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:+63" + landlordPhoneNumber));
+            startActivity(callIntent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == PHONE_CALL_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(StudentViewPropertyDetailsActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            }
+        } else if(requestCode == PHONE_SMS_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(StudentViewPropertyDetailsActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     @Override
     public void onRoomClick(int position) {
