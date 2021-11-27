@@ -114,7 +114,7 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         imageButtonViewPropertyOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StudentViewPropertyDetailsActivity.this, ViewPropertyOnMapActivity.class);
+                Intent intent = new Intent(StudentViewPropertyDetailsActivity.this, StudentViewPropertyOnMapActivity.class);
                 intent.putExtra("chosenProperty", property);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -167,7 +167,7 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         });
     }
 
-    // Functions -----
+    // Functions -----------------------------------------------------
 
     //Load Property Details
     public void loadPropertyData() {

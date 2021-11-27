@@ -348,17 +348,17 @@
                             android:layout_height="45dp"
                             android:layout_marginTop="8dp"
                             android:orientation="horizontal"
-                            android:visibility="visible">
+                            android:visibility="gone">
 
                             <ImageView
                                 android:id="@+id/btnMessageLandlord"
                                 android:layout_width="150dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:background="@color/espasyo_orange_200"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:foreground="?android:attr/selectableItemBackground"
-                                android:background="@color/espasyo_orange_200"
                                 android:padding="12dp"
                                 android:src="@drawable/icon_message_landlord" />
 
@@ -367,10 +367,10 @@
                                 android:layout_width="150dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:background="@color/espasyo_blue_200"
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:foreground="?android:attr/selectableItemBackground"
-                                android:background="@color/espasyo_blue_200"
                                 android:padding="12dp"
                                 android:src="@drawable/icon_call_landlord" />
 

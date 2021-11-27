@@ -59,22 +59,16 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     private GoogleMap gMap;
     private Geocoder geocoder;
 
-    private double selectedLat,
-            selectedLong;
+    private double selectedLat, selectedLong;
 
     private List<Address> listOfAddresses;
 
-    private String street,
-            barangay,
-            municipality,
-            landmark;
+    private String street, barangay, municipality, landmark;
 
     private SearchView locationSearchView;
     private ImageView btnBackToAddPropertyActivity;
     private Button btnGetPickedPropertyLocation;
-    private FloatingActionButton
-            FABChangeMapType,
-            FABGetCurrentLocation;
+    private FloatingActionButton FABChangeMapType, FABGetCurrentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -466,11 +460,6 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         noInternetDialog.show();
     }
 
-    public void enableLocationInSettings() {
-        Intent openLocationInSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        startActivity(openLocationInSettingsIntent);
-    }
-
     public void showEnableLocationInSettingsDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Use location?")
@@ -486,6 +475,11 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                 dialog.dismiss();
             }
         }).create().show();
+    }
+
+    public void enableLocationInSettings() {
+        Intent openLocationInSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(openLocationInSettingsIntent);
     }
 
 }
