@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -29,10 +30,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class StudentViewPropertyOnMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -42,6 +46,7 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
     private InternetConnectionUtil internetChecker;
     private ConnectivityManager connectivityManager;
     private FusedLocationProviderClient client;
+    private FloatingActionButton changeMapType;
 
     private GoogleMap gMap;
 
@@ -49,13 +54,13 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
 
     private String propertyName;
     private String propertyAddress;
-    private double propertyLatitude,
-            propertyLongitude;
+    private double propertyLatitude, propertyLongitude;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_activity_view_property_on_map);
 
+        initializeViews();
         Intent intent = getIntent();
         getPropertyDataFromIntent(intent);
 
@@ -64,7 +69,20 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
         client = LocationServices.getFusedLocationProviderClient(StudentViewPropertyOnMapActivity.this);
         connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
         internetChecker = new InternetConnectionUtil(connectivityManager);
+
+        changeMapType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleMapType();
+            }
+        });
+
     }
+
+    public void initializeViews() {
+        changeMapType = findViewById(R.id.changeMapTypeStudent_propertyDetails);
+    }
+
 
     public void getPropertyDataFromIntent(Intent intent) {
         chosenProperty = intent.getParcelableExtra("chosenProperty");
@@ -78,20 +96,48 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gMap = googleMap;
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        setPolyLineOfMap(gMap);
 
         LatLng propertyLocation = new LatLng(propertyLatitude, propertyLongitude);
         gMap.addMarker(new MarkerOptions().position(propertyLocation)
                 .title(propertyName)
                 .snippet(propertyAddress)).showInfoWindow();
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(propertyLocation, gMap.getMaxZoomLevel()));
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(propertyLocation, 16.0f));
         getCurrentLocation();
+    }
+
+    public void setPolyLineOfMap(GoogleMap gMap) {
+        //to specify the area of main location
+        gMap.addPolyline(new PolylineOptions().clickable(true).color(Color.LTGRAY).add(
+                new LatLng(16.4814312, 121.1542103),
+                new LatLng(16.4826409, 121.1572306),
+                new LatLng(16.4834756, 121.1572032),
+                new LatLng(16.4843089, 121.15693),
+                new LatLng(16.4845001, 121.1563895),
+                new LatLng(16.4848, 121.1561731),
+                new LatLng(16.4845163, 121.155666),
+                new LatLng(16.4847609, 121.1552218),
+                new LatLng(16.4838617, 121.1541471),
+                new LatLng(16.4826408, 121.1531345),
+                new LatLng(16.4814312, 121.1542103)
+        ));
+    }
+
+    public void toggleMapType() {
+        if (gMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
+            gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        } else if (gMap.getMapType() == GoogleMap.MAP_TYPE_SATELLITE) {
+            gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        } else if (gMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID) {
+            gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
     }
 
     public void getCurrentLocation() {
 
         //check if the user has granted the permission for this functionality to access location
         if (ActivityCompat.checkSelfPermission(StudentViewPropertyOnMapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if(internetChecker.isConnectedToInternet()) {
+            if (internetChecker.isConnectedToInternet()) {
                 Task<Location> task = client.getLastLocation();
 
                 task.addOnCompleteListener(new OnCompleteListener<Location>() {
@@ -104,11 +150,10 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
                                 double latitude = location.getLatitude();
                                 double longitude = location.getLongitude();
                                 LatLng usersLocation = new LatLng(latitude, longitude);
-                                MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("You are here");
+                                MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("You are here").icon(BitmapDescriptorFactory.fromResource(R.drawable.img_walking_person));
                                 gMap.addMarker(markerOptions).showInfoWindow();
 
                             } else {
-                                Toast.makeText(StudentViewPropertyOnMapActivity.this, "Location is null", Toast.LENGTH_LONG).show();
                                 //location of device is disabled
                                 showEnableLocationInSettingsDialog();
                             }
@@ -126,14 +171,14 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
     }
 
     public void requestLocationPermission() {
-        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             new AlertDialog.Builder(this)
                     .setTitle("Permission Needed")
                     .setMessage("Location permission is needed to access your location.")
                     .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(StudentViewPropertyOnMapActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+                            ActivityCompat.requestPermissions(StudentViewPropertyOnMapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -143,7 +188,7 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
             }).create().show();
 
         } else {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
         }
     }
 

@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".student.views.StudentViewPropertyOnMapActivity">
 
-
     <fragment
         android:id="@+id/mapFragment_viewPropertyOnMap"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -20,12 +19,12 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/FABChangeMapType_edit"
+        android:id="@+id/changeMapTypeStudent_propertyDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="75dp"
         android:backgroundTint="@color/espasyo_blue_200"
         android:contentDescription="get user location"
         android:src="@drawable/icon_map_type"

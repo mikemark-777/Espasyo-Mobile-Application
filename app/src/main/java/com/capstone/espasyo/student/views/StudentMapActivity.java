@@ -56,7 +56,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class StudentMapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class StudentMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseFirestore database;
@@ -106,13 +106,7 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
         changeMapType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (gMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
-                    gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                } else if (gMap.getMapType() == GoogleMap.MAP_TYPE_SATELLITE) {
-                    gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                } else if (gMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID) {
-                    gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                }
+               toggleMapType();
             }
         });
 
@@ -136,7 +130,6 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gMap = googleMap;
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        gMap.setOnMarkerClickListener(this);
 
         LatLng SaintMarysUniversity = new LatLng(16.483022, 121.155538);
         gMap.addMarker(new MarkerOptions().position(SaintMarysUniversity).title("Saint Mary's University")).showInfoWindow();
@@ -160,6 +153,16 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
                 new LatLng(16.4826408, 121.1531345),
                 new LatLng(16.4814312, 121.1542103)
         ));
+    }
+
+    public void toggleMapType() {
+        if (gMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
+            gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        } else if (gMap.getMapType() == GoogleMap.MAP_TYPE_SATELLITE) {
+            gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        } else if (gMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID) {
+            gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
     }
 
     public void getCurrentLocation() {
@@ -369,9 +372,4 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
                 }
             };
 
-    @Override
-    public boolean onMarkerClick(@NonNull Marker marker) {
-        Toast.makeText(StudentMapActivity.this, "Marker: " + marker.getPosition().latitude + " ," + marker.getPosition().longitude, Toast.LENGTH_SHORT).show();
-        return false;
-    }
 }

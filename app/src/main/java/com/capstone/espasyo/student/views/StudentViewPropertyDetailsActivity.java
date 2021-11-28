@@ -239,7 +239,6 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
 
         //initialize views aside from recyclerview
         imageButtonViewPropertyOnMap = findViewById(R.id.imageButtonViewPropertyOnMap);
-        btnZoomImage = findViewById(R.id.btnZoomImage_student);
         landlordDetailsCardview = findViewById(R.id.landlordDetailsCardview);
         layoutContactLandlord = findViewById(R.id.layoutContactLandlord);
         btnMessageLandlord = findViewById(R.id.btnMessageLandlord);
@@ -247,6 +246,7 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
 
         //for property images
         propertyImageSlider = findViewById(R.id.image_slider_propertyDetails);
+        btnZoomImage = findViewById(R.id.btnZoomImage_student);
         progressDialog = new CustomProgressDialog(this);
         emptyImagesDisplay = findViewById(R.id.emptyImagesDisplay);
     }
