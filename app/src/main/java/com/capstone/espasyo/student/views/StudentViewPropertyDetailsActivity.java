@@ -76,7 +76,6 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
     private String propertyID;
     private CardView landlordDetailsCardview;
 
-
     //for property image
     private ImageFolder propertyImageFolder;
     private ImageSlider propertyImageSlider;

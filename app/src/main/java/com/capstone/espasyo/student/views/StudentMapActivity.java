@@ -239,7 +239,8 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
             gMap.addMarker(new MarkerOptions()
                     .position(propertyLocation)
                     .title(propertyName)
-                    .snippet(propertyAddress)).showInfoWindow();
+                    .snippet(propertyAddress)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).showInfoWindow();
         }
     }
 
