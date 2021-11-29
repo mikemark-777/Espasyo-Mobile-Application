@@ -83,7 +83,6 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
         changeMapType = findViewById(R.id.changeMapTypeStudent_propertyDetails);
     }
 
-
     public void getPropertyDataFromIntent(Intent intent) {
         chosenProperty = intent.getParcelableExtra("chosenProperty");
         propertyName = chosenProperty.getName();
@@ -163,7 +162,7 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
                     }
                 });
             } else {
-                showNoInternetConnectionDialog();
+                internetChecker.showNoInternetConnectionDialog();
             }
         } else {
             requestLocationPermission();
@@ -190,26 +189,6 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
         }
-    }
-
-    public void showNoInternetConnectionDialog() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.landlord_no_internet_connection_dialog, null);
-
-        Button btnOkayInternetConnection = view.findViewById(R.id.btnOkayInternetConnection);
-
-        AlertDialog noInternetDialog = new AlertDialog.Builder(this)
-                .setView(view)
-                .create();
-
-        btnOkayInternetConnection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                noInternetDialog.dismiss();
-            }
-        });
-
-        noInternetDialog.show();
     }
 
     public void showEnableLocationInSettingsDialog() {

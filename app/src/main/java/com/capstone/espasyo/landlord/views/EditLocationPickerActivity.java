@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.connectivityUtil.InternetConnectionUtil;
 import com.capstone.espasyo.landlord.customdialogs.ConfirmPickedPropertyLocationDialog;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -48,9 +51,8 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
     private SupportMapFragment mapFragment_edit;
 
     private int LOCATION_PERMISSION_CODE = 1;
+    private InternetConnectionUtil internetChecker;
     private ConnectivityManager connectivityManager;
-    private NetworkInfo mobileConnection;
-    private NetworkInfo wifiConnection;
 
     private GoogleMap gMapEdit;
     private Geocoder geocoder;
@@ -79,14 +81,14 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.landlord_activity_edit_location_picker);
-
-        if (!isConnectedToInternet()) {
-            showNoInternetConnectionDialog();
-        }
-
+        setContentView(R.layout.landlord_activity_edit_location_picker);   
+        
         initializeViews();
         checkPermission();
+
+        if (!internetChecker.isConnectedToInternet()) {
+            internetChecker.showNoInternetConnectionDialog();
+        }
 
         Intent intent = getIntent();
         getDataFromIntent(intent);
@@ -102,7 +104,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
             public boolean onQueryTextSubmit(String query) {
 
                 if (ActivityCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if (isConnectedToInternet()) {
+                    if (internetChecker.isConnectedToInternet()) {
                         String location = locationSearchView_edit.getQuery().toString();
                         listOfAddresses = null;
 
@@ -123,7 +125,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
                             }
                         }
                     } else {
-                        showNoInternetConnectionDialog();
+                        internetChecker.showNoInternetConnectionDialog();
                     }
                 } else {
                     requestLocationPermission();
@@ -162,10 +164,10 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
         FABGetCurrentLocation_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isConnectedToInternet()) {
+                if (internetChecker.isConnectedToInternet()) {
                     getCurrentLocation();
                 } else {
-                    showNoInternetConnectionDialog();
+                    internetChecker.showNoInternetConnectionDialog();
                 }
 
             }
@@ -180,11 +182,25 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
 
     }
 
+    //this will initialize all views : searchViews, buttons, imageViews and floating action buttons
+    public void initializeViews() {
+        locationSearchView_edit = findViewById(R.id.locationSearchView_edit);
+
+        btnBackToEditPropertyActivity = findViewById(R.id.btnBackToEditPropertyActivity);
+        FABChangeMapType_edit = findViewById(R.id.FABChangeMapType_edit);
+        FABGetCurrentLocation_edit = findViewById(R.id.FABGetCurrentLocation_edit);
+        btnGetPickedPropertyLocation_edit = findViewById(R.id.btnGetPickedPropertyLocation_edit);
+
+        //for checking internet connection
+        connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+        internetChecker = new InternetConnectionUtil(this, connectivityManager);
+    }
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gMapEdit = googleMap;
-
         gMapEdit.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        setPolyLineOfMap(gMapEdit);
 
         LatLng previousLocation = new LatLng(selectedLat, selectedLong);
         gMapEdit.addMarker(new MarkerOptions().position(previousLocation)
@@ -196,7 +212,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
                 if (ActivityCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if (isConnectedToInternet()) {
+                    if (internetChecker.isConnectedToInternet()) {
                         double latitude = latLng.latitude;
                         double longitude = latLng.longitude;
 
@@ -211,24 +227,30 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
 
                         getAddress(latitude, longitude);
                     } else {
-                        showNoInternetConnectionDialog();
+                        internetChecker.showNoInternetConnectionDialog();
                     }
                 } else {
                     requestLocationPermission();
                 }
             }
         });
-
     }
 
-    //this will initialize all views : searchViews, buttons, imageViews and floating action buttons
-    public void initializeViews() {
-        locationSearchView_edit = findViewById(R.id.locationSearchView_edit);
-
-        btnBackToEditPropertyActivity = findViewById(R.id.btnBackToEditPropertyActivity);
-        FABChangeMapType_edit = findViewById(R.id.FABChangeMapType_edit);
-        FABGetCurrentLocation_edit = findViewById(R.id.FABGetCurrentLocation_edit);
-        btnGetPickedPropertyLocation_edit = findViewById(R.id.btnGetPickedPropertyLocation_edit);
+    public void setPolyLineOfMap(GoogleMap gMap) {
+        //to specify the area of main location
+        gMap.addPolyline(new PolylineOptions().clickable(true).color(Color.LTGRAY).add(
+                new LatLng(16.4814312, 121.1542103),
+                new LatLng(16.4826409, 121.1572306),
+                new LatLng(16.4834756, 121.1572032),
+                new LatLng(16.4843089, 121.15693),
+                new LatLng(16.4845001, 121.1563895),
+                new LatLng(16.4848, 121.1561731),
+                new LatLng(16.4845163, 121.155666),
+                new LatLng(16.4847609, 121.1552218),
+                new LatLng(16.4838617, 121.1541471),
+                new LatLng(16.4826408, 121.1531345),
+                new LatLng(16.4814312, 121.1542103)
+        ));
     }
 
     //this will get the data from the intent passed by the edit property activity
@@ -244,7 +266,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
     public void getCurrentLocation() {
 
         if (ActivityCompat.checkSelfPermission(EditLocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (isConnectedToInternet()) {
+            if (internetChecker.isConnectedToInternet()) {
                 //will get the location of the user
                 Task<Location> task = client.getLastLocation();
 
@@ -277,7 +299,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
                 });
 
             } else {
-                showNoInternetConnectionDialog();
+                internetChecker.showNoInternetConnectionDialog();
             }
         } else {
             requestLocationPermission();
@@ -425,42 +447,7 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
             Toast.makeText(EditLocationPickerActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
         }
     }
-
-    /*------------------------- Check Internet Connections ----------------------------------*/
-
-    //this will check the connection of the user (network connection)
-    private boolean isConnectedToInternet() {
-        connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
-        mobileConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        wifiConnection = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        if (mobileConnection != null && mobileConnection.isConnected() || wifiConnection != null && wifiConnection.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void showNoInternetConnectionDialog() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.landlord_no_internet_connection_dialog, null);
-
-        Button btnOkayInternetConnection = view.findViewById(R.id.btnOkayInternetConnection);
-
-        AlertDialog noInternetDialog = new AlertDialog.Builder(this)
-                .setView(view)
-                .create();
-
-        btnOkayInternetConnection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                noInternetDialog.dismiss();
-            }
-        });
-
-        noInternetDialog.show();
-    }
-
+    
     public void enableLocationInSettings() {
         Intent openLocationInSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivity(openLocationInSettingsIntent);
@@ -485,7 +472,6 @@ public class EditLocationPickerActivity extends AppCompatActivity implements OnM
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
-        Toast.makeText(EditLocationPickerActivity.this, "Location Picked: Lat(" + selectedLat + ") , (" + selectedLong + ")", Toast.LENGTH_SHORT).show();
+        super.onBackPressed();
     }
 }

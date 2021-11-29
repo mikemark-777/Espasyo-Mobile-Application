@@ -36,6 +36,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -132,7 +133,7 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         LatLng SaintMarysUniversity = new LatLng(16.483022, 121.155538);
-        gMap.addMarker(new MarkerOptions().position(SaintMarysUniversity).title("Saint Mary's University")).showInfoWindow();
+        gMap.addMarker(new MarkerOptions().position(SaintMarysUniversity).title("Saint Mary's University").icon(BitmapDescriptorFactory.fromResource(R.drawable.img_university))).showInfoWindow();
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SaintMarysUniversity, 16.0f));
         setPolyLineOfMap(gMap);
         fetchProperties();
@@ -183,7 +184,7 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
                                 double longitude = location.getLongitude();
 
                                 LatLng usersLocation = new LatLng(latitude, longitude);
-                                MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("You are here");
+                                MarkerOptions markerOptions = new MarkerOptions().position(usersLocation).title("You are here").icon(BitmapDescriptorFactory.fromResource(R.drawable.img_walking_person));
                                 gMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(usersLocation, 16.0f, 0, 0)));
                                 gMap.addMarker(markerOptions).showInfoWindow();
 

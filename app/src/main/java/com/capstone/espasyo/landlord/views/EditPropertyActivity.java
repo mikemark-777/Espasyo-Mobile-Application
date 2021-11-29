@@ -149,7 +149,6 @@ public class EditPropertyActivity extends AppCompatActivity {
                             //if the user don't change the location, the location saved retains
                             latitude = property.getLatitude();
                             longitude = property.getLongitude();
-                            Toast.makeText(EditPropertyActivity.this, "Location Picked: Lat(" + latitude + ") , (" + longitude + ")", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -465,7 +464,6 @@ public class EditPropertyActivity extends AppCompatActivity {
     public void deleteProperty(String propertyID) {
 
         String verificationID = property.getVerificationID();
-        String barangayBusinessPermitURL = "";
         String municipalBusinessPermitURL = "";
 
         //first delete the rooms of this property

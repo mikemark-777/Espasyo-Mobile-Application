@@ -36,6 +36,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -92,7 +93,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (ActivityCompat.checkSelfPermission(LocationPickerActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if (!internetChecker.isConnectedToInternet()) {
+                    if (internetChecker.isConnectedToInternet()) {
                         String location = locationSearchView.getQuery().toString();
                         listOfAddresses = null;
 
@@ -114,9 +115,9 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                             } else {
                                 Toast.makeText(LocationPickerActivity.this, "No Location Found. Please be more specific", Toast.LENGTH_LONG).show();
                             }
-                        } else {
-                            internetChecker.showNoInternetConnectionDialog();
                         }
+                    } else {
+                        internetChecker.showNoInternetConnectionDialog();
                     }
                 } else {
                     requestLocationPermission();
@@ -194,7 +195,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         setPolyLineOfMap(gMap);
 
         LatLng SaintMarysUniversity = new LatLng(16.483022, 121.155538);
-        gMap.addMarker(new MarkerOptions().position(SaintMarysUniversity).title("Saint Mary's University")).showInfoWindow();
+        gMap.addMarker(new MarkerOptions().position(SaintMarysUniversity).title("Saint Mary's University").icon(BitmapDescriptorFactory.fromResource(R.drawable.img_university))).showInfoWindow();
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SaintMarysUniversity, 16.0f));
 
         //get location via click
@@ -324,7 +325,6 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void setConfirmedLocation(String pickedStreet, String pickedBarangay, String pickedMunicipality, String pickedLandmark, double pickedLatitude, double pickedLongitude) {
-
         //location information
         street = pickedStreet;
         barangay = pickedBarangay;
@@ -334,7 +334,6 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         //map coordinates
         selectedLat = pickedLatitude;
         selectedLong = pickedLongitude;
-
     }
 
     public void showConfirmPickedPropertyLocationDialog() {

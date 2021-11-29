@@ -56,8 +56,6 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> LocationPickerActivityResultLauncher;
 
-    List<String> rentInclusions = new ArrayList<>();
-
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
     String[] minimumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
     String[] maximumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
@@ -100,10 +98,9 @@ public class AddPropertyActivity extends AppCompatActivity {
                             textInputCompleteAddress.setEnabled(true);
                             textInputCompleteAddressLayout.setEnabled(true);
                             completeAddress = formatStringLocation(street, barangay, municipality, landmark);
-                            Toast.makeText(AddPropertyActivity.this, "Location Picked: " + completeAddress, Toast.LENGTH_SHORT).show();
                             textInputCompleteAddress.setText(completeAddress);
                         } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-                            Toast.makeText(AddPropertyActivity.this, "Location and address not set", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddPropertyActivity.this, "Address not set", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
