@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 import com.capstone.espasyo.MainActivity;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
+import com.capstone.espasyo.connectivityUtil.InternetConnectionUtil;
+import com.capstone.espasyo.models.Room;
 import com.capstone.espasyo.student.adapters.PropertyAdapter;
 import com.capstone.espasyo.student.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.student.customdialogs.StudentFilterDialog;
@@ -28,6 +31,7 @@ import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.student.repository.FirebaseConnection;
 import com.capstone.espasyo.student.views.StudentMapActivity;
 import com.capstone.espasyo.student.views.StudentAccountActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +42,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class StudentMainActivity extends AppCompatActivity implements PropertyAdapter.OnPropertyListener, StudentFilterDialog.ConfirmFilterDataListener {
@@ -45,6 +50,9 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
     private AuthViewModel viewModel;
     private FirebaseConnection firebaseConnection;
     private FirebaseFirestore database;
+
+    private InternetConnectionUtil internetChecker;
+    private ConnectivityManager connectivityManager;
 
     private SwipeRefreshLayout listViewSwipeRefresh;
     private PropertyRecyclerView propertyRecyclerView;
@@ -54,7 +62,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
 
     private ImageView btnFilter;
     private CustomProgressDialog progressDialog;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,10 +80,14 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
             }
         });
 
+        connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+        internetChecker = new InternetConnectionUtil(this, connectivityManager);
+
         //Initialize
         firebaseConnection = FirebaseConnection.getInstance();
         database = firebaseConnection.getFirebaseFirestoreInstance();
         propertyList = new ArrayList<>();
+
 
         initPropertyRecyclerView();
         progressDialog.showProgressDialog("Loading properties...", false);
@@ -83,7 +95,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(progressDialog.isShowing()) {
+                if (progressDialog.isShowing()) {
                     progressDialog.dismissProgressDialog();
                 }
             }
@@ -142,7 +154,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                         propertyList.clear();
                         for (QueryDocumentSnapshot property : queryDocumentSnapshots) {
                             Property propertyObj = property.toObject(Property.class);
-                            if(!propertyObj.isLocked()) {
+                            if (!propertyObj.isLocked()) {
                                 propertyList.add(propertyObj);
                             }
                         }
@@ -151,7 +163,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(StudentMainActivity.this, e.toString() , Toast.LENGTH_SHORT).show();
+                Toast.makeText(StudentMainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismissProgressDialog();
             }
         });
@@ -160,33 +172,33 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
 
     //interface for on item selected because setOnNavigationItemSelectedListener is deprecated
     private BottomNavigationView.OnItemSelectedListener navListener = new NavigationBarView.OnItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    switch (menuItem.getItemId()) {
-                        case R.id.List:
-                            startActivity(new Intent(getApplicationContext(), StudentMainActivity.class));
-                            overridePendingTransition(0, 0);
-                            finish();
-                            return true;
-                        case R.id.Map:
-                            startActivity(new Intent(getApplicationContext(), StudentMapActivity.class));
-                            overridePendingTransition(0, 0);
-                            finish();
-                            return true;
-                        case R.id.Account:
-                            startActivity(new Intent(getApplicationContext(), StudentAccountActivity.class));
-                            overridePendingTransition(0, 0);
-                            finish();
-                            return true;
-                    }
-                    return false;
-                }
-            };
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.List:
+                    startActivity(new Intent(getApplicationContext(), StudentMainActivity.class));
+                    overridePendingTransition(0, 0);
+                    finish();
+                    return true;
+                case R.id.Map:
+                    startActivity(new Intent(getApplicationContext(), StudentMapActivity.class));
+                    overridePendingTransition(0, 0);
+                    finish();
+                    return true;
+                case R.id.Account:
+                    startActivity(new Intent(getApplicationContext(), StudentAccountActivity.class));
+                    overridePendingTransition(0, 0);
+                    finish();
+                    return true;
+            }
+            return false;
+        }
+    };
 
     public void showFilterDialog() {
         //create an instance of the filter dialog dialog
         StudentFilterDialog studentFilterDialog = new StudentFilterDialog();
-       // confirmLocationDialog.setArguments(args);
+        // confirmLocationDialog.setArguments(args);
         studentFilterDialog.show(getSupportFragmentManager(), "studentFilterDialog");
     }
 
@@ -199,78 +211,98 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
 
     @Override
     public void getConfirmedFilterData(String propertyType, int minimumPrice, int maximumPrice, int numberOfPersons) {
-        filterProperties(propertyType,minimumPrice, maximumPrice , numberOfPersons);
+        filterProperties(propertyType, minimumPrice, maximumPrice, numberOfPersons);
 
     }
 
     @Override
     public void cancelFilter() {
-        Toast.makeText(StudentMainActivity.this, "fetch again properties" , Toast.LENGTH_SHORT).show();
-        //fetchProperties();
+        //filter data will not be applied
+        fetchProperties();
     }
 
-    public void filterProperties(String propertyType, int minPrice, int maxPrice, int numberOfPerson) {
+    public void filterProperties(String propertyType, int minPrice, int maxPrice, int numberOfPersons) {
+
         //will be used to filter properties according to users preferences
         progressDialog.showProgressDialog("Applying filters...", false);
-        CollectionReference propertiesCollection = database.collection("properties");
-        propertiesCollection.whereEqualTo("propertyType", propertyType)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        propertyList.clear();
-                        for (QueryDocumentSnapshot property : queryDocumentSnapshots) {
-                            Property propertyObj = property.toObject(Property.class);
-                            CollectionReference propertyRoomCollectionRef = database.collection("properties/" + propertyObj.getPropertyID() + "/rooms");
-                            propertyRoomCollectionRef.whereEqualTo("numberOfPersons", numberOfPerson)
-                                    .get()
-                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            if(queryDocumentSnapshots.size() > 0) {
-                                                if(propertyObj.isVerified() && !propertyObj.isLocked()) {
-                                                    if(minPrice != 0 && maxPrice != 0) {
-                                                        if(propertyObj.getMinimumPrice() >= minPrice || propertyObj.getMaximumPrice() <= maxPrice) {
-                                                            propertyList.add(propertyObj);
-                                                        }
-                                                    } else if(minPrice != 0 && maxPrice == 0){
-                                                        if(propertyObj.getMinimumPrice() >= minPrice) {
-                                                            propertyList.add(propertyObj);
-                                                        }
-                                                    } else if(minPrice == 0 && maxPrice != 0) {
-                                                        if(propertyObj.getMaximumPrice() <= maxPrice) {
-                                                            propertyList.add(propertyObj);
-                                                        }
-                                                    } else if(minPrice == 0 && maxPrice == 0){
-                                                        propertyList.add(propertyObj);
-                                                    }
+        CollectionReference propertiesColRef = database.collection("properties");
+        propertiesColRef.whereEqualTo("propertyType", propertyType)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful() && task.isComplete()) {
+                                    propertyList.clear();
+                                    for(QueryDocumentSnapshot snapshot : task.getResult()) {
+                                        Property propertyObj = snapshot.toObject(Property.class);
+                                        if(propertyObj.isVerified() && !propertyObj.isLocked()) {
+                                            if(minPrice != 0 && maxPrice != 0) {
+                                                if(propertyObj.getMinimumPrice() >= minPrice && propertyObj.getMaximumPrice() <= maxPrice) {
+                                                    propertyList.add(propertyObj);
                                                 }
+                                            } else if(minPrice != 0 && maxPrice == 0){
+                                                if(propertyObj.getMinimumPrice() >= minPrice) {
+                                                    propertyList.add(propertyObj);
+                                                }
+                                            } else if(minPrice == 0 && maxPrice != 0) {
+                                                if(propertyObj.getMaximumPrice() <= maxPrice) {
+                                                    propertyList.add(propertyObj);
+                                                }
+                                            } else if(minPrice == 0 && maxPrice == 0){
+                                                propertyList.add(propertyObj);
                                             }
                                         }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(StudentMainActivity.this, e.toString() , Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(progressDialog.isShowing()) {
-                                    progressDialog.dismissProgressDialog();
+                                    }
+
+                                    filterPropertiesByRoom(propertyList, numberOfPersons);
                                 }
                             }
-                        }, 2000);
-                        propertyAdapter.notifyDataSetChanged();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+                        }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(StudentMainActivity.this, e.toString() , Toast.LENGTH_SHORT).show();
                 progressDialog.dismissProgressDialog();
+                Toast.makeText(StudentMainActivity.this, e.toString() , Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void filterPropertiesByRoom(ArrayList<Property> filteredPropertyList, int numberOfPersons) {
+        ArrayList<Property> filteredList = new ArrayList<>();
+        for(Property property : filteredPropertyList) {
+            CollectionReference propertyRoomsColRef = database.collection("properties/" + property.getPropertyID() + "/rooms");
+            propertyRoomsColRef.whereEqualTo("numberOfPersons", numberOfPersons)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isComplete() && task.isSuccessful()) {
+                                if(task.getResult().size() > 0) {
+                                    filteredList.add(property);
+                                }
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(StudentMainActivity.this, e.toString() , Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(progressDialog.isShowing()) {
+                    propertyList.clear();
+                    propertyList.addAll(filteredList);
+                    propertyAdapter.notifyDataSetChanged();
+                    progressDialog.dismissProgressDialog();
+                    if(!internetChecker.isConnectedToInternet()) {
+
+                    }
+                }
+            }
+        }, 2000);
+
     }
 
 }

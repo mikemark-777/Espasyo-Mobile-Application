@@ -68,7 +68,7 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
         mapFragment.getMapAsync(this);
         client = LocationServices.getFusedLocationProviderClient(StudentViewPropertyOnMapActivity.this);
         connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
-        internetChecker = new InternetConnectionUtil(connectivityManager);
+        internetChecker = new InternetConnectionUtil(this, connectivityManager);
 
         changeMapType.setOnClickListener(new View.OnClickListener() {
             @Override
