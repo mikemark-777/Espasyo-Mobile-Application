@@ -65,7 +65,42 @@
         <item>12000</item>
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Minimum Price Dropdown -->
+    <string name="minPrice_dropDown_label">Min</string>
+    <string-array name="minPrices">
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>3000</item>
+        <item>4000</item>
+        <item>5000</item>
+        <item>6000</item>
+        <item>7000</item>
+        <item>8000</item>
+        <item>9000</item>
+        <item>10000</item>
+        <item>11000</item>
+        <item>12000</item>
+    </string-array>
+
+    <!-- Maximum Price Dropdown -->
+    <string name="maxPrice_dropDown_label">Max</string>
+    <string-array name="maxPrices">
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>3000</item>
+        <item>4000</item>
+        <item>5000</item>
+        <item>6000</item>
+        <item>7000</item>
+        <item>8000</item>
+        <item>9000</item>
+        <item>10000</item>
+        <item>11000</item>
+        <item>12000</item>
+    </string-array>
 
 
 </resources>

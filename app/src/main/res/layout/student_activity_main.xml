@@ -21,13 +21,14 @@
             android:layout_height="match_parent"
             android:src="@drawable/espasyo_logo_word"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageViewDeleteProperty"
+            app:layout_constraintEnd_toStartOf="@+id/btnFilter"
             app:layout_constraintHorizontal_bias="0.064"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <ImageView
-            android:id="@+id/imageViewDeleteProperty"
+            android:id="@+id/btnFilter"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="16dp"

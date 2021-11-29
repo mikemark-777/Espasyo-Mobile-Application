@@ -22,6 +22,7 @@ import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.landlord.widgets.PropertyRecyclerView;
 import com.capstone.espasyo.models.Property;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -161,7 +162,12 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
                         }
                         propertyAdapter.notifyDataSetChanged();
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     @Override

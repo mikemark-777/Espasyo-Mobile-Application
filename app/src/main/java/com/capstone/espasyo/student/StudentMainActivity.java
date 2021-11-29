@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.MainActivity;
@@ -20,6 +21,7 @@ import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.capstone.espasyo.student.adapters.PropertyAdapter;
 import com.capstone.espasyo.student.customdialogs.CustomProgressDialog;
+import com.capstone.espasyo.student.customdialogs.StudentFilterDialog;
 import com.capstone.espasyo.student.views.StudentViewPropertyDetailsActivity;
 import com.capstone.espasyo.student.widgets.PropertyRecyclerView;
 import com.capstone.espasyo.models.Property;
@@ -28,6 +30,7 @@ import com.capstone.espasyo.student.views.StudentMapActivity;
 import com.capstone.espasyo.student.views.StudentAccountActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.firestore.CollectionReference;
@@ -37,7 +40,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class StudentMainActivity extends AppCompatActivity implements PropertyAdapter.OnPropertyListener {
+public class StudentMainActivity extends AppCompatActivity implements PropertyAdapter.OnPropertyListener, StudentFilterDialog.ConfirmFilterDataListener {
 
     private AuthViewModel viewModel;
     private FirebaseConnection firebaseConnection;
@@ -49,6 +52,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
     private PropertyAdapter propertyAdapter;
     private ArrayList<Property> propertyList;
 
+    private ImageView btnFilter;
     private CustomProgressDialog progressDialog;
     
     @Override
@@ -101,6 +105,13 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                 }, 2000);
             }
         });
+
+        btnFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFilterDialog();
+            }
+        });
     }
 
     public void initPropertyRecyclerView() {
@@ -116,6 +127,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
 
         //initialize data aside from recyclerView
         progressDialog = new CustomProgressDialog(this);
+        btnFilter = findViewById(R.id.btnFilter);
         listViewSwipeRefresh = findViewById(R.id.listViewSwipeRefresh_student);
     }
 
@@ -145,6 +157,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         });
     }
 
+
     //interface for on item selected because setOnNavigationItemSelectedListener is deprecated
     private BottomNavigationView.OnItemSelectedListener navListener = new NavigationBarView.OnItemSelectedListener() {
                 @Override
@@ -170,10 +183,94 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                 }
             };
 
+    public void showFilterDialog() {
+        //create an instance of the filter dialog dialog
+        StudentFilterDialog studentFilterDialog = new StudentFilterDialog();
+       // confirmLocationDialog.setArguments(args);
+        studentFilterDialog.show(getSupportFragmentManager(), "studentFilterDialog");
+    }
+
     @Override
     public void onPropertyClick(int position) {
         Intent intent = new Intent(StudentMainActivity.this, StudentViewPropertyDetailsActivity.class);
         intent.putExtra("property", propertyList.get(position));
         startActivity(intent);
     }
+
+    @Override
+    public void getConfirmedFilterData(String propertyType, int minimumPrice, int maximumPrice, int numberOfPersons) {
+        filterProperties(propertyType,minimumPrice, maximumPrice , numberOfPersons);
+
+    }
+
+    @Override
+    public void cancelFilter() {
+        Toast.makeText(StudentMainActivity.this, "fetch again properties" , Toast.LENGTH_SHORT).show();
+        //fetchProperties();
+    }
+
+    public void filterProperties(String propertyType, int minPrice, int maxPrice, int numberOfPerson) {
+        //will be used to filter properties according to users preferences
+        progressDialog.showProgressDialog("Applying filters...", false);
+        CollectionReference propertiesCollection = database.collection("properties");
+        propertiesCollection.whereEqualTo("propertyType", propertyType)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        propertyList.clear();
+                        for (QueryDocumentSnapshot property : queryDocumentSnapshots) {
+                            Property propertyObj = property.toObject(Property.class);
+                            CollectionReference propertyRoomCollectionRef = database.collection("properties/" + propertyObj.getPropertyID() + "/rooms");
+                            propertyRoomCollectionRef.whereEqualTo("numberOfPersons", numberOfPerson)
+                                    .get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            if(queryDocumentSnapshots.size() > 0) {
+                                                if(propertyObj.isVerified() && !propertyObj.isLocked()) {
+                                                    if(minPrice != 0 && maxPrice != 0) {
+                                                        if(propertyObj.getMinimumPrice() >= minPrice || propertyObj.getMaximumPrice() <= maxPrice) {
+                                                            propertyList.add(propertyObj);
+                                                        }
+                                                    } else if(minPrice != 0 && maxPrice == 0){
+                                                        if(propertyObj.getMinimumPrice() >= minPrice) {
+                                                            propertyList.add(propertyObj);
+                                                        }
+                                                    } else if(minPrice == 0 && maxPrice != 0) {
+                                                        if(propertyObj.getMaximumPrice() <= maxPrice) {
+                                                            propertyList.add(propertyObj);
+                                                        }
+                                                    } else if(minPrice == 0 && maxPrice == 0){
+                                                        propertyList.add(propertyObj);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(StudentMainActivity.this, e.toString() , Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(progressDialog.isShowing()) {
+                                    progressDialog.dismissProgressDialog();
+                                }
+                            }
+                        }, 2000);
+                        propertyAdapter.notifyDataSetChanged();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(StudentMainActivity.this, e.toString() , Toast.LENGTH_SHORT).show();
+                progressDialog.dismissProgressDialog();
+            }
+        });
+    }
+
 }
