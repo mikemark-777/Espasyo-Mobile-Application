@@ -46,8 +46,7 @@ public class ConfirmReuploadBusinessPermitImageActivity extends AppCompatActivit
 
     private TextView displayPropertyNameConfirmReupload;
 
-    private ImageView displayMunicipalBusinessPermit_Reupload,
-            btnBackToReuploadImage;
+    private ImageView displayMunicipalBusinessPermit_Reupload, btnBackToReuploadImage;
 
     private Button btnConfirmReuploadBP,
             btnDiscardReuploadBP;
@@ -70,7 +69,9 @@ public class ConfirmReuploadBusinessPermitImageActivity extends AppCompatActivit
         btnConfirmReuploadBP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               detachOldBusinessPermit();
+                btnConfirmReuploadBP.setEnabled(false);
+                btnDiscardReuploadBP.setEnabled(false);
+                detachOldBusinessPermit();
             }
         });
 
@@ -127,6 +128,13 @@ public class ConfirmReuploadBusinessPermitImageActivity extends AppCompatActivit
             public void onSuccess(Void unused) {
                 attachReuploadedBusinessPermit(municipalBusinessPermitImageName, Uri.parse(municipalBusinessPermitImageURI));
             }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                btnConfirmReuploadBP.setEnabled(true);
+                btnDiscardReuploadBP.setEnabled(true);
+                Toast.makeText(ConfirmReuploadBusinessPermitImageActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -157,6 +165,8 @@ public class ConfirmReuploadBusinessPermitImageActivity extends AppCompatActivit
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                btnConfirmReuploadBP.setEnabled(true);
+                btnDiscardReuploadBP.setEnabled(true);
                 Toast.makeText(ConfirmReuploadBusinessPermitImageActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
@@ -179,7 +189,9 @@ public class ConfirmReuploadBusinessPermitImageActivity extends AppCompatActivit
         verificationRequestsDocumentReference.set(verificationRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Toast.makeText(ConfirmReuploadBusinessPermitImageActivity.this, "Business Permit has been changed", Toast.LENGTH_SHORT).show();
+                btnConfirmReuploadBP.setEnabled(true);
+                btnDiscardReuploadBP.setEnabled(true);
+                Toast.makeText(ConfirmReuploadBusinessPermitImageActivity.this, "Business Permit successfully updated", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(ConfirmReuploadBusinessPermitImageActivity.this, LandlordMainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -188,6 +200,8 @@ public class ConfirmReuploadBusinessPermitImageActivity extends AppCompatActivit
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                btnConfirmReuploadBP.setEnabled(true);
+                btnDiscardReuploadBP.setEnabled(true);
                 Toast.makeText(ConfirmReuploadBusinessPermitImageActivity.this, "Failed to Upload Verification Request.", Toast.LENGTH_SHORT).show();
             }
         });

@@ -76,6 +76,8 @@ public class AddRoomActivity extends AppCompatActivity {
                 boolean hasKitchen = kitchenSwitch.isChecked();
 
                 if (areInputsValid(roomName, roomPriceInString)) {
+                    btnAddRoom.setEnabled(false);
+                    btnCancelAddRoom.setEnabled(false);
                     int roomPrice = Integer.parseInt(roomPriceInString);
                     //New Room Object
                     String newRoomID = UUID.randomUUID().toString();
@@ -190,6 +192,8 @@ public class AddRoomActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    btnAddRoom.setEnabled(true);
+                    btnCancelAddRoom.setEnabled(true);
                     Toast.makeText(AddRoomActivity.this, "New Room Successfully Added", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -197,6 +201,8 @@ public class AddRoomActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                btnAddRoom.setEnabled(true);
+                btnCancelAddRoom.setEnabled(true);
                 Log.d("ADD ROOM", "Adding room error: " + e.toString());
             }
         });

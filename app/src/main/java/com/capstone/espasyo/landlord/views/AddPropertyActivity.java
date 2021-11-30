@@ -378,6 +378,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                btnAddProperty.setEnabled(true);
                 Toast.makeText(AddPropertyActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });

@@ -24,8 +24,11 @@ import com.capstone.espasyo.models.ImageFolder;
 import com.capstone.espasyo.models.Landlord;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.Room;
+import com.capstone.espasyo.student.views.StudentPreviewImageActivity;
+import com.capstone.espasyo.student.views.StudentViewPropertyDetailsActivity;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.interfaces.ItemChangeListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -74,6 +77,8 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     private ImageSlider propertyImageSlider;
     private CustomProgressDialog progressDialog;
     private ArrayList<String> downloadedURLs = new ArrayList<>();
+    private ImageView btnZoomImage;
+    private int imageIndex = 0;
     private ImageView emptyImagesDisplay;
 
     @Override
@@ -126,6 +131,24 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
                 Intent intent = new Intent(PropertyDetailsActivity.this, ManagePropertyImageActivity.class);
                 intent.putExtra("property", property);
                 startActivity(intent);
+            }
+        });
+
+        propertyImageSlider.setItemChangeListener(new ItemChangeListener() {
+            @Override
+            public void onItemChanged(int i) {
+                imageIndex = i;
+            }
+        });
+
+        btnZoomImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (downloadedURLs.size() > 0) {
+                    Intent intent = new Intent(PropertyDetailsActivity.this, PreviewImageActivity.class);
+                    intent.putExtra("previewImage", downloadedURLs.get(imageIndex));
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -233,6 +256,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         propertyImageSlider = findViewById(R.id.image_slider_propertyDetails);
         progressDialog = new CustomProgressDialog(this);
         emptyImagesDisplay = findViewById(R.id.emptyImagesDisplay_landlordPropertyDetails);
+        btnZoomImage = findViewById(R.id.btnZoomImage_landlord);
     }
 
     public void fetchPropertyRooms() {

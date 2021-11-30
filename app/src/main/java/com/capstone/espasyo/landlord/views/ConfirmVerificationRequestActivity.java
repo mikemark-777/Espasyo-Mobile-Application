@@ -160,6 +160,8 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
         progressDialog.setTitle("Attaching Municipal Business Permit to Verification Request...");
         progressDialog.show();
+        btnConfirmVerificationRequest.setEnabled(false);
+        btnDiscardVerificationRequest.setEnabled(false);
 
         String requesteeID = verificationRequest.getRequesteeID();
         String propertyID = verificationRequest.getPropertyID();
@@ -184,6 +186,8 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                btnConfirmVerificationRequest.setEnabled(true);
+                btnDiscardVerificationRequest.setEnabled(true);
                 Toast.makeText(ConfirmVerificationRequestActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
@@ -211,6 +215,8 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                btnConfirmVerificationRequest.setEnabled(true);
+                btnDiscardVerificationRequest.setEnabled(true);
                 Toast.makeText(ConfirmVerificationRequestActivity.this, "Failed to Upload Verification Request.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -241,8 +247,17 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
+                    btnConfirmVerificationRequest.setEnabled(true);
+                    btnDiscardVerificationRequest.setEnabled(true);
                     Toast.makeText(ConfirmVerificationRequestActivity.this, "Error saving verification ID to property: " + task.getException().toString(), Toast.LENGTH_SHORT).show();
                 }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                btnConfirmVerificationRequest.setEnabled(true);
+                btnDiscardVerificationRequest.setEnabled(true);
+                Toast.makeText(ConfirmVerificationRequestActivity.this, "Error saving verification ID to property: " + e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }

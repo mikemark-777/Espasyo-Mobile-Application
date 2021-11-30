@@ -453,7 +453,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/btnZoomImage_student"
+                    android:id="@+id/btnZoomImage_landlord"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginEnd="8dp"

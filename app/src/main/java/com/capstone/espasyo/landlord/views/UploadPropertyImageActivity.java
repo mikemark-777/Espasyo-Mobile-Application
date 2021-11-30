@@ -154,6 +154,8 @@ public class UploadPropertyImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!propertyImageName.isEmpty() && !propertyImageURI.equals(Uri.EMPTY)) {
+                    btnUpload.setEnabled(false);
+                    btnCancel.setEnabled(false);
                     uploadImage(propertyImageName,propertyImageURI);
                 } else {
                     Toast.makeText(UploadPropertyImageActivity.this, "Please pick an image", Toast.LENGTH_LONG).show();
@@ -416,6 +418,8 @@ public class UploadPropertyImageActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                btnCancel.setEnabled(true);
+                btnUpload.setEnabled(true);
                 Toast.makeText(UploadPropertyImageActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
             }
         });
@@ -427,6 +431,8 @@ public class UploadPropertyImageActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void unused) {
                 //see what must be included, an intent or what
+                btnUpload.setEnabled(true);
+                btnCancel.setEnabled(true);
                 textImageUploading.setVisibility(View.GONE);
                 uploadImageProgressBar.setVisibility(View.GONE);
                 setResult(RESULT_OK);
@@ -435,6 +441,8 @@ public class UploadPropertyImageActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                btnUpload.setEnabled(true);
+                btnCancel.setEnabled(true);
                 textImageUploading.setVisibility(View.GONE);
                 uploadImageProgressBar.setVisibility(View.GONE);
                 Toast.makeText(UploadPropertyImageActivity.this, e.toString(), Toast.LENGTH_LONG).show();

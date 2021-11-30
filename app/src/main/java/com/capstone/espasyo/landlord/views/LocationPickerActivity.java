@@ -104,8 +104,6 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                                 e.printStackTrace();
                             }
 
-                            gMap.clear();
-
                             if (!listOfAddresses.isEmpty()) {
                                 Address addressResult = listOfAddresses.get(0);
                                 LatLng searchedLocation = new LatLng(addressResult.getLatitude(), addressResult.getLongitude());
