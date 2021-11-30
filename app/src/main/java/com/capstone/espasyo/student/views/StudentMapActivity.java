@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
-import com.capstone.espasyo.landlord.views.LocationPickerActivity;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.student.StudentMainActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -39,7 +38,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -329,7 +327,7 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
 
     public void showNoInternetConnectionDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.landlord_no_internet_connection_dialog, null);
+        View view = inflater.inflate(R.layout.no_internet_connection_dialog, null);
 
         Button btnOkayInternetConnection = view.findViewById(R.id.btnOkayInternetConnection);
 

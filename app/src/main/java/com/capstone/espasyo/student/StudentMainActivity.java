@@ -1,6 +1,7 @@
 package com.capstone.espasyo.student;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,8 +13,10 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -21,7 +24,6 @@ import com.capstone.espasyo.MainActivity;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.capstone.espasyo.connectivityUtil.InternetConnectionUtil;
-import com.capstone.espasyo.models.Room;
 import com.capstone.espasyo.student.adapters.PropertyAdapter;
 import com.capstone.espasyo.student.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.student.customdialogs.StudentFilterDialog;
@@ -42,7 +44,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class StudentMainActivity extends AppCompatActivity implements PropertyAdapter.OnPropertyListener, StudentFilterDialog.ConfirmFilterDataListener {
@@ -198,7 +199,6 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
     public void showFilterDialog() {
         //create an instance of the filter dialog dialog
         StudentFilterDialog studentFilterDialog = new StudentFilterDialog();
-        // confirmLocationDialog.setArguments(args);
         studentFilterDialog.show(getSupportFragmentManager(), "studentFilterDialog");
     }
 
@@ -218,7 +218,16 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
     @Override
     public void cancelFilter() {
         //filter data will not be applied
+        progressDialog.showProgressDialog("Loading properties...", false);
         fetchProperties();
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismissProgressDialog();
+                }
+            }
+        }, 1500);
     }
 
     public void filterProperties(String propertyType, int minPrice, int maxPrice, int numberOfPersons) {
@@ -296,13 +305,41 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                     propertyList.addAll(filteredList);
                     propertyAdapter.notifyDataSetChanged();
                     progressDialog.dismissProgressDialog();
-                    if(!internetChecker.isConnectedToInternet()) {
-
+                    if(internetChecker.isConnectedToInternet()) {
+                        if(filteredList.size() == 0) {
+                            showNoResultsFoundDialog();
+                        }
+                    } else {
+                        internetChecker.showNoInternetConnectionDialog();
                     }
                 }
             }
         }, 2000);
+    }
 
+    public void showNoResultsFoundDialog() {
+        LayoutInflater inflater = LayoutInflater.from(StudentMainActivity.this);
+        View view = inflater.inflate(R.layout.no_results_found_dialog, null);
+
+        Button btnOkay = view.findViewById(R.id.btnOkayNoResultsFound);
+        AlertDialog noResultsFoundDialog = new AlertDialog.Builder(StudentMainActivity.this).setView(view).create();
+        btnOkay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog.showProgressDialog("Loading properties...", false);
+                fetchProperties();
+                noResultsFoundDialog.dismiss();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (progressDialog.isShowing()) {
+                            progressDialog.dismissProgressDialog();
+                        }
+                    }
+                }, 1500);
+            }
+        });
+        noResultsFoundDialog.show();
     }
 
 }
