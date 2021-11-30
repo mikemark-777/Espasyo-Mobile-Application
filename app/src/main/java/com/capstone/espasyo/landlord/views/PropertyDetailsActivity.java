@@ -232,7 +232,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         btnManageImages = findViewById(R.id.gotoManageImages);
         propertyImageSlider = findViewById(R.id.image_slider_propertyDetails);
         progressDialog = new CustomProgressDialog(this);
-        emptyImagesDisplay = findViewById(R.id.emptyImagesDisplay);
+        emptyImagesDisplay = findViewById(R.id.emptyImagesDisplay_landlordPropertyDetails);
     }
 
     public void fetchPropertyRooms() {
@@ -315,14 +315,14 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
             downloadedURLs = imageFolder.getImages();
 
             if (!downloadedURLs.isEmpty()) {
-                //emptyImagesDisplay.setVisibility(View.GONE);
+                emptyImagesDisplay.setVisibility(View.GONE);
                 for (String url : downloadedURLs) {
                     imageSlides.add(new SlideModel(url, ScaleTypes.CENTER_INSIDE));
                 }
                 propertyImageSlider.setImageList(imageSlides);
                 progressDialog.dismissProgressDialog();
             } else {
-                //emptyImagesDisplay.setVisibility(View.VISIBLE);
+                emptyImagesDisplay.setVisibility(View.VISIBLE);
                 progressDialog.dismissProgressDialog();
             }
         } else {

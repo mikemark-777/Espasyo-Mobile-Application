@@ -100,7 +100,8 @@ public class StudentViewPropertyOnMapActivity extends AppCompatActivity implemen
         LatLng propertyLocation = new LatLng(propertyLatitude, propertyLongitude);
         gMap.addMarker(new MarkerOptions().position(propertyLocation)
                 .title(propertyName)
-                .snippet(propertyAddress)).showInfoWindow();
+                .snippet(propertyAddress)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).showInfoWindow();
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(propertyLocation, 16.0f));
         getCurrentLocation();
     }

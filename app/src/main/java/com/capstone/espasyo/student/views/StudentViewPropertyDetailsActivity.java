@@ -247,7 +247,7 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         propertyImageSlider = findViewById(R.id.image_slider_propertyDetails);
         btnZoomImage = findViewById(R.id.btnZoomImage_student);
         progressDialog = new CustomProgressDialog(this);
-        emptyImagesDisplay = findViewById(R.id.emptyImagesDisplay);
+        emptyImagesDisplay = findViewById(R.id.emptyImagesDisplay_studentPropertyDetails);
     }
 
     public void fetchPropertyRooms() {
@@ -330,14 +330,14 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
             downloadedURLs = imageFolder.getImages();
 
             if (!downloadedURLs.isEmpty()) {
-                //emptyImagesDisplay.setVisibility(View.GONE);
+                emptyImagesDisplay.setVisibility(View.GONE);
                 for (String url : downloadedURLs) {
                     imageSlides.add(new SlideModel(url, ScaleTypes.CENTER_INSIDE));
                 }
                 propertyImageSlider.setImageList(imageSlides);
                 progressDialog.dismissProgressDialog();
             } else {
-                //emptyImagesDisplay.setVisibility(View.VISIBLE);
+                emptyImagesDisplay.setVisibility(View.VISIBLE);
                 progressDialog.dismissProgressDialog();
             }
         } else {
