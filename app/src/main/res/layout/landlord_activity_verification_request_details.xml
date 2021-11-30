@@ -135,7 +135,7 @@
                 <LinearLayout
                     android:id="@+id/infoBoxExpired_verificationDetails"
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
+                    android:layout_height="190dp"
                     android:background="@color/espasyo_red_200"
                     android:orientation="vertical"
                     android:paddingStart="16dp"
@@ -168,7 +168,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="This verification request is expired. The property to where this verification request is attached is unverified. Please renew this verification request."
+                        android:text="The business permit attached to this verification request is expired. The property that is linked to this is now unverified. To make your property visible to students again,  please renew and reupload your business permit."
                         android:textAlignment="textStart"
                         android:textColor="@color/white"
                         android:layout_marginTop="8dp"/>

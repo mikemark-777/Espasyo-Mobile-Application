@@ -23,10 +23,8 @@ import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Landlord;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,7 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
+public class ConfirmRenewBusinessPermitActivity extends AppCompatActivity {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseFirestore database;
@@ -86,7 +84,7 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         displayMunicipalBusinessPermit_Renew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ConfirmRenewVerificationRequestActivity.this, PreviewImageActivity.class);
+                Intent intent = new Intent(ConfirmRenewBusinessPermitActivity.this, PreviewImageActivity.class);
                 intent.putExtra("previewImage", municipalBusinessPermitImageURI);
                 startActivity(intent);
             }
@@ -107,7 +105,7 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         btnDiscardRenewVerificationRequest = findViewById(R.id.btnDiscardRenewVerificationRequest);
 
         //initialize the progressDialog for the uploading of business permits
-        progressDialog = new ProgressDialog(ConfirmRenewVerificationRequestActivity.this);
+        progressDialog = new ProgressDialog(ConfirmRenewBusinessPermitActivity.this);
     }
 
     public void getDataFromIntent(Intent intent) {
@@ -139,6 +137,8 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
 
         progressDialog.setTitle("Attaching Municipal Business Permit to Verification Request...");
         progressDialog.show();
+        btnConfirmRenewVerificationRequest.setEnabled(false);
+        btnDiscardRenewVerificationRequest.setEnabled(false);
 
         String requesteeID = verificationRequest.getRequesteeID();
         String propertyID = verificationRequest.getPropertyID();
@@ -162,7 +162,9 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ConfirmRenewVerificationRequestActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
+                btnConfirmRenewVerificationRequest.setEnabled(true);
+                btnDiscardRenewVerificationRequest.setEnabled(true);
+                Toast.makeText(ConfirmRenewBusinessPermitActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -184,8 +186,10 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         verificationRequestsDocumentReference.set(RenewedVerificationRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Toast.makeText(ConfirmRenewVerificationRequestActivity.this, "Verification Request has been sent to the admin for renewal", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ConfirmRenewVerificationRequestActivity.this, LandlordMainActivity.class);
+                btnConfirmRenewVerificationRequest.setEnabled(true);
+                btnDiscardRenewVerificationRequest.setEnabled(true);
+                Toast.makeText(ConfirmRenewBusinessPermitActivity.this, "Verification Request has been sent to the admin for renewal", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ConfirmRenewBusinessPermitActivity.this, LandlordMainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -193,7 +197,9 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ConfirmRenewVerificationRequestActivity.this, "Failed to Upload Verification Request.", Toast.LENGTH_SHORT).show();
+                btnConfirmRenewVerificationRequest.setEnabled(true);
+                btnDiscardRenewVerificationRequest.setEnabled(true);
+                Toast.makeText(ConfirmRenewBusinessPermitActivity.this, "Failed to Upload Verification Request.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -216,7 +222,7 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ConfirmRenewVerificationRequestActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ConfirmRenewBusinessPermitActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -258,7 +264,7 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
             @Override
             public void run() {
                 progressDialog.dismiss();
-                Toast.makeText(ConfirmRenewVerificationRequestActivity.this, "Renewal of Business Permit cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ConfirmRenewBusinessPermitActivity.this, "Renewal of Business Permit cancelled", Toast.LENGTH_SHORT).show();
                 setResult(RESULT_CANCELED);
                 finish();
             }

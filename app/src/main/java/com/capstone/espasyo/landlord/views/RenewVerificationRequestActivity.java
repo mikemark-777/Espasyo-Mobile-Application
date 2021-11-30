@@ -34,12 +34,8 @@ import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.VerificationRequest;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -84,7 +80,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.landlord_activity_renew_verification_request);
+        setContentView(R.layout.landlord_activity_renew_business_permit);
 
         //initialize firebase connections
         firebaseConnection = FirebaseConnection.getInstance();
@@ -186,7 +182,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!municipalBusinessPermitImageName.equals("") && !municipalBusinessPermitImageURI.equals(Uri.EMPTY)) {
-                        Intent intent = new Intent(RenewVerificationRequestActivity.this, ConfirmRenewVerificationRequestActivity.class);
+                        Intent intent = new Intent(RenewVerificationRequestActivity.this, ConfirmRenewBusinessPermitActivity.class);
                         intent.putExtra("initialVerificationRequest", verificationRequest);
                         intent.putExtra("chosenProperty", chosenProperty);
                         intent.putExtra("imageName", municipalBusinessPermitImageName);

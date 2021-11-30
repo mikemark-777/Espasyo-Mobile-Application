@@ -57,7 +57,7 @@
             android:name=".landlord.views.ReuploadBusinessPermitActivity"
             android:exported="true" />
         <activity
-            android:name=".landlord.views.ConfirmRenewVerificationRequestActivity"
+            android:name=".landlord.views.ConfirmRenewBusinessPermitActivity"
             android:exported="true" />
         <activity
             android:name=".landlord.views.SeeDetailsDeclinedVerification"
