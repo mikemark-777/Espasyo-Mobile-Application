@@ -212,7 +212,6 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
     @Override
     public void getConfirmedFilterData(String propertyType, int minimumPrice, int maximumPrice, int numberOfPersons) {
         filterProperties(propertyType, minimumPrice, maximumPrice, numberOfPersons);
-
     }
 
     @Override

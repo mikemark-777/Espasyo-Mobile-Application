@@ -3,6 +3,7 @@ package com.capstone.espasyo.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class VerificationRequest implements Parcelable {
@@ -13,7 +14,7 @@ public class VerificationRequest implements Parcelable {
     private String classification;
     private String dateSubmitted;
     private String dateVerified;
-    private String declinedVerificationDescription;
+    private ArrayList<String> declinedVerificationDescription;
     private String requesteeID;
     private String propertyID;
     private String propertyName;
@@ -26,7 +27,6 @@ public class VerificationRequest implements Parcelable {
 
     //setters
 
-
     protected VerificationRequest(Parcel in) {
         verificationRequestID = in.readString();
         isExpired = in.readByte() != 0;
@@ -34,33 +34,12 @@ public class VerificationRequest implements Parcelable {
         classification = in.readString();
         dateSubmitted = in.readString();
         dateVerified = in.readString();
-        declinedVerificationDescription = in.readString();
+        declinedVerificationDescription = in.createStringArrayList();
         requesteeID = in.readString();
         propertyID = in.readString();
         propertyName = in.readString();
         propertyAddress = in.readString();
         municipalBusinessPermitImageURL = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(verificationRequestID);
-        dest.writeByte((byte) (isExpired ? 1 : 0));
-        dest.writeString(status);
-        dest.writeString(classification);
-        dest.writeString(dateSubmitted);
-        dest.writeString(dateVerified);
-        dest.writeString(declinedVerificationDescription);
-        dest.writeString(requesteeID);
-        dest.writeString(propertyID);
-        dest.writeString(propertyName);
-        dest.writeString(propertyAddress);
-        dest.writeString(municipalBusinessPermitImageURL);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<VerificationRequest> CREATOR = new Creator<VerificationRequest>() {
@@ -99,7 +78,7 @@ public class VerificationRequest implements Parcelable {
         this.dateVerified = dateVerified;
     }
 
-    public void setDeclinedVerificationDescription(String declinedVerificationDescription) {
+    public void setDeclinedVerificationDescription(ArrayList<String> declinedVerificationDescription) {
         this.declinedVerificationDescription = declinedVerificationDescription;
     }
 
@@ -122,8 +101,6 @@ public class VerificationRequest implements Parcelable {
     public void setMunicipalBusinessPermitImageURL(String municipalBusinessPermitImageURL) {
         this.municipalBusinessPermitImageURL = municipalBusinessPermitImageURL;
     }
-
-    //getters
 
     public String getVerificationRequestID() {
         return verificationRequestID;
@@ -149,7 +126,7 @@ public class VerificationRequest implements Parcelable {
         return dateVerified;
     }
 
-    public String getDeclinedVerificationDescription() {
+    public ArrayList<String> getDeclinedVerificationDescription() {
         return declinedVerificationDescription;
     }
 
@@ -171,5 +148,26 @@ public class VerificationRequest implements Parcelable {
 
     public String getMunicipalBusinessPermitImageURL() {
         return municipalBusinessPermitImageURL;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(verificationRequestID);
+        dest.writeByte((byte) (isExpired ? 1 : 0));
+        dest.writeString(status);
+        dest.writeString(classification);
+        dest.writeString(dateSubmitted);
+        dest.writeString(dateVerified);
+        dest.writeStringList(declinedVerificationDescription);
+        dest.writeString(requesteeID);
+        dest.writeString(propertyID);
+        dest.writeString(propertyName);
+        dest.writeString(propertyAddress);
+        dest.writeString(municipalBusinessPermitImageURL);
     }
 }

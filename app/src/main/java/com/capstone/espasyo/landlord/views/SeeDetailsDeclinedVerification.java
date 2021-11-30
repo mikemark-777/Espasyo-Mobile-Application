@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.models.VerificationRequest;
 
+import java.util.ArrayList;
+
 public class SeeDetailsDeclinedVerification extends AppCompatActivity {
 
     //verification request object
@@ -138,7 +140,13 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
     }
 
     public void displayDeclinedVerificationReason() {
-        String reason = verificationRequest.getDeclinedVerificationDescription();
-        declinedVerificationDescription.setText(reason);
+        ArrayList<String> reasons = verificationRequest.getDeclinedVerificationDescription();
+
+        String concatReasons = "";
+        for(String reason : reasons) {
+            concatReasons += reason + "\n";
+        }
+
+        declinedVerificationDescription.setText(concatReasons);
     }
 }
