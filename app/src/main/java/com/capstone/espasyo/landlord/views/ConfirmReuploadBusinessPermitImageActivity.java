@@ -1,9 +1,11 @@
 package com.capstone.espasyo.landlord.views;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,10 +48,9 @@ public class ConfirmReuploadBusinessPermitImageActivity extends AppCompatActivit
 
     private TextView displayPropertyNameConfirmReupload;
 
-    private ImageView displayMunicipalBusinessPermit_Reupload, btnBackToReuploadImage;
+    private ImageView displayMunicipalBusinessPermit_Reupload;
 
-    private Button btnConfirmReuploadBP,
-            btnDiscardReuploadBP;
+    private Button btnConfirmReuploadBP, btnDiscardReuploadBP;
 
     private ProgressDialog progressDialog;
 
@@ -78,8 +79,16 @@ public class ConfirmReuploadBusinessPermitImageActivity extends AppCompatActivit
         btnDiscardReuploadBP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                finish();
+                showDiscardConfirmationDialog();
+            }
+        });
+
+        displayMunicipalBusinessPermit_Reupload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ConfirmReuploadBusinessPermitImageActivity.this, PreviewImageActivity.class);
+                intent.putExtra("previewImage", municipalBusinessPermitImageURI);
+                startActivity(intent);
             }
         });
 
@@ -90,9 +99,6 @@ public class ConfirmReuploadBusinessPermitImageActivity extends AppCompatActivit
 
         //business permit imageviews
         displayMunicipalBusinessPermit_Reupload = findViewById(R.id.displayMunicipalBusinessPermit_confirmReupload);
-
-        //image view back button
-        btnBackToReuploadImage = findViewById(R.id.btn_back_to_uploadNewBP);
 
         //initialize buttons
         btnConfirmReuploadBP = findViewById(R.id.btnConfirmReuploadBusinessPermit);
@@ -212,5 +218,37 @@ public class ConfirmReuploadBusinessPermitImageActivity extends AppCompatActivit
                 progressDialog.dismiss();
             }
         }, 3500);
+    }
+
+    public void showDiscardConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Discard Draft")
+                .setMessage("Do you want to discard re-uploaded business permit?")
+                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        discardReuploadBusinessPermit();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
+    }
+
+    public void discardReuploadBusinessPermit() {
+        progressDialog.setTitle("Discarding...");
+        progressDialog.show();
+        // finish this activity
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+                Toast.makeText(ConfirmReuploadBusinessPermitImageActivity.this, "Re-Upload Business Permit cancelled", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        }, 1500);
     }
 }

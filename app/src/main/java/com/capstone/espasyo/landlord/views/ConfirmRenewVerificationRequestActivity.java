@@ -1,9 +1,11 @@
 package com.capstone.espasyo.landlord.views;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,7 +51,7 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
     private String municipalBusinessPermitImageURI;
 
     private TextView displayPropertyNameConfirmRenewVerification, displayAddressConfirmRenewVerification, displayProprietorNameConfirmRenewVerification, displayLandlordNameConfirmRenewVerification, displayLandlordPhoneNumberConfirmRenewVerification;
-    private ImageView displayMunicipalBusinessPermit_Renew, btnBackToUploadImage;
+    private ImageView displayMunicipalBusinessPermit_Renew;
     private Button btnConfirmRenewVerificationRequest, btnDiscardRenewVerificationRequest;
     private ProgressDialog progressDialog;
 
@@ -74,6 +76,22 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
             }
         });
 
+        btnDiscardRenewVerificationRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDiscardConfirmationDialog();
+            }
+        });
+
+        displayMunicipalBusinessPermit_Renew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ConfirmRenewVerificationRequestActivity.this, PreviewImageActivity.class);
+                intent.putExtra("previewImage", municipalBusinessPermitImageURI);
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void initializeViews() {
@@ -83,9 +101,6 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
 
         //business permit imageviews
         displayMunicipalBusinessPermit_Renew = findViewById(R.id.displayMunicipalBusinessPermit_confirmRenewVerification);
-
-        //image view back button
-        btnBackToUploadImage = findViewById(R.id.btn_back_to_uploadNewBP);
 
         //initialize buttons
         btnConfirmRenewVerificationRequest = findViewById(R.id.btnConfirmRenewVerificationRequest);
@@ -216,5 +231,37 @@ public class ConfirmRenewVerificationRequestActivity extends AppCompatActivity {
 
         displayLandlordNameConfirmRenewVerification.setText(landlordName);
         displayLandlordPhoneNumberConfirmRenewVerification.setText(landlordPhoneNumber);
+    }
+
+    public void showDiscardConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Discard Draft")
+                .setMessage("Do you want to discard renewal of business permit?")
+                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        discardReuploadBusinessPermit();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
+    }
+
+    public void discardReuploadBusinessPermit() {
+        progressDialog.setTitle("Discarding...");
+        progressDialog.show();
+        // finish this activity
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+                Toast.makeText(ConfirmRenewVerificationRequestActivity.this, "Renewal of Business Permit cancelled", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        }, 1500);
     }
 }

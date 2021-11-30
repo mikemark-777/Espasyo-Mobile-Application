@@ -72,6 +72,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> pickFromGalleryActivityResultLauncher;
     private ActivityResultLauncher<Intent> pickFromCameraActivityResultLauncher;
+    private ActivityResultLauncher<Intent> ConfirmRenewActivityResultLauncher;
 
     //this will hold the initial verification request and chosen property from STEP-1
     private VerificationRequest verificationRequest;
@@ -145,6 +146,18 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                     }
                 });
 
+        //will handle the result from confirmRenew if discarded or verified
+        ConfirmRenewActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                            finish();
+                        }
+                    }
+                });
+
         //will open choice where to get the image
         btnChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,7 +191,7 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                         intent.putExtra("chosenProperty", chosenProperty);
                         intent.putExtra("imageName", municipalBusinessPermitImageName);
                         intent.putExtra("imageURL", municipalBusinessPermitImageURI.toString());
-                        startActivity(intent);
+                    ConfirmRenewActivityResultLauncher.launch(intent);
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 } else {
                     Toast.makeText(RenewVerificationRequestActivity.this, "Please upload renewed municipal business permit", Toast.LENGTH_SHORT).show();
@@ -397,69 +410,6 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
         }
     }
 
-    public void showConfirmationDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Confirm Attachment")
-                .setMessage("Make sure you have uploaded the updated and authentic Municipal Business Permit. This will be attached to this verification request.")
-                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        attachBusinessPermit(municipalBusinessPermitImageName, municipalBusinessPermitImageURI);
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).create().show();
-    }
-
-    public void attachBusinessPermit(String municipalBusinessPermitImageName, Uri municipalBusinessPermitImageURI) {
-        //set the current municipalBPImageName and municipalBPImageURI
-        currentMunicipalBPImageName = municipalBusinessPermitImageName;
-        currentMunicipalBPImageURI = municipalBusinessPermitImageURI;
-        progressDialog.setTitle("Attaching Municipal Business Permit to Verification Request...");
-        progressDialog.show();
-
-        String requesteeID = verificationRequest.getRequesteeID();
-        String propertyID = verificationRequest.getPropertyID();
-        storageReference = storage.getReference("landlords/" + requesteeID + "/" + propertyID + "/verificationRequest");
-        final StorageReference businessPermitRef = storageReference.child(municipalBusinessPermitImageName);
-        businessPermitRef.putFile(municipalBusinessPermitImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                businessPermitRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        String municipalBusinessPermitImageURL = uri.toString();
-                        Intent intent = new Intent(RenewVerificationRequestActivity.this, ConfirmRenewVerificationRequestActivity.class);
-
-                        //attach the image url to verification request
-                        verificationRequest.setMunicipalBusinessPermitImageURL(municipalBusinessPermitImageURL);
-
-                        intent.putExtra("initialVerificationRequest", verificationRequest);
-                        intent.putExtra("chosenProperty", chosenProperty);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                        progressDialog.dismiss();
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(RenewVerificationRequestActivity.this, "Failed to Upload Image", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                progressDialog.setMessage("Percentage: " + (int) progressPercent + "%");
-            }
-        });
-    }
-
     public void showDiscardDialog() {
 
         new AlertDialog.Builder(this)
@@ -478,14 +428,6 @@ public class RenewVerificationRequestActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         }).create().show();
-    }
-
-    public boolean isImageIsChanged(String newMunicipalBPImageName, Uri newMunicipalBPImageURI, String currentMunicipalBPImageName, Uri currentMunicipalBPImageURI) {
-        if(newMunicipalBPImageName.equals(currentMunicipalBPImageName) && newMunicipalBPImageURI.equals(currentMunicipalBPImageURI)) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     public void previewImage(String imageURL) {

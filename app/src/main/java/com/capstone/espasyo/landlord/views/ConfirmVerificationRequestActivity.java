@@ -91,7 +91,6 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
         displayMunicipalBusinessPermit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String municipalBPUrl = municipalBusinessPermitImageURI;
                 Intent intent = new Intent(ConfirmVerificationRequestActivity.this, PreviewImageActivity.class);
                 intent.putExtra("previewImage", municipalBusinessPermitImageURI);
                 startActivity(intent);
