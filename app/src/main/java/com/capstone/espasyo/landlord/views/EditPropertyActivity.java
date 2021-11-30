@@ -77,10 +77,9 @@ public class EditPropertyActivity extends AppCompatActivity {
             internetEditCheckBox,
             garbageEditCheckBox;
 
-    private Button btnEditProperty,
+    private Button  btnEditMapLocation, btnEditProperty,
             btnCancelEditProperty;
 
-    private ImageButton btnEditMapLocation;
     private ImageView btnDeleteProperty,
             imageButtonBackToChooseEdit;
 

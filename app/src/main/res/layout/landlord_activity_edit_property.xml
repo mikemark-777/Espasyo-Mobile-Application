@@ -126,13 +126,12 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageButton
+                <Button
                     android:id="@+id/btnEditMapLocation"
-                    android:layout_width="65dp"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@color/espasyo_blue_200"
-                    android:src="@drawable/icon_map" />
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
+                    android:layout_weight="1"
+                    android:text="Get" />
 
             </LinearLayout>
 

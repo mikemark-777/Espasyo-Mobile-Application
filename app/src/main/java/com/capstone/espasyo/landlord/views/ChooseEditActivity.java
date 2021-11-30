@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
@@ -33,6 +34,7 @@ public class ChooseEditActivity extends AppCompatActivity {
     private String selectedPropertyID;
 
     private ImageView imageButtonBackToManageProperty;
+    private TextView displayPropertyName;
     private CardView editPropertyCardView;
     private CardView editRoomsCardView;
 
@@ -93,6 +95,7 @@ public class ChooseEditActivity extends AppCompatActivity {
         imageButtonBackToManageProperty = findViewById(R.id.imageButtonBackToManageProperty);
         editPropertyCardView = findViewById(R.id.editPropertyCardView);
         editRoomsCardView = findViewById(R.id.editRoomsCardView);
+        displayPropertyName = findViewById(R.id.displayPropertyName);
         progressDialog = new CustomProgressDialog(this);
     }
 
@@ -104,6 +107,7 @@ public class ChooseEditActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()) {
                     selectedProperty = task.getResult().toObject(Property.class);
+                    displayPropertyName(selectedProperty);
                 }
             }
         });
@@ -115,6 +119,11 @@ public class ChooseEditActivity extends AppCompatActivity {
                 }
             }
         }, 1000);
+    }
+
+    public void displayPropertyName(Property property) {
+        String propertyName = property.getName();
+        displayPropertyName.setText(propertyName);
     }
 
     // TODO: Handle Activity Life Cycle
