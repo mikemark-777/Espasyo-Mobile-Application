@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="270dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
     android:layout_marginLeft="24dp"
+    android:layout_marginTop="8dp"
     android:layout_marginRight="24dp"
+    android:layout_marginBottom="8dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/espasyo_blue_500"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="4dp">
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -26,14 +25,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="105dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="30dp"
         android:background="@color/white"
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingTop="10dp"
         android:paddingRight="16dp"
-        android:paddingBottom="12dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="30dp">
+        android:paddingBottom="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,12 +44,12 @@
                 android:id="@+id/propertyName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Property Name"
                 android:textColor="#000000"
                 android:textSize="22sp"
-                android:textStyle="bold"
-                android:ellipsize="end"
-                android:maxLines="1"/>
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -65,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:text="Php "
                 android:textColor="@color/espasyo_gray_100"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/minimumPrice_propertyItem"
@@ -73,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:text="0.00"
                 android:textColor="@color/espasyo_gray_100"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -81,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:text=" - Php "
                 android:textColor="@color/espasyo_gray_100"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/maximumPrice_propertyItem"
@@ -89,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:text="0.00"
                 android:textColor="@color/espasyo_gray_100"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -109,11 +108,11 @@
                 android:id="@+id/propertyAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Cabarroguis St. District 4, Bayombong NV."
                 android:textColor="@color/black"
-                android:textSize="14sp"
-                android:ellipsize="end"
-                android:maxLines="1"/>
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -121,9 +120,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal" />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/lockedBanner"
+        android:layout_width="93dp"
+        android:layout_height="85dp"
+        android:layout_gravity="left"
+        android:src="@drawable/img_locked_banner" />
 
     <ImageView
         android:id="@+id/propertyItem_iconVerified"
@@ -131,7 +137,7 @@
         android:layout_height="30dp"
         android:layout_gravity="right"
         android:layout_margin="8dp"
-        android:src="@drawable/icon_verified"/>
+        android:src="@drawable/icon_verified" />
 
     <LinearLayout
         android:layout_width="match_parent"
