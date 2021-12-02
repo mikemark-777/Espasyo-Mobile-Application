@@ -24,6 +24,7 @@ public class Property implements Parcelable{
     private double longitude;
     private boolean isVerified;
     private boolean isLocked;
+    private ArrayList<String> reasonLocked;
     private String verificationID;
     private String propertyType;
     private String name;
@@ -42,6 +43,7 @@ public class Property implements Parcelable{
         //empty property constructor **required`
     }
 
+
     protected Property(Parcel in) {
         propertyID = in.readString();
         owner = in.readString();
@@ -49,6 +51,7 @@ public class Property implements Parcelable{
         longitude = in.readDouble();
         isVerified = in.readByte() != 0;
         isLocked = in.readByte() != 0;
+        reasonLocked = in.createStringArrayList();
         verificationID = in.readString();
         propertyType = in.readString();
         name = in.readString();
@@ -97,6 +100,10 @@ public class Property implements Parcelable{
 
     public void setLocked(boolean locked) {
         isLocked = locked;
+    }
+
+    public void setReasonLocked(ArrayList<String> reasonLocked) {
+        this.reasonLocked = reasonLocked;
     }
 
     public void setVerificationID(String verificationID) {
@@ -171,6 +178,10 @@ public class Property implements Parcelable{
         return isLocked;
     }
 
+    public ArrayList<String> getReasonLocked() {
+        return reasonLocked;
+    }
+
     public String getVerificationID() {
         return verificationID;
     }
@@ -232,6 +243,7 @@ public class Property implements Parcelable{
         dest.writeDouble(longitude);
         dest.writeByte((byte) (isVerified ? 1 : 0));
         dest.writeByte((byte) (isLocked ? 1 : 0));
+        dest.writeStringList(reasonLocked);
         dest.writeString(verificationID);
         dest.writeString(propertyType);
         dest.writeString(name);
