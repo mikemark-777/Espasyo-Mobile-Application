@@ -1,10 +1,6 @@
 package com.capstone.espasyo.landlord.views;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.annotation.NonNull;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.adapters.RoomAdapter;
 import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
@@ -24,8 +24,6 @@ import com.capstone.espasyo.models.ImageFolder;
 import com.capstone.espasyo.models.Landlord;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.models.Room;
-import com.capstone.espasyo.student.views.StudentPreviewImageActivity;
-import com.capstone.espasyo.student.views.StudentViewPropertyDetailsActivity;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.interfaces.ItemChangeListener;
@@ -132,6 +130,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
                 Intent intent = new Intent(PropertyDetailsActivity.this, ManagePropertyImageActivity.class);
                 intent.putExtra("property", property);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
@@ -156,7 +155,9 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         btnGotoViewLockedPropertyDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PropertyDetailsActivity.this, "View Locked Property Details", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(PropertyDetailsActivity.this, ViewReasonLockedPropertyActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
     }
