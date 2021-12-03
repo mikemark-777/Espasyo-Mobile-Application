@@ -102,17 +102,17 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/reason1Description"
+                        android:id="@+id/reason1Description_locked"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="Uploaded images that are inappropriate is not allowed. Examples of this are images that do not have anything to do with the property. Images must only be about the property.\n\nTips: \n\n1. Remove images that do not have anything to do with your property.\n\n2. Upload images about your property such as image of the property itself or images of rooms of the property."
+                            android:text="Uploaded images that are inappropriate is not allowed. Examples of this are images that do not have anything to do with the property.\n\nTips: \n\n1. Remove images that do not have anything to do with your property.\n\n2. Upload images about your property such as image of the property itself or images of rooms of the property."
                             android:textSize="14sp" />
 
                     </LinearLayout>
@@ -158,17 +158,17 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/reason2Description"
+                        android:id="@+id/reason2Description_locked"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="Providing inaccurate data will result to false or misleading information to students.\n\nTip:\n\n1.Provide accurate room details such as the real price, number of persons per room and facilities included in that room..\n\n2. Provide accurate rent inclusions. Specify the correct utilities included in the rental fee\n\n3. Provide accurate price (Price Range) of your property and prices of the rooms must be within your property's Price Range "
+                            android:text="Providing inaccurate data will result to false or misleading information to students.\n\nTip:\n\n1.Provide accurate room details such as the real price, number of persons per room and facilities included in that room.\n\n2. Provide accurate rent inclusions. Specify the correct utilities included in the rental fee\n\n3. Provide accurate price (Price Range) of your property and prices of the rooms must be within your property's Price Range "
                             android:textSize="14sp" />
 
                     </LinearLayout>
@@ -214,11 +214,11 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/otherReasonDescription"
+                        android:id="@+id/otherReasonDescription_locked"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="match_parent"

@@ -123,6 +123,7 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
         reason3Cardview = findViewById(R.id.reason3Cardview);
         reason4Cardview = findViewById(R.id.reason4Cardview);
         otherReasonCardview = findViewById(R.id.otherReasonCardview);
+
         //linearlayouts for tips description
         reason1Description = findViewById(R.id.reason1Description);
         reason2Description = findViewById(R.id.reason2Description);

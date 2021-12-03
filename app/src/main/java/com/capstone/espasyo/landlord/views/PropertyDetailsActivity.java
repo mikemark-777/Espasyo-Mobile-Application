@@ -156,6 +156,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PropertyDetailsActivity.this, ViewReasonLockedPropertyActivity.class);
+                intent.putExtra("property", property);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
