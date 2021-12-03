@@ -66,6 +66,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     //for verification information
     private ImageView verificationInfoIcon;
     private TextView verificationInfoMessage;
+    private TextView btnGotoViewLockedPropertyDetails;
     private Button btnAddRoom;
     private final String UNVERIFIED_MESSAGE = "This property is not verified";
     private final String VERIFIED_MESSAGE = "Verified Property";
@@ -151,6 +152,13 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
                 }
             }
         });
+
+        btnGotoViewLockedPropertyDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PropertyDetailsActivity.this, "View Locked Property Details", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // Functions -----
@@ -217,17 +225,20 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
             verificationWarning.setBackgroundColor(getResources().getColor(R.color.espasyo_red_200));
             verificationInfoIcon.setVisibility(View.VISIBLE);
             verificationInfoMessage.setText(UNVERIFIED_MESSAGE);
+            btnGotoViewLockedPropertyDetails.setVisibility(View.GONE);
         } else {
             if (isLocked == true) {
                 verificationWarning.setVisibility(View.VISIBLE);
                 verificationWarning.setBackgroundColor(getResources().getColor(R.color.espasyo_red_200));
                 verificationInfoIcon.setVisibility(View.VISIBLE);
                 verificationInfoMessage.setText(LOCKED_MESSAGE);
+                btnGotoViewLockedPropertyDetails.setVisibility(View.VISIBLE);
             } else {
                 verificationWarning.setVisibility(View.VISIBLE);
                 verificationWarning.setBackgroundColor(getResources().getColor(R.color.espasyo_green_200));
                 verificationInfoIcon.setVisibility(View.GONE);
                 verificationInfoMessage.setText(VERIFIED_MESSAGE);
+                btnGotoViewLockedPropertyDetails.setVisibility(View.GONE);
             }
         }
     }
@@ -249,6 +260,7 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         imageButtonViewPropertyOnMap = findViewById(R.id.imageButtonViewPropertyOnMap);
         verificationInfoIcon = findViewById(R.id.verificationInfoIcon);
         verificationInfoMessage = findViewById(R.id.verificationInfoMessage);
+        btnGotoViewLockedPropertyDetails = findViewById(R.id.btnGotoViewLockedPropertyDetails);
         btnAddRoom = findViewById(R.id.addRoomButton);
 
         //for property images
