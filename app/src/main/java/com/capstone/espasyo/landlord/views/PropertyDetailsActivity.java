@@ -43,6 +43,8 @@ import java.util.ArrayList;
 
 public class PropertyDetailsActivity extends AppCompatActivity implements RoomAdapter.OnRoomListener {
 
+    //comment here again
+
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth fAuth;
     private FirebaseFirestore database;
