@@ -386,14 +386,6 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <Button
-                        android:id="@+id/addRoomButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Add Room"
-                        android:textAllCaps="false" />
-
                 </LinearLayout>
 
                 <com.capstone.espasyo.landlord.widgets.RoomRecyclerView
@@ -452,14 +444,6 @@
                         android:text="Property Images"
                         android:textSize="18sp"
                         android:textStyle="bold" />
-
-                    <Button
-                        android:id="@+id/gotoManageImages"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:text="Manage"
-                        android:textAllCaps="false" />
 
                 </LinearLayout>
 

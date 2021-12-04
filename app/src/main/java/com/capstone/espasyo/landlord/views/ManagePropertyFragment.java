@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.capstone.espasyo.R;
@@ -21,6 +22,7 @@ import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.landlord.widgets.PropertyRecyclerView;
 import com.capstone.espasyo.models.Property;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -42,7 +44,7 @@ public class ManagePropertyFragment extends Fragment implements PropertyAdapter.
     private PropertyAdapter propertyAdapter;
     private ArrayList<Property> ownedPropertyList;
 
-    private FloatingActionButton addPropertyFAB;
+    private ExtendedFloatingActionButton addPropertyFAB;
     private SwipeRefreshLayout managePropertyRVSwipeRefresh;
     private CustomProgressDialog progressDialog;
 
@@ -81,6 +83,27 @@ public class ManagePropertyFragment extends Fragment implements PropertyAdapter.
             }
         }, 500);
 
+        addPropertyFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // goto add property activity
+                startActivity(new Intent(getActivity(), AddPropertyActivity.class));
+            }
+        });
+
+        //shrink and extend the FAB
+        propertyRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    addPropertyFAB.shrink();
+                } else if (dy < 0) {
+                    addPropertyFAB.extend();
+                }
+            }
+        });
+
         managePropertyRVSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -107,6 +130,7 @@ public class ManagePropertyFragment extends Fragment implements PropertyAdapter.
         propertyRecyclerView.setAdapter(propertyAdapter);
 
         //initialize other UI that is not related to Recyclerview
+        addPropertyFAB = view.findViewById(R.id.addPropertyFAB);
         progressDialog = new CustomProgressDialog(getActivity());
         managePropertyRVSwipeRefresh = view.findViewById(R.id.managePropertyRVSwipeRefresh);
     }

@@ -37,6 +37,7 @@ public class ChooseEditActivity extends AppCompatActivity {
     private TextView displayPropertyName;
     private CardView editPropertyCardView;
     private CardView editRoomsCardView;
+    private CardView manageImagesCardView;
 
     private CustomProgressDialog progressDialog;
 
@@ -49,7 +50,6 @@ public class ChooseEditActivity extends AppCompatActivity {
         database = firebaseConnection.getFirebaseFirestoreInstance();
 
         initializeViews();
-
         Intent intent = getIntent();
         selectedPropertyID = intent.getStringExtra("propertyID");
 
@@ -87,6 +87,16 @@ public class ChooseEditActivity extends AppCompatActivity {
             }
         });
 
+        manageImagesCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChooseEditActivity.this, ManagePropertyImageActivity.class);
+                intent.putExtra("property", selectedProperty);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
+
     }
 
     /*----------------------------------------------------------- functions ---------------------------------------------------------------*/
@@ -95,6 +105,7 @@ public class ChooseEditActivity extends AppCompatActivity {
         imageButtonBackToManageProperty = findViewById(R.id.imageButtonBackToManageProperty);
         editPropertyCardView = findViewById(R.id.editPropertyCardView);
         editRoomsCardView = findViewById(R.id.editRoomsCardView);
+        manageImagesCardView = findViewById(R.id.manageImagesCardView);
         displayPropertyName = findViewById(R.id.displayPropertyName);
         progressDialog = new CustomProgressDialog(this);
     }

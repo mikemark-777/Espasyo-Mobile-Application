@@ -54,22 +54,6 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/addPropertyFAB"
-        app:icon="@drawable/icon_add"
-        android:text="Add Property"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="24dp"
-        android:contentDescription="add property"
-        android:src="@drawable/icon_add"
-        app:backgroundTint="@color/espasyo_blue_100"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <include
         android:id="@+id/empty_property_state_dashboardFragment"
         layout="@layout/landlord_empty_property_recyclerview"

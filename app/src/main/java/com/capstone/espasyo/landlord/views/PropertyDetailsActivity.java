@@ -65,14 +65,12 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
     private ImageView verificationInfoIcon;
     private TextView verificationInfoMessage;
     private TextView btnGotoViewLockedPropertyDetails;
-    private Button btnAddRoom;
     private final String UNVERIFIED_MESSAGE = "This property is not verified";
     private final String VERIFIED_MESSAGE = "Verified Property";
     private final String LOCKED_MESSAGE = "This property is locked by Admin";
 
     //for property image
     private ImageFolder propertyImageFolder;
-    private Button btnManageImages;
     private ImageSlider propertyImageSlider;
     private CustomProgressDialog progressDialog;
     private ArrayList<String> downloadedURLs = new ArrayList<>();
@@ -95,15 +93,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         loadPropertyData();
         fetchPropertyRooms();
 
-        btnAddRoom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PropertyDetailsActivity.this, AddRoomActivity.class);
-                intent.putExtra("propertyID", propertyID);
-                startActivity(intent);
-            }
-        });
-
         showAllRooms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,16 +108,6 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
             public void onClick(View v) {
                 Intent intent = new Intent(PropertyDetailsActivity.this, ViewPropertyOnMapActivity.class);
                 intent.putExtra("chosenProperty", property);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            }
-        });
-
-        btnManageImages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PropertyDetailsActivity.this, ManagePropertyImageActivity.class);
-                intent.putExtra("property", property);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
@@ -263,10 +242,8 @@ public class PropertyDetailsActivity extends AppCompatActivity implements RoomAd
         verificationInfoIcon = findViewById(R.id.verificationInfoIcon);
         verificationInfoMessage = findViewById(R.id.verificationInfoMessage);
         btnGotoViewLockedPropertyDetails = findViewById(R.id.btnGotoViewLockedPropertyDetails);
-        btnAddRoom = findViewById(R.id.addRoomButton);
 
         //for property images
-        btnManageImages = findViewById(R.id.gotoManageImages);
         propertyImageSlider = findViewById(R.id.image_slider_propertyDetails);
         progressDialog = new CustomProgressDialog(this);
         emptyImagesDisplay = findViewById(R.id.emptyImagesDisplay_landlordPropertyDetails);

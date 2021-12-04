@@ -44,7 +44,6 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
     private PropertyAdapter propertyAdapter;
     private ArrayList<Property> ownedPropertyList;
 
-    private ExtendedFloatingActionButton addPropertyFAB;
     private SwipeRefreshLayout dashboardRVSwipeRefresh;
     private CustomProgressDialog progressDialog;
 
@@ -89,27 +88,6 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
 
         }
 
-        addPropertyFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // goto add property activity
-                startActivity(new Intent(getActivity(), AddPropertyActivity.class));
-            }
-        });
-
-        //shrink and extend the FAB
-        propertyRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    addPropertyFAB.shrink();
-                } else if (dy < 0) {
-                    addPropertyFAB.extend();
-                }
-            }
-        });
-
         dashboardRVSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -137,8 +115,7 @@ public class DashboardFragment extends Fragment implements PropertyAdapter.OnPro
         propertyRecyclerView.setAdapter(propertyAdapter);
 
 
-        //initialize the addProperty FloatingActionButton and other ui
-        addPropertyFAB = view.findViewById(R.id.addPropertyFAB);
+        //initialize other ui
         progressDialog = new CustomProgressDialog(getActivity());
         dashboardRVSwipeRefresh = view.findViewById(R.id.dashboardSwipeRefresh);
     }
