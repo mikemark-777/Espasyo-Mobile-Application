@@ -170,32 +170,6 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         });
     }
 
-
-    //interface for on item selected because setOnNavigationItemSelectedListener is deprecated
-    private BottomNavigationView.OnItemSelectedListener navListener = new NavigationBarView.OnItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
-                case R.id.List:
-                    startActivity(new Intent(getApplicationContext(), StudentMainActivity.class));
-                    overridePendingTransition(0, 0);
-                    finish();
-                    return true;
-                case R.id.Map:
-                    startActivity(new Intent(getApplicationContext(), StudentMapActivity.class));
-                    overridePendingTransition(0, 0);
-                    finish();
-                    return true;
-                case R.id.Account:
-                    startActivity(new Intent(getApplicationContext(), StudentAccountActivity.class));
-                    overridePendingTransition(0, 0);
-                    finish();
-                    return true;
-            }
-            return false;
-        }
-    };
-
     public void showFilterDialog() {
         //create an instance of the filter dialog dialog
         StudentFilterDialog studentFilterDialog = new StudentFilterDialog();
@@ -341,4 +315,29 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         noResultsFoundDialog.show();
     }
 
+
+    //interface for on item selected because setOnNavigationItemSelectedListener is deprecated
+    private BottomNavigationView.OnItemSelectedListener navListener = new NavigationBarView.OnItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.List:
+                    startActivity(new Intent(getApplicationContext(), StudentMainActivity.class));
+                    overridePendingTransition(0, 0);
+                    finish();
+                    return true;
+                case R.id.Map:
+                    startActivity(new Intent(getApplicationContext(), StudentMapActivity.class));
+                    overridePendingTransition(0, 0);
+                    finish();
+                    return true;
+                case R.id.Account:
+                    startActivity(new Intent(getApplicationContext(), StudentAccountActivity.class));
+                    overridePendingTransition(0, 0);
+                    finish();
+                    return true;
+            }
+            return false;
+        }
+    };
 }

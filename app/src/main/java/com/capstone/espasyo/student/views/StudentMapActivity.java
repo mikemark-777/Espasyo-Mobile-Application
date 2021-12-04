@@ -76,8 +76,6 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
     private List<Address> listOfAddresses;
     private String street, barangay, municipality, landmark;
 
-    //private SearchView locationSearchView;
-    private ImageView btnBackToAddPropertyActivity;
     private FloatingActionButton changeMapType, getCurrentLocation;
 
     @Override
@@ -118,9 +116,6 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     public void initializeViews() {
-        //locationSearchView = findViewById(R.id.locationSearchView);
-
-        btnBackToAddPropertyActivity = findViewById(R.id.btnBackToAddPropertyActivity);
         changeMapType = findViewById(R.id.changeMapTypeStudent);
         getCurrentLocation = findViewById(R.id.getCurrentLocationStudent);
     }
@@ -213,7 +208,9 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
                     propertyList.clear();
                     for (DocumentSnapshot propertySnapshot : task.getResult()) {
                         Property propertyObj = propertySnapshot.toObject(Property.class);
-                        propertyList.add(propertyObj);
+                        if(!propertyObj.isLocked()) {
+                            propertyList.add(propertyObj);
+                        }
                     }
                     displayPropertiesOnMap(propertyList);
                 }
