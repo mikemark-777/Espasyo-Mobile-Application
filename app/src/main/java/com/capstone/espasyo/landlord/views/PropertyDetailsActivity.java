@@ -42,6 +42,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class PropertyDetailsActivity extends AppCompatActivity implements RoomAdapter.OnRoomListener {
+
+    //share mo lang
         
     private FirebaseConnection firebaseConnection;
     private FirebaseAuth fAuth;
