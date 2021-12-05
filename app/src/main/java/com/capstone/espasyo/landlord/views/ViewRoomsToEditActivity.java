@@ -1,5 +1,6 @@
 package com.capstone.espasyo.landlord.views;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,7 @@ import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.landlord.widgets.RoomRecyclerView;
 import com.capstone.espasyo.models.Room;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,7 +39,8 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
     private EditRoomAdapter editRoomAdapter;
     private ArrayList<Room> propertyRooms;
 
-    private ImageView btnBackToChooseEditActivity, btnAddRoom;
+    private ImageView btnBackToChooseEditActivity;
+    private ExtendedFloatingActionButton FABAddRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +63,25 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
             }
         });
 
-        btnAddRoom.setOnClickListener(new View.OnClickListener() {
+        FABAddRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ViewRoomsToEditActivity.this, AddRoomActivity.class);
                 intent.putExtra("propertyID", propertyID);
                 startActivity(intent);
+            }
+        });
+
+        //shrink and extend the FAB
+        editRoomRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    FABAddRoom.shrink();
+                } else if (dy < 0) {
+                    FABAddRoom.extend();
+                }
             }
         });
 
@@ -89,7 +105,7 @@ public class ViewRoomsToEditActivity extends AppCompatActivity implements EditRo
 
         //initialize other views aside from recyclerview
         btnBackToChooseEditActivity = findViewById(R.id.btn_back_to_ChooseEditActivity);
-        btnAddRoom = findViewById(R.id.imageButtonAddRoom_viewRoomToEdit);
+        FABAddRoom = findViewById(R.id.addRoomFAB);
     }
 
     public void fetchPropertyRooms() {

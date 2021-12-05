@@ -24,5 +24,6 @@
     <color name="espasyo_gray_500">#323232</color>
     <color name="espasyo_green_200">#19B100</color>
     <color name="espasyo_white">#FFFFFF</color>
+    <color name="espasyo_FAB_color">#FF8D4F</color>
 
 </resources>

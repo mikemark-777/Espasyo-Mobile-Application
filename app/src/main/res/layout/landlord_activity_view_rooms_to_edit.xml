@@ -37,16 +37,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageButtonAddRoom_viewRoomToEdit"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/icon_add"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.capstone.espasyo.landlord.widgets.RoomRecyclerView
@@ -59,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/addPropertyFAB"
+        android:id="@+id/addRoomFAB"
         app:icon="@drawable/icon_add"
         android:text="Add Room"
         android:layout_width="wrap_content"
@@ -67,9 +57,9 @@
         android:layout_gravity="end|bottom"
         android:layout_marginRight="24dp"
         android:layout_marginBottom="24dp"
-        android:contentDescription="add property"
+        android:contentDescription="add room"
         android:src="@drawable/icon_add"
-        app:backgroundTint="@color/espasyo_blue_100"
+        app:backgroundTint="@color/espasyo_FAB_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

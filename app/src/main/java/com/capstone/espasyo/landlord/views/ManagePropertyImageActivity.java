@@ -31,6 +31,7 @@ import com.denzcoskun.imageslider.interfaces.ItemChangeListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,8 +47,9 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
     private FirebaseFirestore database;
     private FirebaseStorage storage;
 
-    private ImageView btnDeleteImage, btnGotoUploadImage, btnFullScreen;
+    private ImageView btnDeleteImage, btnFullScreen;
     private ImageView emptyImagesDisplay;
+    private ExtendedFloatingActionButton uploadImageFAB;
 
     //storing data
     private ArrayList<String> imageList = new ArrayList<>();
@@ -102,7 +104,7 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
             }
         });
 
-        btnGotoUploadImage.setOnClickListener(new View.OnClickListener() {
+        uploadImageFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(downloadedURLs.size() <= 6) {
@@ -141,7 +143,7 @@ public class ManagePropertyImageActivity extends AppCompatActivity {
     }
 
     public void initializeViews() {
-        btnGotoUploadImage = findViewById(R.id.btnGotoUploadImage);
+        uploadImageFAB = findViewById(R.id.uploadImageFAB);
         btnDeleteImage = findViewById(R.id.btnDeleteImage);
         btnFullScreen = findViewById(R.id.btnFullScreen);
         imageSlider = findViewById(R.id.image_slider);
