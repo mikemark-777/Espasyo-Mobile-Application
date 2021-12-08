@@ -48,7 +48,7 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private DocumentReference verificationRequestsDocumentReference;
 
-    private TextView displayPropertyNameConfirmVerification, displayAddressConfirmVerification, displayProprietorNameConfirmVerification, displayLandlordNameConfirmVerification, displayLandlordPhoneNumberConfirmVerification;
+    private TextView displayPropertyNameConfirmVerification, displayAddressConfirmVerification, displayLandlordNameConfirmVerification, displayLandlordPhoneNumberConfirmVerification;
     private ImageView displayMunicipalBusinessPermit, btnBackToStep3;
     private String municipalBusinessPermitImageName = "";
     private String municipalBusinessPermitImageURI;
@@ -108,7 +108,6 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
     public void initializeViews() {
         displayPropertyNameConfirmVerification = findViewById(R.id.propertyName_confirmVerification);
         displayAddressConfirmVerification = findViewById(R.id.propertyAddress_confirmVerification);
-        displayProprietorNameConfirmVerification = findViewById(R.id.proprietorName_confirmVerification);
 
         //business permit imageviews
         displayMunicipalBusinessPermit = findViewById(R.id.displayMunicipalBusinessPermit_confirmVerification);
@@ -132,7 +131,6 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
         String propertyName = chosenProperty.getName();
         String address = chosenProperty.getAddress();
-        String proprietorName = chosenProperty.getProprietorName();
         String landlordID = chosenProperty.getOwner();
 
         //display all data
@@ -147,7 +145,6 @@ public class ConfirmVerificationRequestActivity extends AppCompatActivity {
 
         displayPropertyNameConfirmVerification.setText(propertyName);
         displayAddressConfirmVerification.setText(address);
-        displayProprietorNameConfirmVerification.setText(proprietorName);
     }
 
     public String getDateSubmitted() {

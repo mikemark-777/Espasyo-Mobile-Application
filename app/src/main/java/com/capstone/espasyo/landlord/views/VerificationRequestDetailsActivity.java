@@ -48,7 +48,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     private LinearLayout infoBoxExpiredVerificationDetails, infoBoxDeclinedVerificationDetails;
 
     //textViews for displaying propertyDetails and verificatioRequestDetails;
-    private TextView propertyNameDisplay, propertyAddressDisplay, properietorNameDisplay, landlordNameDisplay, dateSubmittedDisplay, dateVerifiedDisplay, statusDisplay;
+    private TextView propertyNameDisplay, propertyAddressDisplay, landlordNameDisplay, dateSubmittedDisplay, dateVerifiedDisplay, statusDisplay;
 
     //textviews for previewing business permit images
     TextView btnPreviewMunicipalBP;
@@ -142,7 +142,6 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     public void initializeViews() {
         propertyNameDisplay = findViewById(R.id.propertyName_display_VRDetails);
         propertyAddressDisplay = findViewById(R.id.propertyAddress_display_VRDetails);
-        properietorNameDisplay = findViewById(R.id.proprietor_display_VRDetails);
         landlordNameDisplay = findViewById(R.id.landlord_display_VRDetails);
         dateSubmittedDisplay = findViewById(R.id.dateSubmitted_display_VRDetails);
         dateVerifiedDisplay = findViewById(R.id.dateVerified_display_VRDetails);
@@ -223,11 +222,9 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
                 property = documentSnapshot.toObject(Property.class);
                 String propertyName = property.getName();
                 String address = property.getAddress();
-                String proprietor = property.getProprietorName();
 
                 propertyNameDisplay.setText(propertyName);
                 propertyAddressDisplay.setText(address);
-                properietorNameDisplay.setText(proprietor);
             }
         });
     }

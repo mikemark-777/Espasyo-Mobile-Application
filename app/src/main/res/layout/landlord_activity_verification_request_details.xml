@@ -365,23 +365,7 @@
                         android:orientation="horizontal"
                         android:paddingStart="12dp"
                         android:paddingTop="2dp"
-                        android:paddingBottom="2dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Properietor: "
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            android:id="@+id/proprietor_display_VRDetails"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="Isabel Santos" />
-
-                    </LinearLayout>
+                        android:paddingBottom="2dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

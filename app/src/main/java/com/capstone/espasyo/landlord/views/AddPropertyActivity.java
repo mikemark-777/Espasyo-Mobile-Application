@@ -45,8 +45,8 @@ public class AddPropertyActivity extends AppCompatActivity {
     private FirebaseFirestore database;
     private DocumentReference propertiesDocumentReference;
 
-    private TextInputLayout textInputPropertyNameLayout, textInputPropertyTypeLayout, textInputCompleteAddressLayout, textInputProprietorNameLayout, textInputMinimumPriceLayout, textInputMaximumPriceLayout;
-    private TextInputEditText textInputPropertyName, textInputCompleteAddress, textInputProprietorName;
+    private TextInputLayout textInputPropertyNameLayout, textInputPropertyTypeLayout, textInputCompleteAddressLayout, textInputMinimumPriceLayout, textInputMaximumPriceLayout;
+    private TextInputEditText textInputPropertyName, textInputCompleteAddress;
     private AutoCompleteTextView textInputPropertyType, textInputMinimumPrice, textInputMaximumPrice;
     private CheckBox electricityCheckBox, waterCheckBox, internetCheckBox, garbageCheckBox;
     private boolean isElectricityIncluded, isWaterIncluded, isInternetIncluded, isGarbageCollectionIncluded;
@@ -119,12 +119,11 @@ public class AddPropertyActivity extends AppCompatActivity {
                 String propertyName = textInputPropertyName.getText().toString().trim();
                 String propertyType = textInputPropertyType.getText().toString().trim();
                 String completeAddress = textInputCompleteAddress.getText().toString().trim();
-                String proprietorName = textInputProprietorName.getText().toString().trim();
                 String minPrice = textInputMinimumPrice.getText().toString().trim();
                 String maxPrice = textInputMaximumPrice.getText().toString().trim();
 
 
-                if (areInputsValid(propertyName, propertyType, completeAddress, proprietorName, minPrice, maxPrice)) {
+                if (areInputsValid(propertyName, propertyType, completeAddress, minPrice, maxPrice)) {
 
                     int minimumPrice = Integer.parseInt(minPrice);
                     int maximumPrice = Integer.parseInt(maxPrice);
@@ -145,7 +144,6 @@ public class AddPropertyActivity extends AppCompatActivity {
                     newProperty.setPropertyType(propertyType);
                     newProperty.setName(propertyName);
                     newProperty.setAddress(completeAddress);
-                    newProperty.setProprietorName(proprietorName);
                     newProperty.setMinimumPrice(minimumPrice);
                     newProperty.setMaximumPrice(maximumPrice);
                     newProperty.setElectricityIncluded(isElectricityIncluded);
@@ -212,17 +210,6 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isProprietorNameValid(String proprietorName) {
-        if (!proprietorName.isEmpty()) {
-            textInputProprietorNameLayout.setError(null);
-            Log.d(TAG, "PROPRIETOR NAME: NOT EMPTY");
-            return true;
-        } else {
-            textInputProprietorNameLayout.setError("Proprietor Name Required");
-            Log.d(TAG, "PROPRIETOR NAME: EMPTY");
-            return false;
-        }
-    }
 
     private boolean isMinimumPriceValid(String minimumPrice) {
         if (!minimumPrice.isEmpty()) {
@@ -258,17 +245,16 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    public boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String proprietorName, String minimumPrice, String maximumPrice) {
+    public boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String minimumPrice, String maximumPrice) {
 
         boolean propertyNameResult = isPropertyNameValid(propertyName);
         boolean propertyTypeResult = isPropertyTypeValid(propertyType);
         boolean completeAddressResult = isCompleteAddressValid(completeAddress);
-        boolean proprietorNameResult = isProprietorNameValid(proprietorName);
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
 
 
-        if (propertyNameResult && propertyTypeResult && completeAddressResult && proprietorNameResult && minimumPriceResult && maximumPriceResult) {
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && minimumPriceResult && maximumPriceResult) {
             //will check if the minimum is greater than maximum
             int minPrice = Integer.parseInt(minimumPrice);
             int maxPrice = Integer.parseInt(maximumPrice);
@@ -293,14 +279,12 @@ public class AddPropertyActivity extends AppCompatActivity {
         textInputPropertyNameLayout = findViewById(R.id.text_input_propertyName_layout);
         textInputPropertyTypeLayout = findViewById(R.id.text_input_propertyType_layout);
         textInputCompleteAddressLayout = findViewById(R.id.text_input_completeAddress_layout);
-        textInputProprietorNameLayout = findViewById(R.id.text_input_proprietorName_layout);
         textInputMinimumPriceLayout = findViewById(R.id.text_input_minimumPrice_layout);
         textInputMaximumPriceLayout = findViewById(R.id.text_input_maximumPrice_layout);
 
         textInputPropertyName = findViewById(R.id.text_input_propertyName);
         textInputPropertyType = findViewById(R.id.text_input_propertyType);
         textInputCompleteAddress = findViewById(R.id.text_input_completeAddress);
-        textInputProprietorName = findViewById(R.id.text_input_proprietorName);
         textInputMinimumPrice = findViewById(R.id.text_input_minimumPrice);
         textInputMaximumPrice = findViewById(R.id.text_input_maximumPrice);
 
@@ -418,15 +402,14 @@ public class AddPropertyActivity extends AppCompatActivity {
         }).create().show();
     }
 
-    public boolean areInputsEmpty(String propertyName, String propertyType, String completeAddress, String proprietorName, String minimumPrice, String maximumPrice) {
+    public boolean areInputsEmpty(String propertyName, String propertyType, String completeAddress, String minimumPrice, String maximumPrice) {
         boolean propertyNameResult = propertyName.isEmpty();
         boolean propertyTypeResult = propertyType.isEmpty();
         boolean completeAddressResult = completeAddress.isEmpty();
-        boolean proprietorNameResult = proprietorName.isEmpty();
         boolean minimumPriceResult = minimumPrice.isEmpty();
         boolean maximumPriceResult = maximumPrice.isEmpty();
 
-        return propertyNameResult & propertyTypeResult & completeAddressResult & proprietorNameResult & minimumPriceResult & maximumPriceResult;
+        return propertyNameResult & propertyTypeResult & completeAddressResult & minimumPriceResult & maximumPriceResult;
     }
 
     //will check inputs if empty
@@ -434,11 +417,10 @@ public class AddPropertyActivity extends AppCompatActivity {
         String propertyName = textInputPropertyName.getText().toString().trim();
         String propertyType = textInputPropertyType.getText().toString().trim();
         String completeAddress = textInputCompleteAddress.getText().toString().trim();
-        String proprietorName = textInputProprietorName.getText().toString().trim();
         String minPrice = textInputMinimumPrice.getText().toString().trim();
         String maxPrice = textInputMaximumPrice.getText().toString().trim();
 
-        if (areInputsEmpty(propertyName, propertyType, completeAddress, proprietorName, minPrice, maxPrice)) {
+        if (areInputsEmpty(propertyName, propertyType, completeAddress, minPrice, maxPrice)) {
             finish();
         } else {
             showDiscardDialog();

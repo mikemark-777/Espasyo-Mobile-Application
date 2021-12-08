@@ -48,7 +48,7 @@ public class ConfirmRenewBusinessPermitActivity extends AppCompatActivity {
     private String municipalBusinessPermitImageName;
     private String municipalBusinessPermitImageURI;
 
-    private TextView displayPropertyNameConfirmRenewVerification, displayAddressConfirmRenewVerification, displayProprietorNameConfirmRenewVerification, displayLandlordNameConfirmRenewVerification, displayLandlordPhoneNumberConfirmRenewVerification;
+    private TextView displayPropertyNameConfirmRenewVerification, displayAddressConfirmRenewVerification, displayLandlordNameConfirmRenewVerification, displayLandlordPhoneNumberConfirmRenewVerification;
     private ImageView displayMunicipalBusinessPermit_Renew;
     private Button btnConfirmRenewVerificationRequest, btnDiscardRenewVerificationRequest;
     private ProgressDialog progressDialog;
@@ -95,7 +95,6 @@ public class ConfirmRenewBusinessPermitActivity extends AppCompatActivity {
     public void initializeViews() {
         displayPropertyNameConfirmRenewVerification = findViewById(R.id.propertyName_confirmRenewVerification);
         displayAddressConfirmRenewVerification = findViewById(R.id.propertyAddress_confirmRenewVerification);
-        displayProprietorNameConfirmRenewVerification = findViewById(R.id.proprietorName_confirmRenewVerification);
 
         //business permit imageviews
         displayMunicipalBusinessPermit_Renew = findViewById(R.id.displayMunicipalBusinessPermit_confirmRenewVerification);
@@ -117,7 +116,6 @@ public class ConfirmRenewBusinessPermitActivity extends AppCompatActivity {
         //display property data including landlord data
         String propertyName = chosenProperty.getName();
         String address = chosenProperty.getAddress();
-        String proprietorName = chosenProperty.getProprietorName();
         String landlordID = chosenProperty.getOwner();
         getLandlord(landlordID);
 
@@ -129,7 +127,6 @@ public class ConfirmRenewBusinessPermitActivity extends AppCompatActivity {
 
         displayPropertyNameConfirmRenewVerification.setText(propertyName);
         displayAddressConfirmRenewVerification.setText(address);
-        displayProprietorNameConfirmRenewVerification.setText(proprietorName);
 
     }
 
