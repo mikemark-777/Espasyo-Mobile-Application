@@ -69,6 +69,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     private final String VERIFIED = "Verified";
     private final String UNVERIFIED = "Unverified";
     private final String DECLINED = "Declined";
+    private final String EXPIRED = "Expired";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,7 +173,6 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
 
         String dateSubmitted = verificationRequest.getDateSubmitted();
         String dateVerified = verificationRequest.getDateVerified();
-        boolean isExpired = verificationRequest.isExpired();
         String status = verificationRequest.getStatus();
         String landlordID = verificationRequest.getRequesteeID();
         municipalBPUrl = verificationRequest.getMunicipalBusinessPermitImageURL();
@@ -184,19 +184,23 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         dateSubmittedDisplay.setText(dateSubmitted);
         dateVerifiedDisplay.setText(dateVerified);
 
-        if (isExpired) {
-            infoBoxExpiredVerificationDetails.setVisibility(View.VISIBLE);
-        } else {
-            infoBoxExpiredVerificationDetails.setVisibility(View.GONE);
-        }
+        /*----------For information boxes ----------------------------------------------------------*/
 
-        if (status.equals("declined")) {
-            infoBoxDeclinedVerificationDetails.setVisibility(View.VISIBLE);
-            statusDisplay.setText(DECLINED);
-            statusDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_orange_200));
-        } else {
-            infoBoxDeclinedVerificationDetails.setVisibility(View.GONE);
-        }
+            if (status.equals("expired")) {
+                infoBoxExpiredVerificationDetails.setVisibility(View.VISIBLE);
+            } else {
+                infoBoxExpiredVerificationDetails.setVisibility(View.GONE);
+            }
+
+            if (status.equals("declined")) {
+                infoBoxDeclinedVerificationDetails.setVisibility(View.VISIBLE);
+                statusDisplay.setText(DECLINED);
+                statusDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_orange_200));
+            } else {
+                infoBoxDeclinedVerificationDetails.setVisibility(View.GONE);
+            }
+
+        /*-------------------------------------------------------------------------------------------*/
 
         if (status.equals("verified")) {
             statusDisplay.setText(VERIFIED);
@@ -204,6 +208,12 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         } else if (status.equals("unverified")) {
             statusDisplay.setText(UNVERIFIED);
             statusDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_red_200));
+        } else if(status.equals("declined")) {
+            statusDisplay.setText(DECLINED);
+            statusDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_orange_200));
+        } else if(status.equals("expired")) {
+            statusDisplay.setText(EXPIRED);
+            statusDisplay.setTextColor(this.getResources().getColor(R.color.espasyo_red_500));
         }
 
         //will display the images of barangay and municipal business permit

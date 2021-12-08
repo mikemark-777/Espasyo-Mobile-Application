@@ -36,7 +36,7 @@
         android:layout_marginBottom="24dp"
         android:contentDescription="compose verification request"
         app:icon="@drawable/icon_add"
-        app:backgroundTint="@color/espasyo_blue_100"
+        app:backgroundTint="@color/espasyo_FAB_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
