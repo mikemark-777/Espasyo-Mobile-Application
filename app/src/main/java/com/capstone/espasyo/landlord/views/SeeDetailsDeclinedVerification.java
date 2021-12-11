@@ -23,7 +23,7 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
     private TextView declinedVerificationDescription;
 
     //for tips
-    private CardView reason1Cardview, reason2Cardview, reason3Cardview, reason4Cardview, otherReasonCardview;
+    private CardView reason1Cardview, reason2Cardview, reason3Cardview, reason4Cardview;
     private LinearLayout reason1Description, reason2Description, reason3Description, reason4Description, otherReasonDescription;
     private Button btnReuploadBusinessPermitImage1, btnReuploadBusinessPermitImage2;
     private String reason;
@@ -82,17 +82,6 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
             }
         });
 
-        otherReasonCardview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (otherReasonDescription.getVisibility() == View.VISIBLE) {
-                    otherReasonDescription.setVisibility(View.GONE);
-                } else {
-                    otherReasonDescription.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
         btnReuploadBusinessPermitImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,14 +111,12 @@ public class SeeDetailsDeclinedVerification extends AppCompatActivity {
         reason2Cardview = findViewById(R.id.reason2Cardview);
         reason3Cardview = findViewById(R.id.reason3Cardview);
         reason4Cardview = findViewById(R.id.reason4Cardview);
-        otherReasonCardview = findViewById(R.id.otherReasonCardview);
 
         //linearlayouts for tips description
         reason1Description = findViewById(R.id.reason1Description);
         reason2Description = findViewById(R.id.reason2Description);
         reason3Description = findViewById(R.id.reason3Description);
         reason4Description = findViewById(R.id.reason4Description);
-        otherReasonDescription = findViewById(R.id.otherReasonDescription);
 
         //buttons
         btnReuploadBusinessPermitImage1 = findViewById(R.id.btnReuploadBusinessPermitImage1);
