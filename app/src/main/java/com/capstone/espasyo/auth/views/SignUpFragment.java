@@ -32,6 +32,7 @@ import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.capstone.espasyo.models.Landlord;
 import com.capstone.espasyo.models.Student;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -71,10 +72,9 @@ public class SignUpFragment extends Fragment {
         viewModel.getUserData().observe(this, new Observer<FirebaseUser>() {
             @Override
             public void onChanged(FirebaseUser firebaseUser) {
+                Toast.makeText(getActivity(), "onChanged()", Toast.LENGTH_SHORT).show();
                 if (firebaseUser != null) {
-
                     if (firebaseUser.isEmailVerified()) {
-                        //TODO:must include logout user for them to try login in their verified credentials
                         viewModel.signOut();
                         navController.navigate(R.id.action_emailVerificationFragment_to_loginFragment);
                     } else {
@@ -201,6 +201,7 @@ public class SignUpFragment extends Fragment {
                                 }
                             } else {
                                 Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                btnSignUp.setEnabled(true);
                             }
 
                         }

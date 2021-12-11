@@ -114,6 +114,7 @@ public class AuthenticationRepository {
                     sendEmailVerification();
 
                 } else {
+                    Toast.makeText(application, "Must enable button", Toast.LENGTH_SHORT).show();
                     Toast.makeText(application, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
