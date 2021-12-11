@@ -34,6 +34,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class ConfirmRenewBusinessPermitActivity extends AppCompatActivity {
 
     private FirebaseConnection firebaseConnection;
@@ -152,6 +156,7 @@ public class ConfirmRenewBusinessPermitActivity extends AppCompatActivity {
                         verificationRequest.setMunicipalBusinessPermitImageURL(municipalBusinessPermitImageURL);
                         verificationRequest.setClassification("renew");
                         verificationRequest.setStatus("unverified");
+                        verificationRequest.setDateSubmitted(getDateSubmitted());
                         updateVerificationRequest(verificationRequest);
                     }
                 });
@@ -266,5 +271,10 @@ public class ConfirmRenewBusinessPermitActivity extends AppCompatActivity {
                 finish();
             }
         }, 1500);
+    }
+
+    public String getDateSubmitted() {
+        Date currentDate = Calendar.getInstance().getTime();
+        return DateFormat.getDateInstance(DateFormat.FULL).format(currentDate);
     }
 }

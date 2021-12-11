@@ -50,9 +50,6 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
     //textViews for displaying propertyDetails and verificatioRequestDetails;
     private TextView propertyNameDisplay, propertyAddressDisplay, landlordNameDisplay, dateSubmittedDisplay, dateVerifiedDisplay, statusDisplay;
 
-    //textviews for previewing business permit images
-    TextView btnPreviewMunicipalBP;
-
     //button for viewing property details
     private Button btnVisitProperty;
     private Button btnRenewVerificationRequest, btnSeeDetailsDeclinedVerification;
@@ -96,8 +93,7 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
             }
         });
 
-        //preview municipal business permit (able to zoom in and out)
-        btnPreviewMunicipalBP.setOnClickListener(new View.OnClickListener() {
+        municipalBPImageViewDisplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(VerificationRequestDetailsActivity.this, PreviewImageActivity.class);
@@ -105,6 +101,16 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+/*        //preview municipal business permit (able to zoom in and out)
+        btnPreviewMunicipalBP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VerificationRequestDetailsActivity.this, PreviewImageActivity.class);
+                intent.putExtra("previewImage", municipalBPUrl);
+                startActivity(intent);
+            }
+        });*/
 
         btnDeleteVerificationRequest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +159,6 @@ public class VerificationRequestDetailsActivity extends AppCompatActivity {
         btnVisitProperty = findViewById(R.id.btnViewProperty_VRDetails);
         btnDeleteVerificationRequest = findViewById(R.id.imageButtonDeleteVerificationRequest);
         btnBackToVerificationFragment = findViewById(R.id.imageButtonBackToVerificationFragment);
-        btnPreviewMunicipalBP = findViewById(R.id.btnPreviewMunicipalBP);
         btnRenewVerificationRequest = findViewById(R.id.btnRenewVerificationRequest);
         btnSeeDetailsDeclinedVerification = findViewById(R.id.btnSeeDetailsDeclinedVerification);
 

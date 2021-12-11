@@ -99,6 +99,9 @@ public class LoginFragment extends Fragment {
                                 Intent intent = new Intent(getActivity(), StudentMainActivity.class);
                                 startActivity(intent);
                                 getActivity().finish();
+                            } else if (uRole == ADMIN_CODE) {
+                                viewModel.signOut();
+                                resetUserRole();
                             }
                         } else {
                             userReference.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
@@ -106,19 +109,27 @@ public class LoginFragment extends Fragment {
                                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
                                     DocumentSnapshot user = value;
-                                    int userRole = user.getLong("userRole").intValue();
 
-                                    saveUserRole(userRole);
+                                    if (user != null) {
 
-                                    //Navigate to different modules depending on the user's role
-                                    if (userRole == LANDLORD_CODE) {
-                                        Intent intent = new Intent(getActivity(), LandlordMainActivity.class);
-                                        startActivity(intent);
-                                        getActivity().finish();
-                                    } else if (userRole == STUDENT_CODE) {
-                                        Intent intent = new Intent(getActivity(), StudentMainActivity.class);
-                                        startActivity(intent);
-                                        getActivity().finish();
+                                        int userRole = user.getLong("userRole").intValue();
+                                        saveUserRole(userRole);
+
+                                        //Navigate to different modules depending on the user's role
+                                        if (userRole == LANDLORD_CODE) {
+                                            Intent intent = new Intent(getActivity(), LandlordMainActivity.class);
+                                            startActivity(intent);
+                                            getActivity().finish();
+                                        } else if (userRole == STUDENT_CODE) {
+                                            Intent intent = new Intent(getActivity(), StudentMainActivity.class);
+                                            startActivity(intent);
+                                            getActivity().finish();
+                                        } else if (userRole == ADMIN_CODE) {
+                                            viewModel.signOut();
+                                            resetUserRole();
+                                        }
+                                    } else {
+                                        Toast.makeText(getActivity(), "No user with such credentials", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -168,7 +179,7 @@ public class LoginFragment extends Fragment {
                 String txtPassword = textInputPassword.getText().toString().trim();
 
                 if (areInputsValid(txtEmail, txtPassword)) {
-                    if(getDidUserResetsPassword()) {
+                    if (getDidUserResetsPassword()) {
                         loginProgressBar.setVisibility(View.VISIBLE);
                         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                             @Override
@@ -256,6 +267,14 @@ public class LoginFragment extends Fragment {
             Log.d(TAG, "CAN PROCEED: FALSE");
             return false;
         }
+    }
+
+    public void resetUserRole() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt(USER_ROLE, 0);
+        editor.apply();
     }
 
     public void saveUserRole(int userRole) {
