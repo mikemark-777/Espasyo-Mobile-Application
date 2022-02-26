@@ -21,10 +21,12 @@
         android:theme="@style/Theme.Espasyo">
         <activity
             android:name=".landlord.views.ViewReasonLockedPropertyActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,52 +36,68 @@
         </activity> <!-- Landlord Activities -->
         <activity
             android:name=".landlord.views.UploadPropertyImageActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".landlord.views.ManagePropertyImageActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.LandlordChangePhoneNumberActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.LandlordChangePasswordActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.LandlordChangeNameActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.ConfirmReuploadBusinessPermitImageActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.ReuploadBusinessPermitActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".landlord.views.ConfirmRenewBusinessPermitActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.SeeDetailsDeclinedVerification"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".landlord.views.RenewVerificationRequestActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.LandlordMainActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.AddPropertyActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.AddRoomActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".landlord.views.ChooseEditActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.ChoosePropertyToVerifyActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.ConfirmVerificationRequestActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.EditLocationPickerActivity"
             android:exported="true"
@@ -91,10 +109,12 @@
         <activity
             android:name=".landlord.views.EditPropertyActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".landlord.views.EditRoomActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".landlord.views.LocationPickerActivity"
@@ -106,25 +126,32 @@
         </activity>
         <activity
             android:name=".landlord.views.PreviewImageActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".landlord.views.PropertyDetailsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.RoomDetailsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".landlord.views.LandlordAccountActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.ShowAllRoomsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.UploadMunicipalBusinessPermitActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.VerificationRequestDetailsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".landlord.views.ViewPropertyOnMapActivity"
             android:exported="true">
@@ -134,7 +161,8 @@
         </activity>
         <activity
             android:name=".landlord.views.ViewRoomsToEditActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -153,10 +181,12 @@
         </provider> <!-- Student Activities -->
         <activity
             android:name=".student.StudentMainActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".student.views.StudentViewPropertyDetailsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".student.views.StudentViewPropertyOnMapActivity"
             android:exported="true">
@@ -166,13 +196,16 @@
         </activity>
         <activity
             android:name=".student.views.StudentShowAllRoomsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".student.views.StudentPreviewImageActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".student.views.StudentAccountActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".student.views.StudentMapActivity"
             android:exported="true">
@@ -182,10 +215,12 @@
         </activity>
         <activity
             android:name=".student.views.StudentChangePasswordActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".student.views.StudentChangeNameActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
