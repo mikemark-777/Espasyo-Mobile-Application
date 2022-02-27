@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.connectivityUtil.InternetConnectionUtil;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Room;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,6 +52,10 @@ public class AddRoomActivity extends AppCompatActivity {
     private Button btnAddRoom, btnCancelAddRoom;
     private String propertyID;
 
+    // for checking internet connection
+    private InternetConnectionUtil internetChecker;
+    private ConnectivityManager connectivityManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,14 +82,19 @@ public class AddRoomActivity extends AppCompatActivity {
                 boolean hasKitchen = kitchenSwitch.isChecked();
 
                 if (areInputsValid(roomName, roomPriceInString)) {
-                    btnAddRoom.setEnabled(false);
-                    btnCancelAddRoom.setEnabled(false);
-                    int roomPrice = Integer.parseInt(roomPriceInString);
-                    //New Room Object
-                    String newRoomID = UUID.randomUUID().toString();
-                    //Get Property ID where this room belongs (get through Intent)
-                    Room newRoom = new Room(propertyID, newRoomID, roomName, roomPrice, numberOfPersonInRoom, isRoomAvailable, hasBathroom, hasKitchen);
-                    addNewRoom(propertyID, newRoomID, newRoom);
+                    if(internetChecker.isConnectedToInternet()) {
+                        btnAddRoom.setEnabled(false);
+                        btnCancelAddRoom.setEnabled(false);
+                        int roomPrice = Integer.parseInt(roomPriceInString);
+                        //New Room Object
+                        String newRoomID = UUID.randomUUID().toString();
+                        //Get Property ID where this room belongs (get through Intent)
+                        Room newRoom = new Room(propertyID, newRoomID, roomName, roomPrice, numberOfPersonInRoom, isRoomAvailable, hasBathroom, hasKitchen);
+                        addNewRoom(propertyID, newRoomID, newRoom);
+                    } else  {
+                        internetChecker.showNoInternetConnectionDialog();
+                    }
+
                 }
             }
         });
@@ -181,6 +192,10 @@ public class AddRoomActivity extends AppCompatActivity {
         decrement = findViewById(R.id.decrement);
         btnAddRoom = findViewById(R.id.btnAddRoom);
         btnCancelAddRoom = findViewById(R.id.btnCancelAddRoom);
+
+        //for checking internet connection
+        connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+        internetChecker = new InternetConnectionUtil(this, connectivityManager);
     }
 
     public void addNewRoom(String propertyID, String newRoomID, Room newRoom) {

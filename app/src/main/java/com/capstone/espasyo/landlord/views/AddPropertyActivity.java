@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.connectivityUtil.InternetConnectionUtil;
 import com.capstone.espasyo.landlord.LandlordMainActivity;
 import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.models.ImageFolder;
@@ -65,6 +67,10 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     private Button btnGetMapLocation, btnAddProperty, btnCancelAddProperty;
     private CustomProgressDialog progressDialog;
+
+    // for checking internet connection
+    private InternetConnectionUtil internetChecker;
+    private ConnectivityManager connectivityManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,38 +128,41 @@ public class AddPropertyActivity extends AppCompatActivity {
                 String minPrice = textInputMinimumPrice.getText().toString().trim();
                 String maxPrice = textInputMaximumPrice.getText().toString().trim();
 
-
                 if (areInputsValid(propertyName, propertyType, completeAddress, minPrice, maxPrice)) {
 
-                    int minimumPrice = Integer.parseInt(minPrice);
-                    int maximumPrice = Integer.parseInt(maxPrice);
+                    if(internetChecker.isConnectedToInternet()) {
+                        int minimumPrice = Integer.parseInt(minPrice);
+                        int maximumPrice = Integer.parseInt(maxPrice);
 
-                    String newPropertyID = UUID.randomUUID().toString();
-                    String propertyOwner = fAuth.getCurrentUser().getUid().toString();
+                        String newPropertyID = UUID.randomUUID().toString();
+                        String propertyOwner = fAuth.getCurrentUser().getUid().toString();
 
-                    getRentInclusions();
+                        getRentInclusions();
 
-                    // CREATE SAMPLE PROPERTY OBJECT
-                    Property newProperty = new Property();
-                    newProperty.setPropertyID(newPropertyID);
-                    newProperty.setOwner(propertyOwner);
-                    newProperty.setLatitude(latitude);
-                    newProperty.setLongitude(longitude);
-                    newProperty.setVerified(false);
-                    newProperty.setLocked(false);
-                    newProperty.setPropertyType(propertyType);
-                    newProperty.setName(propertyName);
-                    newProperty.setAddress(completeAddress);
-                    newProperty.setMinimumPrice(minimumPrice);
-                    newProperty.setMaximumPrice(maximumPrice);
-                    newProperty.setElectricityIncluded(isElectricityIncluded);
-                    newProperty.setWaterIncluded(isWaterIncluded);
-                    newProperty.setInternetIncluded(isInternetIncluded);
-                    newProperty.setGarbageCollectionIncluded(isGarbageCollectionIncluded);
+                        // CREATE PROPERTY OBJECT
+                        Property newProperty = new Property();
+                        newProperty.setPropertyID(newPropertyID);
+                        newProperty.setOwner(propertyOwner);
+                        newProperty.setLatitude(latitude);
+                        newProperty.setLongitude(longitude);
+                        newProperty.setVerified(false);
+                        newProperty.setLocked(false);
+                        newProperty.setPropertyType(propertyType);
+                        newProperty.setName(propertyName);
+                        newProperty.setAddress(completeAddress);
+                        newProperty.setMinimumPrice(minimumPrice);
+                        newProperty.setMaximumPrice(maximumPrice);
+                        newProperty.setElectricityIncluded(isElectricityIncluded);
+                        newProperty.setWaterIncluded(isWaterIncluded);
+                        newProperty.setInternetIncluded(isInternetIncluded);
+                        newProperty.setGarbageCollectionIncluded(isGarbageCollectionIncluded);
 
-                    progressDialog.showProgressDialog("Creating Property...", false);
-                    createImageFolderFor(newProperty);
-                    btnAddProperty.setEnabled(false);
+                        progressDialog.showProgressDialog("Creating Property...", false);
+                        createImageFolderFor(newProperty);
+                        btnAddProperty.setEnabled(false);
+                    } else {
+                        internetChecker.showNoInternetConnectionDialog();
+                    }
 
                 } else {
                     Toast.makeText(AddPropertyActivity.this, "Please fill out everything", Toast.LENGTH_SHORT).show();
@@ -311,6 +320,10 @@ public class AddPropertyActivity extends AppCompatActivity {
 
         //progressDialog
         progressDialog = new CustomProgressDialog(this);
+
+        //internet checker
+        connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+        internetChecker = new InternetConnectionUtil(this, connectivityManager);
     }
 
     public void getRentInclusions() {
