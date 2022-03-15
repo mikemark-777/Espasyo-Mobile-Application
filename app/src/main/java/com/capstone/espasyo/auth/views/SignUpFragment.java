@@ -32,7 +32,6 @@ import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.capstone.espasyo.models.Landlord;
 import com.capstone.espasyo.models.Student;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -58,7 +57,8 @@ public class SignUpFragment extends Fragment {
 
     //navigate to Login using text
     private TextView gotoLogin;
-    private TextView btnTermsAndConditions;
+    private TextView btnTermsOfService;
+    private TextView btnPrivacyPolicy;
     private ProgressBar signUpProgressBar;
     private Button btnSignUp;
 
@@ -133,10 +133,17 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-        btnTermsAndConditions.setOnClickListener(new View.OnClickListener() {
+        btnTermsOfService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showTermsAndConditions();
+            }
+        });
+
+        btnPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPrivacyPolicy();
             }
         });
 
@@ -236,7 +243,7 @@ public class SignUpFragment extends Fragment {
         textInputLandlordPhoneNumber = view.findViewById(R.id.text_input_landlord_phone_number_signup);
 
         //Checkbox
-        agreeToTermsAndConditions = view.findViewById(R.id.agreeToTermsAndConditions);
+        agreeToTermsAndConditions = view.findViewById(R.id.agreeToTermsOfService);
 
         //progress bar
         signUpProgressBar = view.findViewById(R.id.signUpProgressBar);
@@ -244,7 +251,8 @@ public class SignUpFragment extends Fragment {
         //buttons and others
         btnSignUp = view.findViewById(R.id.btnSignUp);
         gotoLogin = view.findViewById(R.id.gotoLogin);
-        btnTermsAndConditions = view.findViewById(R.id.btnTermsAndConditions);
+        btnTermsOfService = view.findViewById(R.id.btnTermsOfService);
+        btnPrivacyPolicy =  view.findViewById(R.id.btnPrivacyPolicy);
         navController = Navigation.findNavController(view);
     }
 
@@ -418,7 +426,7 @@ public class SignUpFragment extends Fragment {
 
     public void showTermsAndConditions() {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view = inflater.inflate(R.layout.terms_and_conditions, null);
+        View view = inflater.inflate(R.layout.terms_of_service, null);
 
         Button btnContinue = view.findViewById(R.id.btnContinue_termsAndConditions);
 
@@ -434,5 +442,25 @@ public class SignUpFragment extends Fragment {
         });
         termsAndConditionsDialog.show();
     }
+
+    public void showPrivacyPolicy() {
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View view = inflater.inflate(R.layout.privacy_policy, null);
+
+        Button btnContinue = view.findViewById(R.id.btnContinue_privacypolicy);
+
+        AlertDialog privacyPolicyDialog = new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .create();
+
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                privacyPolicyDialog.dismiss();
+            }
+        });
+        privacyPolicyDialog.show();
+    }
+
 
 }

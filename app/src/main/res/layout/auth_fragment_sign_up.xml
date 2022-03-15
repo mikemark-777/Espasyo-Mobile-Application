@@ -171,42 +171,46 @@
                 android:orientation="horizontal">
 
                 <CheckBox
-                    android:id="@+id/agreeToTermsAndConditions"
-                    android:layout_width="160dp"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/espasyo_orange_500"
-                    android:text="I agree to Espasyo's " />
-
-                <TextView
-                    android:id="@+id/btnTermsAndConditions"
+                    android:id="@+id/agreeToTermsOfService"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Terms and Conditions"
-                    android:textColor="@color/espasyo_blue_200" />
+                    android:layout_weight="0"
+                    android:backgroundTint="@color/espasyo_orange_500"
+                    android:text="I have read and agree to Espasyo's " />
 
             </LinearLayout>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="30dp"
+                android:layout_marginTop="-12dp">
 
-                <CheckBox
-                    android:id="@+id/agreeToPrivacyPolicy"
-                    android:layout_width="160dp"
+                <TextView
+                    android:id="@+id/btnTermsOfService"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/espasyo_orange_500"
-                    android:text="I agree to Espasyo's " />
+                    android:text="Terms of Service"
+                    android:textColor="@color/espasyo_blue_200" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="  and  "
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/btnPrivacyPolicy"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Privacy Policy"
-                    android:textColor="@color/espasyo_blue_200" />
-
+                    android:textAlignment="textStart"
+                    android:textColor="@color/espasyo_blue_200"/>
             </LinearLayout>
 
             <Button
@@ -226,7 +230,7 @@
                 style="?android:attr/progressBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:visibility="invisible" />
 
             <LinearLayout

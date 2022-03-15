@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintHeight_percent="1.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:paddingBottom="36dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.034">
+
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Terms of Service"
+                android:textColor="@color/espasyo_blue_700"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textAlignment="textStart"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="30dp">
+
+                <TextView
+                    android:layout_marginBottom="15dp"
+                    android:paddingLeft="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Effective Date: "
+                    android:textAlignment="textStart"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"/>
+
+                <TextView
+                    android:layout_marginBottom="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="March 15, 2022"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    android:textStyle="bold"/>
+
+
+            </LinearLayout>
+
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Introduction"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="5sp"
+                android:padding="9sp"
+                android:text="Welcome to the Espasyo app. Please read these terms of service including our privacy policy. This Terms of Service (‘Terms’) is a legally binding agreement between Espasyo. When used in these Terms, ‘Espasyo’, ‘we’, ‘our’, or ‘us’ refers to the Espasyo entity. The Services include an online platform service for searching and/or advertising rental units between the landlord (‘Landlord’) and the student (‘Student’) (collectively ‘you’ or ‘User’). "
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Privacy"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:lineSpacingExtra="5sp"
+                android:padding="12dp"
+                android:text="We respect your privacy. We have published the Espasyo Privacy Policy to clarify processes in order to assure security and safeguard your rights. Please review the Privacy Policy to learn more about how Espasyo collects and uses information connected to your Account and/or use of the Services. By using our services, you:
+                              \n\nI. Agree to the collection, use, disclosure, and/or processing of your Content, personal data, and User Information by Espasyo as indicated in the Privacy Policy.\n
+                              \nII. Agree that the information supplied in the application is solely intended for the authorized person or entity that may contain sensitive and/or privileged material such as Name, Contact Information, and Images of Barangay and Municipal Business Permit.\n
+                              \nIII. Agree not to upload or give any access to illegal, harmful, harassing, vulgar, defamatory, tortuous, hateful, racially, ethnically objectionable posts.\n
+                              \nIV.	Agree not to review, retransmit, distribute, or other use of, or by someone other than the intended recipient. "
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Accounts and Security"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:padding="12dp"
+                android:lineSpacingExtra="5sp"
+                android:text="Some functions of our app require registration for an account. You hereby comply to maintain the username and password confidential and will be responsible for the safety of your account, and for any disclosure or use whether or not such use is permitted or not."
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Disclaimer"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:padding="12dp"
+                android:lineSpacingExtra="5sp"
+                android:text="Espasyo is not responsible for any mishandling of data. You acknowledge that many activities include potential risks and accept that, to the greatest extent permissible by applicable law, you assume the whole risk arising from your access to and use of the app.\n\nThe information provided on this application should not be used as a substitute for official transactions made between the user and the landlord. Matters concerning the rental units can only be discussed between the previously mentioned entities. There should not be a misconception about the application being the only platform or method to find apartments, boarding houses, or dormitory. The Espasyo entities shall not be liable for any conflict arising in agreement resulting from using the application. The procedure can only take place between Landlords/Landladies and the Espasyo Application Administrator."
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
+            <Button
+                android:id="@+id/btnContinue_termsAndConditions"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:text="Done"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
