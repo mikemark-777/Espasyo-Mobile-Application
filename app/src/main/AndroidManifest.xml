@@ -8,9 +8,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- For uploading image functionalities -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- For calling and messaging functionalities -->
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- For calling and messaging functionalities -->
+<!--    removed permissions for complying in to the Google Play Console Permissions Policy-->
+<!--    <uses-permission android:name="android.permission.CALL_PHONE" />-->
+<!--    <uses-permission android:name="android.permission.SEND_SMS" />-->
 
     <application
         android:allowBackup="true"

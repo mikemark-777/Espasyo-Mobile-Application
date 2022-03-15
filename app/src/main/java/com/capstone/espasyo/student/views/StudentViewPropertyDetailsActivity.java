@@ -347,26 +347,29 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
 
     public void launchSMS(String landlordPhoneNumber) {
         //check if the permissions is granted for sms
-        if (ContextCompat.checkSelfPermission(StudentViewPropertyDetailsActivity.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(StudentViewPropertyDetailsActivity.this, new String[]{Manifest.permission.SEND_SMS}, PHONE_SMS_PERMISSION_CODE);
-        } else {
+        //removed permissions for complying in to the Google Play Console Permissions Policy
+//        if (ContextCompat.checkSelfPermission(StudentViewPropertyDetailsActivity.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(StudentViewPropertyDetailsActivity.this, new String[]{Manifest.permission.SEND_SMS}, PHONE_SMS_PERMISSION_CODE);
+//        } else {
             Intent smsIntent = new Intent(Intent.ACTION_VIEW);
             smsIntent.setType("vnd.android-dir/mms-sms");
             smsIntent.putExtra("address", landlordPhoneNumber);
             startActivity(smsIntent);
-        }
+//        }
     }
 
     public void launchPhoneCall(String landlordPhoneNumber) {
 
         //check if the permissions is granted for call
-        if (ContextCompat.checkSelfPermission(StudentViewPropertyDetailsActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(StudentViewPropertyDetailsActivity.this, new String[]{Manifest.permission.CALL_PHONE}, PHONE_CALL_PERMISSION_CODE);
-        } else {
-            Intent callIntent = new Intent(Intent.ACTION_CALL);
+        //removed permissions for complying in to the Google Play Console Permissions Policy
+//        if (ContextCompat.checkSelfPermission(StudentViewPropertyDetailsActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(StudentViewPropertyDetailsActivity.this, new String[]{Manifest.permission.CALL_PHONE}, PHONE_CALL_PERMISSION_CODE);
+//        } else {
+            Intent callIntent = new Intent();
+            callIntent.setAction(Intent.ACTION_DIAL);
             callIntent.setData(Uri.parse("tel:+63" + landlordPhoneNumber));
             startActivity(callIntent);
-        }
+//        }
     }
 
     @Override

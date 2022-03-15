@@ -187,6 +187,28 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/agreeToPrivacyPolicy"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/espasyo_orange_500"
+                    android:text="I agree to Espasyo's " />
+
+                <TextView
+                    android:id="@+id/btnPrivacyPolicy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Privacy Policy"
+                    android:textColor="@color/espasyo_blue_200" />
+
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btnSignUp"
                 android:layout_width="match_parent"
