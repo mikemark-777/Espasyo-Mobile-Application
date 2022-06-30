@@ -178,9 +178,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
+
                             android:text="This occurs when you have provided inaccurate data that results to false or misleading information.\n\nTip:\n\n1.Please provide relevant data to ensure the appropriateness of your content.\n\n2. Remove or change inappropriate data. Delete verification request and create a new one, then submit. "
                             android:textSize="14sp" />
-
                     </LinearLayout>
                 </LinearLayout>
 

@@ -36,6 +36,7 @@ public class Property implements Parcelable{
     private boolean isInternetIncluded;
     private boolean isGarbageCollectionIncluded;
     private String imageFolder;
+    // To be added exclusivity attributes
 
 
     public Property(){
