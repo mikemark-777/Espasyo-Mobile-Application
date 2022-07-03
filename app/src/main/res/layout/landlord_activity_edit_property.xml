@@ -194,7 +194,6 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="90dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="4dp">
@@ -237,12 +236,34 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Garbage Collection" />
-
-
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="90dp">
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_edit_exclusivity_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    android:hint="@string/exclusivity_dropdown_label"
+                    app:errorEnabled="true"
+                    app:prefixText="Accepting ">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/text_edit_exclusivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:dropDownHeight="180dp"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

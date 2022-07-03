@@ -184,6 +184,7 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         String name = property.getName();
         String propertyType = property.getPropertyType();
         String address = property.getAddress();
+        String exclusivity = property.getExclusivity();
         int minimumPrice = property.getMinimumPrice();
         int maximumPrice = property.getMaximumPrice();
         boolean isElectricityIncluded = property.isElectricityIncluded();
@@ -194,6 +195,7 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         TextView propName = findViewById(R.id.propertyNameDisplay);
         TextView propType = findViewById(R.id.propertyTypeDisplay);
         TextView propAddress = findViewById(R.id.propertyAddressDisplay);
+        TextView propExclusivity = findViewById(R.id.propertyExclusivityDisplay);
         TextView propMinimumPrice = findViewById(R.id.propertyMinimumPriceDisplay);
         TextView propMaximumPrice = findViewById(R.id.propertyMaximumPriceDisplay);
 
@@ -218,6 +220,15 @@ public class StudentViewPropertyDetailsActivity extends AppCompatActivity implem
         propName.setText(name);
         propType.setText(propertyType);
         propAddress.setText(address);
+
+        if(exclusivity.equals("Male Only")) {
+            propExclusivity.setText("Male");
+        } else if(exclusivity.equals("Female Only")) {
+            propExclusivity.setText("Female");
+        } else if(exclusivity.equals("Male and Female")) {
+            propExclusivity.setText("Male and Female");
+        }
+
         propMinimumPrice.setText(Integer.toString(minimumPrice));
         propMaximumPrice.setText(Integer.toString(maximumPrice));
 

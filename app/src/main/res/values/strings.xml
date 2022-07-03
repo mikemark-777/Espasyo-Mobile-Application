@@ -102,5 +102,13 @@
         <item>12000</item>
     </string-array>
 
+    <!--  Exclusivity Dropdown  -->
+    <string name="exclusivity_dropdown_label">Exclusivity</string>
+    <string-array name="exclusivities">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Male and Female</item>
+    </string-array>
+
 
 </resources>

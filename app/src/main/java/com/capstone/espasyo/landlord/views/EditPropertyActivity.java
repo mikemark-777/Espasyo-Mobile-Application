@@ -61,14 +61,16 @@ public class EditPropertyActivity extends AppCompatActivity {
             textEditPropertyTypeLayout,
             textEditCompleteAddressLayout,
             textEditMinimumPriceLayout,
-            textEditMaximumPriceLayout;
+            textEditMaximumPriceLayout,
+            textEditExclusivityLayout;
 
     private TextInputEditText textEditPropertyName,
             textEditCompleteAddress;
 
     private AutoCompleteTextView textEditPropertyType,
             textEditMinimumPrice,
-            textEditMaximumPrice;
+            textEditMaximumPrice,
+            textEditExclusivity;
 
     private CheckBox electrictiyEditCheckBox,
             waterEditCheckBox,
@@ -84,9 +86,11 @@ public class EditPropertyActivity extends AppCompatActivity {
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
     String[] minimumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
     String[] maximumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
+    String[] exclusivities = {"Male Only", "Female Only", "Male and Female"};
     ArrayAdapter<String> propertyTypeAdapter;
     ArrayAdapter<String> minimumPriceAdapter;
     ArrayAdapter<String> maximumPriceAdapter;
+    ArrayAdapter<String> exclusivityAdapter;
 
     private boolean isElectricityIncluded,
             isWaterIncluded,
@@ -159,6 +163,7 @@ public class EditPropertyActivity extends AppCompatActivity {
                 String editedPropertyAddress = textEditCompleteAddress.getText().toString().trim();
                 String editedMinimumPrice = textEditMinimumPrice.getText().toString().trim();
                 String editedMaximumPrice = textEditMaximumPrice.getText().toString().trim();
+                String editedExclusivity = textEditExclusivity.getText().toString().trim();
                 boolean editedIsElectricityIncluded = electrictiyEditCheckBox.isChecked();
                 boolean editedIsWaterIncluded = waterEditCheckBox.isChecked();
                 boolean editedIsInternetIncluded = internetEditCheckBox.isChecked();
@@ -174,7 +179,7 @@ public class EditPropertyActivity extends AppCompatActivity {
                     editedLongitude = longitude;
                 }
 
-                if (areInputsValid(editedPropertyName, editedPropertyType, editedPropertyAddress, editedMinimumPrice, editedMaximumPrice)) {
+                if (areInputsValid(editedPropertyName, editedPropertyType, editedPropertyAddress, editedMinimumPrice, editedMaximumPrice, editedExclusivity)) {
 
                     property.setName(editedPropertyName);
                     property.setPropertyType(editedPropertyType);
@@ -187,6 +192,7 @@ public class EditPropertyActivity extends AppCompatActivity {
                     property.setWaterIncluded(editedIsWaterIncluded);
                     property.setInternetIncluded(editedIsInternetIncluded);
                     property.setGarbageCollectionIncluded(editedIsGarbageCollectionIncluded);
+                    property.setExclusivity(editedExclusivity);
 
                     saveChangesToProperty(property);
                 }
@@ -297,20 +303,34 @@ public class EditPropertyActivity extends AppCompatActivity {
         }
     }
 
-    private boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String minimumPrice, String maximumPrice) {
+    // for exclusivity
+    private boolean isExclusivityValid(String exclusivity) {
+        if (!exclusivity.isEmpty()) {
+            textEditExclusivityLayout.setError(null);
+            Log.d(TAG, "EXCLUSIVITY: NOT EMPTY");
+            return true;
+        } else {
+            textEditExclusivityLayout.setError("Required");
+            Log.d(TAG, "EXCLUSIVITY: EMPTY");
+            return false;
+        }
+    }
+
+    private boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String minimumPrice, String maximumPrice, String exclusivity) {
 
         boolean propertyNameResult = isPropertyNameValid(propertyName);
         boolean propertyTypeResult = isPropertyTypeValid(propertyType);
         boolean completeAddressResult = isCompleteAddressValid(completeAddress);
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
+        boolean exclusivityResult = isExclusivityValid(exclusivity);
 
         int minPrice = Integer.parseInt(minimumPrice);
         int maxPrice = Integer.parseInt(maximumPrice);
 
         boolean checkMinimumMaximumResult = isMinimumPriceLessThanMaximumPrice(minPrice, maxPrice);
 
-        if (propertyNameResult && propertyTypeResult && completeAddressResult && minimumPriceResult && maximumPriceResult && checkMinimumMaximumResult) {
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && minimumPriceResult && maximumPriceResult && checkMinimumMaximumResult && exclusivityResult) {
             Log.d(TAG, "CAN PROCEED: TRUE");
             return true;
         } else {
@@ -329,12 +349,15 @@ public class EditPropertyActivity extends AppCompatActivity {
         textEditCompleteAddressLayout = findViewById(R.id.text_edit_completeAddress_layout);
         textEditMinimumPriceLayout = findViewById(R.id.text_edit_minimumPrice_layout);
         textEditMaximumPriceLayout = findViewById(R.id.text_edit_maximumPrice_layout);
+        textEditExclusivityLayout = findViewById(R.id.text_edit_exclusivity_layout);
+
         //textInputEditTexts
         textEditPropertyName = findViewById(R.id.text_edit_propertyName);
         textEditPropertyType = findViewById(R.id.text_edit_propertyType);
         textEditCompleteAddress = findViewById(R.id.text_edit_completeAddress);
         textEditMinimumPrice = findViewById(R.id.text_edit_minimumPrice);
         textEditMaximumPrice = findViewById(R.id.text_edit_maximumPrice);
+        textEditExclusivity = findViewById(R.id.text_edit_exclusivity);
         //checkBoxes
         electrictiyEditCheckBox = findViewById(R.id.electricityEditCheckBox);
         waterEditCheckBox = findViewById(R.id.waterEditCheckBox);
@@ -359,6 +382,10 @@ public class EditPropertyActivity extends AppCompatActivity {
         maximumPriceAdapter = new ArrayAdapter<String>(this, R.layout.landlord_maximum_price_list_item, maximumPrices);
         textEditMaximumPrice.setAdapter(maximumPriceAdapter);
         maximumPriceAdapter.notifyDataSetChanged();
+
+        exclusivityAdapter = new ArrayAdapter<String>(this, R.layout.landlord_exclusivity_list_item, exclusivities);
+        textEditExclusivity.setAdapter(exclusivityAdapter);
+        exclusivityAdapter.notifyDataSetChanged();
     }
 
     private void loadPropertyData(Intent intent) {
@@ -369,6 +396,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         String address = property.getAddress();
         int minimumPrice = property.getMinimumPrice();
         int maximumPrice = property.getMaximumPrice();
+        String exclusivity = property.getExclusivity();
         boolean isElectricityIncluded = property.isElectricityIncluded();
         boolean isWaterIncluded = property.isWaterIncluded();
         boolean isInternetIncluded = property.isInternetIncluded();
@@ -378,6 +406,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         int propertyTypePosition = propertyTypeAdapter.getPosition(propertyType);
         int minimumPricePosition = minimumPriceAdapter.getPosition(String.valueOf(minimumPrice));
         int maximumPricePosition = maximumPriceAdapter.getPosition(String.valueOf(maximumPrice));
+        int exclusivityPosition = exclusivityAdapter.getPosition(String.valueOf(exclusivity));
 
 
         textEditPropertyName.setText(name);
@@ -385,6 +414,7 @@ public class EditPropertyActivity extends AppCompatActivity {
         textEditCompleteAddress.setText(address);
         textEditMinimumPrice.setText(textEditMinimumPrice.getAdapter().getItem(minimumPricePosition).toString(), false);
         textEditMaximumPrice.setText(textEditMaximumPrice.getAdapter().getItem(maximumPricePosition).toString(), false);
+        textEditExclusivity.setText(textEditExclusivity.getAdapter().getItem(exclusivityPosition).toString(), false);
         electrictiyEditCheckBox.setChecked(isElectricityIncluded);
         waterEditCheckBox.setChecked(isWaterIncluded);
         internetEditCheckBox.setChecked(isInternetIncluded);

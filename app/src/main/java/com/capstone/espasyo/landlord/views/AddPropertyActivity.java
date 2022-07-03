@@ -47,9 +47,9 @@ public class AddPropertyActivity extends AppCompatActivity {
     private FirebaseFirestore database;
     private DocumentReference propertiesDocumentReference;
 
-    private TextInputLayout textInputPropertyNameLayout, textInputPropertyTypeLayout, textInputCompleteAddressLayout, textInputMinimumPriceLayout, textInputMaximumPriceLayout;
+    private TextInputLayout textInputPropertyNameLayout, textInputPropertyTypeLayout, textInputCompleteAddressLayout, textInputMinimumPriceLayout, textInputMaximumPriceLayout, textInputExclusivityLayout;
     private TextInputEditText textInputPropertyName, textInputCompleteAddress;
-    private AutoCompleteTextView textInputPropertyType, textInputMinimumPrice, textInputMaximumPrice;
+    private AutoCompleteTextView textInputPropertyType, textInputMinimumPrice, textInputMaximumPrice, textInputExclusivity;
     private CheckBox electricityCheckBox, waterCheckBox, internetCheckBox, garbageCheckBox;
     private boolean isElectricityIncluded, isWaterIncluded, isInternetIncluded, isGarbageCollectionIncluded;
 
@@ -61,9 +61,11 @@ public class AddPropertyActivity extends AppCompatActivity {
     String[] propertyType = {"Apartment", "Boarding House", "Dormitory"};
     String[] minimumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
     String[] maximumPrices = {"500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
+    String[] exclusivities = {"Male Only", "Female Only", "Male and Female"};
     ArrayAdapter<String> propertyTypeAdapter;
     ArrayAdapter<String> minimumPriceAdapter;
     ArrayAdapter<String> maximumPriceAdapter;
+    ArrayAdapter<String> exclusivityAdapter;
 
     private Button btnGetMapLocation, btnAddProperty, btnCancelAddProperty;
     private CustomProgressDialog progressDialog;
@@ -127,8 +129,9 @@ public class AddPropertyActivity extends AppCompatActivity {
                 String completeAddress = textInputCompleteAddress.getText().toString().trim();
                 String minPrice = textInputMinimumPrice.getText().toString().trim();
                 String maxPrice = textInputMaximumPrice.getText().toString().trim();
+                String exclusivity = textInputExclusivity.getText().toString().trim();
 
-                if (areInputsValid(propertyName, propertyType, completeAddress, minPrice, maxPrice)) {
+                if (areInputsValid(propertyName, propertyType, completeAddress, minPrice, maxPrice, exclusivity)) {
 
                     if(internetChecker.isConnectedToInternet()) {
                         int minimumPrice = Integer.parseInt(minPrice);
@@ -156,6 +159,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                         newProperty.setWaterIncluded(isWaterIncluded);
                         newProperty.setInternetIncluded(isInternetIncluded);
                         newProperty.setGarbageCollectionIncluded(isGarbageCollectionIncluded);
+                        newProperty.setExclusivity(exclusivity);
 
                         progressDialog.showProgressDialog("Creating Property...", false);
                         createImageFolderFor(newProperty);
@@ -254,16 +258,29 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 
-    public boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String minimumPrice, String maximumPrice) {
+    // for exclusivity
+    private boolean isExclusivityValid(String exclusivity) {
+        if (!exclusivity.isEmpty()) {
+            textInputExclusivityLayout.setError(null);
+            Log.d(TAG, "EXCLUSIVITY: NOT EMPTY");
+            return true;
+        } else {
+            textInputExclusivityLayout.setError("Required");
+            Log.d(TAG, "EXCLUSIVITY: EMPTY");
+            return false;
+        }
+    }
+
+    public boolean areInputsValid(String propertyName, String propertyType, String completeAddress, String minimumPrice, String maximumPrice, String exclusivity) {
 
         boolean propertyNameResult = isPropertyNameValid(propertyName);
         boolean propertyTypeResult = isPropertyTypeValid(propertyType);
         boolean completeAddressResult = isCompleteAddressValid(completeAddress);
         boolean minimumPriceResult = isMinimumPriceValid(minimumPrice);
         boolean maximumPriceResult = isMaximumPriceValid(maximumPrice);
+        boolean exclusivityResult = isExclusivityValid(exclusivity);
 
-
-        if (propertyNameResult && propertyTypeResult && completeAddressResult && minimumPriceResult && maximumPriceResult) {
+        if (propertyNameResult && propertyTypeResult && completeAddressResult && minimumPriceResult && maximumPriceResult && exclusivityResult) {
             //will check if the minimum is greater than maximum
             int minPrice = Integer.parseInt(minimumPrice);
             int maxPrice = Integer.parseInt(maximumPrice);
@@ -290,12 +307,14 @@ public class AddPropertyActivity extends AppCompatActivity {
         textInputCompleteAddressLayout = findViewById(R.id.text_input_completeAddress_layout);
         textInputMinimumPriceLayout = findViewById(R.id.text_input_minimumPrice_layout);
         textInputMaximumPriceLayout = findViewById(R.id.text_input_maximumPrice_layout);
+        textInputExclusivityLayout = findViewById(R.id.text_input_exclusivity_layout);
 
         textInputPropertyName = findViewById(R.id.text_input_propertyName);
         textInputPropertyType = findViewById(R.id.text_input_propertyType);
         textInputCompleteAddress = findViewById(R.id.text_input_completeAddress);
         textInputMinimumPrice = findViewById(R.id.text_input_minimumPrice);
         textInputMaximumPrice = findViewById(R.id.text_input_maximumPrice);
+        textInputExclusivity = findViewById(R.id.text_input_exclusivity);
 
         electricityCheckBox = findViewById(R.id.electricityCheckBox);
         waterCheckBox = findViewById(R.id.waterCheckBox);
@@ -317,6 +336,10 @@ public class AddPropertyActivity extends AppCompatActivity {
         maximumPriceAdapter = new ArrayAdapter<String>(this, R.layout.landlord_maximum_price_list_item, maximumPrices);
         textInputMaximumPrice.setAdapter(maximumPriceAdapter);
         maximumPriceAdapter.notifyDataSetChanged();
+
+        exclusivityAdapter = new ArrayAdapter<String>(this, R.layout.landlord_exclusivity_list_item, exclusivities);
+        textInputExclusivity.setAdapter(exclusivityAdapter);
+        exclusivityAdapter.notifyDataSetChanged();
 
         //progressDialog
         progressDialog = new CustomProgressDialog(this);
