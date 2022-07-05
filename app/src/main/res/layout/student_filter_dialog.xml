@@ -11,7 +11,7 @@
     <LinearLayout
         android:id="@+id/linearLayout6"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="550dp"
         android:background="@color/white"
         android:orientation="vertical"
         android:paddingLeft="12dp"
@@ -158,6 +158,39 @@
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="Exclusivity:"
+            android:textColor="@color/espasyo_blue_200"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_exclusivity_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/exclusivity_dropdown_label"
+                app:errorEnabled="true"
+                app:prefixText="Accepting ">
+
+                <AutoCompleteTextView
+                    android:id="@+id/text_input_exclusivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:dropDownHeight="180dp"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
         <TextView

@@ -30,14 +30,16 @@ public class StudentFilterDialog extends DialogFragment {
     //for radio property type
     private RadioGroup propertyTypeRadioGroup;
     private RadioButton selectedPropertyTypeRadioButton;
-    private TextInputLayout textInputMinimumPriceLayout, textInputMaximumPriceLayout;
-    private AutoCompleteTextView textInputMinimumPrice, textInputMaximumPrice;
+    private TextInputLayout textInputMinimumPriceLayout, textInputMaximumPriceLayout, textInputExclusivityLayout;
+    private AutoCompleteTextView textInputMinimumPrice, textInputMaximumPrice, textInputExclusivity;
 
     //for minimum and maximum price
     String[] minimumPrices = {"0","500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
     String[] maximumPrices = {"0","500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "7500", "8000"};
+    String[] exclusivities = {"Male Only", "Female Only", "Male and Female"};
     ArrayAdapter<String> minimumPriceAdapter;
     ArrayAdapter<String> maximumPriceAdapter;
+    ArrayAdapter<String> exclusivityAdapter;
 
     //for number of persons per room
     private TextView textInputNumberOfPersons;
@@ -84,12 +86,13 @@ public class StudentFilterDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 String propertyType = getSelectedPropertyType(view);
-                int minPrice = getMinimumValudFromString(textInputMinimumPrice.getText().toString().trim());
+                int minPrice = getMinimumValueFromString(textInputMinimumPrice.getText().toString().trim());
                 int maxPrice = getMaximumValueFromString(textInputMaximumPrice.getText().toString().trim());
                 int numberOfPersons = Integer.parseInt(textInputNumberOfPersons.getText().toString());
+                String exclusivity = textInputExclusivity.getText().toString().trim();
 
                 createdFilterDialog.dismiss();
-                listener.getConfirmedFilterData(propertyType, minPrice, maxPrice, numberOfPersons);
+                listener.getConfirmedFilterData(propertyType, minPrice, maxPrice, numberOfPersons, exclusivity);
 
             }
         });
@@ -111,8 +114,10 @@ public class StudentFilterDialog extends DialogFragment {
         //price drop down (textInputLayout and autoCompleteText)
         textInputMinimumPriceLayout = view.findViewById(R.id.text_input_minimumPrice_layout_filter);
         textInputMaximumPriceLayout = view.findViewById(R.id.text_input_maximumPrice_layout_filter);
+        textInputExclusivityLayout = view.findViewById(R.id.text_input_exclusivity_layout);
         textInputMinimumPrice = view.findViewById(R.id.text_input_minimumPrice_filter);
         textInputMaximumPrice = view.findViewById(R.id.text_input_maximumPrice_filter);
+        textInputExclusivity = view.findViewById(R.id.text_input_exclusivity);
 
         //minimum price
         minimumPriceAdapter = new ArrayAdapter<String>(getActivity(), R.layout.landlord_minimum_price_list_item, minimumPrices);
@@ -122,6 +127,10 @@ public class StudentFilterDialog extends DialogFragment {
         maximumPriceAdapter = new ArrayAdapter<String>(getActivity(), R.layout.landlord_maximum_price_list_item, maximumPrices);
         textInputMaximumPrice.setAdapter(maximumPriceAdapter);
         maximumPriceAdapter.notifyDataSetChanged();
+        //exclusivity
+        exclusivityAdapter = new ArrayAdapter<String>(getActivity(), R.layout.landlord_exclusivity_list_item, exclusivities);
+        textInputExclusivity.setAdapter(exclusivityAdapter);
+        exclusivityAdapter.notifyDataSetChanged();
 
         //number of persons per room
         textInputNumberOfPersons = view.findViewById(R.id.text_input_numberOfPersons_filter);
@@ -186,7 +195,7 @@ public class StudentFilterDialog extends DialogFragment {
         }
     }
 
-    public int getMinimumValudFromString(String stringMinValue) {
+    public int getMinimumValueFromString(String stringMinValue) {
         if(stringMinValue.isEmpty()) {
             return 0;
         } else {
@@ -215,7 +224,7 @@ public class StudentFilterDialog extends DialogFragment {
     }
 
     public interface ConfirmFilterDataListener {
-        void getConfirmedFilterData(String propertyType, int minimumPrice, int maximumPrice, int numberOfPersons);
+        void getConfirmedFilterData(String propertyType, int minimumPrice, int maximumPrice, int numberOfPersons, String exclusivity);
         void cancelFilter();
     }
 }

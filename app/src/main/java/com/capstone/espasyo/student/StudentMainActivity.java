@@ -26,6 +26,7 @@ import com.capstone.espasyo.auth.viewmodels.AuthViewModel;
 import com.capstone.espasyo.connectivityUtil.InternetConnectionUtil;
 import com.capstone.espasyo.student.adapters.PropertyAdapter;
 import com.capstone.espasyo.student.customdialogs.CustomProgressDialog;
+import com.capstone.espasyo.student.customdialogs.LookForAffordablePropertyDialog;
 import com.capstone.espasyo.student.customdialogs.StudentFilterDialog;
 import com.capstone.espasyo.student.views.StudentViewPropertyDetailsActivity;
 import com.capstone.espasyo.student.widgets.PropertyRecyclerView;
@@ -46,7 +47,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class StudentMainActivity extends AppCompatActivity implements PropertyAdapter.OnPropertyListener, StudentFilterDialog.ConfirmFilterDataListener {
+public class StudentMainActivity extends AppCompatActivity implements PropertyAdapter.OnPropertyListener, StudentFilterDialog.ConfirmFilterDataListener, LookForAffordablePropertyDialog.ConfirmFilterAffordablePropertiesListener {
 
     private AuthViewModel viewModel;
     private FirebaseConnection firebaseConnection;
@@ -62,6 +63,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
     private ArrayList<Property> propertyList;
 
     private ImageView btnFilter;
+    private ImageView btnFilterAffordableProperties;
     private CustomProgressDialog progressDialog;
 
     @Override
@@ -125,6 +127,13 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                 showFilterDialog();
             }
         });
+
+        btnFilterAffordableProperties.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFilterAffordablePropertiesDialog();
+            }
+        });
     }
 
     public void initPropertyRecyclerView() {
@@ -141,6 +150,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         //initialize data aside from recyclerView
         progressDialog = new CustomProgressDialog(this);
         btnFilter = findViewById(R.id.btnFilter);
+        btnFilterAffordableProperties = findViewById(R.id.btnFilterAffordableProperties);
         listViewSwipeRefresh = findViewById(R.id.listViewSwipeRefresh_student);
     }
 
@@ -176,6 +186,12 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         studentFilterDialog.show(getSupportFragmentManager(), "studentFilterDialog");
     }
 
+    public void showFilterAffordablePropertiesDialog() {
+        //create an instance of the filter dialog dialog
+        LookForAffordablePropertyDialog studentFilterAffordablePropertiesDialog = new LookForAffordablePropertyDialog();
+        studentFilterAffordablePropertiesDialog.show(getSupportFragmentManager(), "studentFilterAffordablePropertiesDialog");
+    }
+
     @Override
     public void onPropertyClick(int position) {
         Intent intent = new Intent(StudentMainActivity.this, StudentViewPropertyDetailsActivity.class);
@@ -183,9 +199,11 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         startActivity(intent);
     }
 
+
+    //this are the overriden methods of StudentFilterDialog
     @Override
-    public void getConfirmedFilterData(String propertyType, int minimumPrice, int maximumPrice, int numberOfPersons) {
-        filterProperties(propertyType, minimumPrice, maximumPrice, numberOfPersons);
+    public void getConfirmedFilterData(String propertyType, int minimumPrice, int maximumPrice, int numberOfPersons, String exclusivity) {
+        filterProperties(propertyType, minimumPrice, maximumPrice, numberOfPersons, exclusivity);
     }
 
     @Override
@@ -203,7 +221,19 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         }, 1500);
     }
 
-    public void filterProperties(String propertyType, int minPrice, int maxPrice, int numberOfPersons) {
+    //this are the overriden methods of LookForAfforablePropertyDialog
+    @Override
+    public void getConfirmedAffordableFilterPrice(int affordableFilterPrice) {
+        filterAffordableProperties(affordableFilterPrice, propertyList);
+    }
+
+    @Override
+    public void cancelAffordablePropertiesFilter() {
+        Toast.makeText(this, "cancelAffordablePropertiesFilter() on Student Activity Main", Toast.LENGTH_SHORT).show();
+    }
+
+    //this will be the first step in filtering the properties using the filter data from StudentFilterDialog
+    public void filterProperties(String propertyType, int minPrice, int maxPrice, int numberOfPersons, String exclusivity) {
 
         //will be used to filter properties according to users preferences
         progressDialog.showProgressDialog("Applying filters...", false);
@@ -217,26 +247,15 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                                     propertyList.clear();
                                     for(QueryDocumentSnapshot snapshot : task.getResult()) {
                                         Property propertyObj = snapshot.toObject(Property.class);
+                                        //additional filter to properties for verified and not locked
                                         if(propertyObj.isVerified() && !propertyObj.isLocked()) {
-                                            if(minPrice != 0 && maxPrice != 0) {
-                                                if(propertyObj.getMinimumPrice() >= minPrice && propertyObj.getMaximumPrice() <= maxPrice) {
-                                                    propertyList.add(propertyObj);
-                                                }
-                                            } else if(minPrice != 0 && maxPrice == 0){
-                                                if(propertyObj.getMinimumPrice() >= minPrice) {
-                                                    propertyList.add(propertyObj);
-                                                }
-                                            } else if(minPrice == 0 && maxPrice != 0) {
-                                                if(propertyObj.getMaximumPrice() <= maxPrice) {
-                                                    propertyList.add(propertyObj);
-                                                }
-                                            } else if(minPrice == 0 && maxPrice == 0){
+                                            if(propertyObj.getExclusivity().equals(exclusivity)) {
                                                 propertyList.add(propertyObj);
                                             }
                                         }
                                     }
 
-                                    filterPropertiesByRoom(propertyList, numberOfPersons);
+                                    filterPropertiesByMinAndMaxPrice(propertyList, minPrice, maxPrice, numberOfPersons);
                                 }
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -248,6 +267,31 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
         });
     }
 
+    //this will be the second step in filtering the properties using the filter data from StudentFilterDialog
+    public void filterPropertiesByMinAndMaxPrice(ArrayList<Property> filteredPropertyByTypeAndExclusivity, int minPrice, int maxPrice, int numberOfPersons) {
+        ArrayList<Property> filteredList = new ArrayList<>();
+        for(Property property : filteredPropertyByTypeAndExclusivity) {
+            if(minPrice != 0 && maxPrice != 0) {
+                if(property.getMinimumPrice() >= minPrice && property.getMaximumPrice() <= maxPrice) {
+                    filteredList.add(property);
+                }
+            } else if(minPrice != 0 && maxPrice == 0){
+                if(property.getMinimumPrice() >= minPrice) {
+                    filteredList.add(property);
+                }
+            } else if(minPrice == 0 && maxPrice != 0) {
+                if(property.getMaximumPrice() <= maxPrice) {
+                    filteredList.add(property);
+                }
+            } else if(minPrice == 0 && maxPrice == 0){
+                filteredList.add(property);
+            }
+        }
+
+        filterPropertiesByRoom(filteredList, numberOfPersons);
+    }
+
+    //this will be the last step in filtering the properties using the filter data from StudentFilterDialog
     public void filterPropertiesByRoom(ArrayList<Property> filteredPropertyList, int numberOfPersons) {
         ArrayList<Property> filteredList = new ArrayList<>();
         for(Property property : filteredPropertyList) {
@@ -288,6 +332,40 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
                 }
             }
         }, 2000);
+    }
+
+    //this will be the step in filtering the properties using the filter data from LookForAffordablePropertyDialog
+    public void filterAffordableProperties(int affordableFilterPrice, ArrayList<Property> propertyList) {
+        progressDialog.showProgressDialog("Finding affordable properties...", false);
+        ArrayList<Property> affordableProperties = new ArrayList<>();
+        for(Property property : propertyList) {
+            if(property.getMaximumPrice() <= affordableFilterPrice) {
+                affordableProperties.add(property);
+                break;
+            } else if(property.getMinimumPrice() <= affordableFilterPrice) {
+                affordableProperties.add(property);
+            }
+        }
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(progressDialog.isShowing()) {
+                    propertyList.clear();
+                    propertyList.addAll(affordableProperties);
+                    propertyAdapter.notifyDataSetChanged();
+                    progressDialog.dismissProgressDialog();
+                    Toast.makeText(StudentMainActivity.this, "Displaying Affordable Properties", Toast.LENGTH_SHORT).show();
+                    if(internetChecker.isConnectedToInternet()) {
+                        if(affordableProperties.size() == 0) {
+                            showNoResultsFoundDialog();
+                        }
+                    } else {
+                        internetChecker.showNoInternetConnectionDialog();
+                    }
+                }
+            }
+        }, 4000);
     }
 
     public void showNoResultsFoundDialog() {

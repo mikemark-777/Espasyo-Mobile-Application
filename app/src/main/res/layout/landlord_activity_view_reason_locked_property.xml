@@ -29,10 +29,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Locked Property Details"
+                android:textAlignment="center"
                 android:textColor="@color/espasyo_blue_500"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:textAlignment="center"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -234,7 +234,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="40dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -242,14 +242,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="For more queries and information, please email us at "
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:layout_marginBottom="12dp"/>
+
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="sample@gmail.com"
+                    android:text="SMU ADSAS"
+                    android:textAlignment="center"
+                    android:textColor="@color/espasyo_blue_700"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="dsas@smu.edu.ph"
+                    android:textAlignment="center"
                     android:textColor="@color/espasyo_blue_200"
                     android:textSize="12sp" />
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -260,7 +273,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SMU ADSAS Office"
+                    android:text="Saint Mary's University ADSAS Offices"
+                    android:textColor="@color/espasyo_blue_700"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="facebook.com/smuadsas"
                     android:textColor="@color/espasyo_blue_200"
                     android:textSize="12sp" />
 
