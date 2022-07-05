@@ -223,6 +223,13 @@
             android:name=".student.views.StudentChangeNameActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".student.views.StudentMapFindNearestPropertiesToSMUActivity"
+            android:exported="true">
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/map_key" />
+        </activity>
     </application>
 
 </manifest>

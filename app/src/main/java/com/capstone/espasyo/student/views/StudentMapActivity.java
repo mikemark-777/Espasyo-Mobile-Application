@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ import com.capstone.espasyo.R;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.student.StudentMainActivity;
+import com.capstone.espasyo.student.customdialogs.FindNearestPropertiesToSMUDialog;
+import com.capstone.espasyo.student.customdialogs.LookForAffordablePropertyDialog;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -55,7 +58,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class StudentMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class StudentMapActivity extends AppCompatActivity implements OnMapReadyCallback, FindNearestPropertiesToSMUDialog.ConfirmFindPropertiesNearestToSMUListener {
 
     private FirebaseConnection firebaseConnection;
     private FirebaseFirestore database;
@@ -77,6 +80,8 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
     private String street, barangay, municipality, landmark;
 
     private FloatingActionButton changeMapType, getCurrentLocation;
+
+    private ImageView btnFindNearbySMU;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,11 +118,20 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
                 getCurrentLocation();
             }
         });
+
+        btnFindNearbySMU.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFindNearestPropertiesToSMUDialog();
+            }
+        });
     }
+
 
     public void initializeViews() {
         changeMapType = findViewById(R.id.changeMapTypeStudent);
         getCurrentLocation = findViewById(R.id.getCurrentLocationStudent);
+        btnFindNearbySMU = findViewById(R.id.btnFindNearbySMU);
     }
 
     @Override
@@ -272,6 +286,13 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
         }).create().show();
     }
 
+    public void showFindNearestPropertiesToSMUDialog() {
+        //create an instance of the filter affordable properties  dialog
+        FindNearestPropertiesToSMUDialog findNearestPropertiesToSMUDialog = new FindNearestPropertiesToSMUDialog();
+        findNearestPropertiesToSMUDialog.show(getSupportFragmentManager(), "findNearestPropertiesToSMUDialog");
+    }
+
+
     public void requestLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             new AlertDialog.Builder(this)
@@ -342,6 +363,19 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
         noInternetDialog.show();
     }
 
+    //overriden methods for FindNearestPropertiesToSMUDialog
+    @Override
+    public void getConfirmedToFindPropertiesNearestSMU() {
+        Intent intent = new Intent(StudentMapActivity.this, StudentMapFindNearestPropertiesToSMUActivity.class);
+        intent.putExtra("properties", propertyList);
+        startActivity(intent);
+    }
+
+    @Override
+    public void cancelFindPropertiesNearestSMU() {
+        //just cancelled
+    }
+
     //for navigation
     //interface for on item selected because setOnNavigationItemSelectedListener is depracated
     private BottomNavigationView.OnItemSelectedListener navListener =
@@ -368,5 +402,4 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
                     return false;
                 }
             };
-
 }

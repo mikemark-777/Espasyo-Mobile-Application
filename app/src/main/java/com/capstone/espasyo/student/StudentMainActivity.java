@@ -187,7 +187,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
     }
 
     public void showFilterAffordablePropertiesDialog() {
-        //create an instance of the filter dialog dialog
+        //create an instance of the filter affordable properties  dialog
         LookForAffordablePropertyDialog studentFilterAffordablePropertiesDialog = new LookForAffordablePropertyDialog();
         studentFilterAffordablePropertiesDialog.show(getSupportFragmentManager(), "studentFilterAffordablePropertiesDialog");
     }
@@ -229,7 +229,7 @@ public class StudentMainActivity extends AppCompatActivity implements PropertyAd
 
     @Override
     public void cancelAffordablePropertiesFilter() {
-        Toast.makeText(this, "cancelAffordablePropertiesFilter() on Student Activity Main", Toast.LENGTH_SHORT).show();
+        fetchProperties();
     }
 
     //this will be the first step in filtering the properties using the filter data from StudentFilterDialog
