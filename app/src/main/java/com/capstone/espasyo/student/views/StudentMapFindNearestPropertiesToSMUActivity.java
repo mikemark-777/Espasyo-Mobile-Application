@@ -123,8 +123,6 @@ public class StudentMapFindNearestPropertiesToSMUActivity extends AppCompatActiv
         setPolyLineOfMap(gMap);
 
         displayPropertiesOnMap(propertyList);
-
-
     }
 
     public void drawCircumferenceOfSMU(GoogleMap gMap, LatLng location) {

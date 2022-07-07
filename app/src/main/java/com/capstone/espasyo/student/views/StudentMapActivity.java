@@ -18,6 +18,8 @@ import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -27,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.capstone.espasyo.R;
+import com.capstone.espasyo.landlord.customdialogs.CustomProgressDialog;
 import com.capstone.espasyo.landlord.repository.FirebaseConnection;
 import com.capstone.espasyo.models.Property;
 import com.capstone.espasyo.student.StudentMainActivity;
@@ -41,6 +44,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -82,6 +86,7 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
     private FloatingActionButton changeMapType, getCurrentLocation;
 
     private ImageView btnFindNearbySMU;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +137,8 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
         changeMapType = findViewById(R.id.changeMapTypeStudent);
         getCurrentLocation = findViewById(R.id.getCurrentLocationStudent);
         btnFindNearbySMU = findViewById(R.id.btnFindNearbySMU);
+
+        progressDialog = new CustomProgressDialog(this);
     }
 
     @Override
@@ -250,6 +257,33 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
                     .title(propertyName)
                     .snippet(propertyAddress)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).showInfoWindow();
+
+            //add onclicklistener to all property location
+            gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(@NonNull Marker marker) {
+                    progressDialog.showProgressDialog("Preparing property...", false);
+                    Property clickedProperty = getPropertyClicked(marker.getTitle());
+
+                    if(clickedProperty == null) {
+                        Toast.makeText(StudentMapActivity.this, "This is not a property", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismissProgressDialog();
+                    } else {
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (progressDialog.isShowing()) {
+                                    Intent intent = new Intent(StudentMapActivity.this, StudentViewPropertyDetailsActivity.class);
+                                    intent.putExtra("property", clickedProperty);
+                                    startActivity(intent);
+                                    progressDialog.dismissProgressDialog();
+                                }
+                            }
+                        }, 1500);
+                    }
+                    return false;
+                }
+            });
         }
     }
 
@@ -290,6 +324,17 @@ public class StudentMapActivity extends AppCompatActivity implements OnMapReadyC
         //create an instance of the filter affordable properties  dialog
         FindNearestPropertiesToSMUDialog findNearestPropertiesToSMUDialog = new FindNearestPropertiesToSMUDialog();
         findNearestPropertiesToSMUDialog.show(getSupportFragmentManager(), "findNearestPropertiesToSMUDialog");
+    }
+
+    public Property getPropertyClicked(String clickedPropertyName) {
+
+        Property pickedProperty = null;
+        for (Property property : propertyList) {
+            if (property.getName().equals(clickedPropertyName)) {
+                pickedProperty = property;
+            }
+        }
+        return pickedProperty;
     }
 
 
