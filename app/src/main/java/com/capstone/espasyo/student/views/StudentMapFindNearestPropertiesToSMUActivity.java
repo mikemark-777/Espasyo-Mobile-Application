@@ -303,7 +303,6 @@ public class StudentMapFindNearestPropertiesToSMUActivity extends AppCompatActiv
         } else {
             return false;
         }
-
     }
 
     public void showNoInternetConnectionDialog() {
