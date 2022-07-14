@@ -14,7 +14,7 @@
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/landlord_activity_choose_edit.xml" value="0.25" />
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/landlord_activity_edit_property.xml" value="0.25" />
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/landlord_activity_property_details.xml" value="0.4" />
-        <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/landlord_activity_see_details_declined_verification.xml" value="0.6" />
+        <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/landlord_activity_see_details_declined_verification.xml" value="0.41739130434782606" />
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/landlord_activity_show_all_rooms.xml" value="0.25" />
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/landlord_activity_view_reason_locked_property.xml" value="0.4" />
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/landlord_exclusivity_list_item.xml" value="0.24895833333333334" />
@@ -25,7 +25,7 @@
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/privacy_policy.xml" value="0.34173669467787116" />
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/student_activity_main.xml" value="0.4" />
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/student_activity_map.xml" value="0.264" />
-        <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/student_activity_map_find_nearest_properties_to_smu.xml" value="0.4" />
+        <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/student_activity_map_find_nearest_properties_to_smu.xml" value="0.152" />
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/student_activity_view_property_details.xml" value="0.25" />
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/student_filter_affordable_properties.xml" value="0.25" />
         <entry key="..\:/Users/ASUS/StudioProjects/Espasyo-Mobile-Application/app/src/main/res/layout/student_filter_affordable_properties_dialog.xml" value="0.264" />

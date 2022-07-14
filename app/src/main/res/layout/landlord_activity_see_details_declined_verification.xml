@@ -309,35 +309,92 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="40dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="For more queries and information, please email us at "
-                    android:textSize="12sp" />
+                    android:text="For more queries and information, you can email us at "
+                    android:textSize="12sp"/>
+
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="sample@gmail.com"
+                    android:text="SMU ADSAS"
+                    android:textAlignment="center"
+                    android:textColor="@color/espasyo_blue_700"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="dsas@smu.edu.ph"
+                    android:textAlignment="center"
                     android:textColor="@color/espasyo_blue_200"
+                    android:textSize="12sp"
+                    android:textStyle="italic"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\nOr"
+                    android:textSize="12sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\nChat us at our Facebook Page"
                     android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="\nOr chat us at our Facebook Page"
-                    android:textSize="12sp" />
+                    android:text="Saint Mary's University ADSAS Offices"
+                    android:textColor="@color/espasyo_blue_700"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SMU ADSAS Office"
+                    android:text="facebook.com/smuadsas"
                     android:textColor="@color/espasyo_blue_200"
+                    android:textSize="12sp"
+                    android:textStyle="italic"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\nOr"
                     android:textSize="12sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\nVisit us personally at our office"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Saint Mary's University Campus"
+                    android:textColor="@color/espasyo_blue_700"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Office of the Dean of Student Affairs and Services,\nSecond floor, Administration Bldg., \n(beside the CICT Director's Office)"
+                    android:textColor="@color/espasyo_blue_200"
+                    android:textSize="12sp"
+                    android:textAlignment="center"/>
 
             </LinearLayout>
 
